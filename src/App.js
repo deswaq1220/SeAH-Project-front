@@ -1,13 +1,10 @@
 import { BrowserRouter as Router, Route, Routes} from
 "react-router-dom";
-
+import ManagerLogin from "./page/ManagerLogin";
+import './style/reset.css'
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/"></Route>
-      </Routes>
-    </Router>
+    <ManagerLogin></ManagerLogin>
   );
 }
 
