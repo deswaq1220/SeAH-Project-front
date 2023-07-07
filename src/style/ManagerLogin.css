@@ -83,10 +83,10 @@ button:focus {
   border-radius: 4px; /* 원하는 테두리 반경 값으로 조정 */
   font-family: NanumSquare;
 }
-p{
+/* p{
   font-size: 30px;
   font-weight: 600;
-}
+} */
 
 /* 테블릿 사이즈 */
 

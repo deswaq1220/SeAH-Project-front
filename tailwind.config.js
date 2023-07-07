@@ -9,6 +9,9 @@ module.exports = {
       },
       spacing :{
         '1200' : '1200px'
+      },
+      screens :{
+        'ssm' : {'raw':'(min-width:450px)'}
       }
     },
   },

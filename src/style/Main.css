@@ -1,59 +1,45 @@
 
 #wrap2{
-  width: 100%;
   display: flex;
   justify-content: center;
 }
 
-#menuWrap{
-  width: 1200px;
-  height: auto;
-  background-color: aliceblue;
-  padding: 50px 0 0;
-  box-sizing:border-box;
-}
-#logo2{
-  width: 500px;
-  height: 50px;
-  background-image: url('../img/logo.png');
-  background-repeat: no-repeat;
-  background-size: contain;
-  margin-bottom: 20px;
-}
-
-.slideImg{
+.banner{
   width: 100%;
   height: 400px;
-  background-image: url('../img/main_movie_bg.jpg');
+  background-image: url("../img/main_movie_bg.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  margin-bottom: 30px;
+  padding-top: 150px;
+
 }
-.subWrap1,.subWrap2{
-  width: 100%;
-  height: 360px;
-  margin-bottom: 15px;
-  background-color: antiquewhite;
+
+.logoeara{
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
 }
 
 
-li{
-  width: 360px;
-  height: auto;
-  background-color: aqua;
-  border-radius: 20px;
+.bannerText{
   display: flex;
   flex-direction: column;
-  
+  justify-content: center;
+  align-items: center;
+  margin: 0 10px;
 }
 
-.subWrap1 li:nth-child(1){
-  background-image: url('../img/worker2.png');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
+.text1{
+  font-size: 30px;
+  color: white;
+  font-weight: 600;
+  text-shadow: 0px 4px 3px rgb(98, 98, 98);
 }
 
+.text2{
+  color: white;
+  font-weight: 600;
+  text-shadow: 0px 4px 3px rgb(98, 98, 98);
+}
