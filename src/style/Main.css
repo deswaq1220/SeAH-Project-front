@@ -1,4 +1,59 @@
 
 #wrap2{
   width: 100%;
+  display: flex;
+  justify-content: center;
 }
+
+#menuWrap{
+  width: 1200px;
+  height: auto;
+  background-color: aliceblue;
+  padding: 50px 0 0;
+  box-sizing:border-box;
+}
+#logo2{
+  width: 500px;
+  height: 50px;
+  background-image: url('../img/logo.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  margin-bottom: 20px;
+}
+
+.slideImg{
+  width: 100%;
+  height: 400px;
+  background-image: url('../img/main_movie_bg.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  margin-bottom: 30px;
+}
+.subWrap1,.subWrap2{
+  width: 100%;
+  height: 360px;
+  margin-bottom: 15px;
+  background-color: antiquewhite;
+  display: flex;
+  justify-content: space-between;
+}
+
+
+li{
+  width: 360px;
+  height: auto;
+  background-color: aqua;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.subWrap1 li:nth-child(1){
+  background-image: url('../img/worker2.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
