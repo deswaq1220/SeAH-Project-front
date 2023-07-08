@@ -23,6 +23,7 @@ function ManagerLogin() {
 
             <div>
               <button
+                id="loginbtn"
                 type="submit"
                 className="flex w-96 h-14 justify-center items-center rounded-md bg-seahColor px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
               >

@@ -63,11 +63,11 @@ input::placeholder {
 
 /* 선택적으로 다른 상태에 대한 스타일링을 추가할 수 있습니다 */
 
-button:hover {
+#loginbtn:hover {
   background-color: #d82800; 
 }
 
-button:focus {
+#loginbtn:focus {
   outline: none; /* 포커스 시 기본 아웃라인 제거 */
   /* 원하는 포커스 상태의 스타일 추가 */
 }
