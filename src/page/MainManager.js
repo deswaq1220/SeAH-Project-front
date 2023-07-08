@@ -12,28 +12,28 @@ function MainManager() {
     {
       id: 1,
       name: '안전교육',
-      href: '#',
+      href: '/eduMain',
       imageSrc: safety,
       imageAlt: '안전교육',
     },
     {
       id: 2,
       name: '안전점검',
-      href: '#',
+      href: '/inspection',
       imageSrc: worker,
       imageAlt: '안전점검',
     },
     {
       id: 3,
       name: '기준정보등록',
-      href: '#',
+      href: '/reinfo',
       imageSrc: info,
       imageAlt: '기준정보',
     },
     {
       id: 4,
       name: '준비중',
-      href: '#',
+      href: '/404',
       imageSrc: mark,
       imageAlt: '임시',
     },
@@ -47,7 +47,7 @@ function MainManager() {
   return (
     <div id="wrap2">
     <div className="bg-white">
-      <div className="mx-auto max-w-2xl px-4 lg:max-w-7xl lg:px-8">
+      <div className="mx-auto max-w-2xl  lg:max-w-7xl ">
       <div className="logoeara mt-4">
       <img src={logo} className="w-80 " />
       <p className=" text-seahColor text-lg ">안전도 <b>SeAH</b>답게!</p> 

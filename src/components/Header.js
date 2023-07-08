@@ -65,10 +65,10 @@ export default function Header() {
         aria-label="Global"
       >
         <div className="flex lg:flex-1">
-          <a href="#" className="-m-1.5 p-1.5">
+          <Link to="/manager" className="-m-1.5 p-1.5">
             <span className="sr-only">Your Company</span>
             <img className="h-8 w-auto" src={logo} alt="" />
-          </a>
+          </Link>
         </div>
         <div className="flex lg:hidden">
           <button
@@ -132,39 +132,28 @@ export default function Header() {
             </Transition>
           </Popover> */}
 
-          <a
-            href="#"
-            className={`text-l font-semibold leading-6 text-gray-900 hover:bg-slate-100 underline-offset-8${
-              isSafetyCheckSelected ? "underline" : ""
-            }`}
-            onClick={handleSafetyCheckClick}
+          <Link to="/inspection"
+            className="text-lg font-semibold leading-6 text-gray-900 hover:bg-slate-100"
           >
             안전점검
-          </a>
+          </Link>
           <Link
             to="/eduMain"
-            className={`text-l font-semibold leading-6 text-gray-900 hover:bg-slate-100 underline-offset-8 ${
-              isEduMainSelected ? "underline-offset-8" : ""
-            }`}
-            onClick={handleEduMainClick}
+            className="text-lg font-semibold leading-6 text-gray-900 hover:bg-slate-100"
           >
             안전교육
           </Link>
           <Link
             to="/reinfo"
-            className={`text-l font-semibold leading-6 text-gray-900 hover:bg-slate-100 underline-offset-8 ${
-              isReferenceSelected ? "underline" : ""
-            }`}
-            onClick={handleReferenceClick}
+            className="text-lg font-semibold leading-6 text-gray-900 hover:bg-slate-100 "
           >
             기준정보관리
           </Link>
         </Popover.Group>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <a href="#" className="text-l font-semibold leading-6 text-gray-900">
+          <Link to="/managerlogin" className="text-lg font-semibold leading-6 text-gray-900">
             로그아웃 <span aria-hidden="true">&rarr;</span>
-            
-          </a>
+          </Link>
         </div>
       </nav>
       <Dialog
@@ -217,32 +206,28 @@ export default function Header() {
                     </>
                   )}
                 </Disclosure> */}
-                <a
-                  href="#"
+                <Link to="/inspection"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
                   안전점검
-                </a>
-                <a
-                  href="#"
+                </Link>
+                <Link to="/eduMain"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
                   안전교육
-                </a>
-                <a
-                  href="#"
+                </Link>
+                <Link to="/reinfo"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
                   기준정보관리
-                </a>
+                </Link>
               </div>
               <div className="py-6">
-                <a
-                  href="#"
+                <Link to="/managerlogin"
                   className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
                   로그아웃
-                </a>
+                </Link>
               </div>
             </div>
           </div>

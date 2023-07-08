@@ -51,6 +51,7 @@ function SafetyEducationMain() {
         <button onClick={goToPreviousWeek} className="mr-2">&lt;</button>
         <a>{getFormattedDate()}</a>
         <button onClick={goToNextWeek} className="ml-2">&gt;</button>
+        안전교육페이지다
       </div>
     </div>
   );
