@@ -6,7 +6,7 @@ import logo from "../img/logo.png"
 // import bannerImage from "../img/main_movie_bg.jpg"
 import info from "../img/personal-profile.png"
 
-function Main() {
+function MainManager() {
 
   const products = [
     {
@@ -82,4 +82,4 @@ function Main() {
   )
 }
 
-export default Main;
+export default MainManager;
