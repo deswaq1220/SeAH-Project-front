@@ -75,14 +75,14 @@ function SafetyEduReg() {
   const [isCompleted, setIsCompleted] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [formData, setFormData] = useState({
-    sortation: "[집체교육]",
-    edutile: "[조회]",
-    charge: "[임시]",
+    sortation: "",
+    edutitle: "",
+    charge: "",
     trainingTime: {
       startTime: "",
       endTime: "",
     },
-    trainingTarget: "[임시]",
+    trainingTarget: "",
     content: "",
   });
 
@@ -157,7 +157,7 @@ function SafetyEduReg() {
               <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
                 구분
               </span>
-              <Listbox value={selected} onChange={handleChange}>
+              <Listbox value={selected} onChange={setSelected}>
                 {({ open }) => (
                   <>
                     <div className="relative mt-2">
@@ -237,7 +237,7 @@ function SafetyEduReg() {
                 )}
               </Listbox>
             </div>
-            <div id="edutile" className="flex items-baseline justify-start">
+            <div id="Training_title" className="flex items-baseline justify-start">
               <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
                 교육제목
               </span>
@@ -247,7 +247,8 @@ function SafetyEduReg() {
                     type="text"
                     name="edutitle"
                     id="edutitle"
-                    value={formData.edutile}
+                    value={formData.edutitle}
+                    onChange={handleChange}
                     autoComplete="family-name"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
                   />
@@ -260,15 +261,16 @@ function SafetyEduReg() {
               </span>
               <div className="sm:col-span-3">
                 <label
-                  htmlFor="last-name"
+                  htmlFor="educharge"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 ></label>
                 <div className="mt-2">
                   <input
                     type="text"
                     name="charge"
-                    id="charge"
+                    id="educharge"
                     value={formData.charge}
+                    onChange={handleChange}
                     autoComplete="family-name"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
                   />
@@ -418,6 +420,8 @@ function SafetyEduReg() {
                   id="about"
                   name="content"
                   rows={3}
+                  value={formData.conte}
+                  onChange={handleChange}
                   className="block w-full h-16 rounded-md border-0 py-1.5 px-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6"
                   defaultValue={""}
                 />
@@ -466,7 +470,7 @@ function SafetyEduReg() {
                       <div className="mt-4 flex text-sm leading-6 text-gray-600">
                         <label
                           htmlFor="file-upload"
-                          className="relative cursor-pointer rounded-md bg-white font-semibold text-seahColor focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                          className="relative cursor-pointer rounded-md bg-white font-semibold text-seahColor focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-seahDeep"
                         >
                           <span>클릭하거나</span>
                           <input

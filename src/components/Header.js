@@ -133,19 +133,19 @@ export default function Header() {
           </Popover> */}
 
           <Link to="/inspection"
-            className="text-lg font-semibold leading-6 text-gray-900 hover:bg-slate-100"
+            className="text-lg font-semibold leading-6 text-gray-900 hover:text-seahColor"
           >
             안전점검
           </Link>
           <Link
             to="/eduMain"
-            className="text-lg font-semibold leading-6 text-gray-900 hover:bg-slate-100"
+            className="text-lg font-semibold leading-6 text-gray-900 hover:text-seahColor"
           >
             안전교육
           </Link>
           <Link
             to="/reinfo"
-            className="text-lg font-semibold leading-6 text-gray-900 hover:bg-slate-100 "
+            className="text-lg font-semibold leading-6 text-gray-900 hover:text-seahColor"
           >
             기준정보관리
           </Link>
