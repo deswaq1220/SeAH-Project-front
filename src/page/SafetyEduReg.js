@@ -485,6 +485,7 @@ function SafetyEduReg() {
                         </p>
                       </div>
                       <p className="text-xs leading-5 text-gray-600">10MB</p>
+                      {/* 파일첨부 삭제시 밑에서부터는 하나씩 삭제 가능하나 맨 처음 첨부한 파일 삭제시 첨부한 파일들 전체가 삭제되는 오류있음 */}
                     </div>
                   </div>
                 </div>
