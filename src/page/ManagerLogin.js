@@ -5,7 +5,7 @@ function ManagerLogin() {
       <div id="wrap">
         <div className="center">
           <div className="logo"></div>
-          <form className="space-y-6" action="#" method="POST">
+          <form id="loginform"className="space-y-6" action="#" method="POST">
             <div>
               <div className="flex items-center justify-between"></div>
               <div className="mt-2">
@@ -25,7 +25,7 @@ function ManagerLogin() {
               <button
                 id="loginbtn"
                 type="submit"
-                className="flex w-96 h-14 justify-center items-center rounded-md bg-seahColor px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                className="flex w-96 h-14 justify-center items-center rounded-md bg-seahColor px-3 py-1.5 text-lg font-semibold leading-6 text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
               >
                 로그인
               </button>

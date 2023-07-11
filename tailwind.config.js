@@ -8,7 +8,8 @@ module.exports = {
         'seahDeep' : '#d82800'
       },
       spacing :{
-        '1200' : '1200px'
+        '1200' : '1200px',
+        '100'  : '500px'
       },
       screens :{
         'ssm' : {'raw':'(min-width:450px)'}

@@ -7,6 +7,7 @@ import UserMain from "./page/UserMain";
 import SafetyEducationMain from "./page/SafetyEducationMain";
 import SafetyInspection from "./page/SafetyInspection";
 import Error from "./page/error";
+import SafetyEduReg from "./page/SafetyEduReg";
 
 
 
@@ -17,8 +18,9 @@ function App() {
         <Route path="/manager" element={<MainManager/>}></Route> 
         <Route path="/user" element={<UserMain/>}></Route>
         <Route path="/eduMain" element={<SafetyEducationMain/>}></Route>
+        <Route path="/edureg" element={<SafetyEduReg/>}></Route>
         <Route path="/inspection" element={<SafetyInspection/>}></Route>
-        <Route path="/managerlogin" element={<ManagerLogin/>}></Route>
+        <Route path="/" element={<ManagerLogin/>}></Route>
         <Route path="/reinfo" element={<ReferenceInfo/>}></Route>
         <Route path="/404" element={<Error/>}></Route>
       </Routes>
