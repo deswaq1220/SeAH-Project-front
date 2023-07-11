@@ -1,13 +1,15 @@
 import { useState, Fragment, useCallback } from "react";
 import Header from "../components/Header";
-import { format, addMonths, subMonths } from "date-fns";
+// import { format, addMonths, subMonths } from "date-fns";
 import { Listbox, Transition } from "@headlessui/react";
 import {
   CheckIcon,
   ChevronUpDownIcon,
   PhotoIcon,
+  CheckCircleIcon,
 } from "@heroicons/react/20/solid";
 import { useDropzone } from "react-dropzone";
+import QRCode from "qrcode.react";
 const people = [
   {
     id: 1,
@@ -69,19 +71,19 @@ function classNames(...classes) {
 function SafetyEduReg() {
   const [selected, setSelected] = useState(people[0]);
   const [selectedDuty, setSelectedDuty] = useState(duty[0]);
-  const [currentDate, setCurrentDate] = useState(new Date());
+  // const [currentDate, setCurrentDate] = useState(new Date());
   const [isCompleted, setIsCompleted] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [formData, setFormData] = useState({
-    sortation: '',
-    edutile: '',
-    charge: '',
+    sortation: "[집체교육]",
+    edutile: "[조회]",
+    charge: "[임시]",
     trainingTime: {
-      startTime: '',
-      endTime: '',
+      startTime: "",
+      endTime: "",
     },
-    trainingTarget: '',
-    content: '',
+    trainingTarget: "[임시]",
+    content: "",
   });
 
   const handleChange = (e) => {
@@ -90,24 +92,6 @@ function SafetyEduReg() {
       ...prevData,
       [name]: value,
     }));
-  };
-
-  const goToPreviousMonth = () => {
-    const previousMonthDate = subMonths(currentDate, 1);
-    setCurrentDate(previousMonthDate);
-  };
-
-  const goToNextMonth = () => {
-    const nextMonthDate = addMonths(currentDate, 1);
-    setCurrentDate(nextMonthDate);
-  };
-
-  const getFormattedDate = () => {
-    const year = currentDate.getFullYear();
-    const month = format(currentDate, "M월");
-    const day = format(currentDate, "d일");
-
-    return `${year}. ${month} ${day}`;
   };
 
   const [selectedStartTime, setSelectedStartTime] = useState("");
@@ -125,8 +109,6 @@ function SafetyEduReg() {
   const handleCreate = () => {
     setIsCompleted(true); // 생성 완료 상태 업데이트
   };
-
-  
 
   const onDrop = useCallback(
     (acceptedFiles) => {
@@ -175,7 +157,7 @@ function SafetyEduReg() {
               <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
                 구분
               </span>
-              <Listbox value={selected} onChange={setSelected}>
+              <Listbox value={selected} onChange={handleChange}>
                 {({ open }) => (
                   <>
                     <div className="relative mt-2">
@@ -263,8 +245,9 @@ function SafetyEduReg() {
                 <div className="mt-2">
                   <input
                     type="text"
-                    name="last-name"
-                    id="last-name"
+                    name="edutitle"
+                    id="edutitle"
+                    value={formData.edutile}
                     autoComplete="family-name"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
                   />
@@ -283,8 +266,9 @@ function SafetyEduReg() {
                 <div className="mt-2">
                   <input
                     type="text"
-                    name="last-name"
-                    id="last-name"
+                    name="charge"
+                    id="charge"
+                    value={formData.charge}
                     autoComplete="family-name"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
                   />
@@ -432,7 +416,7 @@ function SafetyEduReg() {
               <div className="mt-2 w-80">
                 <textarea
                   id="about"
-                  name="about"
+                  name="content"
                   rows={3}
                   className="block w-full h-16 rounded-md border-0 py-1.5 px-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6"
                   defaultValue={""}
@@ -443,21 +427,23 @@ function SafetyEduReg() {
               <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
                 QR생성
               </span>
-              <button
-                type="submit"
-                className="block w-30 rounded-md bg-seahColor px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                onClick={handleCreate}
-              >
-                {isCompleted ? (
-                  <>
-                    생성완료
-                    <CheckIcon className="h-5 w-5 inline-block ml-1" />
-                  </>
-                ) : (
-                  "생성하기"
-                )}
-              </button>
-              {/* 데이터 처리 로직 구현해야함 */}
+              {isCompleted ? (
+                <div className="mt-4">
+                  <QRCode value={JSON.stringify(formData)} />
+                  <div className="flex items-center mt-2">
+                    <CheckCircleIcon className="h-5 w-5 text-green-500" />
+                    <span className="ml-1">생성완료</span>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  type="submit"
+                  className="block w-30 rounded-md bg-seahColor px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  onClick={handleCreate}
+                >
+                  생성하기
+                </button>
+              )}
             </div>
             <div id="file" className="flex items-baseline justify-start ">
               <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
