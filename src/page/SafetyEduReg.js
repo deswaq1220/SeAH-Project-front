@@ -13,42 +13,18 @@ import QRCode from "qrcode.react";
 const people = [
   {
     id: 1,
-    name: "[집체교육]",
+    name: "선택",
   },
   {
     id: 2,
-    name: "[조회]",
+    name: "[집체교육]",
   },
   {
     id: 3,
-    name: "[임시]",
+    name: "[조회]",
   },
   {
     id: 4,
-    name: "[임시]",
-  },
-  {
-    id: 5,
-    name: "[임시]",
-  },
-  {
-    id: 6,
-    name: "[임시]",
-  },
-  {
-    id: 7,
-    name: "[임시]",
-  },
-  {
-    id: 8,
-    name: "[임시]",
-  },
-  {
-    id: 9,
-    name: "[임시]",
-  },
-  {
-    id: 10,
     name: "[임시]",
   },
 ];
@@ -56,10 +32,18 @@ const people = [
 const duty = [
   {
     id: 1,
-    name: "사무직",
+    name: "선택",
   },
   {
     id: 2,
+    name: "전체",
+  },
+  {
+    id: 3,
+    name: "사무직",
+  },
+  {
+    id: 4,
     name: "현장직",
   },
 ];
@@ -67,6 +51,29 @@ const duty = [
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
+
+const MAX_FILENAME_LENGTH = 20;
+const FILENAME_SUFFIX = "...";
+
+const TruncatedFileName = ({ fileName }) => {
+  if (fileName.length <= MAX_FILENAME_LENGTH) {
+    return <div>{fileName}</div>;
+  }
+
+  const truncatedFileName = fileName.slice(0, MAX_FILENAME_LENGTH - FILENAME_SUFFIX.length);
+  const displayedFileName = truncatedFileName + FILENAME_SUFFIX;
+
+  return (
+    <div className="relative">
+      <div>{displayedFileName}</div>
+      <div className="absolute top-0 right-0 bottom-0 left-0 pointer-events-none">
+        <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75">
+          <div className="p-2 text-gray-600">{fileName}</div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 function SafetyEduReg() {
   const [selected, setSelected] = useState(people[0]);
@@ -76,14 +83,15 @@ function SafetyEduReg() {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [formData, setFormData] = useState({
     sortation: "", // 구분
-    edutitle: "",  // 교육제목
-    charge: "",    // 담당자
-    trainingTime: {  //교육시간
-      startTime: "",  // 시작시간
-      endTime: "",    // 끝나는 시간
+    edutitle: "", // 교육제목
+    charge: "", // 담당자
+    trainingTime: {
+      //교육시간
+      startTime: "", // 시작시간
+      endTime: "", // 끝나는 시간
     },
-    duty:"",          // 대상자
-    content: "",      //내용
+    duty: "", // 대상자
+    content: "", // 교육내용
   });
 
   const handleChange = (e) => {
@@ -92,7 +100,7 @@ function SafetyEduReg() {
       ...prevData,
       [name]: value,
     }));
-  };
+  }; // 큐알로 값 넘기는 기능
 
   const [selectedStartTime, setSelectedStartTime] = useState("");
   const [selectedEndTime, setSelectedEndTime] = useState("");
@@ -107,7 +115,7 @@ function SafetyEduReg() {
         startTime: newValue, // 업데이트할 formData 속성에 맞게 수정
       },
     }));
-  };
+  }; // 시작시간
 
   const handleEndTimeChange = (e) => {
     const newValue = e.target.value;
@@ -119,11 +127,11 @@ function SafetyEduReg() {
         endTime: newValue,
       },
     }));
-  };
+  }; // 종료시간
 
   const handleCreate = () => {
     setIsCompleted(true); // 생성 완료 상태 업데이트
-  };
+  }; // 큐알코드 생성시 생성완료 출력
 
   const onDrop = useCallback(
     (acceptedFiles) => {
@@ -131,15 +139,15 @@ function SafetyEduReg() {
       console.log(acceptedFiles);
     },
     [uploadedFiles]
-  );
+  ); // 파일 온드롭 기능
 
   const deleteFile = (index) => {
     const updatedFiles = [...uploadedFiles];
     updatedFiles.splice(index, 1);
     setUploadedFiles(updatedFiles);
-  };
+  }; // 파일 삭제기능
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop }); // 온드롭기능
 
   const formatTimeRange = (startTime, endTime) => {
     const options = {
@@ -156,7 +164,7 @@ function SafetyEduReg() {
     );
     const formattedEndTime = new Date(endTime).toLocaleString("ko-KR", options);
     return `${formattedStartTime} ~ ${formattedEndTime}`;
-  };
+  }; // 데이트 피커
 
   const handleListboxChange = (selectedItem) => {
     setSelected(selectedItem);
@@ -164,7 +172,8 @@ function SafetyEduReg() {
       ...prevData,
       sortation: selectedItem.name, // 업데이트할 formData 속성에 맞게 수정
     }));
-  };
+  }; // 큐알로 값 전달 기능
+
   const handleDutyChange = (value) => {
     setSelectedDuty(value);
     setFormData((prevData) => ({
@@ -172,7 +181,7 @@ function SafetyEduReg() {
       // 업데이트할 formData 속성에 맞게 수정
       duty: value.name,
     }));
-  };
+  }; // 큐알로 값 전달기능
 
   return (
     <div>
@@ -291,7 +300,7 @@ function SafetyEduReg() {
             </div>
             <div id="charge" className="flex items-baseline justify-start">
               <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
-                담당자
+                강사
               </span>
               <div className="sm:col-span-3">
                 <label
@@ -311,6 +320,7 @@ function SafetyEduReg() {
                 </div>
               </div>
             </div>
+            {/* 교육시간은 세아측에서 결정 후 알려주기로 했음 아직 미정 */}
             <div
               id="Training_time"
               className="flex items-baseline justify-start"
@@ -338,7 +348,7 @@ function SafetyEduReg() {
                   htmlFor="endtimepicker"
                   className="block mt-4 mb-2 font-medium text-gray-700"
                 >
-                  끝나는 시간
+                  종료시간
                 </label>
                 <input
                   type="datetime-local"
@@ -525,17 +535,40 @@ function SafetyEduReg() {
                 </div>
 
                 <div>
-                  {uploadedFiles.map((file, index) => (
-                    <div key={index} className="flex items-centern mt-2">
-                      <div>{file.name}</div>
+                  {uploadedFiles.map((file) => (
+                    <div key={file.name} className="flex flex-col items-start mt-2">
+                      <div>
+                        <span className="break-all">{file.name}</span>
+                      </div>
                       <button
-                        onClick={() => deleteFile(index)}
+                        onClick={() => deleteFile(file.name)}
                         className="ml-2 text-red-600"
                       >
                         삭제
                       </button>
                     </div>
                   ))}
+                </div>
+              </div>
+            </div>
+
+            <div id="writer" className="flex items-baseline justify-start">
+              <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
+                작성자
+              </span>
+              <div className="sm:col-span-3">
+                <label
+                  htmlFor="educharge"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                ></label>
+                <div className="mt-2">
+                  <input
+                    type="text"
+                    name="writer"
+                    id="eduwriter"
+                    autoComplete="family-name"
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
+                  />
                 </div>
               </div>
             </div>

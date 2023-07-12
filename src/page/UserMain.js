@@ -26,14 +26,14 @@ function UserMain() {
     {
       id: 3,
       name: '준비중',
-      href: '#',
+      href: '/404',
       imageSrc: mark,
       imageAlt: '준비중',
     },
     {
       id: 4,
       name: '준비중',
-      href: '#',
+      href: '/404',
       imageSrc: mark,
       imageAlt: '준비중',
     },
