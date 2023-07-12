@@ -75,15 +75,15 @@ function SafetyEduReg() {
   const [isCompleted, setIsCompleted] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [formData, setFormData] = useState({
-    sortation: "",
-    edutitle: "",
-    charge: "",
-    trainingTime: {
-      startTime: "",
-      endTime: "",
+    sortation: "", // 구분
+    edutitle: "",  // 교육제목
+    charge: "",    // 담당자
+    trainingTime: {  //교육시간
+      startTime: "",  // 시작시간
+      endTime: "",    // 끝나는 시간
     },
-    trainingTarget: "",
-    content: "",
+    duty:"",          // 대상자
+    content: "",      //내용
   });
 
   const handleChange = (e) => {
@@ -98,12 +98,27 @@ function SafetyEduReg() {
   const [selectedEndTime, setSelectedEndTime] = useState("");
 
   const handleStartTimeChange = (e) => {
-    setSelectedStartTime(e.target.value);
-    setSelectedEndTime("");
+    const newValue = e.target.value;
+    setSelectedStartTime(newValue);
+    setFormData((prevData) => ({
+      ...prevData,
+      trainingTime: {
+        ...prevData.trainingTime,
+        startTime: newValue, // 업데이트할 formData 속성에 맞게 수정
+      },
+    }));
   };
 
   const handleEndTimeChange = (e) => {
-    setSelectedEndTime(e.target.value);
+    const newValue = e.target.value;
+    setSelectedEndTime(newValue);
+    setFormData((prevData) => ({
+      ...prevData,
+      trainingTime: {
+        ...prevData.trainingTime,
+        endTime: newValue,
+      },
+    }));
   };
 
   const handleCreate = () => {
@@ -143,6 +158,22 @@ function SafetyEduReg() {
     return `${formattedStartTime} ~ ${formattedEndTime}`;
   };
 
+  const handleListboxChange = (selectedItem) => {
+    setSelected(selectedItem);
+    setFormData((prevData) => ({
+      ...prevData,
+      sortation: selectedItem.name, // 업데이트할 formData 속성에 맞게 수정
+    }));
+  };
+  const handleDutyChange = (value) => {
+    setSelectedDuty(value);
+    setFormData((prevData) => ({
+      ...prevData,
+      // 업데이트할 formData 속성에 맞게 수정
+      duty: value.name,
+    }));
+  };
+
   return (
     <div>
       <Header />
@@ -157,7 +188,7 @@ function SafetyEduReg() {
               <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
                 구분
               </span>
-              <Listbox value={selected} onChange={setSelected}>
+              <Listbox value={selected} onChange={handleListboxChange}>
                 {({ open }) => (
                   <>
                     <div className="relative mt-2">
@@ -237,7 +268,10 @@ function SafetyEduReg() {
                 )}
               </Listbox>
             </div>
-            <div id="Training_title" className="flex items-baseline justify-start">
+            <div
+              id="Training_title"
+              className="flex items-baseline justify-start"
+            >
               <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
                 교육제목
               </span>
@@ -330,7 +364,7 @@ function SafetyEduReg() {
               <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
                 교육대상
               </span>
-              <Listbox value={selectedDuty} onChange={setSelectedDuty}>
+              <Listbox value={selectedDuty} onChange={handleDutyChange}>
                 {({ open }) => (
                   <>
                     <div className="relative mt-2">
