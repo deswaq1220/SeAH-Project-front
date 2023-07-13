@@ -2,6 +2,7 @@ import { useState, Fragment, useCallback } from "react";
 import Header from "../components/Header";
 // import { format, addMonths, subMonths } from "date-fns";
 import { Listbox, Transition } from "@headlessui/react";
+import { Link } from "react-router-dom";
 import {
   CheckIcon,
   ChevronUpDownIcon,
@@ -52,7 +53,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const MAX_FILENAME_LENGTH = 20;
+const MAX_FILENAME_LENGTH = 30;
 const FILENAME_SUFFIX = "...";
 
 const TruncatedFileName = ({ fileName }) => {
@@ -60,19 +61,13 @@ const TruncatedFileName = ({ fileName }) => {
     return <div>{fileName}</div>;
   }
 
-  const truncatedFileName = fileName.slice(0, MAX_FILENAME_LENGTH - FILENAME_SUFFIX.length);
+  const truncatedFileName = fileName.slice(
+    0,
+    MAX_FILENAME_LENGTH - FILENAME_SUFFIX.length
+  );
   const displayedFileName = truncatedFileName + FILENAME_SUFFIX;
 
-  return (
-    <div className="relative">
-      <div>{displayedFileName}</div>
-      <div className="absolute top-0 right-0 bottom-0 left-0 pointer-events-none">
-        <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75">
-          <div className="p-2 text-gray-600">{fileName}</div>
-        </div>
-      </div>
-    </div>
-  );
+  return <div>{displayedFileName}</div>;
 };
 
 function SafetyEduReg() {
@@ -182,6 +177,8 @@ function SafetyEduReg() {
       duty: value.name,
     }));
   }; // 큐알로 값 전달기능
+
+  const eduUrl = "http://www.seahaerospace.com/kor/index.asp"; // 큐알 스캔시 이동할 경로
 
   return (
     <div>
@@ -464,7 +461,7 @@ function SafetyEduReg() {
                   id="about"
                   name="content"
                   rows={3}
-                  value={formData.conte}
+                  value={formData.content}
                   onChange={handleChange}
                   className="block w-full h-16 rounded-md border-0 py-1.5 px-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6"
                   defaultValue={""}
@@ -477,7 +474,10 @@ function SafetyEduReg() {
               </span>
               {isCompleted ? (
                 <div className="mt-4">
-                  <QRCode value={JSON.stringify(formData)} />
+                  {/* <QRCode value={JSON.stringify(formData)} /> */}
+                  <Link to={eduUrl}>
+                    <QRCode value={eduUrl} />
+                  </Link>
                   <div className="flex items-center mt-2">
                     <CheckCircleIcon className="h-5 w-5 text-green-500" />
                     <span className="ml-1">생성완료</span>
@@ -529,20 +529,20 @@ function SafetyEduReg() {
                         </p>
                       </div>
                       <p className="text-xs leading-5 text-gray-600">10MB</p>
-                      {/* 파일첨부 삭제시 밑에서부터는 하나씩 삭제 가능하나 맨 처음 첨부한 파일 삭제시 첨부한 파일들 전체가 삭제되는 오류있음 */}
                     </div>
                   </div>
                 </div>
 
                 <div>
-                  {uploadedFiles.map((file) => (
-                    <div key={file.name} className="flex flex-col items-start mt-2">
-                      <div>
-                        <span className="break-all">{file.name}</span>
+                  {uploadedFiles.map((file, index) => (
+                    <div key={file.name} className="flex items-start mt-2">
+                      <div className="text-left">
+                        <TruncatedFileName fileName={file.name} />
                       </div>
                       <button
                         onClick={() => deleteFile(file.name)}
                         className="ml-2 text-red-600"
+                        type="button"
                       >
                         삭제
                       </button>
