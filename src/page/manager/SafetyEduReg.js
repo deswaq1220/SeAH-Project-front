@@ -1,5 +1,5 @@
 import { useState, Fragment, useCallback } from "react";
-import Header from "../components/Header";
+import Header from "../../components/Header";
 // import { format, addMonths, subMonths } from "date-fns";
 import { Listbox, Transition } from "@headlessui/react";
 import { Link } from "react-router-dom";
@@ -186,7 +186,7 @@ function SafetyEduReg() {
 
       <div className="flex justify-center">
         <div
-          id="safeEduDetail"
+          id="safeEdureg"
           className="max-w-screen-lg w-full px-2 flex flex-col items-center mt-4  ring-1 ring-inset rounded-md ring-red-600/10"
         >
           <form className="w-full md:grid-cols-2">

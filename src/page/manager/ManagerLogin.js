@@ -1,4 +1,4 @@
-import "../style/ManagerLogin.css";
+import "../../style/ManagerLogin.css";
 function ManagerLogin() {
   return (
     <div>

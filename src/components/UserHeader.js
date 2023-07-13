@@ -33,7 +33,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Header() {
+export default function UserHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isSafetyCheckSelected, setSafetyCheckSelected] = useState(false);
   const [isEduMainSelected, setEduMainSelected] = useState(false);
@@ -65,7 +65,7 @@ export default function Header() {
         aria-label="Global"
       >
         <div className="flex lg:flex-1">
-          <Link to="/manager" className="-m-1.5 p-1.5">
+          <Link to="/user" className="-m-1.5 p-1.5">
             <span className="sr-only">Your Company</span>
             <img className="h-8 w-auto" src={logo} alt="" />
           </Link>
@@ -73,7 +73,7 @@ export default function Header() {
         <div className="flex lg:hidden">
           <button
             type="button"
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 hover:bg-slate-100"
+            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 hover:bg-slate-100 "
             onClick={() => setMobileMenuOpen(true)}
           >
             <span className="sr-only">Open main menu</span>
@@ -132,28 +132,23 @@ export default function Header() {
             </Transition>
           </Popover> */}
 
-          <Link to="/inspection"
+          <Link to="/#"
             className="text-lg font-semibold leading-6 text-gray-900 hover:bg-slate-100"
           >
             안전점검
           </Link>
           <Link
-            to="/eduMain"
+            to="/#"
             className="text-lg font-semibold leading-6 text-gray-900 hover:bg-slate-100"
           >
             안전교육
           </Link>
-          <Link
-            to="/reinfo"
-            className="text-lg font-semibold leading-6 text-gray-900 hover:bg-slate-100 "
-          >
-            기준정보관리
-          </Link>
+          
         </Popover.Group>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Link to="/" className="text-lg font-semibold leading-6 text-gray-900">
+          {/* <Link to="/" className="text-lg font-semibold leading-6 text-gray-900">
             로그아웃 <span aria-hidden="true">&rarr;</span>
-          </Link>
+          </Link> */}
         </div>
       </nav>
       <Dialog
@@ -216,18 +211,18 @@ export default function Header() {
                 >
                   안전교육
                 </Link>
-                <Link to="/reinfo"
+                {/* <Link to="/reinfo"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
                   기준정보관리
-                </Link>
+                </Link> */}
               </div>
               <div className="py-6">
-                <Link to="/managerlogin"
+                {/* <Link to="/managerlogin"
                   className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
                   로그아웃
-                </Link>
+                </Link> */}
               </div>
             </div>
           </div>

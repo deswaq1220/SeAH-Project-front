@@ -1,41 +1,41 @@
-import "../style/Main.css"
-import safety from "../img/safety.png";
-import worker from "../img/worker2.png";
-import mark from "../img/x-mark.png"
-import logo from "../img/logo.png"
+import "../../style/Main.css"
+import safety from "../../img/safety.png";
+import worker from "../../img/worker2.png";
+import mark from "../../img/x-mark.png"
+import logo from "../../img/logo.png"
 // import bannerImage from "../img/main_movie_bg.jpg"
-import info from "../img/personal-profile.png"
+// import info from "../../img/personal-profile.png"
 
-function MainManager() {
+function UserMain() {
 
   const products = [
     {
       id: 1,
       name: '안전교육',
-      href: '/eduMain',
+      href: '#',
       imageSrc: safety,
       imageAlt: '안전교육',
     },
     {
       id: 2,
       name: '안전점검',
-      href: '/inspection',
+      href: '#',
       imageSrc: worker,
       imageAlt: '안전점검',
     },
     {
       id: 3,
-      name: '기준정보등록',
-      href: '/reinfo',
-      imageSrc: info,
-      imageAlt: '기준정보',
+      name: '준비중',
+      href: '/404',
+      imageSrc: mark,
+      imageAlt: '준비중',
     },
     {
       id: 4,
       name: '준비중',
       href: '/404',
       imageSrc: mark,
-      imageAlt: '임시',
+      imageAlt: '준비중',
     },
     
     // More products...
@@ -47,7 +47,7 @@ function MainManager() {
   return (
     <div id="wrap2">
     <div className="bg-white">
-      <div className="mx-auto max-w-2xl  lg:max-w-7xl ">
+      <div className="mx-auto max-w-2xl px-4 lg:max-w-7xl lg:px-8">
       <div className="logoeara mt-4">
       <img src={logo} className="w-80 " />
       <p className=" text-seahColor text-lg ">안전도 <b>SeAH</b>답게!</p> 
@@ -82,4 +82,4 @@ function MainManager() {
   )
 }
 
-export default MainManager;
+export default UserMain;

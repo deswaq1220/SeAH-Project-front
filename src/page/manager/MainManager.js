@@ -1,33 +1,33 @@
-import "../style/Main.css"
-import safety from "../img/safety.png";
-import worker from "../img/worker2.png";
-import mark from "../img/x-mark.png"
-import logo from "../img/logo.png"
+import "../../style/Main.css"
+import safety from "../../img/safety.png";
+import worker from "../../img/worker2.png";
+import mark from "../../img/x-mark.png"
+import logo from "../../img/logo.png"
 // import bannerImage from "../img/main_movie_bg.jpg"
-import info from "../img/personal-profile.png"
+import info from "../../img/personal-profile.png"
 
-function UserMain() {
+function Mainmanager() {
 
   const products = [
     {
       id: 1,
       name: '안전교육',
-      href: '#',
+      href: '/eduMain',
       imageSrc: safety,
       imageAlt: '안전교육',
     },
     {
       id: 2,
       name: '안전점검',
-      href: '#',
+      href: '/inspection',
       imageSrc: worker,
       imageAlt: '안전점검',
     },
     {
       id: 3,
-      name: '준비중',
-      href: '/404',
-      imageSrc: mark,
+      name: '기준정보관리',
+      href: '/reinfo',
+      imageSrc: info,
       imageAlt: '준비중',
     },
     {
@@ -82,4 +82,4 @@ function UserMain() {
   )
 }
 
-export default UserMain;
+export default Mainmanager;
