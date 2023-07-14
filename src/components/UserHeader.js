@@ -2,16 +2,10 @@ import { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import { Dialog, Disclosure, Popover, Transition } from "@headlessui/react";
 import {
-  ArrowPathIcon,
   Bars3Icon,
-  ChartPieIcon,
-  CursorArrowRaysIcon,
-  FingerPrintIcon,
-  SquaresPlusIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import {
-  ChevronDownIcon,
   PhoneIcon,
   PlayCircleIcon,
 } from "@heroicons/react/20/solid";
@@ -24,10 +18,10 @@ import logo from "../img/logo.png";
 //   { name: 'Integrations', description: 'Connect with third-party tools', href: '#', icon: SquaresPlusIcon },
 //   { name: 'Automations', description: 'Build strategic funnels that will convert', href: '#', icon: ArrowPathIcon },
 // ]
-const callsToAction = [
-  { name: "Watch demo", href: "#", icon: PlayCircleIcon },
-  { name: "Contact sales", href: "#", icon: PhoneIcon },
-];
+// const callsToAction = [
+//   { name: "Watch demo", href: "#", icon: PlayCircleIcon },
+//   { name: "Contact sales", href: "#", icon: PhoneIcon },
+// ];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -35,28 +29,28 @@ function classNames(...classes) {
 
 export default function UserHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isSafetyCheckSelected, setSafetyCheckSelected] = useState(false);
-  const [isEduMainSelected, setEduMainSelected] = useState(false);
-  const [isReferenceSelected, setReferenceSelected] = useState(false);
+  // const [isSafetyCheckSelected, setSafetyCheckSelected] = useState(false);
+  // const [isEduMainSelected, setEduMainSelected] = useState(false);
+  // const [isReferenceSelected, setReferenceSelected] = useState(false);
 
-  const handleSafetyCheckClick = () => {
-    setSafetyCheckSelected(true);
-    setEduMainSelected(false);
-    setMobileMenuOpen(false);
-  };
+  // const handleSafetyCheckClick = () => {
+  //   setSafetyCheckSelected(true);
+  //   setEduMainSelected(false);
+  //   setMobileMenuOpen(false);
+  // };
 
-  const handleEduMainClick = () => {
-    setSafetyCheckSelected(false);
-    setEduMainSelected(true);
-    setMobileMenuOpen(false);
-  };
+  // const handleEduMainClick = () => {
+  //   setSafetyCheckSelected(false);
+  //   setEduMainSelected(true);
+  //   setMobileMenuOpen(false);
+  // };
 
-  const handleReferenceClick = () => {
-    setSafetyCheckSelected(false);
-    setEduMainSelected(false);
-    setReferenceSelected(true);
-    setMobileMenuOpen(false);
-  };
+  // const handleReferenceClick = () => {
+  //   setSafetyCheckSelected(false);
+  //   setEduMainSelected(false);
+  //   setReferenceSelected(true);
+  //   setMobileMenuOpen(false);
+  // };
 
   return (
     <header className="bg-white">

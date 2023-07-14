@@ -2,20 +2,14 @@ import { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import { Dialog, Disclosure, Popover, Transition } from "@headlessui/react";
 import {
-  ArrowPathIcon,
   Bars3Icon,
   ChartPieIcon,
-  CursorArrowRaysIcon,
-  FingerPrintIcon,
-  SquaresPlusIcon,
   XMarkIcon,
   ClipboardDocumentListIcon,
   BookOpenIcon,
 } from "@heroicons/react/24/outline";
 import {
   ChevronDownIcon,
-  PhoneIcon,
-  PlayCircleIcon,
 } from "@heroicons/react/20/solid";
 import logo from "../img/logo.png";
 
@@ -39,28 +33,28 @@ function classNames(...classes) {
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isSafetyCheckSelected, setSafetyCheckSelected] = useState(false);
-  const [isEduMainSelected, setEduMainSelected] = useState(false);
-  const [isReferenceSelected, setReferenceSelected] = useState(false);
+  // const [isSafetyCheckSelected, setSafetyCheckSelected] = useState(false);
+  // const [isEduMainSelected, setEduMainSelected] = useState(false);
+  // const [isReferenceSelected, setReferenceSelected] = useState(false);
 
-  const handleSafetyCheckClick = () => {
-    setSafetyCheckSelected(true);
-    setEduMainSelected(false);
-    setMobileMenuOpen(false);
-  };
+  // const handleSafetyCheckClick = () => {
+  //   setSafetyCheckSelected(true);
+  //   setEduMainSelected(false);
+  //   setMobileMenuOpen(false);
+  // };
 
-  const handleEduMainClick = () => {
-    setSafetyCheckSelected(false);
-    setEduMainSelected(true);
-    setMobileMenuOpen(false);
-  };
+  // const handleEduMainClick = () => {
+  //   setSafetyCheckSelected(false);
+  //   setEduMainSelected(true);
+  //   setMobileMenuOpen(false);
+  // };
 
-  const handleReferenceClick = () => {
-    setSafetyCheckSelected(false);
-    setEduMainSelected(false);
-    setReferenceSelected(true);
-    setMobileMenuOpen(false);
-  };
+  // const handleReferenceClick = () => {
+  //   setSafetyCheckSelected(false);
+  //   setEduMainSelected(false);
+  //   setReferenceSelected(true);
+  //   setMobileMenuOpen(false);
+  // };
 
   return (
     <header className="bg-white">

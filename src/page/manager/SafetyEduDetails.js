@@ -50,13 +50,20 @@ export default function SafetyEduDetails() {
               2023-07-13 14:00 ~ 15:00
             </p>
           </div>
+          <div>
           <button
-            type="button"
-            className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-            onClick={handleExport}
+            type="submit"
+            className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mr-1"
           >
-            엑셀 저장
+            수정하기
           </button>
+          <button
+            type="submit"
+            className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+          >
+            저장하기
+          </button>
+          </div>
         </div>
 
         <div className="mt-6 border-t border-gray-100">
@@ -74,8 +81,8 @@ export default function SafetyEduDetails() {
               <dt className="text-base font-bold leading-6 text-gray-900">
                 교육내용
               </dt>
-              <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                사무직 안전교육입니다. 참석 바랍니다
+              <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0 whitespace-pre-wrap ">
+                
               </dd>
             </div>
             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -140,19 +147,29 @@ export default function SafetyEduDetails() {
             </div>
           </dl>
         </div>
-        <div className="mt-6 pr-3 pb-3 flex items-center justify-end gap-x-6 ">
+        <div className="mt-6 pr-3 pb-3 flex items-center justify-center gap-x-6 ">
+          
+          <div>
           <button
             type="submit"
-            className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+            className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mr-1"
           >
-            수정하기
+            QR코드  
           </button>
           <button
             type="submit"
-            className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+            className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mr-1"
           >
-            저장하기
+            출석현황
           </button>
+          <button
+            type="button"
+            className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+            onClick={handleExport}
+          >
+            엑셀 저장
+          </button>
+          </div>
         </div>
       </div>
     </div>
