@@ -2,7 +2,7 @@ import { useState, Fragment, useCallback } from "react";
 import Header from "../../components/Header";
 // import { format, addMonths, subMonths } from "date-fns";
 import { Listbox, Transition } from "@headlessui/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   CheckIcon,
   ChevronUpDownIcon,
@@ -178,6 +178,35 @@ function SafetyEduReg() {
     }));
   }; // 큐알로 값 전달기능
 
+  // 교육등록
+
+  const navigate = useNavigate();
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    fetch('http://localhost:8081/edureg', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('저장내용:', formData);
+      // 저장 성공 시 처리 로직 추가
+      navigate('/edudetails'); // 저장 성공 후 화면 이동
+    })
+    .catch(error => {
+      console.log("여기서 실패");
+      console.error('에러저장내용:', error);
+      // 저장 실패 시 처리 로직 추가
+    });
+  };
+
+
+
   const eduUrl = "http://www.seahaerospace.com/kor/index.asp"; // 큐알 스캔시 이동할 경로
 
   return (
@@ -189,7 +218,7 @@ function SafetyEduReg() {
           id="safeEdureg"
           className="max-w-screen-lg w-full px-2 flex flex-col items-center mt-4  ring-1 ring-inset rounded-md ring-red-600/10"
         >
-          <form className="w-full md:grid-cols-2">
+          <form className="w-full md:grid-cols-2" onSubmit={handleSubmit}>
             <div id="sortation" className="flex items-baseline justify-start">
               <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
                 구분
@@ -582,6 +611,7 @@ function SafetyEduReg() {
               <button
                 type="submit"
                 className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                
               >
                 저장하기
               </button>
