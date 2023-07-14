@@ -11,6 +11,7 @@ import {
 } from "@heroicons/react/20/solid";
 import { useDropzone } from "react-dropzone";
 import QRCode from "qrcode.react";
+import axios from 'axios';
 const people = [
   {
     id: 1,
@@ -18,15 +19,19 @@ const people = [
   },
   {
     id: 2,
-    name: "[집체교육]",
+    name: "CREW",
   },
   {
     id: 3,
-    name: "[조회]",
+    name: "DM",
   },
   {
     id: 4,
-    name: "[임시]",
+    name: "MANAGE",
+  },
+  {
+    id: 5,
+    name: "ETC",
   },
 ];
 
@@ -37,15 +42,15 @@ const duty = [
   },
   {
     id: 2,
-    name: "전체",
+    name: "T",
   },
   {
     id: 3,
-    name: "사무직",
+    name: "O",
   },
   {
     id: 4,
-    name: "현장직",
+    name: "F",
   },
 ];
 
@@ -76,17 +81,23 @@ function SafetyEduReg() {
   // const [currentDate, setCurrentDate] = useState(new Date());
   const [isCompleted, setIsCompleted] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [error, setError] = useState(null);
+
+
   const [formData, setFormData] = useState({
-    sortation: "", // 구분
-    edutitle: "", // 교육제목
-    charge: "", // 담당자
-    trainingTime: {
+    eduCategory: "", // 교육
+    // edutitle: "", // 교육제목
+    eduInstructor: "", // 담당자
+    eduPlace:"" ,// 교육장소,
+    eduSumTime: {
       //교육시간
-      startTime: "", // 시작시간
-      endTime: "", // 끝나는 시간
+      eduStartTime: "", // 시작시간
+      eduEndTime: "", // 끝나는 시간
     },
-    duty: "", // 대상자
-    content: "", // 교육내용
+    eduTarget: "", // 대상자
+    eduContent: "", // 교육내용
+    eduWriter: ""
+
   });
 
   const handleChange = (e) => {
@@ -95,7 +106,7 @@ function SafetyEduReg() {
       ...prevData,
       [name]: value,
     }));
-  }; // 큐알로 값 넘기는 기능
+  }; // 값 넘기는 기능
 
   const [selectedStartTime, setSelectedStartTime] = useState("");
   const [selectedEndTime, setSelectedEndTime] = useState("");
@@ -105,24 +116,25 @@ function SafetyEduReg() {
     setSelectedStartTime(newValue);
     setFormData((prevData) => ({
       ...prevData,
-      trainingTime: {
-        ...prevData.trainingTime,
-        startTime: newValue, // 업데이트할 formData 속성에 맞게 수정
+      eduSumTime: {
+        ...prevData.eduSumTime,
+        eduStartTime: newValue, // 시작시간 필드 이름 변경
       },
     }));
-  }; // 시작시간
-
+  };
+  
   const handleEndTimeChange = (e) => {
     const newValue = e.target.value;
     setSelectedEndTime(newValue);
     setFormData((prevData) => ({
       ...prevData,
-      trainingTime: {
-        ...prevData.trainingTime,
-        endTime: newValue,
+      eduSumTime: {
+        ...prevData.eduSumTime,
+        eduEndTime: newValue, // 종료시간 필드 이름 변경
       },
     }));
-  }; // 종료시간
+  };
+  
 
   const handleCreate = () => {
     setIsCompleted(true); // 생성 완료 상태 업데이트
@@ -165,7 +177,7 @@ function SafetyEduReg() {
     setSelected(selectedItem);
     setFormData((prevData) => ({
       ...prevData,
-      sortation: selectedItem.name, // 업데이트할 formData 속성에 맞게 수정
+      eduCategory: selectedItem.name, // 업데이트할 formData 속성에 맞게 수정
     }));
   }; // 큐알로 값 전달 기능
 
@@ -174,39 +186,70 @@ function SafetyEduReg() {
     setFormData((prevData) => ({
       ...prevData,
       // 업데이트할 formData 속성에 맞게 수정
-      duty: value.name,
+      eduTarget: value.name,
     }));
   }; // 큐알로 값 전달기능
 
   // 교육등록
 
-  const navigate = useNavigate();
+   const navigate = useNavigate();
+
+  //  const handleSubmit = (event) => {
+  //   event.preventDefault();
+  
+  //   const formData = {
+  //     data: JSON.stringify(formData) // 'data' 키를 추가하고 값으로 formData를 문자열로 변환
+  //   };
+  
+  //   fetch('http://localhost:8081/edureg', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify(formData)
+  //   })
+  //     .then(response => {
+  //       console.log('저장내용:', formData);
+  //       // 저장 성공 시 처리 로직 추가
+  //       navigate('/edudetails'); // 저장 성공 후 화면 이동
+  //       console.log(response);
+  //     })
+  //     .catch(error => {
+  //       console.log('에러저장내용:', error);
+  //       // 저장 실패 시 처리 로직 추가
+  //     });
+  // };
+  
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    fetch('http://localhost:8081/edureg', {
-      method: 'POST',
+    if (!formData.eduContent) {
+      // eduContent 필드가 비어있을 경우 에러 처리
+      setError("Edu Content is required.");
+      return;
+    }
+  
+    axios.post('http://localhost:8081/edureg', formData,{
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(formData)
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log('저장내용:', formData);
-      // 저장 성공 시 처리 로직 추가
-      navigate('/edudetails'); // 저장 성공 후 화면 이동
-    })
-    .catch(error => {
-      console.log("여기서 실패");
-      console.error('에러저장내용:', error);
-      // 저장 실패 시 처리 로직 추가
-    });
+    }) // 수정된 부분
+      .then(response => {
+        console.log('저장내용:', formData);
+        // 저장 성공 시 처리 로직 추가
+        navigate('/edudetails'); // 저장 성공 후 화면 이동
+        console.log(response);
+      })
+      .catch(error => {
+        console.log('에러저장내용:', error);
+
+        // 저장 실패 시 처리 로직 추가
+      });
   };
-
-
-
+  
+  
+  
   const eduUrl = "http://www.seahaerospace.com/kor/index.asp"; // 큐알 스캔시 이동할 경로
 
   return (
@@ -316,8 +359,8 @@ function SafetyEduReg() {
                     type="text"
                     name="edutitle"
                     id="edutitle"
-                    value={formData.edutitle}
-                    onChange={handleChange}
+                    // value={formData.edutitle}
+                    // onChange={handleChange}
                     autoComplete="family-name"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
                   />
@@ -336,9 +379,31 @@ function SafetyEduReg() {
                 <div className="mt-2">
                   <input
                     type="text"
-                    name="charge"
+                    name="eduInstructor"
                     id="educharge"
-                    value={formData.charge}
+                    value={formData.eduInstructor}
+                    onChange={handleChange}
+                    autoComplete="family-name"
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
+                  />
+                </div>
+              </div>
+            </div>
+            <div id="eduPlace" className="flex items-baseline justify-start">
+              <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
+                교육장소
+              </span>
+              <div className="sm:col-span-3">
+                <label
+                  htmlFor="educharge"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                ></label>
+                <div className="mt-2">
+                  <input
+                    type="text"
+                    name="eduPlace"
+                    id="place"
+                    value={formData.eduPlace}
                     onChange={handleChange}
                     autoComplete="family-name"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
@@ -488,9 +553,9 @@ function SafetyEduReg() {
               <div className="mt-2 w-80">
                 <textarea
                   id="about"
-                  name="content"
+                  name="eduContent"
                   rows={3}
-                  value={formData.content}
+                  value={formData.eduContent}
                   onChange={handleChange}
                   className="block w-full h-16 rounded-md border-0 py-1.5 px-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6"
                   defaultValue={""}
@@ -593,8 +658,10 @@ function SafetyEduReg() {
                 <div className="mt-2">
                   <input
                     type="text"
-                    name="writer"
+                    name="eduWriter"
                     id="eduwriter"
+                    value={formData.eduWriter}
+                    onChange={handleChange}
                     autoComplete="family-name"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
                   />
