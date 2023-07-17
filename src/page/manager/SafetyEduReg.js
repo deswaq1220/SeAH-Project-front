@@ -123,7 +123,7 @@ function SafetyEduReg() {
 
   const [formData, setFormData] = useState({
     eduCategory: "", // 교육
-    // edutitle: "", // 교육제목
+     eduClass: "", // 교육분류
     eduInstructor: "", // 담당자
     eduPlace:"" ,// 교육장소,
       //교육시간
@@ -384,16 +384,16 @@ function SafetyEduReg() {
               className="flex items-baseline justify-start"
             >
               <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
-                교육제목
+                분류
               </span>
               <div className="sm:col-span-3 w-56">
                 <div className="mt-2">
                   <input
                     type="text"
-                    name="edutitle"
-                    id="edutitle"
-                    // value={formData.edutitle}
-                    // onChange={handleChange}
+                    name="eduClass"
+                    id="eduClass"
+                    value={formData.eduClass}
+                    onChange={handleChange}
                     autoComplete="family-name"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
                   />

@@ -12,6 +12,7 @@ import UserSafetyEduAttendance from "./page/user/UserSafetyEduAttendance";
 import SafetyEduDetails from "./page/manager/SafetyEduDetails";
 import EmailForm from "./Email";
 
+
 function App() {
   return (
     <Router>
