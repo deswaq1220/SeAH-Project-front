@@ -11,7 +11,7 @@ import {
 } from "@heroicons/react/20/solid";
 import { useDropzone } from "react-dropzone";
 import QRCode from "qrcode.react";
-import axios from 'axios';
+import axios from "axios";
 const people = [
   {
     id: 1,
@@ -35,6 +35,25 @@ const people = [
   },
 ];
 
+// 한글 값 매핑 함수
+function mapEduCategoryName(category) {
+  switch (category) {
+    case "선택":
+      return "[선택]";
+    case "CREW":
+      return "[크루미팅]";
+    case "DM":
+      return "[DM미팅]";
+    case "MANAGE":
+      return "[관리감독]";
+    case "ETC":
+      return "[기타]";
+    default:
+      return "";
+  }
+}
+
+
 const duty = [
   {
     id: 1,
@@ -53,6 +72,23 @@ const duty = [
     name: "F",
   },
 ];
+// 한글 값 매핑 함수
+function mapDutyName(duty) {
+  switch (duty) {
+    case "선택":
+      return "[선택]";
+    case "T":
+      return "[전체]";
+    case "O":
+      return "[사무직]";
+    case "F":
+      return "[현장직]";
+    default:
+      return "";
+  }
+}
+
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -82,22 +118,21 @@ function SafetyEduReg() {
   const [isCompleted, setIsCompleted] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [error, setError] = useState(null);
-
+  
+ 
 
   const [formData, setFormData] = useState({
     eduCategory: "", // 교육
     // edutitle: "", // 교육제목
     eduInstructor: "", // 담당자
     eduPlace:"" ,// 교육장소,
-    eduSumTime: {
       //교육시간
-      eduStartTime: "", // 시작시간
-      eduEndTime: "", // 끝나는 시간
-    },
+      eduStartTime: new Date(), // 시작시간
+      eduEndTime: new Date(), // 끝나는 시간
+    
     eduTarget: "", // 대상자
     eduContent: "", // 교육내용
     eduWriter: ""
-
   });
 
   const handleChange = (e) => {
@@ -116,25 +151,23 @@ function SafetyEduReg() {
     setSelectedStartTime(newValue);
     setFormData((prevData) => ({
       ...prevData,
-      eduSumTime: {
-        ...prevData.eduSumTime,
+      
         eduStartTime: newValue, // 시작시간 필드 이름 변경
-      },
+      
     }));
   };
-  
+
   const handleEndTimeChange = (e) => {
     const newValue = e.target.value;
     setSelectedEndTime(newValue);
     setFormData((prevData) => ({
       ...prevData,
-      eduSumTime: {
-        ...prevData.eduSumTime,
+     
+      
         eduEndTime: newValue, // 종료시간 필드 이름 변경
-      },
+     
     }));
   };
-  
 
   const handleCreate = () => {
     setIsCompleted(true); // 생성 완료 상태 업데이트
@@ -192,15 +225,15 @@ function SafetyEduReg() {
 
   // 교육등록
 
-   const navigate = useNavigate();
+  const navigate = useNavigate();
 
   //  const handleSubmit = (event) => {
   //   event.preventDefault();
-  
+
   //   const formData = {
   //     data: JSON.stringify(formData) // 'data' 키를 추가하고 값으로 formData를 문자열로 변환
   //   };
-  
+
   //   fetch('http://localhost:8081/edureg', {
   //     method: 'POST',
   //     headers: {
@@ -219,7 +252,6 @@ function SafetyEduReg() {
   //       // 저장 실패 시 처리 로직 추가
   //     });
   // };
-  
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -229,27 +261,28 @@ function SafetyEduReg() {
       setError("Edu Content is required.");
       return;
     }
-  
-    axios.post('http://localhost:8081/edureg', formData,{
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }) // 수정된 부분
-      .then(response => {
-        console.log('저장내용:', formData);
+
+    axios
+      .post("http://localhost:8081/edureg", formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }) // 수정된 부분
+      .then((response) => {
+        console.log("저장내용:", formData);
         // 저장 성공 시 처리 로직 추가
-        navigate('/edudetails'); // 저장 성공 후 화면 이동
+        navigate("/edudetails"); // 저장 성공 후 화면 이동
         console.log(response);
       })
-      .catch(error => {
-        console.log('에러저장내용:', error);
+      .catch((error) => {
+        console.log("에러저장내용:", error);
 
         // 저장 실패 시 처리 로직 추가
       });
   };
-  
-  
-  
+
+
+
   const eduUrl = "http://www.seahaerospace.com/kor/index.asp"; // 큐알 스캔시 이동할 경로
 
   return (
@@ -273,7 +306,7 @@ function SafetyEduReg() {
                       <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-16 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
                         <span className="flex items-center">
                           <span className="ml-3 block truncate">
-                            {selected.name}
+                          {selected ? mapEduCategoryName(selected.name) : "선택"}
                           </span>
                         </span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
@@ -316,7 +349,7 @@ function SafetyEduReg() {
                                         "ml-3 block truncate"
                                       )}
                                     >
-                                      {person.name}
+                                      {mapEduCategoryName(person.name)}
                                     </span>
                                   </div>
 
@@ -472,7 +505,7 @@ function SafetyEduReg() {
                       <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-16 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
                         <span className="flex items-center">
                           <span className="ml-3 block truncate">
-                            {selectedDuty.name}
+                          {selectedDuty ? mapDutyName(selectedDuty.name) : "선택"}
                           </span>
                         </span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
@@ -515,7 +548,7 @@ function SafetyEduReg() {
                                         "ml-3 block truncate"
                                       )}
                                     >
-                                      {dutyItem.name}
+                                      {mapDutyName(dutyItem.name)}
                                     </span>
                                   </div>
 
@@ -678,7 +711,6 @@ function SafetyEduReg() {
               <button
                 type="submit"
                 className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-                
               >
                 저장하기
               </button>
