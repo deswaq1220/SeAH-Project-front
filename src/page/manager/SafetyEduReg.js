@@ -114,7 +114,7 @@ function SafetyEduReg() {
   const [isCompleted, setIsCompleted] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [error, setError] = useState(null);
-  const [selectedFile, setSelectedFile] = useState(null);
+  // const [selectedFile, setSelectedFile] = useState(null);
   const [formData, setFormData] = useState({
     eduCategory: "", // 교육
     eduClass: "", // 교육분류
@@ -127,9 +127,9 @@ function SafetyEduReg() {
     eduTarget: "", // 대상자
     eduContent: "", // 교육내용
     eduWriter: "",
-    file: null
+    file: null,
   });
-  // formData.append("file", uploadedFiles[0]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -193,24 +193,33 @@ function SafetyEduReg() {
     });
   };
   // 파일 업로드 핸들러
-  // const handleFileUpload = () => {
-  //   if (!uploadedFiles[0]) {
-  //     alert("Please select a file.");
-  //     return;
-  //   }
-  //   const formData = new FormData();
-    
-
-  //   axios
-  //     .post("http://localhost:8081/edureg", formData, {
-  //     })
-  //     .then((response) => {
-  //       console.log("File uploaded successfully.", response);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error uploading file.", error);
-  //     });
-  // };
+  const handleFileUpload = () => {
+    if (!uploadedFiles[0]) {
+      alert("Please select a file.");
+      return;
+    }
+  
+    const formDataWithFile = new FormData();
+    formDataWithFile.append("eduCategory", formData.eduCategory);
+    formDataWithFile.append("eduClass", formData.eduClass);
+    formDataWithFile.append("eduInstructor", formData.eduInstructor);
+    formDataWithFile.append("eduPlace", formData.eduPlace);
+    formDataWithFile.append("eduStartTime", formData.eduStartTime);
+    formDataWithFile.append("eduEndTime", formData.eduEndTime);
+    formDataWithFile.append("eduTarget", formData.eduTarget);
+    formDataWithFile.append("eduContent", formData.eduContent);
+    formDataWithFile.append("eduWriter", formData.eduWriter);
+    formDataWithFile.append("file", formData.file); // 파일을 폼 데이터에 추가
+  
+    axios
+      .post("http://localhost:8081/edureg", formDataWithFile)
+      .then((response) => {
+        console.log("File uploaded successfully.", response);
+      })
+      .catch((error) => {
+        console.error("Error uploading file.", error);
+      });
+  };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop }); // 온드롭기능
 
@@ -253,13 +262,25 @@ function SafetyEduReg() {
   const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
-    
+
     if (!formData.eduContent) {
       // eduContent 필드가 비어있을 경우 에러 처리
       setError("Edu Content is required.");
       return;
     }
-    
+
+    const formDataWithFile = new FormData();
+    formDataWithFile.append("eduCategory", formData.eduCategory);
+    formDataWithFile.append("eduClass", formData.eduClass);
+    formDataWithFile.append("eduInstructor", formData.eduInstructor);
+    formDataWithFile.append("eduPlace", formData.eduPlace);
+    formDataWithFile.append("eduStartTime", formData.eduStartTime);
+    formDataWithFile.append("eduEndTime", formData.eduEndTime);
+    formDataWithFile.append("eduTarget", formData.eduTarget);
+    formDataWithFile.append("eduContent", formData.eduContent);
+    formDataWithFile.append("eduWriter", formData.eduWriter);
+    formDataWithFile.append("file", formData.file); // 파일을 폼 데이터에 추가
+
     axios
       .post("http://localhost:8081/edureg", formData, {
         // headers: {
@@ -277,6 +298,8 @@ function SafetyEduReg() {
 
         // 저장 실패 시 처리 로직 추가
       });
+
+      handleFileUpload()
   };
 
   // 큐알 스캔시 이동할 경로
@@ -717,7 +740,6 @@ function SafetyEduReg() {
               </button>
               <button
                 type="submit"
-           
                 className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
               >
                 저장하기

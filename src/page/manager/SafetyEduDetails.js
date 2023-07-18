@@ -37,6 +37,8 @@ export default function SafetyEduDetails() {
     saveAs(excelFile, "안전교육.xlsx");
   };
 
+  
+
   return (
     <div>
       <Header />
