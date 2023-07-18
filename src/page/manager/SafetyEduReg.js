@@ -53,7 +53,6 @@ function mapEduCategoryName(category) {
   }
 }
 
-
 const duty = [
   {
     id: 1,
@@ -88,8 +87,6 @@ function mapDutyName(duty) {
   }
 }
 
-
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -114,27 +111,25 @@ const TruncatedFileName = ({ fileName }) => {
 function SafetyEduReg() {
   const [selected, setSelected] = useState(people[0]);
   const [selectedDuty, setSelectedDuty] = useState(duty[0]);
-  // const [currentDate, setCurrentDate] = useState(new Date());
   const [isCompleted, setIsCompleted] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [error, setError] = useState(null);
-  
- 
-
+  const [selectedFile, setSelectedFile] = useState(null);
   const [formData, setFormData] = useState({
     eduCategory: "", // 교육
-     eduClass: "", // 교육분류
+    eduClass: "", // 교육분류
     eduInstructor: "", // 담당자
-    eduPlace:"" ,// 교육장소,
-      //교육시간
-      eduStartTime: new Date(), // 시작시간
-      eduEndTime: new Date(), // 끝나는 시간
-    
+    eduPlace: "", // 교육장소,
+    //교육시간
+    eduStartTime: new Date(), // 시작시간
+    eduEndTime: new Date(), // 끝나는 시간
+
     eduTarget: "", // 대상자
     eduContent: "", // 교육내용
-    eduWriter: ""
+    eduWriter: "",
+    file: null
   });
-
+  // formData.append("file", uploadedFiles[0]);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -151,9 +146,8 @@ function SafetyEduReg() {
     setSelectedStartTime(newValue);
     setFormData((prevData) => ({
       ...prevData,
-      
-        eduStartTime: newValue, // 시작시간 필드 이름 변경
-      
+
+      eduStartTime: newValue, // 시작시간 필드 이름 변경
     }));
   };
 
@@ -162,10 +156,7 @@ function SafetyEduReg() {
     setSelectedEndTime(newValue);
     setFormData((prevData) => ({
       ...prevData,
-     
-      
-        eduEndTime: newValue, // 종료시간 필드 이름 변경
-     
+      eduEndTime: newValue, // 종료시간 필드 이름 변경
     }));
   };
 
@@ -176,9 +167,16 @@ function SafetyEduReg() {
   const onDrop = useCallback(
     (acceptedFiles) => {
       setUploadedFiles([...uploadedFiles, ...acceptedFiles]);
+      if (acceptedFiles.length > 0) {
+        setFormData({
+          ...formData,
+          file: acceptedFiles[0], // Update the file property in the formData state
+        });
+      }
+      alert(acceptedFiles);
       console.log(acceptedFiles);
     },
-    [uploadedFiles]
+    [formData, uploadedFiles]
   ); // 파일 온드롭 기능
 
   const deleteFile = (index) => {
@@ -187,8 +185,36 @@ function SafetyEduReg() {
     setUploadedFiles(updatedFiles);
   }; // 파일 삭제기능
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setFormData({
+      ...formData,
+      file: file, // Update the file property in the formData state
+    });
+  };
+  // 파일 업로드 핸들러
+  // const handleFileUpload = () => {
+  //   if (!uploadedFiles[0]) {
+  //     alert("Please select a file.");
+  //     return;
+  //   }
+  //   const formData = new FormData();
+    
+
+  //   axios
+  //     .post("http://localhost:8081/edureg", formData, {
+  //     })
+  //     .then((response) => {
+  //       console.log("File uploaded successfully.", response);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error uploading file.", error);
+  //     });
+  // };
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop }); // 온드롭기능
 
+  // 데이트 피커
   const formatTimeRange = (startTime, endTime) => {
     const options = {
       year: "numeric",
@@ -204,16 +230,16 @@ function SafetyEduReg() {
     );
     const formattedEndTime = new Date(endTime).toLocaleString("ko-KR", options);
     return `${formattedStartTime} ~ ${formattedEndTime}`;
-  }; // 데이트 피커
-
+  };
+  // 큐알로 값 전달 기능
   const handleListboxChange = (selectedItem) => {
     setSelected(selectedItem);
     setFormData((prevData) => ({
       ...prevData,
       eduCategory: selectedItem.name, // 업데이트할 formData 속성에 맞게 수정
     }));
-  }; // 큐알로 값 전달 기능
-
+  };
+  // 큐알로 값 전달기능
   const handleDutyChange = (value) => {
     setSelectedDuty(value);
     setFormData((prevData) => ({
@@ -221,52 +247,24 @@ function SafetyEduReg() {
       // 업데이트할 formData 속성에 맞게 수정
       eduTarget: value.name,
     }));
-  }; // 큐알로 값 전달기능
+  };
 
-  // 교육등록
-
+  // 교육등록 핸들러
   const navigate = useNavigate();
-
-  //  const handleSubmit = (event) => {
-  //   event.preventDefault();
-
-  //   const formData = {
-  //     data: JSON.stringify(formData) // 'data' 키를 추가하고 값으로 formData를 문자열로 변환
-  //   };
-
-  //   fetch('http://localhost:8081/edureg', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify(formData)
-  //   })
-  //     .then(response => {
-  //       console.log('저장내용:', formData);
-  //       // 저장 성공 시 처리 로직 추가
-  //       navigate('/edudetails'); // 저장 성공 후 화면 이동
-  //       console.log(response);
-  //     })
-  //     .catch(error => {
-  //       console.log('에러저장내용:', error);
-  //       // 저장 실패 시 처리 로직 추가
-  //     });
-  // };
-
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    
     if (!formData.eduContent) {
       // eduContent 필드가 비어있을 경우 에러 처리
       setError("Edu Content is required.");
       return;
     }
-
+    
     axios
       .post("http://localhost:8081/edureg", formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
+        // headers: {
+        //   "Content-Type": "application/json",
+        // },
       }) // 수정된 부분
       .then((response) => {
         console.log("저장내용:", formData);
@@ -281,9 +279,8 @@ function SafetyEduReg() {
       });
   };
 
-
-
-  const eduUrl = "http://www.seahaerospace.com/kor/index.asp"; // 큐알 스캔시 이동할 경로
+  // 큐알 스캔시 이동할 경로
+  const eduUrl = "http://www.seahaerospace.com/kor/index.asp";
 
   return (
     <div>
@@ -294,7 +291,11 @@ function SafetyEduReg() {
           id="safeEdureg"
           className="max-w-screen-lg w-full px-2 flex flex-col items-center mt-4  ring-1 ring-inset rounded-md ring-red-600/10"
         >
-          <form className="w-full md:grid-cols-2" onSubmit={handleSubmit}>
+          <form
+            className="w-full md:grid-cols-2"
+            onSubmit={handleSubmit}
+            encType="multipart/form-data"
+          >
             <div id="sortation" className="flex items-baseline justify-start">
               <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
                 구분
@@ -306,7 +307,9 @@ function SafetyEduReg() {
                       <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-16 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
                         <span className="flex items-center">
                           <span className="ml-3 block truncate">
-                          {selected ? mapEduCategoryName(selected.name) : "선택"}
+                            {selected
+                              ? mapEduCategoryName(selected.name)
+                              : "선택"}
                           </span>
                         </span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
@@ -505,7 +508,9 @@ function SafetyEduReg() {
                       <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-16 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
                         <span className="flex items-center">
                           <span className="ml-3 block truncate">
-                          {selectedDuty ? mapDutyName(selectedDuty.name) : "선택"}
+                            {selectedDuty
+                              ? mapDutyName(selectedDuty.name)
+                              : "선택"}
                           </span>
                         </span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
@@ -649,6 +654,8 @@ function SafetyEduReg() {
                             name="file-upload"
                             {...getInputProps()}
                             className="sr-only"
+                            type="file"
+                            onChange={handleFileChange}
                           />
                         </label>
                         <p className="pl-1">
@@ -710,6 +717,7 @@ function SafetyEduReg() {
               </button>
               <button
                 type="submit"
+           
                 className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
               >
                 저장하기
