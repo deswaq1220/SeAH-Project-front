@@ -4,6 +4,9 @@ import { Listbox, Transition } from "@headlessui/react";
 // import { Link } from "react-router-dom";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import UserHeader from "../../components/UserHeader";
+import axios from "axios";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const department = [
   {
@@ -37,6 +40,65 @@ function UserSafetyEduAttendance() {
   const day = String(today.getDate()).padStart(2, "0");
 
   const formattedDate = `${year}. ${month}. ${day}`;
+ 
+
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+  
+    // Form 데이터 가져오기
+    const attenDepartment = selected.name; // 사용자가 선택한 부서명
+    const attenName = selected.attenName;
+    const attenEmployeeNumber = selected.attenEmployeeNumber;
+  
+    // 출석 등록을 위한 요청 데이터 생성
+    const requestData = {
+      attenDepartment, // 사용자가 선택한 부서명을 추가
+      attenName,
+      attenEmployeeNumber,
+    };
+  
+    // 출석 등록 요청 보내기
+    axios
+      .post("http://localhost:8081/usereduatten/register", requestData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        // 성공적으로 응답을 받았을 때 처리
+        console.log(response);
+
+        // 출석이 완료되었다는 알림 띄우기
+      toast.success('출석이 완료되었습니다.', {
+        position: 'top-center',
+        autoClose: 3000, // 알림이 3초 후에 자동으로 사라짐
+        hideProgressBar: true,
+      });
+      })
+      .catch((error) => {
+        // 오류가 발생했을 때 처리
+        console.error(error);
+        alert("출석 등록에 실패했습니다. 다시 시도해주세요.");
+      });
+  };
+
+  // 값 가져오는 핸들러
+  const handleNameChange = (event) => {
+    setSelected((prevSelected) => ({
+      ...prevSelected,
+      attenName: event.target.value,
+    }));
+  };
+ 
+  const handleNumberChange = (event) => {
+    setSelected((prevSelected) => ({
+      ...prevSelected,
+      attenEmployeeNumber: event.target.value,
+    }));
+  };
+  
+
   return (
     <div>
      <UserHeader></UserHeader>
@@ -54,7 +116,7 @@ function UserSafetyEduAttendance() {
               안전교육 사원 출석 페이지 입니다
             </p>
           </div>
-          <form className="w-full md:grid-cols-2">
+          <form className="w-full md:grid-cols-2" onSubmit={handleSubmit}>
             <div id="sortation" className="flex items-baseline justify-start">
               <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
                 부서
@@ -147,8 +209,10 @@ function UserSafetyEduAttendance() {
                 <div className="mt-2">
                   <input
                     type="text"
-                    name="name"
+                    name="attenName"
                     id="Employee_name"
+                    value={selected.attenName}
+                    onChange={handleNameChange}
                     autoComplete="family-name"
                     required
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
@@ -167,8 +231,10 @@ function UserSafetyEduAttendance() {
                 <div className="mt-2">
                   <input
                     type="text"
-                    name="number"
+                    name="attenEmployeeNumber"
                     id="number"
+                    value={selected.attenEmployeeNumber}
+                    onChange={handleNumberChange}
                     required
                     autoComplete="family-name"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
