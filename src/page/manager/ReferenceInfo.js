@@ -4,7 +4,7 @@ function ReferenceInfo() {
   return(
     <>
     <Header/>
-    기준정보페이지다
+    기준정보페이지입니다
     </>
   )
 }

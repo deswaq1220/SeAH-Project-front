@@ -505,7 +505,7 @@ const handleFileUpload = () => {
                   min={new Date().toISOString().slice(0, 16)}
                 />
 
-                <label
+                {/* <label
                   htmlFor="endtimepicker"
                   className="block mt-4 mb-2 font-medium text-gray-700"
                 >
@@ -525,7 +525,7 @@ const handleFileUpload = () => {
                     교육일정:{" "}
                     {formatTimeRange(selectedStartTime, selectedEndTime)}
                   </p>
-                )}
+                )} */}
               </div>
             </div>
             <div
@@ -640,10 +640,10 @@ const handleFileUpload = () => {
               </span>
               {isCompleted ? (
                 <div className="mt-4">
-                  <QRCode value={JSON.stringify(formData)} />
-                  {/* <Link to={eduUrl}>
+                  {/* <QRCode value={JSON.stringify(formData)} /> */}
+                  <Link to={eduUrl}>
                     <QRCode value={eduUrl} />
-                  </Link> */}
+                  </Link>
                   <div className="flex items-center mt-2">
                     <CheckCircleIcon className="h-5 w-5 text-green-500" />
                     <span className="ml-1">생성완료</span>

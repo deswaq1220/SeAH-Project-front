@@ -66,7 +66,7 @@ export default function SafetyEduList() {
   return (
     <>
       <Header />
-      <div className="px-4 sm:px-0 text-center flex justify-center flex-col items-center mt-3">
+      <div className="px-4 sm:px-0 text-center flex justify-center flex-col items-center mt-3 mb-3">
         <h3 className=" text-4xl font-bold leading-7  text-gray-900 ">
           {formattedDate}
         </h3>
