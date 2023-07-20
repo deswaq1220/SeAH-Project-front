@@ -210,6 +210,37 @@ function SafetyEduReg() {
       file: file, // Update the file property in the formData state
     });
   };
+<<<<<<< HEAD
+=======
+  // 파일 업로드 핸들러
+  const handleFileUpload = () => {
+    if (!uploadedFiles[0]) {
+      alert("Please select a file.");
+      return;
+    }
+  
+    const formDataWithFile = new FormData();
+    formDataWithFile.append("eduCategory", formData.eduCategory);
+    formDataWithFile.append("eduClass", formData.eduClass);
+    formDataWithFile.append("eduInstructor", formData.eduInstructor);
+    formDataWithFile.append("eduPlace", formData.eduPlace);
+    formDataWithFile.append("eduStartTime", formData.eduStartTime);
+    formDataWithFile.append("eduEndTime", formData.eduEndTime);
+    formDataWithFile.append("eduTarget", formData.eduTarget);
+    formDataWithFile.append("eduContent", formData.eduContent);
+    formDataWithFile.append("eduWriter", formData.eduWriter);
+    formDataWithFile.append("file", formData.file); // 파일을 폼 데이터에 추가
+  
+    axios
+      .post("http://localhost:8081/edureg", formDataWithFile)
+      .then((response) => {
+        console.log("File uploaded successfully.", response);
+      })
+      .catch((error) => {
+        console.error("Error uploading file.", error);
+      });
+  };
+>>>>>>> 1858a4dcfa9b53a3d5fee108c7080f0ff4d18fc4
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop }); // 온드롭기능
 
@@ -276,10 +307,17 @@ function SafetyEduReg() {
     formDataWithFile.append("eduWriter", formData.eduWriter);
 
     axios
+<<<<<<< HEAD
       .post("http://localhost:8081/edureg", formDataWithFile, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
+=======
+      .post("http://localhost:8081/edureg", formData, {
+        // headers: {
+        //   "Content-Type": "application/json",
+        // },
+>>>>>>> 1858a4dcfa9b53a3d5fee108c7080f0ff4d18fc4
       }) // 수정된 부분
       .then((response) => {
         console.log("저장내용:", formData);

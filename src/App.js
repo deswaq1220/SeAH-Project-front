@@ -12,14 +12,10 @@ import UserSafetyEduAttendance from "./page/user/UserSafetyEduAttendance";
 import SafetyEduDetails from "./page/manager/SafetyEduDetails";
 import EmailForm from "./Email";
 import SafetyEduList from "./page/manager/SafetyEduList";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
 
 
 function App() {
   return (
-   <>
     <Router>
       <Routes>
         {/* 관리자 */}
@@ -41,8 +37,6 @@ function App() {
         <Route path="/404" element={<Error/>}></Route> {/* 에러 */}
       </Routes>
     </Router>
-    <ToastContainer/>
-   </>
     
   );
 }
