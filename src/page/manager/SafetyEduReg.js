@@ -20,14 +20,17 @@ const people = [
   {
     id: 2,
     name: "CREW",
+    time: 30,
   },
   {
     id: 3,
     name: "DM",
+    time: 20,
   },
   {
     id: 4,
     name: "MANAGE",
+    time: 120,
   },
   {
     id: 5,
@@ -114,7 +117,7 @@ function SafetyEduReg() {
   const [isCompleted, setIsCompleted] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [error, setError] = useState(null);
-  // const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedEtcTime, setSelectedEtcTime] = useState(30);
   const [formData, setFormData] = useState({
     eduCategory: "", // 교육
     eduClass: "", // 교육분류
@@ -146,19 +149,34 @@ function SafetyEduReg() {
     setSelectedStartTime(newValue);
     setFormData((prevData) => ({
       ...prevData,
-
       eduStartTime: newValue, // 시작시간 필드 이름 변경
     }));
   };
 
-  const handleEndTimeChange = (e) => {
-    const newValue = e.target.value;
-    setSelectedEndTime(newValue);
-    setFormData((prevData) => ({
-      ...prevData,
-      eduEndTime: newValue, // 종료시간 필드 이름 변경
-    }));
+
+
+  // 총 교육 시간을 계산하는 함수
+  const calculateTotalTime = () => {
+    // "기타"를 선택한 경우 셀렉트 박스에서 선택한 값으로 계산
+    if (selected.name === "ETC") {
+      return `총 교육시간: ${selectedEtcTime}분`;
+    }
+    // 다른 항목을 선택한 경우 해당 항목의 시간으로 계산
+    else {
+      const eduTime = selected.time || 0;
+      const startTimeValue = new Date(selectedStartTime);
+      const endTimeValue = new Date(startTimeValue.getTime() + eduTime * 60 * 1000);
+      setSelectedEndTime(endTimeValue.toISOString().slice(0, 16)); // 종료시간 상태 업데이트
+      return `총 교육시간: ${eduTime}분`;
+    }
   };
+
+  // "기타" 선택 시 셀렉트 박스에서 시간을 변경했을 때 실행되는 핸들러
+  const handleEtcTimeChange = (e) => {
+    const newValue = parseInt(e.target.value, 10);
+    setSelectedEtcTime(newValue);
+  };
+
 
   const handleCreate = () => {
     setIsCompleted(true); // 생성 완료 상태 업데이트
@@ -192,45 +210,6 @@ function SafetyEduReg() {
       file: file, // Update the file property in the formData state
     });
   };
-  // 파일 업로드 핸들러
-  // 파일 업로드 핸들러
-const handleFileUpload = () => {
-  if (!formData.file) {
-    alert("Please select a file.");
-    return;
-  }
-
-  const formDataWithFile = new FormData();
-
-  // 파일 첨부 여부 확인
-  if (formData.file) {
-    formDataWithFile.append("file", formData.file);
-  }
-
-  // 나머지 필드 추가
-  formDataWithFile.append("eduCategory", formData.eduCategory);
-  formDataWithFile.append("eduClass", formData.eduClass);
-  formDataWithFile.append("eduInstructor", formData.eduInstructor);
-  formDataWithFile.append("eduPlace", formData.eduPlace);
-  formDataWithFile.append("eduStartTime", formData.eduStartTime);
-  formDataWithFile.append("eduEndTime", formData.eduEndTime);
-  formDataWithFile.append("eduTarget", formData.eduTarget);
-  formDataWithFile.append("eduContent", formData.eduContent);
-  formDataWithFile.append("eduWriter", formData.eduWriter);
-
-  axios
-    .post("http://localhost:8081/edureg", formDataWithFile, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
-    .then((response) => {
-      console.log("File uploaded successfully.", response);
-    })
-    .catch((error) => {
-      console.error("Error uploading file.", error);
-    });
-};
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop }); // 온드롭기능
 
@@ -273,14 +252,19 @@ const handleFileUpload = () => {
   const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
+    const formDataWithFile = new FormData();
 
     if (!formData.eduContent) {
       // eduContent 필드가 비어있을 경우 에러 처리
       setError("Edu Content is required.");
       return;
     }
+    if (formData.file) {
+      formDataWithFile.append("file", formData.file);
+    } else {
+      console.log("파일없음");
+    }
 
-    const formDataWithFile = new FormData();
     formDataWithFile.append("eduCategory", formData.eduCategory);
     formDataWithFile.append("eduClass", formData.eduClass);
     formDataWithFile.append("eduInstructor", formData.eduInstructor);
@@ -290,13 +274,12 @@ const handleFileUpload = () => {
     formDataWithFile.append("eduTarget", formData.eduTarget);
     formDataWithFile.append("eduContent", formData.eduContent);
     formDataWithFile.append("eduWriter", formData.eduWriter);
-    formDataWithFile.append("file", formData.file); // 파일을 폼 데이터에 추가
 
     axios
       .post("http://localhost:8081/edureg", formDataWithFile, {
-        // headers: {
-        //   "Content-Type": "application/json",
-        // },
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       }) // 수정된 부분
       .then((response) => {
         console.log("저장내용:", formData);
@@ -305,12 +288,10 @@ const handleFileUpload = () => {
         console.log(response);
       })
       .catch((error) => {
-        console.log("에러저장내용:", error);
+        console.log("여기?:", error);
 
         // 저장 실패 시 처리 로직 추가
       });
-
-      handleFileUpload()
   };
 
   // 큐알 스캔시 이동할 경로
@@ -420,22 +401,37 @@ const handleFileUpload = () => {
               id="Training_title"
               className="flex items-baseline justify-start"
             >
-              <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
-                분류
+              <span className="w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
+                제목
               </span>
-              <div className="sm:col-span-3 w-56">
-                <div className="mt-2">
-                  <input
-                    type="text"
-                    name="eduClass"
-                    id="eduClass"
-                    value={formData.eduClass}
-                    onChange={handleChange}
-                    autoComplete="family-name"
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
-                  />
+              {selected.name === "ETC" ? (
+                <div className="sm:col-span-3 w-56">
+                  <div className="mt-2">
+                    <input
+                      type="text"
+                      name="eduClass"
+                      id="eduClass"
+                      value={formData.eduClass}
+                      onChange={handleChange}
+                      autoComplete="family-name"
+                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
+                    />
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="sm:col-span-3">
+                  <div className="mt-2">
+                    <input
+                      type="text"
+                      name="eduClass"
+                      id="eduClass"
+                      value={mapEduCategoryName(selected.name)}
+                      readOnly
+                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 bg-gray-100 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
             <div id="charge" className="flex items-baseline justify-start">
               <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
@@ -486,7 +482,7 @@ const handleFileUpload = () => {
               id="Training_time"
               className="flex items-baseline justify-start"
             >
-              <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
+              <span className="w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
                 교육시간
               </span>
               <div className="mt-2">
@@ -505,27 +501,35 @@ const handleFileUpload = () => {
                   min={new Date().toISOString().slice(0, 16)}
                 />
 
-                {/* <label
+                <label
                   htmlFor="endtimepicker"
                   className="block mt-4 mb-2 font-medium text-gray-700"
                 >
                   종료시간
                 </label>
-                <input
-                  type="datetime-local"
-                  id="endtimepicker"
-                  className="block w-56 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
-                  value={selectedEndTime}
-                  onChange={handleEndTimeChange}
-                  min={selectedStartTime ? selectedStartTime.slice(0, 16) : ""}
-                />
-
-                {selectedStartTime && selectedEndTime && (
-                  <p className="mt-2 text-gray-600 w-56">
-                    교육일정:{" "}
-                    {formatTimeRange(selectedStartTime, selectedEndTime)}
-                  </p>
-                )} */}
+                <div className="mt-2 text-gray-600">{calculateTotalTime()}</div>
+                {selected.name === "ETC" && (
+                  <div className="mt-2">
+                    <label
+                      htmlFor="etcTime"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    >
+                      기타 교육 시간 선택
+                    </label>
+                    <select
+                      id="etcTime"
+                      name="etcTime"
+                      value={selectedEtcTime}
+                      onChange={handleEtcTimeChange}
+                      className="block w-56 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
+                    >
+                      {/* 기타 선택 시, 30분 단위로 선택할 수 있도록 셀렉트 박스 옵션 생성 */}
+                      {[30, 60, 90, 120].map((time) => (
+                        <option key={time} value={time}>{`${time}분`}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
               </div>
             </div>
             <div
