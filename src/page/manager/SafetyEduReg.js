@@ -12,6 +12,7 @@ import {
 import { useDropzone } from "react-dropzone";
 import QRCode from "qrcode.react";
 import axios from "axios";
+import useSafetyEduForm from "../../useHook/useSafetyEduForm";
 const people = [
   {
     id: 1,
@@ -20,21 +21,22 @@ const people = [
   {
     id: 2,
     name: "CREW",
-    time: 30,
+    time: 30
   },
   {
     id: 3,
     name: "DM",
-    time: 20,
+    time: 20
   },
   {
     id: 4,
     name: "MANAGE",
-    time: 120,
+    time : 120
   },
   {
     id: 5,
     name: "ETC",
+    time: 30
   },
 ];
 
@@ -112,228 +114,38 @@ const TruncatedFileName = ({ fileName }) => {
 };
 
 function SafetyEduReg() {
-  const [selected, setSelected] = useState(people[0]);
-  const [selectedDuty, setSelectedDuty] = useState(duty[0]);
-  const [isCompleted, setIsCompleted] = useState(false);
-  const [uploadedFiles, setUploadedFiles] = useState([]);
-  const [error, setError] = useState(null);
-  const [selectedEtcTime, setSelectedEtcTime] = useState(30);
-  const [formData, setFormData] = useState({
-    eduCategory: "", // 교육
-    eduClass: "", // 교육분류
-    eduInstructor: "", // 담당자
-    eduPlace: "", // 교육장소,
-    //교육시간
-    eduStartTime: new Date(), // 시작시간
-    eduEndTime: new Date(), // 끝나는 시간
 
-    eduTarget: "", // 대상자
-    eduContent: "", // 교육내용
-    eduWriter: "",
-    file: null,
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  }; // 값 넘기는 기능
-
-  const [selectedStartTime, setSelectedStartTime] = useState("");
-  const [selectedEndTime, setSelectedEndTime] = useState("");
-
-  const handleStartTimeChange = (e) => {
-    const newValue = e.target.value;
-    setSelectedStartTime(newValue);
-    setFormData((prevData) => ({
-      ...prevData,
-      eduStartTime: newValue, // 시작시간 필드 이름 변경
-    }));
-  };
-
-
-
-  // 총 교육 시간을 계산하는 함수
-  const calculateTotalTime = () => {
-    // "기타"를 선택한 경우 셀렉트 박스에서 선택한 값으로 계산
-    if (selected.name === "ETC") {
-      return `총 교육시간: ${selectedEtcTime}분`;
-    }
-    // 다른 항목을 선택한 경우 해당 항목의 시간으로 계산
-    else {
-      const eduTime = selected.time || 0;
-      const startTimeValue = new Date(selectedStartTime);
-      const endTimeValue = new Date(startTimeValue.getTime() + eduTime * 60 * 1000);
-      setSelectedEndTime(endTimeValue.toISOString().slice(0, 16)); // 종료시간 상태 업데이트
-      return `총 교육시간: ${eduTime}분`;
-    }
-  };
-
-  // "기타" 선택 시 셀렉트 박스에서 시간을 변경했을 때 실행되는 핸들러
-  const handleEtcTimeChange = (e) => {
-    const newValue = parseInt(e.target.value, 10);
-    setSelectedEtcTime(newValue);
-  };
-
-
-  const handleCreate = () => {
-    setIsCompleted(true); // 생성 완료 상태 업데이트
-  }; // 큐알코드 생성시 생성완료 출력
-
-  const onDrop = useCallback(
-    (acceptedFiles) => {
-      setUploadedFiles([...uploadedFiles, ...acceptedFiles]);
-      if (acceptedFiles.length > 0) {
-        setFormData({
-          ...formData,
-          file: acceptedFiles[0], // Update the file property in the formData state
-        });
-      }
-      alert(acceptedFiles);
-      console.log(acceptedFiles);
-    },
-    [formData, uploadedFiles]
-  ); // 파일 온드롭 기능
-
-  const deleteFile = (index) => {
-    const updatedFiles = [...uploadedFiles];
-    updatedFiles.splice(index, 1);
-    setUploadedFiles(updatedFiles);
-  }; // 파일 삭제기능
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setFormData({
-      ...formData,
-      file: file, // Update the file property in the formData state
-    });
-  };
-<<<<<<< HEAD
-=======
-  // 파일 업로드 핸들러
-  const handleFileUpload = () => {
-    if (!uploadedFiles[0]) {
-      alert("Please select a file.");
-      return;
-    }
+  const {
+    selected,
+    selectedDuty,
+    isCompleted,
+    uploadedFiles,
+    error,
+    formData,
+    handleChange,
+    handleStartTimeChange,
+    // handleEndTimeChange,
+    handleCreate,
+    onDrop,
+    deleteFile,
+    handleFileChange,
+    getRootProps,
+    getInputProps,
+    isDragActive,
+    formatTimeRange,
+    handleListboxChange,
+    handleDutyChange,
+    navigate,
+    handleSubmit,
+    selectedEtcTime,
+    calculateTotalTime,
+    handleEtcTimeChange,
+    selectedStartTime,
+    qrValue,
+    setQrValue
+  } = useSafetyEduForm();
   
-    const formDataWithFile = new FormData();
-    formDataWithFile.append("eduCategory", formData.eduCategory);
-    formDataWithFile.append("eduClass", formData.eduClass);
-    formDataWithFile.append("eduInstructor", formData.eduInstructor);
-    formDataWithFile.append("eduPlace", formData.eduPlace);
-    formDataWithFile.append("eduStartTime", formData.eduStartTime);
-    formDataWithFile.append("eduEndTime", formData.eduEndTime);
-    formDataWithFile.append("eduTarget", formData.eduTarget);
-    formDataWithFile.append("eduContent", formData.eduContent);
-    formDataWithFile.append("eduWriter", formData.eduWriter);
-    formDataWithFile.append("file", formData.file); // 파일을 폼 데이터에 추가
   
-    axios
-      .post("http://localhost:8081/edureg", formDataWithFile)
-      .then((response) => {
-        console.log("File uploaded successfully.", response);
-      })
-      .catch((error) => {
-        console.error("Error uploading file.", error);
-      });
-  };
->>>>>>> 1858a4dcfa9b53a3d5fee108c7080f0ff4d18fc4
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop }); // 온드롭기능
-
-  // 데이트 피커
-  const formatTimeRange = (startTime, endTime) => {
-    const options = {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour12: false,
-      hour: "2-digit",
-      minute: "2-digit",
-    };
-    const formattedStartTime = new Date(startTime).toLocaleString(
-      "ko-KR",
-      options
-    );
-    const formattedEndTime = new Date(endTime).toLocaleString("ko-KR", options);
-    return `${formattedStartTime} ~ ${formattedEndTime}`;
-  };
-  // 큐알로 값 전달 기능
-  const handleListboxChange = (selectedItem) => {
-    setSelected(selectedItem);
-    setFormData((prevData) => ({
-      ...prevData,
-      eduCategory: selectedItem.name, // 업데이트할 formData 속성에 맞게 수정
-    }));
-  };
-  // 큐알로 값 전달기능
-  const handleDutyChange = (value) => {
-    setSelectedDuty(value);
-    setFormData((prevData) => ({
-      ...prevData,
-      // 업데이트할 formData 속성에 맞게 수정
-      eduTarget: value.name,
-    }));
-  };
-
-  // 교육등록 핸들러
-  const navigate = useNavigate();
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const formDataWithFile = new FormData();
-
-    if (!formData.eduContent) {
-      // eduContent 필드가 비어있을 경우 에러 처리
-      setError("Edu Content is required.");
-      return;
-    }
-    if (formData.file) {
-      formDataWithFile.append("file", formData.file);
-    } else {
-      console.log("파일없음");
-    }
-
-    formDataWithFile.append("eduCategory", formData.eduCategory);
-    formDataWithFile.append("eduClass", formData.eduClass);
-    formDataWithFile.append("eduInstructor", formData.eduInstructor);
-    formDataWithFile.append("eduPlace", formData.eduPlace);
-    formDataWithFile.append("eduStartTime", formData.eduStartTime);
-    formDataWithFile.append("eduEndTime", formData.eduEndTime);
-    formDataWithFile.append("eduTarget", formData.eduTarget);
-    formDataWithFile.append("eduContent", formData.eduContent);
-    formDataWithFile.append("eduWriter", formData.eduWriter);
-
-    axios
-<<<<<<< HEAD
-      .post("http://localhost:8081/edureg", formDataWithFile, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-=======
-      .post("http://localhost:8081/edureg", formData, {
-        // headers: {
-        //   "Content-Type": "application/json",
-        // },
->>>>>>> 1858a4dcfa9b53a3d5fee108c7080f0ff4d18fc4
-      }) // 수정된 부분
-      .then((response) => {
-        console.log("저장내용:", formData);
-        // 저장 성공 시 처리 로직 추가
-        navigate("/edudetails"); // 저장 성공 후 화면 이동
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log("여기?:", error);
-
-        // 저장 실패 시 처리 로직 추가
-      });
-  };
-
-  // 큐알 스캔시 이동할 경로
-  const eduUrl = "http://www.seahaerospace.com/kor/index.asp";
 
   return (
     <div>
@@ -440,7 +252,7 @@ function SafetyEduReg() {
               className="flex items-baseline justify-start"
             >
               <span className="w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
-                제목
+                교육 제목
               </span>
               {selected.name === "ETC" ? (
                 <div className="sm:col-span-3 w-56">
@@ -520,7 +332,7 @@ function SafetyEduReg() {
               id="Training_time"
               className="flex items-baseline justify-start"
             >
-              <span className="w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
+              <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
                 교육시간
               </span>
               <div className="mt-2">
@@ -539,12 +351,21 @@ function SafetyEduReg() {
                   min={new Date().toISOString().slice(0, 16)}
                 />
 
-                <label
+                {/* <label
                   htmlFor="endtimepicker"
                   className="block mt-4 mb-2 font-medium text-gray-700"
                 >
                   종료시간
                 </label>
+                <input
+                  type="datetime-local"
+                  id="endtimepicker"
+                  className="block w-56 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
+                  value={selectedEndTime}
+                  onChange={handleEndTimeChange}
+                  min={selectedStartTime ? selectedStartTime.slice(0, 16) : ""}
+                /> */}
+
                 <div className="mt-2 text-gray-600">{calculateTotalTime()}</div>
                 {selected.name === "ETC" && (
                   <div className="mt-2">
@@ -683,9 +504,9 @@ function SafetyEduReg() {
               {isCompleted ? (
                 <div className="mt-4">
                   {/* <QRCode value={JSON.stringify(formData)} /> */}
-                  <Link to={eduUrl}>
-                    <QRCode value={eduUrl} />
-                  </Link>
+                  
+                    <QRCode value={qrValue} />
+                  
                   <div className="flex items-center mt-2">
                     <CheckCircleIcon className="h-5 w-5 text-green-500" />
                     <span className="ml-1">생성완료</span>
