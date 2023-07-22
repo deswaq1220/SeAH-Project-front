@@ -1,5 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./style/reset.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import ManagerLogin from "./page/manager/ManagerLogin";
 import MainManager from "./page/manager/MainManager";
 import ReferenceInfo from "./page/manager/ReferenceInfo";
