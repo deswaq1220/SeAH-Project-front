@@ -1,7 +1,7 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Header from "../../components/Header";
 import { format, addMonths, subMonths } from "date-fns";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 function SafetyEducationMain() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -27,143 +27,147 @@ function SafetyEducationMain() {
 
   const handleClick = () => {
     // 원하는 경로로 이동
-    navigate('/edureg');
+    navigate("/edureg");
   };
 
   const people = [
-    {
-      name: "[크루미팅] 안전교육수강확인서",
-      email: "하절기 작업안전",
-      role: "2023-07-20",
-      lastSeen: "파일첨부",
-      lastSeenDateTime: "2023-01-23T13:23Z",
-    },
-    {
-      name: "[크루미팅] 안전교육수강확인서",
-      email: "온열질환의 위험성",
-      role: "2023-07-10",
-      lastSeen: "파일첨부",
-      lastSeenDateTime: "2023-01-23T13:23Z",
-    },
-    {
-      name: "[크루미팅] 안전교육수강확인서",
-      email: "올바른 보호구 착용",
-      role: "2023-07-08",
-      lastSeen: "파일첨부",
-      lastSeenDateTime: "2023-01-23T13:23Z",
-    },
-    {
-      name: "[DM미팅] 안전교육수강확인서",
-      email: "크레인 작업 위험성",
-      role: "2023-07-05",
-      lastSeen: "파일첨부",
-      lastSeenDateTime: "2023-01-23T13:23Z",
-    },
-    {
-      name: "[DM미팅] 안전교육수강확인서",
-      email: "위험반경 접근 금지",
-      role: "2023-07-02",
-      lastSeen: "파일첨부",
-      lastSeenDateTime: "2023-01-23T13:23Z",
-    },
-    {
-      name: "[크루미팅] 안전교육수강확인서",
-      email: "일상점검 확인 사항",
-      role: "2023-07-01",
-      lastSeen: "파일첨부",
-      lastSeenDateTime: "2023-01-23T13:23Z",
-    },
+    // 사용자 데이터
+  ];
+
+  const userList = [
+    { id: 1, title: "[크루미팅]", content: "본문내용 일부입니다", writer: "변경원", attachment:'O' },
+    { id: 2, title: "[DM미팅]", content: "사진신경쓰지말아요", writer: "정수인", attachment:'X' },
+    { id: 3, title: "[기타]제1차교육입니다", content: "사진랜덤이라 골때림", writer: "이혜영", attachment:'O' },
+    { id: 4, title: "[크루미팅]", content: "잠시쓰는거라 대충 합시다 챗지피티 돌려서 만들었으예", writer: "진다인", attachment:'O' },
+   
+    // Add more user data as needed
   ];
 
   return (
     <div>
       <Header />
-      <div className="flex flex-col justify-center items-center text-3xl w-1200 ">
-        <div>
-        <button onClick={goToPreviousMonth} className="mr-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M15.75 19.5L8.25 12l7.5-7.5"
-            />
-          </svg>
-        </button>
-        <a>{getFormattedDate()}</a>
-        <button onClick={goToNextMonth} className="ml-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M8.25 4.5l7.5 7.5-7.5 7.5"
-            />
-          </svg>
-        </button>
+      <div className="flex flex-col justify-center items-center text-3xl">
+        <div className="flex items-center">
+          <button onClick={goToPreviousMonth} className="mr-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 19.5L8.25 12l7.5-7.5"
+              />
+            </svg>
+          </button>
+          <a>{getFormattedDate()}</a>
+          <button onClick={goToNextMonth} className="ml-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M8.25 4.5l7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </button>
         </div>
 
-        <ul
-        role="list"
-        className=" divide-gray-100 flex justify-center items-center flex-col "
-      >
-        {people.map((person) => (
-          <li key={person.email} className="flex justify-between gap-x-28 py-5">
-            <div className="flex gap-x-4">
-              <div className="min-w-0 flex-auto">
-                <p className="text-sm font-semibold leading-6 text-gray-900">
-                  {person.name}
-                </p>
-                <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                  {person.email}
-                </p>
+        {/* 테이블 리스트 */}
+        <div className="container mx-auto px-4 sm:px-8">
+          <div className="py-8">
+            <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+              <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
+                <table className="min-w-full leading-normal">
+                  <thead>
+                    <tr>
+                      <th
+                        scope="col"
+                        className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal"
+                      >
+                        교육제목
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal"
+                      >
+                        내용
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal"
+                      >
+                        작성자
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal"
+                      >
+                        첨부파일
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {userList.map((user) => (
+                      <tr key={user.id}>
+                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                          <div className="flex items-center">
+                            <div className="flex-shrink-0 w-10 h-10">
+                              <img
+                                className="w-full h-full rounded-full"
+                                src={`https://i.pravatar.cc/100?img=${user.id}`}
+                                alt={user.title}
+                              />
+                            </div>
+                            <div className="ml-3">
+                              <p className="text-gray-900 whitespace-no-wrap">
+                                {user.title}
+                              </p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                          <p className="text-gray-900 whitespace-no-wrap">
+                            {user.content}
+                          </p>
+                        </td>
+                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                          <p className="text-gray-900 whitespace-no-wrap">
+                            {user.writer}
+                          </p>
+                        </td>
+                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                          <p className="text-gray-900 whitespace-no-wrap">
+                            {user.attachment}
+                          </p>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
-            <div className="hidden sm:flex sm:flex-col sm:items-end">
-              <p className="text-sm leading-6 text-gray-900">{person.role}</p>
-              {person.lastSeen ? (
-                <p className="mt-1 text-xs leading-5 text-gray-500">
-                  {" "}
-                  <time dateTime={person.lastSeenDateTime}>
-                    {person.lastSeen}
-                  </time>
-                </p>
-              ) : (
-                <div className="mt-1 flex items-center gap-x-1.5">
-                  <div className="flex-none rounded-full bg-emerald-500/20 p-1">
-                    <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                  </div>
-                  <p className="text-xs leading-5 text-gray-500">Online</p>
-                </div>
-              )}
-            </div>
-          </li>
-        ))}
-      </ul>
-        
-        
-        
-       <div className="flex justify-end">
-       <button
-          type="submit"
-          className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-          onClick={handleClick}
-        >
-          등록하기
-        </button>
-       </div>
+          </div>
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+              onClick={handleClick}
+            >
+              등록하기
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
