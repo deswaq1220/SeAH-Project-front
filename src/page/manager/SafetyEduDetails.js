@@ -13,7 +13,9 @@ export default function SafetyEduDetails() {
   useEffect(() => {
     const fetchEduDetail = async () => {
       try {
-        const response = await axios.get(`http://localhost:8081/edudetails/${eduId}`);
+        const response = await axios.get(`http://localhost:8081/edudetails/${eduId}`,{
+          
+        });
         setEduData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -29,7 +31,7 @@ export default function SafetyEduDetails() {
 
   const handleExport = () => {
     // 엑셀 데이터 생성 로직 작성
-    /* 나중에 데이터 뿌려주는 작업하고 다시 동적으로 해봐야함  */
+
     const data = [
       {
         title: "[집체교육] 제 1차 사무직 안전교육",

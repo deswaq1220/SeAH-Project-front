@@ -92,7 +92,6 @@ const useSafetyEduForm = () => {
   const [isCompleted, setIsCompleted] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [error, setError] = useState(null);
-  const [qrValue, setQrValue] = useState(""); // 큐알코드 값을 위한 상태
 
   const [formData, setFormData] = useState({
     eduCategory: "", // 교육
@@ -100,7 +99,7 @@ const useSafetyEduForm = () => {
     eduInstructor: "", // 담당자
     eduPlace: "", // 교육장소
     eduStartTime: new Date(), // 시작시간
-    eduEndTime: new Date(), // 끝나는 시간
+    // eduEndTime: new Date(), // 끝나는 시간
     eduTarget: "", // 대상자
     eduContent: "", // 교육내용
     eduWriter: "",
@@ -127,20 +126,19 @@ const useSafetyEduForm = () => {
     }));
   };
 
-  const handleEndTimeChange = (e) => {
-    const newValue = e.target.value;
-    setSelectedEndTime(newValue);
-    setFormData((prevData) => ({
-      ...prevData,
-      eduEndTime: newValue, // 종료시간 필드 이름 변경
-    }));
-  };
+  // const handleEndTimeChange = (e) => {
+  //   const newValue = e.target.value;
+  //   setSelectedEndTime(newValue);
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     eduEndTime: newValue, // 종료시간 필드 이름 변경
+  //   }));
+  // };
 
   
 
   const handleCreate = () => {
-    const qrLink = "http://www.seahaerospace.com/kor/index.asp"; // 예시로 가정한 링크입니다. 원하는 링크로 변경해주세요.
-    setQrValue(qrLink);
+    // const qrLink = "http://www.seahaerospace.com/kor/index.asp"; // 예시로 가정한 링크입니다. 원하는 링크로 변경해주세요.
     setIsCompleted(true); // 생성 완료 상태 업데이트
   };
 
@@ -175,25 +173,13 @@ const useSafetyEduForm = () => {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
-  const formatTimeRange = (startTime, endTime) => {
-    const options = {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour12: false,
-      hour: "2-digit",
-      minute: "2-digit",
-    };
-    const formattedStartTime = new Date(startTime).toLocaleString("ko-KR", options);
-    const formattedEndTime = new Date(endTime).toLocaleString("ko-KR", options);
-    return `${formattedStartTime} ~ ${formattedEndTime}`;
-  };
 
   const handleListboxChange = (selectedItem) => {
     setSelected(selectedItem);
     setFormData((prevData) => ({
       ...prevData,
       eduCategory: selectedItem.name,
+      eduClass: mapEduCategoryName(selectedItem.name),
     }));
   };
 
@@ -205,48 +191,61 @@ const useSafetyEduForm = () => {
     }));
   };
 
-  const navigate = useNavigate();
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const formDataWithFile = new FormData();
-    // formData와 qrValue를 서버로 전송
-    const dataToSend = { ...formData, qrValue }; // 큐알 링크인 qrValue를 폼 데이터에 추가합니다.
-    if (!formData.eduContent) {
-      setError("Edu Content is required.");
-      return;
-    }
+    // 교육등록 핸들러
+    const navigate = useNavigate();
+    const handleSubmit = (event) => {
+      event.preventDefault();
+      const formDataWithFile = new FormData();
+  
+      if (!formData.eduContent) {
+        // eduContent 필드가 비어있을 경우 에러 처리
+        setError("본문내용없음");
+        return;
+      }
+      if (formData.file) {
+        formDataWithFile.append("file", formData.file);
+      }else {
+        console.log("파일없음");
+      }
+      if (!formData.eduInstructor) {
+        // eduInstructor 필드가 비어있을 경우 에러 처리
+        setError("강사없음");
+        return;
+      }
 
-    if (formData.file) {
-      formDataWithFile.append("file", formData.file, dataToSend);
-    } else {
-      console.log("파일없음");
-    }
+      console.log(formData)
+      console.log("카테고리네임" ,mapEduCategoryName(selected.name))
+      console.log("대상자",mapDutyName(selectedDuty.name) )
+  
+      formDataWithFile.append("eduCategory", formData.eduCategory);
+      formDataWithFile.append("eduClass", formData.eduClass);
+      formDataWithFile.append("eduInstructor", formData.eduInstructor);
+      formDataWithFile.append("eduPlace", formData.eduPlace);
+      formDataWithFile.append("eduStartTime", formData.eduStartTime);
 
-    formDataWithFile.append("eduCategory", formData.eduCategory);
-    formDataWithFile.append("eduClass", formData.eduClass);
-    formDataWithFile.append("eduInstructor", formData.eduInstructor);
-    formDataWithFile.append("eduPlace", formData.eduPlace);
-    formDataWithFile.append("eduStartTime", formData.eduStartTime);
-    formDataWithFile.append("eduEndTime", formData.eduEndTime);
-    formDataWithFile.append("eduTarget", formData.eduTarget);
-    formDataWithFile.append("eduContent", formData.eduContent);
-    formDataWithFile.append("eduWriter", formData.eduWriter);
-
-    axios
-      .post("http://localhost:8081/edureg", formDataWithFile, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((response) => {
-        console.log("저장내용:", formData);
-        navigate("/edudetails");
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log("여기?:", error);
-      });
-  };
+      formDataWithFile.append("eduTarget", formData.eduTarget);
+      formDataWithFile.append("eduContent", formData.eduContent);
+      formDataWithFile.append("eduWriter", formData.eduWriter);
+  
+      axios
+        .post("http://localhost:8081/edureg", formDataWithFile, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }) // 수정된 부분
+        .then((response) => {
+          console.log("저장내용:", formData);
+          // 저장 성공 시 처리 로직 추가
+          navigate("/eduMain"); // 저장 성공 후 화면 이동
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log("여기?:", error);
+  
+          // 저장 실패 시 처리 로직 추가
+        });
+    };
+  
 
   const [selectedEtcTime, setSelectedEtcTime] = useState(30);
 
@@ -274,7 +273,7 @@ const useSafetyEduForm = () => {
     formData,
     handleChange,
     handleStartTimeChange,
-    handleEndTimeChange,
+    // handleEndTimeChange,
     handleCreate,
     onDrop,
     deleteFile,
@@ -282,7 +281,7 @@ const useSafetyEduForm = () => {
     getRootProps,
     getInputProps,
     isDragActive,
-    formatTimeRange,
+    // formatTimeRange,
     handleListboxChange,
     handleDutyChange,
     navigate,
@@ -291,8 +290,6 @@ const useSafetyEduForm = () => {
     calculateTotalTime,
     handleEtcTimeChange,
     selectedStartTime,
-    qrValue,
-    setQrValue
   }
 }
 
