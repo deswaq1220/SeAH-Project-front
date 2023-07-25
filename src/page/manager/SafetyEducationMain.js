@@ -25,6 +25,7 @@ function SafetyEducationMain() {
       try {
         const response = await axios.get("http://localhost:8081/edumain"); // 서버의 API 엔드포인트에 맞게 경로를 수정해야 합니다.
         setEduList(response.data); // 서버로부터 받은 데이터를 상태 변수에 저장
+        console.log(eduList)
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -217,12 +218,15 @@ function SafetyEducationMain() {
       </div>
       <div className="flex justify-center">
         <div className="px-4 sm:px-6 lg:px-8 max-w-screen-xl w-full">
+          {eduList.length > 0 ?(
+
           <Pagination
             currentPage={currentPage}
             itemsPerPage={itemsPerPage}
             totalItems={eduList.length}
             setCurrentPage={setCurrentPage}
           />
+          ) :(null)}
         </div>
       </div>
     </div>

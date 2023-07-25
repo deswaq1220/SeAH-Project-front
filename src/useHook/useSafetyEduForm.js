@@ -193,10 +193,10 @@ const useSafetyEduForm = () => {
 
     // 교육등록 핸들러
     const navigate = useNavigate();
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
       event.preventDefault();
       const formDataWithFile = new FormData();
-  
+    
       if (!formData.eduContent) {
         // eduContent 필드가 비어있을 경우 에러 처리
         setError("본문내용없음");
@@ -204,7 +204,7 @@ const useSafetyEduForm = () => {
       }
       if (formData.file) {
         formDataWithFile.append("file", formData.file);
-      }else {
+      } else {
         console.log("파일없음");
       }
       if (!formData.eduInstructor) {
@@ -212,38 +212,37 @@ const useSafetyEduForm = () => {
         setError("강사없음");
         return;
       }
-
-      console.log(formData)
-      console.log("카테고리네임" ,mapEduCategoryName(selected.name))
-      console.log("대상자",mapDutyName(selectedDuty.name) )
-  
+    
+      console.log(formData);
+      console.log("카테고리네임", mapEduCategoryName(selected.name));
+      console.log("대상자", mapDutyName(selectedDuty.name));
+    
       formDataWithFile.append("eduCategory", formData.eduCategory);
       formDataWithFile.append("eduClass", formData.eduClass);
       formDataWithFile.append("eduInstructor", formData.eduInstructor);
       formDataWithFile.append("eduPlace", formData.eduPlace);
       formDataWithFile.append("eduStartTime", formData.eduStartTime);
-
+    
       formDataWithFile.append("eduTarget", formData.eduTarget);
       formDataWithFile.append("eduContent", formData.eduContent);
       formDataWithFile.append("eduWriter", formData.eduWriter);
-  
-      axios
-        .post("http://localhost:8081/edureg", formDataWithFile, {
+    
+      try {
+        const response = await axios.post("http://localhost:8081/edureg" , formDataWithFile, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        }) // 수정된 부분
-        .then((response) => {
-          console.log("저장내용:", formData);
-          // 저장 성공 시 처리 로직 추가
-          navigate("/eduMain"); // 저장 성공 후 화면 이동
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log("여기?:", error);
-  
-          // 저장 실패 시 처리 로직 추가
+          withCredentials: true, // 이 부분 추가
         });
+    
+        console.log("저장내용:", formData);
+        // 저장 성공 시 처리 로직 추가
+        navigate("/eduMain"); // 저장 성공 후 화면 이동
+        console.log(response.data);
+      } catch (error) {
+        console.log("여기?:", error);
+        // 저장 실패 시 처리 로직 추가
+      }
     };
   
 
