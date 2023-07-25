@@ -100,7 +100,7 @@ const useSafetyEduForm = () => {
     eduPlace: "", // 교육장소
     eduStartTime: new Date(), // 시작시간
     // eduEndTime: new Date(), // 끝나는 시간
-    eduSumTime: null, // 총시간
+    eduSumTime: "", // 총시간
     eduTarget: "", // 대상자
     eduContent: "", // 교육내용
     eduWriter: "",
