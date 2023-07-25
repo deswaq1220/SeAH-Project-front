@@ -95,11 +95,12 @@ const useSafetyEduForm = () => {
 
   const [formData, setFormData] = useState({
     eduCategory: "", // 교육
-    eduClass: "", // 교육분류
+    eduTitle: "", // 교육분류
     eduInstructor: "", // 담당자
     eduPlace: "", // 교육장소
     eduStartTime: new Date(), // 시작시간
     // eduEndTime: new Date(), // 끝나는 시간
+    eduSumTime: null, // 총시간
     eduTarget: "", // 대상자
     eduContent: "", // 교육내용
     eduWriter: "",
@@ -222,7 +223,7 @@ const useSafetyEduForm = () => {
       formDataWithFile.append("eduInstructor", formData.eduInstructor);
       formDataWithFile.append("eduPlace", formData.eduPlace);
       formDataWithFile.append("eduStartTime", formData.eduStartTime);
-    
+      formDataWithFile.append("eduSumTime", formData.eduSumTime);
       formDataWithFile.append("eduTarget", formData.eduTarget);
       formDataWithFile.append("eduContent", formData.eduContent);
       formDataWithFile.append("eduWriter", formData.eduWriter);

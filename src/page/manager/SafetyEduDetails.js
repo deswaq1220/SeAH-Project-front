@@ -107,7 +107,7 @@ export default function SafetyEduDetails() {
                 교육시간
               </dt>
               <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                {eduData.eduStartTime} ~ {eduData.eduEndTime} 
+                {eduData.eduStartTime} ~ 
               </dd>
               <dt className="text-base font-bold leading-6 text-gray-900">
                 총 교육시간
