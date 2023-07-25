@@ -13,7 +13,6 @@ import SafetyEduReg from "./page/manager/SafetyEduReg";
 import UserSafetyEduAttendance from "./page/user/UserSafetyEduAttendance";
 import SafetyEduDetails from "./page/manager/SafetyEduDetails";
 import EmailForm from "./Email";
-import SafetyEduList from "./page/manager/SafetyEduList";
 
 
 function App() {
@@ -24,12 +23,11 @@ function App() {
         <Route path="/" element={<ManagerLogin/>}></Route> {/* 관리자 로그인페이지 */}
         <Route path="/manager" element={<MainManager/>}></Route> {/* 관리자 메인페이지 */}
         <Route path="/eduMain" element={<SafetyEducationMain/>}></Route>{/* 관리자 안전교육페이지 */}
-        <Route path="/edudetails" element={<SafetyEduDetails/>}></Route>{/* 관리자 안전교육상세*/}
+        <Route path="/edudetails/:eduId" element={<SafetyEduDetails/>}></Route>{/* 관리자 안전교육상세*/}
         <Route path="/edureg" element={<SafetyEduReg/>}></Route>{/* 관리자 안전교육 등록페이지 */}
         <Route path="/inspection" element={<SafetyInspection/>}></Route>{/* 관리자 안점점검 페이지 */}
         <Route path="/reinfo" element={<ReferenceInfo/>}></Route> {/* 관리자 기준정보페이지 */}
         <Route path="/sendEmail" element={<EmailForm/>}></Route> {/* 이메일 */}
-        <Route path="/edulist" element={<SafetyEduList/>}></Route> {/* 교육리스트 */}
 
 
         {/* 사용자  */}
@@ -38,6 +36,7 @@ function App() {
         
         <Route path="/404" element={<Error/>}></Route> {/* 에러 */}
       </Routes>
+      <ToastContainer/>
     </Router>
     
   );
