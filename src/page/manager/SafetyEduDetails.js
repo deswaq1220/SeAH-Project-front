@@ -14,6 +14,7 @@ export default function SafetyEduDetails() {
     const fetchEduDetail = async () => {
       try {
         const response = await axios.get(`http://localhost:8081/edudetails/${eduId}`,{
+          // // "http://172.20.10.5:3000/edudetails/${eduId}"
           
         });
         setEduData(response.data);
@@ -26,7 +27,7 @@ export default function SafetyEduDetails() {
   }, [eduId]);
 
   useEffect(() => {
-    console.log(eduData); // 최신 데이터를 출력
+    
   }, [eduData]);
 
   const handleExport = () => {

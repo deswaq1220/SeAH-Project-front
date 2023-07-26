@@ -95,15 +95,15 @@ const useSafetyEduForm = () => {
 
   const [formData, setFormData] = useState({
     eduCategory: "", // 교육
-    eduClass: "", // 교육분류
-    eduInstructor: "", // 담당자
-    eduPlace: "", // 교육장소
+    eduTitle: "", // 교육제목\
+    eduInstructor: "변경원", // 강사
+    eduPlace: "우리집", // 교육장소
     eduStartTime: new Date(), // 시작시간
     // eduEndTime: new Date(), // 끝나는 시간
     eduSumTime: "", // 총시간
     eduTarget: "", // 대상자
-    eduContent: "", // 교육내용
-    eduWriter: "",
+    eduContent: "테스트", // 교육내용
+    eduWriter: "작성자",
     file: null,
   });
 
@@ -127,16 +127,7 @@ const useSafetyEduForm = () => {
     }));
   };
 
-  // const handleEndTimeChange = (e) => {
-  //   const newValue = e.target.value;
-  //   setSelectedEndTime(newValue);
-  //   setFormData((prevData) => ({
-  //     ...prevData,
-  //     eduEndTime: newValue, // 종료시간 필드 이름 변경
-  //   }));
-  // };
 
-  
 
   const handleCreate = () => {
     // const qrLink = "http://www.seahaerospace.com/kor/index.asp"; // 예시로 가정한 링크입니다. 원하는 링크로 변경해주세요.
@@ -152,7 +143,7 @@ const useSafetyEduForm = () => {
           file: acceptedFiles[0], // Update the file property in the formData state
         });
       }
-      alert(acceptedFiles);
+      // alert(acceptedFiles);
       console.log(acceptedFiles);
     },
     [formData, uploadedFiles]
@@ -164,12 +155,9 @@ const useSafetyEduForm = () => {
     setUploadedFiles(updatedFiles);
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setFormData({
-      ...formData,
-      file: file, // Update the file property in the formData state
-    });
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    setFormData((prevFormData) => ({ ...prevFormData, file: selectedFile }));
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
@@ -180,7 +168,7 @@ const useSafetyEduForm = () => {
     setFormData((prevData) => ({
       ...prevData,
       eduCategory: selectedItem.name,
-      eduClass: mapEduCategoryName(selectedItem.name),
+      eduTitle: mapEduCategoryName(selectedItem.name),
     }));
   };
 
@@ -215,33 +203,37 @@ const useSafetyEduForm = () => {
       }
     
       console.log(formData);
-      console.log("카테고리네임", mapEduCategoryName(selected.name));
-      console.log("대상자", mapDutyName(selectedDuty.name));
+      
     
       formDataWithFile.append("eduCategory", formData.eduCategory);
-      formDataWithFile.append("eduClass", formData.eduClass);
+      formDataWithFile.append("eduTitle", formData.eduTitle);
       formDataWithFile.append("eduInstructor", formData.eduInstructor);
       formDataWithFile.append("eduPlace", formData.eduPlace);
       formDataWithFile.append("eduStartTime", formData.eduStartTime);
+      formDataWithFile.append("eduSumTime", formData.eduSumTime);
     
       formDataWithFile.append("eduTarget", formData.eduTarget);
       formDataWithFile.append("eduContent", formData.eduContent);
       formDataWithFile.append("eduWriter", formData.eduWriter);
+      formDataWithFile.append("file", formData.file);
+
     
       try {
-        const response = await axios.post("http://localhost:8081/edureg" , formDataWithFile, {
+        const response = await axios.post("http://localhost:8081/edureg" ,
+        // // "http://172.20.10.5:3000/edureg"
+        formDataWithFile, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-          withCredentials: true, // 이 부분 추가
+          // withCredentials: true, // 이 부분 추가
         });
     
         console.log("저장내용:", formData);
         // 저장 성공 시 처리 로직 추가
         navigate("/eduMain"); // 저장 성공 후 화면 이동
-        console.log(response.data);
+        
       } catch (error) {
-        console.log("여기?:", error);
+        console.log("여기 오류:", error);
         // 저장 실패 시 처리 로직 추가
       }
     };
@@ -253,9 +245,13 @@ const useSafetyEduForm = () => {
     if (selected.name === "ETC") {
       return `총 교육시간: ${selectedEtcTime}분`;
     } else {
+      formData.eduSumTime = selected.time;
       return `총 교육시간: ${selected.time || 0}분`;
     }
   };
+
+  
+  const qrValue = 'http://172.20.10.5:3000/usereduatten'
 
   
 
@@ -273,7 +269,6 @@ const useSafetyEduForm = () => {
     formData,
     handleChange,
     handleStartTimeChange,
-    // handleEndTimeChange,
     handleCreate,
     onDrop,
     deleteFile,
@@ -281,7 +276,6 @@ const useSafetyEduForm = () => {
     getRootProps,
     getInputProps,
     isDragActive,
-    // formatTimeRange,
     handleListboxChange,
     handleDutyChange,
     navigate,
@@ -290,6 +284,7 @@ const useSafetyEduForm = () => {
     calculateTotalTime,
     handleEtcTimeChange,
     selectedStartTime,
+    qrValue,
   }
 }
 

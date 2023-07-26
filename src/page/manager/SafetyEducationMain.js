@@ -24,8 +24,8 @@ function SafetyEducationMain() {
     const fetchEduList = async () => {
       try {
         const response = await axios.get("http://localhost:8081/edumain"); // 서버의 API 엔드포인트에 맞게 경로를 수정해야 합니다.
+        // "http://172.20.10.5:3000/edumain"
         setEduList(response.data); // 서버로부터 받은 데이터를 상태 변수에 저장
-        console.log(eduList)
       } catch (error) {
         console.error("Error fetching data:", error);
       }
