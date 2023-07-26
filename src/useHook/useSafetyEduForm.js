@@ -100,10 +100,7 @@ const useSafetyEduForm = () => {
     eduPlace: "", // 교육장소
     eduStartTime: new Date(), // 시작시간
     // eduEndTime: new Date(), // 끝나는 시간
-<<<<<<< HEAD
     eduSumTime: "", // 총시간
-=======
->>>>>>> parent of 4eef7db (디테일에 시간값 안넘어감)
     eduTarget: "", // 대상자
     eduContent: "", // 교육내용
     eduWriter: "",
