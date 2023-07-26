@@ -85,7 +85,7 @@ function mapDutyName(duty) {
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
-
+const formDataWithFile = new FormData();
 const useSafetyEduForm = () => {
   const [selected, setSelected] = useState(people[0]);
   const [selectedDuty, setSelectedDuty] = useState(duty[0]);
@@ -104,7 +104,7 @@ const useSafetyEduForm = () => {
     eduTarget: "", // 대상자
     eduContent: "테스트", // 교육내용
     eduWriter: "작성자",
-    file: null,
+    files: null,
   });
 
   const handleChange = (e) => {
@@ -137,13 +137,19 @@ const useSafetyEduForm = () => {
   const onDrop = useCallback(
     (acceptedFiles) => {
       setUploadedFiles([...uploadedFiles, ...acceptedFiles]);
+
+      for (const file of acceptedFiles) {
+        formDataWithFile.append("files", file);
+      }
+      
       if (acceptedFiles.length > 0) {
         setFormData({
           ...formData,
-          file: acceptedFiles[0], // Update the file property in the formData state
+          files: acceptedFiles // Update the file property in the formData state
         });
       }
       // alert(acceptedFiles);
+      
       console.log(acceptedFiles);
     },
     [formData, uploadedFiles]
@@ -156,9 +162,12 @@ const useSafetyEduForm = () => {
   };
 
   const handleFileChange = (event) => {
+    //이거 이상함? 나중에 터지면 여기 문제일수도
     const selectedFile = event.target.files[0];
     setFormData((prevFormData) => ({ ...prevFormData, file: selectedFile }));
   };
+
+  
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
@@ -184,18 +193,21 @@ const useSafetyEduForm = () => {
     const navigate = useNavigate();
     const handleSubmit = async (event) => {
       event.preventDefault();
-      const formDataWithFile = new FormData();
+      
     
       if (!formData.eduContent) {
         // eduContent 필드가 비어있을 경우 에러 처리
         setError("본문내용없음");
         return;
       }
-      if (formData.file) {
-        formDataWithFile.append("file", formData.file);
-      } else {
-        console.log("파일없음");
-      }
+      // if (formData.files) {
+
+        
+      //   formDataWithFile.append("files", formData.files);
+      //   console.log("여기 파일"+formDataWithFile.files);
+      // } else {
+      //   console.log("파일없음");
+      // }
       if (!formData.eduInstructor) {
         // eduInstructor 필드가 비어있을 경우 에러 처리
         setError("강사없음");
@@ -211,11 +223,13 @@ const useSafetyEduForm = () => {
       formDataWithFile.append("eduPlace", formData.eduPlace);
       formDataWithFile.append("eduStartTime", formData.eduStartTime);
       formDataWithFile.append("eduSumTime", formData.eduSumTime);
-    
+      
+     
+      console.log("formDataWithFile 파일" + formDataWithFile.get("files"));
       formDataWithFile.append("eduTarget", formData.eduTarget);
       formDataWithFile.append("eduContent", formData.eduContent);
       formDataWithFile.append("eduWriter", formData.eduWriter);
-      formDataWithFile.append("file", formData.file);
+
 
     
       try {
@@ -223,12 +237,13 @@ const useSafetyEduForm = () => {
         // // "http://172.20.10.5:3000/edureg"
         formDataWithFile, {
           headers: {
+            
             "Content-Type": "multipart/form-data",
           },
           // withCredentials: true, // 이 부분 추가
         });
     
-        console.log("저장내용:", formData);
+        console.log("저장내용:", formDataWithFile);
         // 저장 성공 시 처리 로직 추가
         navigate("/eduMain"); // 저장 성공 후 화면 이동
         
