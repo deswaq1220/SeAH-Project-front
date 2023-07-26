@@ -96,14 +96,14 @@ const useSafetyEduForm = () => {
   const [formData, setFormData] = useState({
     eduCategory: "", // 교육
     eduTitle: "", // 교육제목\
-    eduInstructor: "변경원", // 강사
-    eduPlace: "우리집", // 교육장소
+    eduInstructor: "", // 강사
+    eduPlace: "", // 교육장소
     eduStartTime: new Date(), // 시작시간
     // eduEndTime: new Date(), // 끝나는 시간
     eduSumTime: "", // 총시간
     eduTarget: "", // 대상자
-    eduContent: "테스트", // 교육내용
-    eduWriter: "작성자",
+    eduContent: "", // 교육내용
+    eduWriter: "",
     files: null,
   });
 
