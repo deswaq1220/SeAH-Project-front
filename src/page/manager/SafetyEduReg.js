@@ -142,7 +142,8 @@ function SafetyEduReg() {
     handleEtcTimeChange,
     selectedStartTime,
     qrValue,
-    setQrValue
+    setQrValue,
+    resetForm
   } = useSafetyEduForm();
   
   
@@ -263,7 +264,7 @@ function SafetyEduReg() {
                       id="eduTitle"
                       value={formData.eduTitle}
                       onChange={handleChange}
-                      autoComplete="family-name"
+                      autoComplete="off"
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
                     />
                   </div>
@@ -299,7 +300,7 @@ function SafetyEduReg() {
                     id="educharge"
                     value={formData.eduInstructor}
                     onChange={handleChange}
-                    autoComplete="family-name"
+                    autoComplete="off"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
                   />
                 </div>
@@ -321,7 +322,7 @@ function SafetyEduReg() {
                     id="place"
                     value={formData.eduPlace}
                     onChange={handleChange}
-                    autoComplete="family-name"
+                    autoComplete="off"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
                   />
                 </div>
@@ -492,6 +493,7 @@ function SafetyEduReg() {
                   rows={3}
                   value={formData.eduContent}
                   onChange={handleChange}
+                  autoComplete="off"
                   className="block w-full h-16 rounded-md border-0 py-1.5 px-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6"
                   defaultValue={""}
                 />
@@ -599,7 +601,7 @@ function SafetyEduReg() {
                     id="eduwriter"
                     value={formData.eduWriter}
                     onChange={handleChange}
-                    autoComplete="family-name"
+                     autoComplete="off"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
                   />
                 </div>
