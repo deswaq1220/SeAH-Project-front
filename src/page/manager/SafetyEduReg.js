@@ -499,13 +499,13 @@ function SafetyEduReg() {
                 />
               </div>
             </div>
-            <div id="qr" className="flex items-baseline justify-start">
+            {/* <div id="qr" className="flex items-baseline justify-start">
               <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
                 QR생성
               </span>
               {isCompleted ? (
                 <div className="mt-4">
-                  {/* <QRCode value={JSON.stringify(formData)} /> */}
+                  <QRCode value={JSON.stringify(formData)} />
                   
                     <QRCode value={qrValue} />
                   
@@ -523,7 +523,7 @@ function SafetyEduReg() {
                   생성하기
                 </button>
               )}
-            </div>
+            </div> */}
             <div id="file" className="flex items-baseline justify-start ">
               <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
                 파일첨부

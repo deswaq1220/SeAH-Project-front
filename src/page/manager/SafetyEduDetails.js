@@ -5,8 +5,21 @@ import * as XLSX from "xlsx";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import useSafetyEduForm from "../../useHook/useSafetyEduForm";
+import QRCode from "qrcode.react";
+import {
+  CheckCircleIcon,
+} from "@heroicons/react/20/solid";
 
 export default function SafetyEduDetails() {
+
+  const {
+    isCompleted,
+    handleCreate,
+    qrValue,
+    formData
+  } = useSafetyEduForm();
+
   const { eduId } = useParams(); // useParams 훅을 사용하여 URL 파라미터에서 eduId 가져오기
   const [eduData, setEduData] = useState(null);
 
@@ -187,12 +200,28 @@ export default function SafetyEduDetails() {
         </div>
         <div className="mt-6 pr-3 pb-3 flex items-center justify-center gap-x-6 ">
           <div>
-            <button
-              type="submit"
-              className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mr-1"
-            >
-              QR코드
-            </button>
+          {isCompleted ? (
+                <div className="mt-4">
+                  <QRCode value={JSON.stringify(formData)} />
+                  
+                    {/* <QRCode value={qrValue} /> */}
+                  
+                  <div className="flex items-center mt-2">
+                    <CheckCircleIcon className="h-5 w-5 text-green-500" />
+                    <span className="ml-1">생성완료</span>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  type="submit"
+                  className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mr-1"
+                  onClick={handleCreate}
+                >
+                  QR CODE
+                </button>
+              )}
+
+            
             <button
               type="submit"
               className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mr-1"

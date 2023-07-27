@@ -86,12 +86,14 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 const formDataWithFile = new FormData();
-const useSafetyEduForm = () => {
+const useSafetyEduForm = (eduData) => {
   const [selected, setSelected] = useState(people[0]);
   const [selectedDuty, setSelectedDuty] = useState(duty[0]);
   const [isCompleted, setIsCompleted] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [error, setError] = useState(null);
+  const [qrValue, setQrValue] = useState("");
+ 
 
   const [formData, setFormData] = useState({
     eduCategory: "", // 교육
@@ -105,6 +107,7 @@ const useSafetyEduForm = () => {
     eduContent: "", // 교육내용
     eduWriter: "",
     files: null,
+    eduId:""
   });
 
   const handleChange = (e) => {
@@ -134,8 +137,25 @@ const useSafetyEduForm = () => {
 
   // 큐알코드 생성하기 누르면 활성화되는 함수
   const handleCreate = () => {
-    // const qrLink = "http://www.seahaerospace.com/kor/index.asp"; // 예시로 가정한 링크입니다. 원하는 링크로 변경해주세요.
-    setIsCompleted(true); // 큐알코드 생성 완료 상태 업데이트
+    if (eduData) {
+      let qrLink = `http://localhost:8081/usereduatten/${formData.eduId}?`;
+
+      // eduData에 있는 각 필드들을 qrLink에 추가
+      qrLink += `eduCategory=${eduData.eduCategory}&`;
+      qrLink += `eduTitle=${eduData.eduTitle}&`;
+      qrLink += `eduInstructor=${eduData.eduInstructor}&`;
+      qrLink += `eduPlace=${eduData.eduPlace}&`;
+      qrLink += `eduStartTime=${eduData.eduStartTime}&`;
+      qrLink += `eduSumTime=${eduData.eduSumTime}&`;
+      qrLink += `eduTarget=${eduData.eduTarget}&`;
+      qrLink += `eduContent=${eduData.eduContent}&`;
+      qrLink += `eduWriter=${eduData.eduWriter}&`;
+      qrLink += `eduId=${eduData.eduId}`;
+
+      console.log("QR Value:", qrLink);
+      setIsCompleted(true); // 큐알코드 생성 완료 상태 업데이트
+      setQrValue(qrLink);
+    }
   };
 
   const onDrop = useCallback(
@@ -283,7 +303,6 @@ const useSafetyEduForm = () => {
     }
   };
 
-  const qrValue = "http://172.20.10.5:3000/usereduatten";
 
   const handleEtcTimeChange = (e) => {
     const newValue = parseInt(e.target.value, 10);
@@ -320,6 +339,8 @@ const useSafetyEduForm = () => {
     setSelectedStartTime(""); // 기본 값으로 변경
     setSelectedEtcTime(30); // 기본 값으로 변경
   };
+
+
 
   return {
     selected,
