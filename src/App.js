@@ -14,6 +14,9 @@ import UserSafetyEduAttendance from "./page/user/UserSafetyEduAttendance";
 import SafetyEduDetails from "./page/manager/SafetyEduDetails";
 import EmailForm from "./Email";
 
+// 수인 씀
+import SafetyEduStatics from "./page/manager/SafetyEduStatics"
+
 
 function App() {
   console.log(`
@@ -37,6 +40,9 @@ function App() {
         <Route path="/inspection" element={<SafetyInspection/>}></Route>{/* 관리자 안점점검 페이지 */}
         <Route path="/reinfo" element={<ReferenceInfo/>}></Route> {/* 관리자 기준정보페이지 */}
         <Route path="/sendEmail" element={<EmailForm/>}></Route> {/* 이메일 */}
+
+        {/*수인 추가함 */}
+        <Route path="/edustatic/:attenName" element={<SafetyEduStatics/>}></Route>{/* 관리자 안전교육통계 : 이름*/}
 
 
         {/* 사용자  */}
