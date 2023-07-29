@@ -143,7 +143,8 @@ function SafetyEduReg() {
     selectedStartTime,
     qrValue,
     setQrValue,
-    resetForm
+    resetForm,
+    handleOptionChange
   } = useSafetyEduForm();
   
   
@@ -380,7 +381,7 @@ function SafetyEduReg() {
                       id="etcTime"
                       name="etcTime"
                       value={selectedEtcTime}
-                      onChange={handleEtcTimeChange}
+                      onChange={(e) => handleOptionChange(e)}
                       className="block w-56 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
                     >
                       {/* 기타 선택 시, 30분 단위로 선택할 수 있도록 셀렉트 박스 옵션 생성 */}

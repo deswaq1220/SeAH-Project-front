@@ -36,28 +36,44 @@ export default function SafetyEduDetails() {
     
   }, [eduData]);
 
-  const handleExport = () => {
-    // 엑셀 데이터 생성 로직 작성
 
+  // 엑셀!!!!!!!!!!!
+
+  const createExcelData = (eduData) => {
+    // 교육 정보를 바탕으로 엑셀 데이터를 생성하는 로직 작성
     const data = [
       {
-        title: "[집체교육] 제 1차 사무직 안전교육",
-        time: "2023-07-13 14:00 ~ 15:00",
-        duration: "1시간",
-        content: "사무직 안전교육입니다. 참석 바랍니다",
-        attachments: [
-          { name: "안전교육 참석1.jpeg", size: "2.4mb" },
-          { name: "안전교육 참석2.jpeg", size: "4.5mb" },
-        ],
+        category: `${eduData.eduCategory}`,
+        title: `${eduData.eduCategory}`,
+        time: `${eduData.eduStartTime}`,
+        duration: `${eduData.eduSumTime} 분`,
+        content: eduData.eduContent,
+        Instructor: `${eduData.eduInstructor}`,
+        eduWriter: eduData.eduWriter,
+        target: eduData.eduTarget,
+        attachments: eduData.attachments,
+        
       },
     ];
+  
+    return data;
+  };
+
+
+
+  const handleExport = () => {
+    if (!eduData) return; // eduData가 없을 경우 빠른 리턴
+  
+    // 엑셀 데이터 생성
+    const data = createExcelData(eduData);
+  
     // 엑셀 시트 생성
     const worksheet = XLSX.utils.json_to_sheet(data);
-
+  
     // 엑셀 워크북 생성
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-
+  
     // 엑셀 파일 저장
     const excelBuffer = XLSX.write(workbook, {
       bookType: "xlsx",
@@ -66,7 +82,7 @@ export default function SafetyEduDetails() {
     const excelFile = new Blob([excelBuffer], {
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     });
-    saveAs(excelFile, "안전교육.xlsx");
+    saveAs(excelFile, `${eduData.eduCategory}_안전교육.xlsx`);
   };
 
   if (!eduData) {

@@ -153,6 +153,12 @@ const useSafetyEduForm = (eduData) => {
         eduWriter: eduData.eduWriter,
         eduId: eduData.eduId,
       }));
+
+      const foundCategory = people.find((item) => item.name === eduData.eduCategory);
+      if (foundCategory) {
+        setSelected(foundCategory);
+      }
+
     }
   }, [eduData]);
 
@@ -199,14 +205,39 @@ const useSafetyEduForm = (eduData) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
 
+  // 교육 카테고리를 선택했을 때 호출되는 함수
   const handleListboxChange = (selectedItem) => {
     setSelected(selectedItem);
+    if (selectedItem.name === "ETC") {
+      // 기타 카테고리인 경우 selectedEtcTime 값을 formData.eduSumTime으로 설정
+      setFormData((prevData) => ({
+        ...prevData,
+        eduCategory: selectedItem.name,
+        eduTitle: mapEduCategoryName(selectedItem.name),
+        eduSumTime: selectedEtcTime,
+      }));
+    } else {
+      // 기타 카테고리가 아닌 경우 선택한 카테고리의 시간 값을 formData.eduSumTime으로 설정
+      setFormData((prevData) => ({
+        ...prevData,
+        eduCategory: selectedItem.name,
+        eduTitle: mapEduCategoryName(selectedItem.name),
+        eduSumTime: selectedItem.time,
+      }));
+    }
+  };
+
+// 기타 카테고리에서 셀렉트 박스의 옵션을 변경했을 때 호출되는 함수
+  const handleOptionChange = (e) => {
+    const { value } = e.target;
+    setSelectedEtcTime(Number(value)); // 선택한 값을 숫자로 변환하여 selectedEtcTime 상태를 업데이트
     setFormData((prevData) => ({
       ...prevData,
-      eduCategory: selectedItem.name,
-      eduTitle: mapEduCategoryName(selectedItem.name),
+      eduSumTime: Number(value), // 선택한 값을 숫자로 변환하여 formData.eduSumTime을 업데이트
     }));
   };
+
+
 
   const handleDutyChange = (value) => {
     setSelectedDuty(value);
@@ -227,14 +258,6 @@ const useSafetyEduForm = (eduData) => {
         setError("본문내용없음");
         return;
       }
-      // if (formData.files) {
-
-        
-      //   formDataWithFile.append("files", formData.files);
-      //   console.log("여기 파일"+formDataWithFile.files);
-      // } else {
-      //   console.log("파일없음");
-      // }
       if (!formData.eduInstructor) {
         // eduInstructor 필드가 비어있을 경우 에러 처리
         setError("강사없음");
@@ -269,6 +292,32 @@ const useSafetyEduForm = (eduData) => {
           },
           // withCredentials: true, // 이 부분 추가
         });
+
+        // 저장 성공 시 처리 로직 추가
+    setFormData({
+      eduCategory: "",
+      eduTitle: "",
+      eduInstructor: "",
+      eduPlace: "",
+      eduStartTime: new Date(),
+      eduSumTime: "",
+      eduTarget: "",
+      eduContent: "",
+      eduWriter: "",
+      files: null,
+    });
+
+    // 데이터 전송 후 formDataWithFile 초기화
+    formDataWithFile.delete("eduCategory");
+    formDataWithFile.delete("eduTitle");
+    formDataWithFile.delete("eduInstructor");
+    formDataWithFile.delete("eduPlace");
+    formDataWithFile.delete("eduStartTime");
+    formDataWithFile.delete("eduSumTime");
+    formDataWithFile.delete("eduTarget");
+    formDataWithFile.delete("eduContent");
+    formDataWithFile.delete("eduWriter");
+    formDataWithFile.delete("files");
     
         console.log("저장내용:", formDataWithFile);
         // 저장 성공 시 처리 로직 추가
@@ -295,11 +344,12 @@ const useSafetyEduForm = (eduData) => {
 
   
 
-  const handleEtcTimeChange = (e) => {
-    const newValue = parseInt(e.target.value, 10);
-    setSelectedEtcTime(newValue);
+  const handleEtcTimeChange = (event) => {
+    const { value } = event.target;
+    setSelectedEtcTime(Number(value));
   };
 
+  
   return{
     selected,
     selectedDuty,
@@ -325,6 +375,7 @@ const useSafetyEduForm = (eduData) => {
     handleEtcTimeChange,
     selectedStartTime,
     qrValue,
+    handleOptionChange,
   }
 }
 
