@@ -133,8 +133,8 @@ const useSafetyEduForm = (eduData) => {
 
   // 큐알버튼 누르면 생성도는 버튼
   const handleCreate = () => {
-    // const qrLink = "http://www.seahaerospace.com/kor/index.asp"; // 예시로 가정한 링크입니다. 원하는 링크로 변경해주세요.
     setIsCompleted(true); // 생성 완료 상태 업데이트
+    // setQrValue(JSON.stringify({ ...formData, eduId: eduData.eduId }));
   };
 
   useEffect(() => {
@@ -283,7 +283,7 @@ const useSafetyEduForm = (eduData) => {
 
     
       try {
-        const response = await axios.post("http://localhost:8081/edureg" ,
+        const response = await axios.post("http://127.0.0.1:8081/edureg" ,
         // // "http://172.20.10.5:3000/edureg"
         formDataWithFile, {
           headers: {

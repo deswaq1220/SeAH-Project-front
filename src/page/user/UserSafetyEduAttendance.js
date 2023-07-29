@@ -6,6 +6,7 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import UserHeader from "../../components/UserHeader";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 const department = [
   {
     id: 1,
@@ -31,6 +32,7 @@ function classNames(...classes) {
 
 function UserSafetyEduAttendance() {
   const [selected, setSelected] = useState(department[0]);
+  const { eduId } = useParams();
 
   const today = new Date();
   const year = today.getFullYear();
@@ -54,11 +56,12 @@ function UserSafetyEduAttendance() {
       attenDepartment, // 사용자가 선택한 부서명을 추가
       attenName,
       attenEmployeeNumber,
+      eduId: parseInt(eduId),
     };
   
     // 출석 등록 요청 보내기
     axios
-      .post("http://localhost:8081/usereduatten/register", requestData, {
+      .post("http://127.0.0.1:8081/usereduatten/register", requestData, {
         //http://172.20.10.5:8081/usereduatten/register 이거는 진짜 사용할때
         headers: {
           "Content-Type": "application/json",

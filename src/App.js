@@ -41,7 +41,7 @@ function App() {
 
         {/* 사용자  */}
         <Route path="/user" element={<UserMain/>}></Route>  {/* 사용자 메인페이지*/}
-        <Route path="/usereduatten" element={<UserSafetyEduAttendance/>}></Route>{/* 사용자 사원출석페이지 */}
+        <Route path="/usereduattence/register/:eduId" element={<UserSafetyEduAttendance/>}></Route>{/* 사용자 사원출석페이지 */}
         
         <Route path="/404" element={<Error/>}></Route> {/* 에러 */}
       </Routes>
