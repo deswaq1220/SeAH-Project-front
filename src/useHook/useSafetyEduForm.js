@@ -1,4 +1,4 @@
-import { useState,useCallback } from 'react';
+import { useState,useCallback,useEffect } from 'react';
 import axios from "axios";
 import { useDropzone } from "react-dropzone";
 import { Link, useNavigate } from "react-router-dom";
@@ -119,7 +119,7 @@ const useSafetyEduForm = (eduData) => {
   };
 
   const [selectedStartTime, setSelectedStartTime] = useState("");
-  const [selectedEndTime, setSelectedEndTime] = useState("");
+  // const [selectedEndTime, setSelectedEndTime] = useState("");
 
   const handleStartTimeChange = (e) => {
     const newValue = e.target.value;
@@ -131,11 +131,35 @@ const useSafetyEduForm = (eduData) => {
   };
 
 
-
+  // 큐알버튼 누르면 생성도는 버튼
   const handleCreate = () => {
     // const qrLink = "http://www.seahaerospace.com/kor/index.asp"; // 예시로 가정한 링크입니다. 원하는 링크로 변경해주세요.
     setIsCompleted(true); // 생성 완료 상태 업데이트
   };
+
+  useEffect(() => {
+    if (eduData) {
+      // eduData가 존재하면 폼 데이터 초기화
+      setFormData((prevData) => ({
+        ...prevData,
+        eduCategory: eduData.eduCategory,
+        eduTitle: mapEduCategoryName(eduData.eduCategory),
+        eduInstructor: eduData.eduInstructor,
+        eduPlace: eduData.eduPlace,
+        eduStartTime: eduData.eduStartTime,
+        eduSumTime: eduData.eduSumTime,
+        eduTarget: eduData.eduTarget,
+        eduContent: eduData.eduContent,
+        eduWriter: eduData.eduWriter,
+        eduId: eduData.eduId,
+      }));
+    }
+  }, [eduData]);
+
+
+
+
+
 
   const onDrop = useCallback(
     (acceptedFiles) => {

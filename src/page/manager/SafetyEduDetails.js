@@ -12,16 +12,9 @@ import {
 } from "@heroicons/react/20/solid";
 
 export default function SafetyEduDetails() {
-
-  const {
-    isCompleted,
-    handleCreate,
-    qrValue,
-    formData
-  } = useSafetyEduForm();
-
   const { eduId } = useParams(); // useParams 훅을 사용하여 URL 파라미터에서 eduId 가져오기
   const [eduData, setEduData] = useState(null);
+  const { isCompleted, handleCreate, qrValue, formData } = useSafetyEduForm(eduData);
 
   useEffect(() => {
     const fetchEduDetail = async () => {
