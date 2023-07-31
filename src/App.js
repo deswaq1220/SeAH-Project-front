@@ -42,7 +42,7 @@ function App() {
         <Route path="/sendEmail" element={<EmailForm/>}></Route> {/* 이메일 */}
 
         {/*수인 추가함 */}
-        <Route path="/edustatic/:attenName" element={<SafetyEduStatics/>}></Route>{/* 관리자 안전교육통계 : 이름*/}
+        <Route path="/edustatistics" element={<SafetyEduStatics/>}></Route>{/* 관리자 안전교육통계*/}
 
 
         {/* 사용자  */}
