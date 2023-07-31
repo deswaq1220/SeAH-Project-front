@@ -1,4 +1,4 @@
-import { useState, Fragment, useCallback } from "react";
+import { useState, Fragment, useCallback, useEffect } from "react";
 // import { format, addMonths, subMonths } from "date-fns";
 import { Listbox, Transition } from "@headlessui/react";
 // import { Link } from "react-router-dom";
@@ -33,6 +33,7 @@ function classNames(...classes) {
 function UserSafetyEduAttendance() {
   const [selected, setSelected] = useState(department[0]);
   const { eduId } = useParams();
+  const [eduTitle, setEduTitle] = useState("");
 
   const today = new Date();
   const year = today.getFullYear();
@@ -100,6 +101,21 @@ function UserSafetyEduAttendance() {
       attenEmployeeNumber: event.target.value,
     }));
   };
+
+  useEffect(() => {
+    // GET 요청을 통해 eduTitle 가져오기
+    axios.get(`http://172.20.10.5:8081/usereduatten/register/${eduId}`)
+      .then((response) => {
+        // 응답 데이터에서 eduTitle 값을 추출하여 상태 업데이트
+        setEduTitle(response.data.eduTitle);
+      })
+      .catch((error) => {
+        // 오류 처리
+        console.error("Error fetching eduTitle:", error);
+      });
+  }, [eduId]);
+
+
   
 
   return (
@@ -116,7 +132,7 @@ function UserSafetyEduAttendance() {
               {formattedDate}
             </h3>
             <p className="mt-1 max-w-2xl text-lg leading-6 text-gray-500">
-              안전교육 사원 출석 페이지 입니다
+              {eduTitle} 사원 출석 페이지 입니다
             </p>
           </div>
           <form className="w-full md:grid-cols-2" onSubmit={handleSubmit }>

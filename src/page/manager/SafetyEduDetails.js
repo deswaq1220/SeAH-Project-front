@@ -209,9 +209,9 @@ export default function SafetyEduDetails() {
                 <div className="mt-4">
                   {/* <QRCode value={JSON.stringify(formData)} /> */}
 
-                  <Link to={`/attendance/${eduData.eduId}`}>
+                  <Link to={`/userattendance/register/${eduData.eduId}`}>
                     <QRCode
-                      value={`/usereduatten/register/${eduData.eduId}`}
+                      value={`http://172.20.10.5:8081/usereduatten/register/${eduData.eduId}`}
                     />
                   </Link>
 
