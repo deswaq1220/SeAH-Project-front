@@ -2,6 +2,8 @@ import { useState,useCallback,useEffect } from 'react';
 import axios from "axios";
 import { useDropzone } from "react-dropzone";
 import { Link, useNavigate } from "react-router-dom";
+import NotificationModal from '../components/Notification'
+
 
 const people = [
   {
@@ -93,6 +95,8 @@ const useSafetyEduForm = (eduData) => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [error, setError] = useState(null);
   const [qrValue, setQrValue] = useState("");
+  const [showNotification, setShowNotification] = useState(false);
+  const apiUrl = process.env.REACT_APP_API_BASE_URL;
  
 
   const [formData, setFormData] = useState({
@@ -163,10 +167,6 @@ const useSafetyEduForm = (eduData) => {
   }, [eduData]);
 
 
-
-
-
-
   const onDrop = useCallback(
     (acceptedFiles) => {
       setUploadedFiles([...uploadedFiles, ...acceptedFiles]);
@@ -181,12 +181,13 @@ const useSafetyEduForm = (eduData) => {
           files: acceptedFiles // Update the file property in the formData state
         });
       }
-      // alert(acceptedFiles);
+      
       
       console.log(acceptedFiles);
     },
     [formData, uploadedFiles]
   );
+  
 
   const deleteFile = (index) => {
     const updatedFiles = [...uploadedFiles];
@@ -249,6 +250,7 @@ const useSafetyEduForm = (eduData) => {
 
     // 교육등록 핸들러
     const navigate = useNavigate();
+
     const handleSubmit = async (event) => {
       event.preventDefault();
       
@@ -283,17 +285,17 @@ const useSafetyEduForm = (eduData) => {
 
     
       try {
-        const response = await axios.post("http://127.0.0.1:8081/edureg" ,
+        const response = await axios.post(`http://172.20.10.5:8081/edureg` ,
         // // "http://172.20.10.5:3000/edureg"
         formDataWithFile, {
           headers: {
             
             "Content-Type": "multipart/form-data",
           },
-          // withCredentials: true, // 이 부분 추가
+          withCredentials: true, // 이 부분 추가
         });
 
-        // 저장 성공 시 처리 로직 추가
+        //저장 성공 시 처리 로직 추가
     setFormData({
       eduCategory: "",
       eduTitle: "",
@@ -318,6 +320,14 @@ const useSafetyEduForm = (eduData) => {
     formDataWithFile.delete("eduContent");
     formDataWithFile.delete("eduWriter");
     formDataWithFile.delete("files");
+
+     // 성공적으로 저장되면 알림 띄우기
+     setShowNotification(true);
+
+     // 3초 후에 알림이 자동으로 사라지도록 설정
+     setTimeout(() => {
+       setShowNotification(false);
+     }, 3000);
     
         console.log("저장내용:", formDataWithFile);
         // 저장 성공 시 처리 로직 추가
@@ -376,6 +386,7 @@ const useSafetyEduForm = (eduData) => {
     selectedStartTime,
     qrValue,
     handleOptionChange,
+    showNotification,
   }
 }
 

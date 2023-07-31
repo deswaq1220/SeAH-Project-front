@@ -3,6 +3,7 @@ import Header from "../../components/Header";
 // import { format, addMonths, subMonths } from "date-fns";
 import { Listbox, Transition } from "@headlessui/react";
 import { Link, useNavigate } from "react-router-dom";
+// import Notification from '../components/Notification'
 import {
   CheckIcon,
   ChevronUpDownIcon,
@@ -144,7 +145,7 @@ function SafetyEduReg() {
     qrValue,
     setQrValue,
     resetForm,
-    handleOptionChange
+    showNotification,
   } = useSafetyEduForm();
   
   
@@ -381,7 +382,7 @@ function SafetyEduReg() {
                       id="etcTime"
                       name="etcTime"
                       value={selectedEtcTime}
-                      onChange={(e) => handleOptionChange(e)}
+                      onChange={handleEtcTimeChange}
                       className="block w-56 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
                     >
                       {/* 기타 선택 시, 30분 단위로 선택할 수 있도록 셀렉트 박스 옵션 생성 */}
@@ -625,6 +626,7 @@ function SafetyEduReg() {
           </form>
         </div>
       </div>
+      {/* {showNotification && <Notification />} */}
     </div>
   );
 }

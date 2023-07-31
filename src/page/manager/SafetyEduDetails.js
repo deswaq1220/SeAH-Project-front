@@ -14,12 +14,13 @@ export default function SafetyEduDetails() {
   const [eduData, setEduData] = useState(null);
   const { isCompleted, handleCreate, qrValue, formData } =
     useSafetyEduForm(eduData);
+    const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
   useEffect(() => {
     const fetchEduDetail = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8081/edudetails/${eduId}`,
+          `http://172.20.10.5:8081/edudetails/${eduId}`,
           {
             // // "http://172.20.10.5:3000/edudetails/${eduId}"
           }
@@ -210,7 +211,7 @@ export default function SafetyEduDetails() {
 
                   <Link to={`/attendance/${eduData.eduId}`}>
                     <QRCode
-                      value={`http://127.0.0.1:8081/usereduatten/register/${eduData.eduId}`}
+                      value={`/usereduatten/register/${eduData.eduId}`}
                     />
                   </Link>
 

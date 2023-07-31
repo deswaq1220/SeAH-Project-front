@@ -11,6 +11,7 @@ function SafetyEducationMain() {
   const [eduList, setEduList] = useState([]); // 안전교육 데이터를 담을 상태 변수
   const itemsPerPage = 10; // 한 페이지당 보여줄 항목 개수
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 번호
+  const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
   // 현재 페이지에 해당하는 항목들을 추출하는 함수
   const getCurrentPageItems = () => {
@@ -23,7 +24,7 @@ function SafetyEducationMain() {
     // 서버로부터 안전교육 데이터를 가져오는 함수
     const fetchEduList = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8081/edumain"); // 서버의 API 엔드포인트에 맞게 경로를 수정해야 합니다.
+        const response = await axios.get(`http://172.20.10.5:8081/edumain`); // 서버의 API 엔드포인트에 맞게 경로를 수정해야 합니다.
         // "http://172.20.10.5:3000/edumain"
         setEduList(response.data); // 서버로부터 받은 데이터를 상태 변수에 저장
       } catch (error) {

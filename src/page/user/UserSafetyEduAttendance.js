@@ -40,6 +40,7 @@ function UserSafetyEduAttendance() {
   const day = String(today.getDate()).padStart(2, "0");
 
   const formattedDate = `${year}. ${month}. ${day}`;
+  const apiUrl = process.env.REACT_APP_API_BASE_URL;
  
 
 
@@ -61,7 +62,7 @@ function UserSafetyEduAttendance() {
   
     // 출석 등록 요청 보내기
     axios
-      .post("http://127.0.0.1:8081/usereduatten/register", requestData, {
+      .post(`http://172.20.10.5:8081/usereduatten/register`, requestData, {
         //http://172.20.10.5:8081/usereduatten/register 이거는 진짜 사용할때
         headers: {
           "Content-Type": "application/json",
