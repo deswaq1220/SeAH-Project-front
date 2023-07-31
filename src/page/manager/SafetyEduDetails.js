@@ -31,7 +31,7 @@ export default function SafetyEduDetails() {
       }
     };
 
-    fetchEduDetail();
+    fetchEduDetail(); 
   }, [eduId]);
 
   useEffect(() => {}, [eduData]);
