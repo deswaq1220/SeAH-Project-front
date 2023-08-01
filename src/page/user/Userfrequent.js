@@ -3,30 +3,92 @@ import { Link } from "react-router-dom";
 // import { CheckCircleIcon } from "@heroicons/react/20/solid";
 
 import {CheckCircleIcon ,XCircleIcon } from "@heroicons/react/24/outline";
+import axios from "axios";
+import {useEffect, useState} from "react";
 
-const people = [
-  {
-    name: '[2023-07-31 08:00]',
-    title: '[김흥돌]',
-    department: '',
-    email: '',
-    inscontent:'브레이크 정밀 점검 필요',
-    action: '',
-    icon: XCircleIcon ,
-  },
-  {
-    name: '[2023-07-31 08:00]',
-    title: '[김흥돌]',
-    department: '[김안전]',
-    email: '[2023-08-02 16:00]',
-    inscontent:'브레이크 정밀 점검 필요',
-    action: '정밀 점검 수행',
-    icon: CheckCircleIcon ,
-  },
-  // More people...
-]
+// const people = [
+//   {
+//     name: '[2023-07-31 08:00]',
+//     title: '[김흥돌]',
+//     department: '',
+//     email: '',
+//     inscontent:'브레이크 정밀 점검 필요',
+//     action: '',
+//     icon: XCircleIcon ,
+//   },
+//   {
+//     name: '[' + ']',
+//     title: '[김흥돌]',
+//     department: '[김안전]',
+//     email: '[2023-08-02 16:00]',
+//     inscontent:'브레이크 정밀 점검 필요',
+//     action: '정밀 점검 수행',
+//     icon: CheckCircleIcon ,
+//   },
+//   // More people...
+// ]
 
 export default function Userfrequent() {
+  const [people, setPeople] = useState([]);
+
+  // Json값 가져와서 세팅
+  useEffect(() => {
+    function fetchDataWithAxios() {
+      axios
+          // .get(`http://localhost:8081/special/list/${masterdataPart}/${masterdataFacility}`)
+          .get(`http://localhost:8081/special/list/주조/주조1`)     // qr값 받아위에꺼로 세팅해야됨
+          .then((response) => {
+            const dataFromBackend = response.data.listOfFac;
+
+            // 백엔드에서 받은 데이터를 가공하여 people 배열 생성
+            const peopleData = dataFromBackend.map((item) => {
+              return {
+                name: `[${item.speDate}]`,          // 등록날짜
+                title: `[${item.spePerson}]`,
+                department: `[${item.speActPerson}]`, // 조치자 정보를 얻는 필드를 추가해주세요.
+                email: `[${item.speDeadline}]`, // 이메일 필드를 얻는 필드를 추가해주세요.
+                inscontent: item.speContent,
+                action: item.speActContent,
+                icon: item.speComplete === "OK" ? CheckCircleIcon : XCircleIcon,
+              };
+            });
+
+            setPeople(peopleData);
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+            console.error("에러다잉:", error);
+          });
+    }
+    fetchDataWithAxios();
+  }, []);
+
+
+  // const people = [
+  //   {
+  //     name: '[2023-07-31 08:00]',
+  //     title: '[김흥돌]',
+  //     department: '',
+  //     email: '',
+  //     inscontent:'브레이크 정밀 점검 필요',
+  //     action: '',
+  //     icon: XCircleIcon ,
+  //   },
+  //   {
+  //     name: '[' + ']',
+  //     title: '[김흥돌]',             // 점검자
+  //     department: '[김안전]',        // 조치자
+  //     email: '[2023-08-02 16:00]',
+  //     inscontent:'브레이크 정밀 점검 필요',
+  //     action: '정밀 점검 수행',
+  //     icon: CheckCircleIcon ,
+  //   },
+  //   // More people...
+  // ]
+
+
+
+
   return (
     <div className="container mx-auto sm:px-6 lg:px-8">
       <UserHeader />

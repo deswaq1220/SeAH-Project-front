@@ -75,6 +75,7 @@ export default function UserSelectInspection() {
   const [monthlyNoComplete, setMonthlyNoComplete] = useState(0);
 
   useEffect(() => {
+    // Json값 가져와서 세팅
     function fetchDataWithAxios() {
       axios
           .get("http://localhost:8081/userselectInspection")
