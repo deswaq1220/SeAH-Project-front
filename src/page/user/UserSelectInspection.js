@@ -70,8 +70,9 @@ function classNames(...classes) {
 }
 
 export default function UserSelectInspection() {
-  const [dailyAll, setDailyAll] = useState(0);
-  const [dailyComplete, setDailyComplete] = useState(0);
+  const [monthlyAll, setMonthlyAll] = useState(0);
+  const [monthlyComplete, setMonthlyComplete] = useState(0);
+  const [monthlyNoComplete, setMonthlyNoComplete] = useState(0);
 
   useEffect(() => {
     function fetchDataWithAxios() {
@@ -80,8 +81,9 @@ export default function UserSelectInspection() {
           .then((response) => {
             const data = response.data;
             // 가져온 데이터로 상태 변수 업데이트
-            setDailyAll(data.dailyAll);
-            setDailyComplete(data.dailyComplete);
+            setMonthlyAll(data.monthlyAll);
+            setMonthlyComplete(data.monthlyComplete);
+            setMonthlyNoComplete(data.monthlyNoComplete);
             console.log(data); // JSON 데이터가 출력됩니다.
           })
           .catch((error) => {
@@ -97,7 +99,7 @@ export default function UserSelectInspection() {
       name: "점검실시",
       href: "#",
       icon: ShieldCheckIcon,
-      count: dailyAll.toString(),
+      count: monthlyAll.toString(),
       current: true,
       iconForeground: "text-green-600",
     },
@@ -105,7 +107,15 @@ export default function UserSelectInspection() {
       name: "조치완료",
       href: "#",
       icon: ShieldExclamationIcon,
-      count: dailyComplete.toString(),
+      count: monthlyComplete.toString(),
+      current: false,
+      iconForeground: "text-blue-600",
+    },
+    {
+      name: "조치필요",
+      href: "#",
+      icon: ShieldExclamationIcon,
+      count: monthlyNoComplete.toString(),
       current: false,
       iconForeground: "text-red-600",
     },
@@ -174,7 +184,9 @@ export default function UserSelectInspection() {
         <nav className="flex flex-1 flex-col" aria-label="Sidebar">
           <p className="flex justify-center font-semibold text-lg mb-2">
             <DocumentCheckIcon className="w-6 h-6 mr-1" />
-            금일 점검현황
+            {/*------------------------  수정 필요  -------------------------*/}
+            7월 점검현황
+            {/*------------------------  수정 필요  -------------------------*/}
           </p>
           <p className=" text-lg font-semibold">정기점검</p>
           <ul role="list" className="-mx-2 space-y-1 mb-3">
