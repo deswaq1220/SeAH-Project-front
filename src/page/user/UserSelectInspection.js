@@ -14,6 +14,8 @@ import {
   ShieldExclamationIcon,
   XCircleIcon,
 } from "@heroicons/react/24/outline";
+import {useEffect, useState} from "react";
+import axios from "axios";
 
 const actions = [
   {
@@ -61,33 +63,61 @@ const regular = [
     iconForeground: "text-red-600",
   },
 ];
-const frequent = [
-  {
-    name: "점검",
-    href: "#",
-    icon: ShieldCheckIcon,
-    count: "5",
-    current: true,
-    iconForeground: "text-green-600",
-  },
-  {
-    name: "조치필요",
-    href: "#",
-    icon: ShieldExclamationIcon,
-    count: "12",
-    current: false,
-    iconForeground: "text-red-600",
-  },
-  // { name: 'Calendar', href: '#', icon: CalendarIcon, count: '20+', current: false },
-  // { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
-  // { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
-];
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function UserSelectInspection() {
+  const [dailyAll, setDailyAll] = useState(0);
+  const [dailyComplete, setDailyComplete] = useState(0);
+
+  useEffect(() => {
+    function fetchDataWithAxios() {
+      axios
+          .get("http://localhost:8081/userselectInspection")
+          .then((response) => {
+            const data = response.data;
+            // 가져온 데이터로 상태 변수 업데이트
+            setDailyAll(data.dailyAll);
+            setDailyComplete(data.dailyComplete);
+            console.log(data); // JSON 데이터가 출력됩니다.
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+          });
+    }
+    fetchDataWithAxios();
+  }, []);
+
+
+  const frequent = [
+    {
+      name: "점검",
+      href: "#",
+      icon: ShieldCheckIcon,
+      count: dailyAll.toString(),
+      current: true,
+      iconForeground: "text-green-600",
+    },
+    {
+      name: "조치완료",
+      href: "#",
+      icon: ShieldExclamationIcon,
+      count: dailyComplete.toString(),
+      current: false,
+      iconForeground: "text-red-600",
+    },
+    // { name: 'Calendar', href: '#', icon: CalendarIcon, count: '20+', current: false },
+    // { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
+    // { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
+  ];
+
+
+
+
+
   return (
     <div className="container mx-auto sm:px-6 lg:px-8 px-4">
       <UserHeader />
