@@ -94,7 +94,7 @@ export default function UserSelectInspection() {
 
   const frequent = [
     {
-      name: "점검",
+      name: "점검실시",
       href: "#",
       icon: ShieldCheckIcon,
       count: dailyAll.toString(),
