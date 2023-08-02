@@ -9,34 +9,21 @@ import logo from "../../img/logo.png"
 function UserMain() {
 
   const products = [
-    {
-      id: 1,
-      name: '안전교육',
-      href: '#',
-      imageSrc: safety,
-      imageAlt: '안전교육',
-    },
+    // {
+    //   id: 1,
+    //   name: '안전교육',
+    //   href: '#',
+    //   imageSrc: safety,
+    //   imageAlt: '안전교육',
+    // },
     {
       id: 2,
       name: '안전점검',
-      href: '#',
+      href: '/userselectInspection',
       imageSrc: worker,
       imageAlt: '안전점검',
     },
-    {
-      id: 3,
-      name: '준비중',
-      href: '/404',
-      imageSrc: mark,
-      imageAlt: '준비중',
-    },
-    {
-      id: 4,
-      name: '준비중',
-      href: '/404',
-      imageSrc: mark,
-      imageAlt: '준비중',
-    },
+    
     
     // More products...
   ]

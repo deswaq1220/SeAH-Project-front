@@ -146,6 +146,7 @@ function SafetyEduReg() {
     setQrValue,
     resetForm,
     showNotification,
+    
   } = useSafetyEduForm();
   
   
