@@ -63,7 +63,7 @@ function UserSafetyEduAttendance() {
   
     // 출석 등록 요청 보내기
     axios
-      .post(`http://172.20.10.5:8081/usereduatten/register`, requestData, {
+      .post(`http://localhost:8081/usereduatten/register`, requestData, {
         //http://172.20.10.5:8081/usereduatten/register 이거는 진짜 사용할때
         headers: {
           "Content-Type": "application/json",
@@ -104,7 +104,7 @@ function UserSafetyEduAttendance() {
 
   useEffect(() => {
     // GET 요청을 통해 eduTitle 가져오기
-    axios.get(`http://172.20.10.5:8081/usereduatten/register/${eduId}`)
+    axios.get(`http://localhost:8081/usereduatten/register/${eduId}`)
       .then((response) => {
         // 응답 데이터에서 eduTitle 값을 추출하여 상태 업데이트
         setEduTitle(response.data.eduTitle);
