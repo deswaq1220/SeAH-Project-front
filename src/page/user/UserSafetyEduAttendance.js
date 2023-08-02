@@ -121,6 +121,17 @@ function UserSafetyEduAttendance() {
         console.error("Error fetching data:", error);
       }
     };
+    // GET 요청을 통해 eduTitle 가져오기
+    axios.get(`http://localhost:8081/usereduatten/register/${eduId}`)
+      .then((response) => {
+        // 응답 데이터에서 eduTitle 값을 추출하여 상태 업데이트
+        setEduTitle(response.data.eduTitle);
+      })
+      .catch((error) => {
+        // 오류 처리
+        console.error("Error fetching eduTitle:", error);
+      });
+  }, [eduId]);
 
     fetchEduList(); // 데이터 가져오기 함수 호출
   }, [eduId]); // eduId를 두 번째 인자로 넣어줌으로써 eduId가 변경될 때마다 useEffect가 실행되도록 함
