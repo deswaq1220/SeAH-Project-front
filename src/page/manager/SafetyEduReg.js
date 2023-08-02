@@ -3,6 +3,7 @@ import Header from "../../components/Header";
 // import { format, addMonths, subMonths } from "date-fns";
 import { Listbox, Transition } from "@headlessui/react";
 import { Link, useNavigate } from "react-router-dom";
+// import Notification from '../components/Notification'
 import {
   CheckIcon,
   ChevronUpDownIcon,
@@ -143,7 +144,8 @@ function SafetyEduReg() {
     selectedStartTime,
     qrValue,
     setQrValue,
-    resetForm
+    resetForm,
+    showNotification,
   } = useSafetyEduForm();
   
   
@@ -624,6 +626,7 @@ function SafetyEduReg() {
           </form>
         </div>
       </div>
+      {/* {showNotification && <Notification />} */}
     </div>
   );
 }

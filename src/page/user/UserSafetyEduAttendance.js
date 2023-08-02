@@ -1,4 +1,4 @@
-import { useState, Fragment, useCallback } from "react";
+import { useState, Fragment, useCallback, useEffect } from "react";
 // import { format, addMonths, subMonths } from "date-fns";
 import { Listbox, Transition } from "@headlessui/react";
 // import { Link } from "react-router-dom";
@@ -6,6 +6,7 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import UserHeader from "../../components/UserHeader";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 const department = [
   {
     id: 1,
@@ -31,6 +32,8 @@ function classNames(...classes) {
 
 function UserSafetyEduAttendance() {
   const [selected, setSelected] = useState(department[0]);
+  const { eduId } = useParams();
+  const [eduTitle, setEduTitle] = useState("");
 
   const today = new Date();
   const year = today.getFullYear();
@@ -38,6 +41,7 @@ function UserSafetyEduAttendance() {
   const day = String(today.getDate()).padStart(2, "0");
 
   const formattedDate = `${year}. ${month}. ${day}`;
+  const apiUrl = process.env.REACT_APP_API_BASE_URL;
  
 
 
@@ -54,11 +58,12 @@ function UserSafetyEduAttendance() {
       attenDepartment, // 사용자가 선택한 부서명을 추가
       attenName,
       attenEmployeeNumber,
+      eduId: parseInt(eduId),
     };
   
     // 출석 등록 요청 보내기
     axios
-      .post("http://localhost:8081/usereduatten/register", requestData, {
+      .post(`http://172.20.10.5:8081/usereduatten/register`, requestData, {
         //http://172.20.10.5:8081/usereduatten/register 이거는 진짜 사용할때
         headers: {
           "Content-Type": "application/json",
@@ -96,6 +101,21 @@ function UserSafetyEduAttendance() {
       attenEmployeeNumber: event.target.value,
     }));
   };
+
+  useEffect(() => {
+    // GET 요청을 통해 eduTitle 가져오기
+    axios.get(`http://172.20.10.5:8081/usereduatten/register/${eduId}`)
+      .then((response) => {
+        // 응답 데이터에서 eduTitle 값을 추출하여 상태 업데이트
+        setEduTitle(response.data.eduTitle);
+      })
+      .catch((error) => {
+        // 오류 처리
+        console.error("Error fetching eduTitle:", error);
+      });
+  }, [eduId]);
+
+
   
 
   return (
@@ -112,7 +132,7 @@ function UserSafetyEduAttendance() {
               {formattedDate}
             </h3>
             <p className="mt-1 max-w-2xl text-lg leading-6 text-gray-500">
-              안전교육 사원 출석 페이지 입니다
+              {eduTitle} 사원 출석 페이지 입니다
             </p>
           </div>
           <form className="w-full md:grid-cols-2" onSubmit={handleSubmit }>

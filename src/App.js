@@ -13,6 +13,9 @@ import SafetyEduReg from "./page/manager/SafetyEduReg";
 import UserSafetyEduAttendance from "./page/user/UserSafetyEduAttendance";
 import SafetyEduDetails from "./page/manager/SafetyEduDetails";
 import EmailForm from "./Email";
+import UserSelectInspection from "./page/user/UserSelectInspection";
+import Userfrequent from "./page/user/Userfrequent";
+import UserfrequentReg from "./page/user/UserfrequentReg";
 
 // 수인 씀
 import EduStatics from "./page/manager/EduStatics"
@@ -49,7 +52,11 @@ function App() {
 
         {/* 사용자  */}
         <Route path="/user" element={<UserMain/>}></Route>  {/* 사용자 메인페이지*/}
-        <Route path="/usereduatten" element={<UserSafetyEduAttendance/>}></Route>{/* 사용자 사원출석페이지 */}
+        <Route path="/userfrequent" element={<Userfrequent/>}></Route>  {/* 사용자 메인페이지*/}
+        <Route path="/userselectInspection" element={<UserSelectInspection/>}></Route>  {/* 사용자 점검선택페이지*/}
+        <Route path="/userattendance/register/:eduId" element={<UserSafetyEduAttendance/>}></Route>{/* 사용자 사원출석페이지 */}
+        <Route path="/userfrequentreg" element={<UserfrequentReg/>}></Route>{/* 사용자 사원출석페이지 */}
+
         
         <Route path="/404" element={<Error/>}></Route> {/* 에러 */}
       </Routes>

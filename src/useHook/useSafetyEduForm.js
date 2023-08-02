@@ -1,7 +1,9 @@
-import { useState, useCallback } from "react";
+import { useState,useCallback,useEffect } from 'react';
 import axios from "axios";
 import { useDropzone } from "react-dropzone";
 import { Link, useNavigate } from "react-router-dom";
+import NotificationModal from '../components/Notification'
+
 
 const people = [
   {
@@ -11,22 +13,22 @@ const people = [
   {
     id: 2,
     name: "CREW",
-    time: 30,
+    time: 30
   },
   {
     id: 3,
     name: "DM",
-    time: 20,
+    time: 20
   },
   {
     id: 4,
     name: "MANAGE",
-    time: 120,
+    time : 120
   },
   {
     id: 5,
     name: "ETC",
-    time: 30,
+    time: 30
   },
 ];
 
@@ -93,6 +95,8 @@ const useSafetyEduForm = (eduData) => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [error, setError] = useState(null);
   const [qrValue, setQrValue] = useState("");
+  const [showNotification, setShowNotification] = useState(false);
+  const apiUrl = process.env.REACT_APP_API_BASE_URL;
  
 
   const [formData, setFormData] = useState({
@@ -115,16 +119,11 @@ const useSafetyEduForm = (eduData) => {
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
-      // 기존 값과 새로운 값이 누적되는 문제를 해결하기 위해 아래와 같이 수정합니다.
-      // 예를 들어, name이 'eduCategory'인 경우 이전 값의 'eduTitle'을 수정하지 않도록 합니다.
-      ...(name === "eduCategory"
-        ? { eduTitle: mapEduCategoryName(value) }
-        : {}),
     }));
   };
 
   const [selectedStartTime, setSelectedStartTime] = useState("");
-  const [selectedEndTime, setSelectedEndTime] = useState("");
+  // const [selectedEndTime, setSelectedEndTime] = useState("");
 
   const handleStartTimeChange = (e) => {
     const newValue = e.target.value;
@@ -135,28 +134,38 @@ const useSafetyEduForm = (eduData) => {
     }));
   };
 
-  // 큐알코드 생성하기 누르면 활성화되는 함수
+
+  // 큐알버튼 누르면 생성도는 버튼
   const handleCreate = () => {
-    if (eduData) {
-      let qrLink = `http://localhost:8081/usereduatten/${formData.eduId}?`;
-
-      // eduData에 있는 각 필드들을 qrLink에 추가
-      qrLink += `eduCategory=${eduData.eduCategory}&`;
-      qrLink += `eduTitle=${eduData.eduTitle}&`;
-      qrLink += `eduInstructor=${eduData.eduInstructor}&`;
-      qrLink += `eduPlace=${eduData.eduPlace}&`;
-      qrLink += `eduStartTime=${eduData.eduStartTime}&`;
-      qrLink += `eduSumTime=${eduData.eduSumTime}&`;
-      qrLink += `eduTarget=${eduData.eduTarget}&`;
-      qrLink += `eduContent=${eduData.eduContent}&`;
-      qrLink += `eduWriter=${eduData.eduWriter}&`;
-      qrLink += `eduId=${eduData.eduId}`;
-
-      console.log("QR Value:", qrLink);
-      setIsCompleted(true); // 큐알코드 생성 완료 상태 업데이트
-      setQrValue(qrLink);
-    }
+    setIsCompleted(true); // 생성 완료 상태 업데이트
+    // setQrValue(JSON.stringify({ ...formData, eduId: eduData.eduId }));
   };
+
+  useEffect(() => {
+    if (eduData) {
+      // eduData가 존재하면 폼 데이터 초기화
+      setFormData((prevData) => ({
+        ...prevData,
+        eduCategory: eduData.eduCategory,
+        eduTitle: mapEduCategoryName(eduData.eduCategory),
+        eduInstructor: eduData.eduInstructor,
+        eduPlace: eduData.eduPlace,
+        eduStartTime: eduData.eduStartTime,
+        eduSumTime: eduData.eduSumTime,
+        eduTarget: eduData.eduTarget,
+        eduContent: eduData.eduContent,
+        eduWriter: eduData.eduWriter,
+        eduId: eduData.eduId,
+      }));
+
+      const foundCategory = people.find((item) => item.name === eduData.eduCategory);
+      if (foundCategory) {
+        setSelected(foundCategory);
+      }
+
+    }
+  }, [eduData]);
+
 
   const onDrop = useCallback(
     (acceptedFiles) => {
@@ -165,19 +174,20 @@ const useSafetyEduForm = (eduData) => {
       for (const file of acceptedFiles) {
         formDataWithFile.append("files", file);
       }
-
+      
       if (acceptedFiles.length > 0) {
         setFormData({
           ...formData,
-          files: acceptedFiles, // Update the file property in the formData state
+          files: acceptedFiles // Update the file property in the formData state
         });
       }
-      // alert(acceptedFiles);
-
+      
+      
       console.log(acceptedFiles);
     },
     [formData, uploadedFiles]
   );
+  
 
   const deleteFile = (index) => {
     const updatedFiles = [...uploadedFiles];
@@ -191,16 +201,44 @@ const useSafetyEduForm = (eduData) => {
     setFormData((prevFormData) => ({ ...prevFormData, file: selectedFile }));
   };
 
+  
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
+
+  // 교육 카테고리를 선택했을 때 호출되는 함수
   const handleListboxChange = (selectedItem) => {
     setSelected(selectedItem);
+    if (selectedItem.name === "ETC") {
+      // 기타 카테고리인 경우 selectedEtcTime 값을 formData.eduSumTime으로 설정
+      setFormData((prevData) => ({
+        ...prevData,
+        eduCategory: selectedItem.name,
+        eduTitle: mapEduCategoryName(selectedItem.name),
+        eduSumTime: selectedEtcTime,
+      }));
+    } else {
+      // 기타 카테고리가 아닌 경우 선택한 카테고리의 시간 값을 formData.eduSumTime으로 설정
+      setFormData((prevData) => ({
+        ...prevData,
+        eduCategory: selectedItem.name,
+        eduTitle: mapEduCategoryName(selectedItem.name),
+        eduSumTime: selectedItem.time,
+      }));
+    }
+  };
+
+// 기타 카테고리에서 셀렉트 박스의 옵션을 변경했을 때 호출되는 함수
+  const handleOptionChange = (e) => {
+    const { value } = e.target;
+    setSelectedEtcTime(Number(value)); // 선택한 값을 숫자로 변환하여 selectedEtcTime 상태를 업데이트
     setFormData((prevData) => ({
       ...prevData,
-      eduCategory: selectedItem.name,
-      eduTitle: mapEduCategoryName(selectedItem.name),
+      eduSumTime: Number(value), // 선택한 값을 숫자로 변환하여 formData.eduSumTime을 업데이트
     }));
   };
+
+
 
   const handleDutyChange = (value) => {
     setSelectedDuty(value);
@@ -210,114 +248,54 @@ const useSafetyEduForm = (eduData) => {
     }));
   };
 
-  // 교육등록 핸들러
-  const navigate = useNavigate();
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+    // 교육등록 핸들러
+    const navigate = useNavigate();
 
-    if (!formData.eduContent) {
-      // eduContent 필드가 비어있을 경우 에러 처리
-      setError("본문내용없음");
-      return;
-    }
-    // if (formData.files) {
+    const handleSubmit = async (event) => {
+      event.preventDefault();
+      
+    
+      if (!formData.eduContent) {
+        // eduContent 필드가 비어있을 경우 에러 처리
+        setError("본문내용없음");
+        return;
+      }
+      if (!formData.eduInstructor) {
+        // eduInstructor 필드가 비어있을 경우 에러 처리
+        setError("강사없음");
+        return;
+      }
+    
+      console.log(formData);
+      
+    
+      formDataWithFile.append("eduCategory", formData.eduCategory);
+      formDataWithFile.append("eduTitle", formData.eduTitle);
+      formDataWithFile.append("eduInstructor", formData.eduInstructor);
+      formDataWithFile.append("eduPlace", formData.eduPlace);
+      formDataWithFile.append("eduStartTime", formData.eduStartTime);
+      formDataWithFile.append("eduSumTime", formData.eduSumTime);
+      
+     
+      console.log("formDataWithFile 파일" + formDataWithFile.get("files"));
+      formDataWithFile.append("eduTarget", formData.eduTarget);
+      formDataWithFile.append("eduContent", formData.eduContent);
+      formDataWithFile.append("eduWriter", formData.eduWriter);
 
-    //   formDataWithFile.append("files", formData.files);
-    //   console.log("여기 파일"+formDataWithFile.files);
-    // } else {
-    //   console.log("파일없음");
-    // }
-    if (!formData.eduInstructor) {
-      // eduInstructor 필드가 비어있을 경우 에러 처리
-      setError("강사없음");
-      return;
-    }
 
-    console.log(formData);
-
-    formDataWithFile.append("eduCategory", formData.eduCategory);
-    formDataWithFile.append("eduTitle", formData.eduTitle);
-    formDataWithFile.append("eduInstructor", formData.eduInstructor);
-    formDataWithFile.append("eduPlace", formData.eduPlace);
-    formDataWithFile.append("eduStartTime", formData.eduStartTime);
-    formDataWithFile.append("eduSumTime", formData.eduSumTime);
-    console.log("formDataWithFile 파일" + formDataWithFile.get("files"));
-    formDataWithFile.append("eduTarget", formData.eduTarget);
-    formDataWithFile.append("eduContent", formData.eduContent);
-    formDataWithFile.append("eduWriter", formData.eduWriter);
-
-    try {
-      const response = await axios.post(
-        "http://localhost:8081/edureg",
+    
+      try {
+        const response = await axios.post(`http://172.20.10.5:8081/edureg` ,
         // // "http://172.20.10.5:3000/edureg"
-        formDataWithFile,
-        {
+        formDataWithFile, {
           headers: {
+            
             "Content-Type": "multipart/form-data",
           },
-          // withCredentials: true, // 이 부분 추가
-        }
-      );
+          withCredentials: true, // 이 부분 추가
+        });
 
-      console.log("저장내용:", formDataWithFile);
-      // 저장 성공 시 처리 로직 추가
-      setFormData({
-        eduCategory: "",
-        eduTitle: "",
-        eduInstructor: "",
-        eduPlace: "",
-        eduStartTime: new Date(),
-        eduSumTime: "",
-        eduTarget: "",
-        eduContent: "",
-        eduWriter: "",
-        files: null,
-      });
-
-      // 데이터 전송 후 formDataWithFile 초기화
-      formDataWithFile.delete("eduCategory");
-      formDataWithFile.delete("eduTitle");
-      formDataWithFile.delete("eduInstructor");
-      formDataWithFile.delete("eduPlace");
-      formDataWithFile.delete("eduStartTime");
-      formDataWithFile.delete("eduSumTime");
-      formDataWithFile.delete("eduTarget");
-      formDataWithFile.delete("eduContent");
-      formDataWithFile.delete("eduWriter");
-      formDataWithFile.delete("files");
-      navigate("/eduMain"); // 저장 성공 후 화면 이동
-    } catch (error) {
-      console.log("여기 오류:", error);
-      // 저장 실패 시 처리 로직 추가
-    }
-  };
-
-  const [selectedEtcTime, setSelectedEtcTime] = useState(30);
-
-  const calculateTotalTime = () => {
-    if (selected.name === "ETC") {
-      return `총 교육시간: ${selectedEtcTime}분`;
-    } else {
-      formData.eduSumTime = selected.time;
-      return `총 교육시간: ${selected.time || 0}분`;
-    }
-  };
-
-
-  const handleEtcTimeChange = (e) => {
-    const newValue = parseInt(e.target.value, 10);
-    setSelectedEtcTime(newValue);
-
-    // 기타 선택 시, eduSumTime 값을 업데이트합니다.
-    if (selected.name === "ETC") {
-      setFormData((prevData) => ({
-        ...prevData,
-        eduSumTime: newValue,
-      }));
-    }
-  };
-
-  const resetForm = () => {
+        //저장 성공 시 처리 로직 추가
     setFormData({
       eduCategory: "",
       eduTitle: "",
@@ -331,18 +309,58 @@ const useSafetyEduForm = (eduData) => {
       files: null,
     });
 
-    setIsCompleted(false); // 생성 완료 상태 업데이트
-    setUploadedFiles([]); // 업로드된 파일 초기화
-    setError(null); // 에러 초기화
-    setSelected(people[0]); // 기본 선택 항목으로 변경
-    setSelectedDuty(duty[0]); // 기본 선택 항목으로 변경
-    setSelectedStartTime(""); // 기본 값으로 변경
-    setSelectedEtcTime(30); // 기본 값으로 변경
+    // 데이터 전송 후 formDataWithFile 초기화
+    formDataWithFile.delete("eduCategory");
+    formDataWithFile.delete("eduTitle");
+    formDataWithFile.delete("eduInstructor");
+    formDataWithFile.delete("eduPlace");
+    formDataWithFile.delete("eduStartTime");
+    formDataWithFile.delete("eduSumTime");
+    formDataWithFile.delete("eduTarget");
+    formDataWithFile.delete("eduContent");
+    formDataWithFile.delete("eduWriter");
+    formDataWithFile.delete("files");
+
+     // 성공적으로 저장되면 알림 띄우기
+     setShowNotification(true);
+
+     // 3초 후에 알림이 자동으로 사라지도록 설정
+     setTimeout(() => {
+       setShowNotification(false);
+     }, 3000);
+    
+        console.log("저장내용:", formDataWithFile);
+        // 저장 성공 시 처리 로직 추가
+        navigate("/eduMain"); // 저장 성공 후 화면 이동
+        
+      } catch (error) {
+        console.log("여기 오류:", error);
+        // 저장 실패 시 처리 로직 추가
+      }
+    };
+  
+
+  const [selectedEtcTime, setSelectedEtcTime] = useState(30);
+
+  const calculateTotalTime = () => {
+    if (selected.name === "ETC") {
+      return `총 교육시간: ${selectedEtcTime}분`;
+    } else {
+      formData.eduSumTime = selected.time;
+      return `총 교육시간: ${selected.time || 0}분`;
+    }
   };
 
 
+  
 
-  return {
+  const handleEtcTimeChange = (event) => {
+    const { value } = event.target;
+    setSelectedEtcTime(Number(value));
+  };
+
+  
+  return{
     selected,
     selectedDuty,
     isCompleted,
@@ -367,8 +385,9 @@ const useSafetyEduForm = (eduData) => {
     handleEtcTimeChange,
     selectedStartTime,
     qrValue,
-    resetForm,
-  };
-};
+    handleOptionChange,
+    showNotification,
+  }
+}
 
 export default useSafetyEduForm;
