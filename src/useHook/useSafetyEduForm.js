@@ -2,7 +2,7 @@ import { useState,useCallback,useEffect } from 'react';
 import axios from "axios";
 import { useDropzone } from "react-dropzone";
 import { Link, useNavigate } from "react-router-dom";
-
+import NotificationModal from '../components/Notification'
 
 
 const people = [
