@@ -14,6 +14,8 @@ import {
   ShieldExclamationIcon,
   XCircleIcon,
 } from "@heroicons/react/24/outline";
+import {useEffect, useState} from "react";
+import axios from "axios";
 
 const actions = [
   {
@@ -61,33 +63,72 @@ const regular = [
     iconForeground: "text-red-600",
   },
 ];
-const frequent = [
-  {
-    name: "점검",
-    href: "#",
-    icon: ShieldCheckIcon,
-    count: "5",
-    current: true,
-    iconForeground: "text-green-600",
-  },
-  {
-    name: "조치필요",
-    href: "#",
-    icon: ShieldExclamationIcon,
-    count: "12",
-    current: false,
-    iconForeground: "text-red-600",
-  },
-  // { name: 'Calendar', href: '#', icon: CalendarIcon, count: '20+', current: false },
-  // { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
-  // { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
-];
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function UserSelectInspection() {
+  const [monthlyAll, setMonthlyAll] = useState(0);
+  const [monthlyComplete, setMonthlyComplete] = useState(0);
+  const [monthlyNoComplete, setMonthlyNoComplete] = useState(0);
+
+  useEffect(() => {
+    // Json값 가져와서 세팅
+    function fetchDataWithAxios() {
+      axios
+          .get("http://localhost:8081/userselectInspection")
+          .then((response) => {
+            const data = response.data;
+            // 가져온 데이터로 상태 변수 업데이트
+            setMonthlyAll(data.monthlyAll);
+            setMonthlyComplete(data.monthlyComplete);
+            setMonthlyNoComplete(data.monthlyNoComplete);
+            console.log(data); // JSON 데이터가 출력됩니다.
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+          });
+    }
+    fetchDataWithAxios();
+  }, []);
+
+
+  const frequent = [
+    {
+      name: "점검실시",
+      href: "#",
+      icon: ShieldCheckIcon,
+      count: monthlyAll.toString(),
+      current: true,
+      iconForeground: "text-green-600",
+    },
+    {
+      name: "조치완료",
+      href: "#",
+      icon: ShieldExclamationIcon,
+      count: monthlyComplete.toString(),
+      current: false,
+      iconForeground: "text-blue-600",
+    },
+    {
+      name: "조치필요",
+      href: "#",
+      icon: ShieldExclamationIcon,
+      count: monthlyNoComplete.toString(),
+      current: false,
+      iconForeground: "text-red-600",
+    },
+    // { name: 'Calendar', href: '#', icon: CalendarIcon, count: '20+', current: false },
+    // { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
+    // { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
+  ];
+
+
+
+
+
   return (
     <div className="container mx-auto sm:px-6 lg:px-8 px-4">
       <UserHeader />
@@ -144,7 +185,9 @@ export default function UserSelectInspection() {
         <nav className="flex flex-1 flex-col" aria-label="Sidebar">
           <p className="flex justify-center font-semibold text-lg mb-2">
             <DocumentCheckIcon className="w-6 h-6 mr-1" />
-            금일 점검현황
+            {/*------------------------  수정 필요  -------------------------*/}
+            7월 점검현황
+            {/*------------------------  수정 필요  -------------------------*/}
           </p>
           <p className=" text-lg font-semibold">정기점검</p>
           <ul role="list" className="-mx-2 space-y-1 mb-3">
