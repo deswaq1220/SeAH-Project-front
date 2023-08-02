@@ -24,7 +24,6 @@ export default function Userfrequent() {
           .then((response) => {
             const dataFromBackend = response.data.listOfFac;
 
-
             // 백엔드에서 받은 데이터를 가공하여 people 배열 생성
             const peopleData = dataFromBackend.map((item) => {
             // 점검일 format 변환
@@ -47,7 +46,6 @@ export default function Userfrequent() {
                 icon: item.speComplete === "OK" ? CheckCircleIcon : XCircleIcon,
               };
             });
-
             setPeople(peopleData);
           })
           .catch((error) => {
