@@ -14,7 +14,7 @@ const department = [
   },
   {
     id: 2,
-    name: "소형연압팀",
+    name: "소형압연팀",
   },
   {
     id: 3,
