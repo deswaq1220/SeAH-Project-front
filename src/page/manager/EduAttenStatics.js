@@ -27,15 +27,17 @@ function EduAttenStatics() {
   const [searchName, setSearchName] = useState("");
 
   const filteredAttendeesList = attendeesList.filter((item) => {
-    const isDepartmentMatched =
-      searchDepartment === "부서" || item.attenDepartment === searchDepartment;
+    // searchDepartment가 "부서"인 경우에는 부서를 무시하고 이름만으로 검색
+    const isDepartmentMatched = searchDepartment === "부서" ? true : item.attenDepartment === searchDepartment;
+  
     const isNameMatched =
       searchName === "이름" ||
       item.attenName.toLowerCase().includes(searchName.toLowerCase());
-
+  
     return isDepartmentMatched && isNameMatched;
   });
-
+  
+  
 
   useEffect(() => {
     // 현재 월의 로그를 가져오는 함수
@@ -64,23 +66,25 @@ function EduAttenStatics() {
     getLogsForCurrentMonth();
   }, [selectedCategory, currentDate]);
 
-  //이름 검색
-  const handleSearch = () => {
-    axios
-      .get("http://localhost:8081/edustatistics/getmonth", {
+  // 이름 검색
+  const handleSearch = async () => {
+    try {
+      const response = await axios.get("http://localhost:8081/edustatistics/getmonth", {
         params: {
           eduCategory: selectedCategory,
           month: selectedMonth,
-          department : searchDepartment,
-          name: searchName, // 이름으로 검색하기 위해 searchName을 전달
+          department: searchDepartment,
+          name: searchName,
         },
-      })
-      .then((response) => {
-        setAttendeesList(response.data);
-      })
-      .catch((error) => {
-        console.error("Error 난리 났다 난리났어", error);
       });
+      const sortedAttendeesList = response.data.sort((a, b) => {
+        // eduStartTime을 기준으로 오름차순 정렬
+        return new Date(a.eduStartTime) - new Date(b.eduStartTime);
+      });
+      setAttendeesList(sortedAttendeesList);
+    } catch (error) {
+      console.error("데이터 난리났다 난리났어:", error);
+    }
   };
 
 
