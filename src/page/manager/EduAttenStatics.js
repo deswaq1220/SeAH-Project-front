@@ -2,14 +2,13 @@ import React, { useState, useEffect } from "react";
 import Header from "../../components/Header";
 import axios from "axios";
 import Pagination from "../../components/Pagination";
-import { format, addMonths, subMonths } from "date-fns";
-
+import { format, addMonths, subMonths, getMonth, getYear } from "date-fns";
 // 부서 드롭다운
 const department = [
   { id: null, name: "부서" },
-  { id: 1, name: "부서1" },
-  { id: 2, name: "부서2" },
-  { id: 3, name: "부서3" },
+  { id: 1, name: "소형연압팀" },
+  { id: 2, name: "압출팀" },
+  { id: 3, name: "주조팀" },
 ];
 
 function EduAttenStatics() {
@@ -25,7 +24,7 @@ function EduAttenStatics() {
 
   // 드롭다운 메뉴와 입력 필드를 통해 부서와 이름을 검색하도록 상태를 추가
   const [searchDepartment, setSearchDepartment] = useState("부서");
-  const [searchName, setSearchName] = useState("이름");
+  const [searchName, setSearchName] = useState("");
 
   const filteredAttendeesList = attendeesList.filter((item) => {
     const isDepartmentMatched =
@@ -37,23 +36,53 @@ function EduAttenStatics() {
     return isDepartmentMatched && isNameMatched;
   });
 
+
   useEffect(() => {
-    if (selectedCategory !== "") {
-      axios
-        .get("http://localhost:8081/edustatistics/getmonth", {
+    // 현재 월의 로그를 가져오는 함수
+    const getLogsForCurrentMonth = async () => {
+      try {
+        const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
+        const currentYear = getYear(currentDate);
+        const response = await axios.get("http://localhost:8081/edustatistics/getmonth", {
           params: {
             eduCategory: selectedCategory,
-            month: selectedMonth,
+            month: currentMonth,
           },
-        })
-        .then((response) => {
-          setAttendeesList(response.data);
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
         });
-    }
-  }, [selectedCategory, selectedMonth]);
+        const sortedAttendeesList = response.data.sort((a, b) => {
+          // eduStartTime을 기준으로 오름차순 정렬
+          return new Date(a.eduStartTime) - new Date(b.eduStartTime);
+        });
+        setAttendeesList(sortedAttendeesList);
+        setSelectedMonth(currentMonth);
+      } catch (error) {
+        console.error("데이터 가져오기 오류:", error);
+      }
+    };
+
+    // 현재 월의 로그를 가져오는 함수 호출
+    getLogsForCurrentMonth();
+  }, [selectedCategory, currentDate]);
+
+  //이름 검색
+  const handleSearch = () => {
+    axios
+      .get("http://localhost:8081/edustatistics/getmonth", {
+        params: {
+          eduCategory: selectedCategory,
+          month: selectedMonth,
+          department : searchDepartment,
+          name: searchName, // 이름으로 검색하기 위해 searchName을 전달
+        },
+      })
+      .then((response) => {
+        setAttendeesList(response.data);
+      })
+      .catch((error) => {
+        console.error("Error 난리 났다 난리났어", error);
+      });
+  };
+
 
   //카테고리 라벨
   const getCategoryLabel = (category) => {
@@ -72,20 +101,15 @@ function EduAttenStatics() {
   };
 
   //달력 넣기
-
   const goToPreviousMonth = () => {
     const previousMonthDate = subMonths(currentDate, 1);
     setCurrentDate(previousMonthDate);
-    // 월 변경 시 해당 월에 맞게 필터링되도록 호출
-    setSelectedMonth(previousMonthDate.getMonth() + 1);
   };
 
   const goToNextMonth = () => {
     const nextMonthDate = addMonths(currentDate, 1);
     setCurrentDate(nextMonthDate);
-    // 월 변경 시 해당 월에 맞게 필터링되도록 호출
-    setSelectedMonth(nextMonthDate.getMonth() + 1);
-  };
+  }
 
   const getFormattedDate = () => {
     const year = currentDate.getFullYear();
@@ -183,7 +207,7 @@ function EduAttenStatics() {
           </select>
         </div>
         <div className="px-4">
-          <label className="block text-sm font-medium text-gray-700"></label>
+          <label className="block text-sm font-medium text-gray-700">이름</label>
           <input
             type="text"
             onChange={(e) => setSearchName(e.target.value)}
@@ -192,7 +216,7 @@ function EduAttenStatics() {
           />
         </div>
         <button
-          // onClick={handleSearch}
+          onClick={handleSearch}
           className="ml-4 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-seahColor hover:bg-seahDeep focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-seahColor"
         >
           검색
@@ -212,13 +236,6 @@ function EduAttenStatics() {
                 <table className="min-w-full divide-y divide-gray-300">
                   <thead>
                     <tr>
-                      {/* 확인하고 교육분류는 삭제 */}
-                      <th
-                        scope="col"
-                        className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
-                      >
-                        교육분류
-                      </th>
                       <th
                         scope="col"
                         className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
@@ -229,7 +246,7 @@ function EduAttenStatics() {
                         scope="col"
                         className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
                       >
-                        교육 시작 시간
+                        교육 일정
                       </th>
                       <th
                         scope="col"
@@ -260,9 +277,6 @@ function EduAttenStatics() {
                   <tbody className="divide-y divide-gray-200 bg-white">
                     {attendeesList.map((item, index) => (
                       <tr key={index}>
-                        <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
-                          {item.eduCategory}
-                        </td>
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           {item.eduTitle}
                         </td>

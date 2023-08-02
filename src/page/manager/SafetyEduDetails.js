@@ -20,7 +20,7 @@ export default function SafetyEduDetails() {
     const fetchEduDetail = async () => {
       try {
         const response = await axios.get(
-          `http://172.20.10.5:8081/edudetails/${eduId}`,
+          `http://localhost:8081/edudetails/${eduId}`,
           {
             // // "http://172.20.10.5:3000/edudetails/${eduId}"
           }
