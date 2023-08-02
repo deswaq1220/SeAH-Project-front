@@ -20,6 +20,12 @@ function SafetyEducationMain() {
     return eduList.slice(startIndex, endIndex);
   };
 
+
+  const getDisplayedId = (eduId) => {
+    const index = eduList.findIndex((edu) => edu.eduId === eduId);
+    return index !== -1 ? index + 1 : ""; // 인덱스를 1부터 시작하도록 +1 해줍니다.
+  };
+
   useEffect(() => {
     // 서버로부터 안전교육 데이터를 가져오는 함수
     const fetchEduList = async () => {
@@ -175,7 +181,7 @@ function SafetyEducationMain() {
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           <div className="flex items-center">
                             <div className="mt-1 text-gray-500">
-                              {edu.eduNum}
+                              {getDisplayedId(edu.eduId)}
                             </div>
                           </div>
                         </td>

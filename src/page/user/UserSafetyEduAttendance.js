@@ -40,6 +40,7 @@ function UserSafetyEduAttendance() {
   const { eduId } = useParams();
   const [eduList, setEduList] = useState([]); // 안전교육 데이터를 담을 상태 변수
   const [eduData, setEduData] = useState(null);
+  const [eduTitle, setEduTitle] = useState("")
   const [isAttendanceCompleted, setIsAttendanceCompleted] = useState(false); // 출석 완료 여부 상태 변수
   const today = new Date();
   const year = today.getFullYear();
@@ -113,7 +114,7 @@ function UserSafetyEduAttendance() {
     const fetchEduList = async () => {
       try {
         const response = await axios.get(
-          `http://172.20.10.5:8081/edudetails/${eduId}`
+          `http://localhost:8081/edudetails/${eduId}`
         );
         console.log(response.data); // 서버로부터 받은 데이터 확인
         setEduList(response.data); // 해당 아이디에 해당하는 데이터를 상태 변수에 저장
@@ -131,7 +132,7 @@ function UserSafetyEduAttendance() {
         // 오류 처리
         console.error("Error fetching eduTitle:", error);
       });
-  }, [eduId]);
+
 
     fetchEduList(); // 데이터 가져오기 함수 호출
   }, [eduId]); // eduId를 두 번째 인자로 넣어줌으로써 eduId가 변경될 때마다 useEffect가 실행되도록 함
