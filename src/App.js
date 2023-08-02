@@ -15,7 +15,8 @@ import SafetyEduDetails from "./page/manager/SafetyEduDetails";
 import EmailForm from "./Email";
 
 // 수인 씀
-import SafetyEduStatics from "./page/manager/SafetyEduStatics"
+import EduStatics from "./page/manager/EduStatics"
+import EduAttenStatics from "./page/manager/EduAttenStatics"
 
 
 function App() {
@@ -42,7 +43,8 @@ function App() {
         <Route path="/sendEmail" element={<EmailForm/>}></Route> {/* 이메일 */}
 
         {/*수인 추가함 */}
-        <Route path="/edustatistics" element={<SafetyEduStatics/>}></Route>{/* 관리자 안전교육통계*/}
+        <Route path="/edustatistics" element={<EduStatics/>}></Route>{/* 관리자 안전교육통계*/}
+        <Route path="/edustatistics/atten" element={<EduAttenStatics/>}></Route>{/* 관리자 안전교육통계*/}
 
 
         {/* 사용자  */}

@@ -174,7 +174,7 @@ function SafetyEducationMain() {
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           <div className="flex items-center">
                             <div className="mt-1 text-gray-500">
-                              {edu.eduId}
+                              {edu.eduNum}
                             </div>
                           </div>
                         </td>
