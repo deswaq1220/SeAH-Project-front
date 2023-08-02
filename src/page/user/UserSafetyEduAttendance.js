@@ -40,6 +40,7 @@ function UserSafetyEduAttendance() {
   const { eduId } = useParams();
   const [eduList, setEduList] = useState([]); // 안전교육 데이터를 담을 상태 변수
   const [eduData, setEduData] = useState(null);
+  const [eduTitle, setEduTitle] = useState(null);
   const [isAttendanceCompleted, setIsAttendanceCompleted] = useState(false); // 출석 완료 여부 상태 변수
   const today = new Date();
   const year = today.getFullYear();
@@ -131,8 +132,6 @@ function UserSafetyEduAttendance() {
         // 오류 처리
         console.error("Error fetching eduTitle:", error);
       });
-  }, [eduId]);
-
     fetchEduList(); // 데이터 가져오기 함수 호출
   }, [eduId]); // eduId를 두 번째 인자로 넣어줌으로써 eduId가 변경될 때마다 useEffect가 실행되도록 함
 
@@ -301,6 +300,6 @@ function UserSafetyEduAttendance() {
       </div>
     </div>
   );
-}
+                                      }
 
 export default UserSafetyEduAttendance;
