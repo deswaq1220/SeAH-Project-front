@@ -1,5 +1,5 @@
 import UserHeader from "../../components/UserHeader";
-
+import { format, addMonths, subMonths } from "date-fns";
 import {
   ClipboardDocumentListIcon,
   ClipboardDocumentCheckIcon,
@@ -13,8 +13,10 @@ import {
   ShieldCheckIcon,
   ShieldExclamationIcon,
   XCircleIcon,
+  WrenchScrewdriverIcon,
+  CalendarDaysIcon
 } from "@heroicons/react/24/outline";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 const actions = [
@@ -64,7 +66,6 @@ const regular = [
   },
 ];
 
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -73,44 +74,61 @@ export default function UserSelectInspection() {
   const [monthlyAll, setMonthlyAll] = useState(0);
   const [monthlyComplete, setMonthlyComplete] = useState(0);
   const [monthlyNoComplete, setMonthlyNoComplete] = useState(0);
+  const [currentDate, setCurrentDate] = useState(new Date()); // 년,월
+
+  // const goToPreviousMonth = () => {
+  //   const previousMonthDate = subMonths(currentDate, 1);
+  //   setCurrentDate(previousMonthDate);
+  // };
+
+  // const goToNextMonth = () => {
+  //   const nextMonthDate = addMonths(currentDate, 1);
+  //   setCurrentDate(nextMonthDate);
+  // };
+
+  const getFormattedDate = () => {
+    const year = currentDate.getFullYear();
+    const month = format(currentDate, "M월");
+
+    return ` ${month}`;
+  };
 
   useEffect(() => {
     // Json값 가져와서 세팅
     function fetchDataWithAxios() {
       axios
-          .get("http://localhost:8081/userselectInspection")
-          .then((response) => {
-            const data = response.data;
-            // 가져온 데이터로 상태 변수 업데이트
-            setMonthlyAll(data.monthlyAll);
-            setMonthlyComplete(data.monthlyComplete);
-            setMonthlyNoComplete(data.monthlyNoComplete);
-            console.log(data); // JSON 데이터가 출력됩니다.
-          })
-          .catch((error) => {
-            console.error("Error fetching data:", error);
-          });
+        .get("http://localhost:8081/userselectInspection")
+        .then((response) => {
+          const data = response.data;
+          // 가져온 데이터로 상태 변수 업데이트
+          setMonthlyAll(data.monthlyAll);
+          setMonthlyComplete(data.monthlyComplete);
+          setMonthlyNoComplete(data.monthlyNoComplete);
+          console.log(data); // JSON 데이터가 출력됩니다.
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
     }
     fetchDataWithAxios();
   }, []);
-
 
   const frequent = [
     {
       name: "점검실시",
       href: "#",
-      icon: ShieldCheckIcon,
+      icon: WrenchScrewdriverIcon,
       count: monthlyAll.toString(),
       current: true,
-      iconForeground: "text-green-600",
+      iconForeground: "text-blue-600",
     },
     {
       name: "조치완료",
       href: "#",
-      icon: ShieldExclamationIcon,
+      icon: ShieldCheckIcon,
       count: monthlyComplete.toString(),
       current: false,
-      iconForeground: "text-blue-600",
+      iconForeground: "text-green-600",
     },
     {
       name: "조치필요",
@@ -124,10 +142,6 @@ export default function UserSelectInspection() {
     // { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
     // { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
   ];
-
-
-
-
 
   return (
     <div className="container mx-auto sm:px-6 lg:px-8 px-4">
@@ -145,7 +159,7 @@ export default function UserSelectInspection() {
               actionIdx === actions.length - 1
                 ? "rounded-bl-lg rounded-br-lg sm:rounded-bl-none"
                 : "",
-              "group relative bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500"
+              "group relative bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-seahColor"
             )}
           >
             <div>
@@ -184,9 +198,10 @@ export default function UserSelectInspection() {
       <div className="mt-4">
         <nav className="flex flex-1 flex-col" aria-label="Sidebar">
           <p className="flex justify-center font-semibold text-lg mb-2">
-            <DocumentCheckIcon className="w-6 h-6 mr-1" />
+            <CalendarDaysIcon className="w-6 h-6 mr-1" />
             {/*------------------------  수정 필요  -------------------------*/}
-            7월 점검현황
+              <p>{getFormattedDate()} 점검현황</p>
+
             {/*------------------------  수정 필요  -------------------------*/}
           </p>
           <p className=" text-lg font-semibold">정기점검</p>
@@ -198,20 +213,21 @@ export default function UserSelectInspection() {
                   className={classNames(
                     item.current
                       ? "bg-gray-50 text-green-600"
-                      : "text-gray-700 hover:text-indigo-600 hover:bg-gray-50",
+                      : "text-gray-700 hover:text-seahColor hover:bg-gray-50",
                     "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                   )}
                 >
                   <span
-                    className={classNames(
-                      item.iconForeground,
-                      "inline-flex"
-                    )}
+                    className={classNames(item.iconForeground, "inline-flex")}
                     style={{ backgroundColor: item.iconBackground }}
                   >
                     <item.icon className="h-6 w-6" aria-hidden="true" />
                   </span>
-                  <span className={item.current ? "text-green-600" : "text-gray-700"}>
+                  <span
+                    className={
+                      item.current ? "text-green-600" : "text-gray-700"
+                    }
+                  >
                     {item.name}
                   </span>
                   {item.count ? (
@@ -226,7 +242,7 @@ export default function UserSelectInspection() {
               </li>
             ))}
           </ul>
-          <p className="text-lg font-semibold" >수시점검</p>
+          <p className="text-lg font-semibold">수시점검</p>
           <ul role="list" className="-mx-2 space-y-1">
             {frequent.map((item) => (
               <li key={item.name}>
@@ -234,21 +250,20 @@ export default function UserSelectInspection() {
                   href={item.href}
                   className={classNames(
                     item.current
-                      ? "bg-gray-50 text-green-600"
-                      : "text-gray-700 hover:text-indigo-600 hover:bg-gray-50",
+                      ? "bg-gray-50 text-blue-600"
+                      : "text-gray-700 hover:text-seahColor hover:bg-gray-50",
                     "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                   )}
                 >
                   <span
-                    className={classNames(
-                      item.iconForeground,
-                      "inline-flex"
-                    )}
+                    className={classNames(item.iconForeground, "inline-flex")}
                     style={{ backgroundColor: item.iconBackground }}
                   >
                     <item.icon className="h-6 w-6" aria-hidden="true" />
                   </span>
-                  <span className={item.current ? "text-green-600" : "text-gray-700"}>
+                  <span
+                    className={item.current ? "text-blue-600" : "text-gray-700"}
+                  >
                     {item.name}
                   </span>
                   {item.count ? (
