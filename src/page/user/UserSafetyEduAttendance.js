@@ -31,10 +31,16 @@ function classNames(...classes) {
 }
 
 function UserSafetyEduAttendance() {
-  const [selected, setSelected] = useState(department[0]);
+  const [selected, setSelected] = useState({
+    ...department[0],
+    attenName: "", // 빈 문자열로 초기화
+    attenEmployeeNumber: "", // 빈 문자열로 초기화
+  });
+  // ...
   const { eduId } = useParams();
-  const [eduTitle, setEduTitle] = useState("");
-
+  const [eduList, setEduList] = useState([]); // 안전교육 데이터를 담을 상태 변수
+  const [eduData, setEduData] = useState(null);
+  const [isAttendanceCompleted, setIsAttendanceCompleted] = useState(false); // 출석 완료 여부 상태 변수
   const today = new Date();
   const year = today.getFullYear();
   const month = String(today.getMonth() + 1).padStart(2, "0");
@@ -42,28 +48,26 @@ function UserSafetyEduAttendance() {
 
   const formattedDate = `${year}. ${month}. ${day}`;
   const apiUrl = process.env.REACT_APP_API_BASE_URL;
- 
-
 
   const handleSubmit = (event) => {
     event.preventDefault();
-  
+
     // Form 데이터 가져오기
     const attenDepartment = selected.name; // 사용자가 선택한 부서명
     const attenName = selected.attenName;
     const attenEmployeeNumber = selected.attenEmployeeNumber;
-  
+
     // 출석 등록을 위한 요청 데이터 생성
     const requestData = {
-      attenDepartment, // 사용자가 선택한 부서명을 추가
+      attenDepartment,
       attenName,
       attenEmployeeNumber,
-      eduId: parseInt(eduId),
+      eduId,
     };
-  
+
     // 출석 등록 요청 보내기
     axios
-      .post(`http://172.20.10.5:8081/usereduatten/register`, requestData, {
+      .post(`http://172.20.10.5:8081/usereduatten/register/`, requestData, {
         //http://172.20.10.5:8081/usereduatten/register 이거는 진짜 사용할때
         headers: {
           "Content-Type": "application/json",
@@ -74,11 +78,13 @@ function UserSafetyEduAttendance() {
         console.log(response);
 
         // 출석이 완료되었다는 알림 띄우기
-      toast.success('출석이 완료되었습니다.', {
-        position: 'top-center',
-        autoClose: 3000, // 알림이 3초 후에 자동으로 사라짐
-        hideProgressBar: true,
-      });
+        toast.success("출석이 완료되었습니다.", {
+          position: "top-center",
+          autoClose: 3000, // 알림이 3초 후에 자동으로 사라짐
+          hideProgressBar: true,
+        });
+        // 출석이 완료되었으므로 출석하기 버튼 비활성화
+        setIsAttendanceCompleted(true);
       })
       .catch((error) => {
         // 오류가 발생했을 때 처리
@@ -94,7 +100,7 @@ function UserSafetyEduAttendance() {
       attenName: event.target.value,
     }));
   };
- 
+
   const handleNumberChange = (event) => {
     setSelected((prevSelected) => ({
       ...prevSelected,
@@ -103,24 +109,25 @@ function UserSafetyEduAttendance() {
   };
 
   useEffect(() => {
-    // GET 요청을 통해 eduTitle 가져오기
-    axios.get(`http://172.20.10.5:8081/usereduatten/register/${eduId}`)
-      .then((response) => {
-        // 응답 데이터에서 eduTitle 값을 추출하여 상태 업데이트
-        setEduTitle(response.data.eduTitle);
-      })
-      .catch((error) => {
-        // 오류 처리
-        console.error("Error fetching eduTitle:", error);
-      });
-  }, [eduId]);
+    // 서버로부터 안전교육 데이터를 가져오는 함수
+    const fetchEduList = async () => {
+      try {
+        const response = await axios.get(
+          `http://172.20.10.5:8081/edudetails/${eduId}`
+        );
+        console.log(response.data); // 서버로부터 받은 데이터 확인
+        setEduList(response.data); // 해당 아이디에 해당하는 데이터를 상태 변수에 저장
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-
-  
+    fetchEduList(); // 데이터 가져오기 함수 호출
+  }, [eduId]); // eduId를 두 번째 인자로 넣어줌으로써 eduId가 변경될 때마다 useEffect가 실행되도록 함
 
   return (
     <div>
-     <UserHeader></UserHeader>
+      <UserHeader></UserHeader>
 
       <div className="flex justify-center">
         <div
@@ -132,10 +139,10 @@ function UserSafetyEduAttendance() {
               {formattedDate}
             </h3>
             <p className="mt-1 max-w-2xl text-lg leading-6 text-gray-500">
-              {eduTitle} 사원 출석 페이지 입니다
+            {eduList.eduTitle}교육 사원출석 페이지입니다
             </p>
           </div>
-          <form className="w-full md:grid-cols-2" onSubmit={handleSubmit }>
+          <form className="w-full md:grid-cols-2" onSubmit={handleSubmit}>
             <div id="sortation" className="flex items-baseline justify-start">
               <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
                 부서
@@ -266,12 +273,14 @@ function UserSafetyEduAttendance() {
               <button
                 type="button"
                 className="text-sm font-semibold leading-6 text-gray-900"
+                disabled={isAttendanceCompleted}
               >
                 취소하기
               </button>
               <button
                 type="submit"
                 className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                disabled={isAttendanceCompleted}
               >
                 출석하기
               </button>
