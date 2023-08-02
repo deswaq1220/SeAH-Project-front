@@ -29,7 +29,7 @@ const actions = [
   {
     title: "수시점검",
     sub: "공정별 어쩌구,, 뭐시기를 수시점검 데모텍스트",
-    href: "#",
+    href: "/special/list/:masterdataPart/:masterdataFacility",
     icon: ClipboardDocumentCheckIcon,
     iconForeground: "text-purple-700",
     iconBackground: "bg-purple-50",
