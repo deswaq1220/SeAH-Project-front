@@ -12,7 +12,7 @@ import Falsetrap from "./falsetrap";
 import RiskAssessment from "./riskAssessment";
 import InspectionDetails from "./Inspectiondetails";
 import ActionRquest from "./actionrequest";
-
+import Dangersource from "./sourceDanger";
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -28,6 +28,7 @@ function UserfrequentReg() {
       <Facilityname /> {/* 설비명 */}
       <Danger /> {/* 위험분류 */}
       <Injured /> {/* 부상부위 */}
+      <Dangersource/> {/* 위험원인 */}
       <Falsetrap /> {/* 실수함정 */}
       <RiskAssessment /> {/* 위험성평가 */}
       {/* 위험분류 표 */}
