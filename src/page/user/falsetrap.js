@@ -21,15 +21,23 @@ function classNames(...classes) {
 }
 
 
-export default function Falsetrap(){
-  const [falsetrapSelected, SetFalsetrapSelected] = useState(falsetrap[0]); //  실수함정
+export default function Falsetrap({onFormDataChange}){
+  const [falsetrapSelected, setFalsetrapSelected] = useState(falsetrap[0]); //  실수함정
+
+    const handleFalsetrapChange = (falsetrapSelected) => {
+        setFalsetrapSelected(falsetrapSelected);
+        onFormDataChange(falsetrapSelected);
+    };
+
+
   return(
     <div id="falsetrap" className="flex items-baseline justify-start">
         <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
           실수함정
         </span>
         {/* 실수함정 */}
-        <Listbox value={falsetrapSelected} onChange={SetFalsetrapSelected}>
+        {/*<Listbox value={falsetrapSelected} onChange={setFalsetrapSelected}>*/}
+        <Listbox value={falsetrapSelected} onChange={handleFalsetrapChange}>
           {({ open }) => (
             <>
               <div className="relative mt-2">

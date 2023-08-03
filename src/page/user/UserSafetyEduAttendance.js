@@ -14,7 +14,7 @@ const department = [
   },
   {
     id: 2,
-    name: "소형연압팀",
+    name: "소형압연팀",
   },
   {
     id: 3,
@@ -69,7 +69,6 @@ function UserSafetyEduAttendance() {
     axios
 
       .post(`http://localhost:8081/usereduatten/register`, requestData, {
-
         //http://172.20.10.5:8081/usereduatten/register 이거는 진짜 사용할때
         headers: {
           "Content-Type": "application/json",

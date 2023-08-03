@@ -14,19 +14,26 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function RiskAssessment() {
+export default function RiskAssessment({onFormDataChange}) {
 
-  const [riskAssessmentSelected, SetRiskAssessmentSelected] = useState(riskAssessment[0]); //  위험성평가
+  const [riskAssessmentSelected, setRiskAssessmentSelected] = useState(riskAssessment[0]); //  위험성평가
+  const handleRiskAssessmentChange = (riskAssessmentSelected)  => {
+      setRiskAssessmentSelected(riskAssessmentSelected);
+      onFormDataChange(riskAssessmentSelected);
+  }
+
+
   return(
     <div id="riskAssessment" className="flex items-baseline justify-start">
         <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
           위험성평가
         </span>
         {/* 위험성 평가 */}
-        <Listbox
-          value={riskAssessmentSelected}
-          onChange={SetRiskAssessmentSelected}
-        >
+        {/*<Listbox*/}
+        {/*  value={riskAssessmentSelected}*/}
+        {/*  onChange={setRiskAssessmentSelected}*/}
+        {/*>        */}
+        <Listbox value={riskAssessmentSelected} onChange={handleRiskAssessmentChange}>
           {({ open }) => (
             <>
               <div className="relative mt-2">

@@ -1,5 +1,5 @@
 import UserHeader from "../../components/UserHeader";
-import { Fragment, useState } from "react";
+import {Fragment, useEffect, useState} from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import DangerImg from "../../img/danger.png";
@@ -12,30 +12,138 @@ import Falsetrap from "./falsetrap";
 import RiskAssessment from "./riskAssessment";
 import InspectionDetails from "./Inspectiondetails";
 import ActionRquest from "./actionrequest";
+import {useParams} from "react-router-dom";
+import axios from "axios";
+import data from "bootstrap/js/src/dom/data";
+import {toast} from "react-toastify";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 function UserfrequentReg() {
+  const { masterdataPart } = useParams();           // url 영역 파라미터
+  const { masterdataFacility } = useParams();       // url 설비 파라미터
+  const [speEmpNum, setSpeEmpNum] = useState();
+  const [spePerson, setSpePerson] = useState();
+  const [speEmail, setSpeEmail] = useState();
+  const [speDanger, setSpeDanger] = useState();
+  const [speInjure, setSpeInjure] = useState();
+  const [speCause, setSpeCause] = useState();
+  const [speTrap, setSpeTrap] = useState();
+  const [speRiskAssess, setSpeRiskAssess] = useState();
+  const [speContent, setSpeContent] = useState();
+  const [speActContent, setSpeActContent] = useState();
+  const [speActPerson, setSpeActPerson] = useState();
+  const [speActEmail, setSpeActEmail] = useState();
+
+
+  // Inspector 콜백 함수 : 점검자(이름, 이메일, 사원번호)
+  const handleInpectorDataChange = (data) => {
+      setSpeEmpNum(data.speEmpNum);
+      setSpePerson(data.spePerson);
+      setSpeEmail(data.speEmail);
+  };
+
+  // Danger 콜백함수 : 위험분류
+  const handleDangerDataChange = (selected) => {
+      setSpeDanger(selected.name);
+  };
+
+  // Ingured 콜백함수 : 부상부위
+  const handleInguredDataChange = (injuredSelected) => {
+      setSpeInjure(injuredSelected.name);
+  };
+
+  // FalseTrap 콜백함수 : 실수함정
+  const handleFalsetrapDataChange = (falsetrapSelected) => {
+      setSpeTrap(falsetrapSelected.name);
+  };
+
+  // RiskAssessment 콜백 : 위험성평가
+  const handleRiskAssessmentDataChange = (riskAssessmentSelected) => {
+      setSpeRiskAssess(riskAssessmentSelected.name);
+  };
+
+  // InspectionDetails 콜백 : 점검내용
+  const handleInspectionDetailsDataChange = (data) => {
+      setSpeContent(data.content);
+  };
+
+  // ActionRquest 콜백 : 조치자(이름, 이메일)
+  const handleActionRequestDetailsDataChange = (data) => {
+      setSpeActPerson(data.speActPerson);
+      setSpeActEmail(data.speActEmail);
+  };
+      // setSpeCause(data.speCause);
+
+
+
+
+    const handleActContChange = (e) => {
+      setSpeActContent(e.target.value);
+  }
+
+  const handleFormSubmit = () => {
+      const requestData = {
+          speEmpNum,
+          spePerson,
+          speEmail,
+          speDanger,
+          speInjure,
+          speCause,
+          speTrap,
+          speRiskAssess,
+          speContent,
+          speActPerson,
+          speActEmail
+      };
+
+
+  // 수시점검 등록 요청
+  axios
+      .post(`http://localhost:8081/special/list/${masterdataPart}/${masterdataFacility}`, requestData,{
+        headers : {
+         "Content-Type" : "application/json",
+        },
+      })
+      .then((response) => {
+          console.log(response);
+
+          // 등록이 완료되었다는 알림 띄우기
+          toast.success("등록이 완료되었습니다.", {
+              position: "top-center",
+              autoClose: 3000, // 알림이 3초 후에 자동으로 사라짐
+              hideProgressBar: true,
+          });
+      })
+      .catch((error) => {
+          console.error(error);
+          alert("수시점검 등록에 실패했습니다. 다시 시도해주세요.");
+      });
+  };
+
+
+
   return (
+
     <>
       <UserHeader />
       <p>수시점검</p>
       <p>수시점검 내용등록</p>
-      <Inspector /> {/* 점검자 */}
+      <Inspector onFormDataChange={handleInpectorDataChange} /> {/* 점검자 */}
       <Inspectionarea /> {/* 점검영역 */}
       <Facilityname /> {/* 설비명 */}
-      <Danger /> {/* 위험분류 */}
-      <Injured /> {/* 부상부위 */}
-      <Falsetrap /> {/* 실수함정 */}
-      <RiskAssessment /> {/* 위험성평가 */}
+      <Danger onFormDataChange={handleDangerDataChange} /> {/* 위험분류 */}
+      <Injured onFormDataChange={handleInguredDataChange}  /> {/* 부상부위 */}
+      <Falsetrap onFormDataChange={handleFalsetrapDataChange} /> {/* 실수함정 */}
+      <RiskAssessment onFormDataChange={handleRiskAssessmentDataChange} /> {/* 위험성평가 */}
       {/* 위험분류 표 */}
       <div className="flex flex-col justify-center items-center border border-gray-300 px-3 mx-3 ">
         <p className=" font-semibold text-lg">평가표</p>
         <img src={DangerImg} className=" p-3 w-100"></img>
       </div>
-      <InspectionDetails /> {/* 점검내용 */}
+      <InspectionDetails onFormDataChange={handleInspectionDetailsDataChange} /> {/* 점검내용 */}
       {/* 개선대책 */}
       <div id="ReformMeasures" className="grid sm:flex items-baseline justify-start">
         <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 my-4 ml-4 ">
@@ -49,10 +157,12 @@ function UserfrequentReg() {
             id="comment"
             className="block w-72 rounded-md border-0  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 border-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 p-2 mr-3 ml-4"
             defaultValue={""}
+            value={speActContent}
+            onChange={handleActContChange}
           />
         </div>
       </div>
-      <ActionRquest /> {/* 조치요청 */}
+      <ActionRquest onFormDataChange={handleActionRequestDetailsDataChange} /> {/* 조치요청 */}
       <div className="flex justify-center w-full mt-8 mb-10">
         <button
           type="button"
@@ -61,11 +171,13 @@ function UserfrequentReg() {
           등록취소
         </button>
         <button
-          type="button"
+          type="submit"
           className="rounded-md bg-seahColor px-7 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus:outline-none"
+          onClick={handleFormSubmit}            // 등록 버튼 클릭 시 handleFormSubmit 실행
         >
           등록
         </button>
+
       </div>
     </>
   );
