@@ -55,7 +55,7 @@ export default function Userfrequent() {
     }
 
     fetchDataWithAxios(masterdataPart, masterdataFacility);
-  }, [masterdataPart, masterdataFacility]);
+  }, []);
 
 
   // const people = [

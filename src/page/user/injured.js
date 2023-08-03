@@ -18,24 +18,15 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-
-export default function Injured (onFormDataChange){
-  const [injuredSelected, setInjuredSelected] = useState(injured[0]); //  부상부위
-
-  const handleInjuredChange = (injuredSelected) => {
-      setInjuredSelected(injuredSelected);
-      onFormDataChange(injuredSelected);
-  };
-
-
+export default function Injured (){
+  const [injuredSelected, injuredSetSelected] = useState(injured[0]); //  부상부위
   return(
     <div id="injured" className="flex items-baseline justify-start">
         <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
           부상부위
         </span>
         {/* 부상부위 */}
-        {/*<Listbox value={injuredSelected} onChange={setInjuredSelected}>*/}
-        <Listbox value={injuredSelected} onChange={handleInjuredChange}>
+        <Listbox value={injuredSelected} onChange={injuredSetSelected}>
           {({ open }) => (
             <>
               <div className="relative mt-2">

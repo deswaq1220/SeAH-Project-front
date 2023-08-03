@@ -1,15 +1,4 @@
-import {useState} from "react";
-
-export default function InspectionDetails({onFormDataChange}){
-  const [content, setContent] = useState();
-
-  const handleContentChange = (e) => {
-      setContent(e.target.value);
-      onFormDataChange(e.target.value);
-  }
-
-
-
+export default function InspectionDetails(){
   return(
     // {/* 점검내용 */}
     <div id="Inspectiondetails" className="grid sm:flex items-baseline justify-start">
@@ -24,8 +13,6 @@ export default function InspectionDetails({onFormDataChange}){
           id="comment"
           className="block w-72 rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 border-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 p-2 mr-3 ml-4"
           defaultValue={''}
-          value={content}
-          onChange={handleContentChange}
         />
       </div>
     </div>

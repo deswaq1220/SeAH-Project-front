@@ -4,14 +4,28 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import axios from "axios";
 import {useParams} from "react-router-dom";
 
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
+// const people = [
+//   { id: 1, name: "[선택]" },
+//   { id: 2, name: "[류재일]" },
+//   { id: 3, name: "[임찬성]" },
+//   { id: 4, name: "[김선미]" },
+//   { id: 5, name: "[정국권]" },
+//   { id: 6, name: "[조용휘]" },
+//   { id: 7, name: "[김재현]" },
+//   { id: 8, name: "[김태연]" },
+//   { id: 9, name: "[지상천]" },
+//   { id: 10, name: "[이연수]" },
+//   { id: 11, name: "[김종선]" },
+//   { id: 12, name: "[김대규]" },
+//   { id: 13, name: "[정용대]" },
+// ];
 
-export default function ActionRquest({onFormDataChange}){
-  // get 정보
+
+export default function ActionRquest(){
   // const [peopleSelected, SetPeopleSelected] = useState(people[0]); //  실수함정
   // qr 정보따라 url 파라미터 세팅되어야됨
   const { masterdataPart } = useParams();           // url 영역 파라미터
@@ -46,20 +60,6 @@ export default function ActionRquest({onFormDataChange}){
   // 선택된 이메일 담을 변수
   const [selectedEmail, setSelectedEmail] = useState(null);
 
-  // post 정보
-  const handleActionChange = (selectedEmail) => {
-      setSelectedEmail(selectedEmail);
-      onFormDataChange(selectedEmail)({
-          setActPerson : selectedEmail?.emailName || "",      // 선택한 이메일이 있다면 이름 저장
-          speActEmail: selectedEmail?.emailAdd || "",   // 선택한 이메일이 있다면 이메일 저장
-      });
-  };
-
-
-
-
-
-
   return(
     <div id="ActionRequest" className="grid sm:flex items-baseline justify-start">
         <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 my-4 ml-4 ">
@@ -68,8 +68,7 @@ export default function ActionRquest({onFormDataChange}){
         {/* 조치요청 */}
 
         <div className="grid sm:columns-1 ml-4">
-        {/*<Listbox value={selectedEmail} onChange={setSelectedEmail}>*/}
-        <Listbox value={selectedEmail} onChange={handleActionChange}>
+        <Listbox value={selectedEmail} onChange={setSelectedEmail}>
           {({ open }) => (
             <>
               <div className="relative mt-2">
