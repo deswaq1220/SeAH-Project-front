@@ -26,18 +26,6 @@ function EduAttenStatics() {
   const [searchDepartment, setSearchDepartment] = useState("부서");
   const [searchName, setSearchName] = useState("");
 
-  const filteredAttendeesList = attendeesList.filter((item) => {
-    // searchDepartment가 "부서"인 경우에는 부서를 무시하고 이름만으로 검색
-    const isDepartmentMatched = searchDepartment === "부서" ? true : item.attenDepartment === searchDepartment;
-  
-    const isNameMatched =
-      searchName === "이름" ||
-      item.attenName.toLowerCase().includes(searchName.toLowerCase());
-  
-    return isDepartmentMatched && isNameMatched;
-  });
-  
-  
 
   useEffect(() => {
     // 현재 월의 로그를 가져오는 함수
@@ -69,7 +57,9 @@ function EduAttenStatics() {
   // 이름 검색
   const handleSearch = async () => {
     try {
+      
       const response = await axios.get("http://localhost:8081/edustatistics/getmonth", {
+       
         params: {
           eduCategory: selectedCategory,
           month: selectedMonth,
@@ -204,6 +194,7 @@ function EduAttenStatics() {
             className="mt-1 block w-full border-gray-300 shadow-sm focus:ring-seahColor focus:border-seahColor sm:text-sm rounded-md"
           >
             {department.map((dept) => (
+              
               <option key={dept.id} value={dept.name}>
                 {dept.name}
               </option>
