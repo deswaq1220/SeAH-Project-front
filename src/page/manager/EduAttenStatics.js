@@ -33,7 +33,7 @@ function EduAttenStatics() {
       try {
         const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
         const currentYear = getYear(currentDate);
-        const response = await axios.get("http://localhost:8081/edustatistics/getmonth", {
+        const response = await axios.get("http://172.20.20.252:8081/edustatistics/getmonth", {
           params: {
             eduCategory: selectedCategory,
             month: currentMonth,
@@ -57,9 +57,9 @@ function EduAttenStatics() {
   // 이름 검색
   const handleSearch = async () => {
     try {
-      
-      const response = await axios.get("http://localhost:8081/edustatistics/getmonth", {
-       
+
+      const response = await axios.get("http://172.20.20.252:8081/edustatistics/getmonth", {
+
         params: {
           eduCategory: selectedCategory,
           month: selectedMonth,
@@ -194,7 +194,7 @@ function EduAttenStatics() {
             className="mt-1 block w-full border-gray-300 shadow-sm focus:ring-seahColor focus:border-seahColor sm:text-sm rounded-md"
           >
             {department.map((dept) => (
-              
+
               <option key={dept.id} value={dept.name}>
                 {dept.name}
               </option>

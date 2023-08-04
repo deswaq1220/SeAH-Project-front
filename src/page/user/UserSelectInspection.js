@@ -97,7 +97,7 @@ export default function UserSelectInspection() {
     // Json값 가져와서 세팅
     function fetchDataWithAxios() {
       axios
-        .get("http://localhost:8081/userselectInspection")
+        .get("http://172.20.20.252:8081/userselectInspection")
         .then((response) => {
           const data = response.data;
           // 가져온 데이터로 상태 변수 업데이트

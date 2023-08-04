@@ -20,7 +20,7 @@ export default function Userfrequent() {
 
     function fetchDataWithAxios(masterdataPart, masterdataFacility) {
       axios
-          .get(`http://localhost:8081/special/list/${masterdataPart}/${masterdataFacility}`)
+          .get(`http://172.20.20.252:8081/special/list/${masterdataPart}/${masterdataFacility}`)
           .then((response) => {
             const dataFromBackend = response.data.listOfFac;
 
