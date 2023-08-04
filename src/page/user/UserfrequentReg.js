@@ -25,25 +25,25 @@ function classNames(...classes) {
 function UserfrequentReg() {
     const {masterdataPart} = useParams();           // url 영역 파라미터
     const {masterdataFacility} = useParams();       // url 설비 파라미터
-    const [speEmpNum, setSpeEmpNum] = useState();
-    const [spePerson, setSpePerson] = useState();
-    const [speEmail, setSpeEmail] = useState();
-    const [speDanger, setSpeDanger] = useState();
-    const [speInjure, setSpeInjure] = useState();
-    const [speCause, setSpeCause] = useState();
-    const [speTrap, setSpeTrap] = useState();
-    const [speRiskAssess, setSpeRiskAssess] = useState();
-    const [speContent, setSpeContent] = useState();
-    const [speActContent, setSpeActContent] = useState();
-    const [speActPerson, setSpeActPerson] = useState();
-    const [speActEmail, setSpeActEmail] = useState();
+    const [speEmpNum, setSpeEmpNum] = useState("");
+    const [spePerson, setSpePerson] = useState("");
+    const [speEmail, setSpeEmail] = useState("");
+    const [speDanger, setSpeDanger] = useState("");
+    const [speInjure, setSpeInjure] = useState("");
+    const [speCause, setSpeCause] = useState("");
+    const [speTrap, setSpeTrap] = useState("");
+    const [speRiskAssess, setSpeRiskAssess] = useState("");
+    const [speContent, setSpeContent] = useState("");
+    const [speActContent, setSpeActContent] = useState("");
+    const [speActPerson, setSpeActPerson] = useState("");
+    const [speActEmail, setSpeActEmail] = useState("");
 
 
     // Inspector 콜백 함수 : 점검자(이름, 이메일, 사원번호)
-    const handleInpectorDataChange = (data) => {
-        setSpeEmpNum(data.speEmpNum);
-        setSpePerson(data.spePerson);
-        setSpeEmail(data.speEmail);
+    const handleInspectorDataChange = (formData) => {
+        setSpeEmpNum(formData);
+        setSpePerson(formData);
+        setSpeEmail(formData);
     };
 
     // Danger 콜백함수 : 위험분류
@@ -56,9 +56,20 @@ function UserfrequentReg() {
         setSpeInjure(injuredSelected.name);
     };
 
+
+    // // Ingured 콜백함수 : 부상부위
+    // const handleInguredDataChange = (injuredSelected) => {
+    //     if (injuredSelected === "[기타(직접입력)]") {
+    //         // 직접입력 값을 speInjure로 업데이트
+    //         setSpeInjure(inputValueRef.current);
+    //     } else {
+    //         setSpeInjure(injuredSelected.name);
+    //     }
+    // };
+
     // Dangersource 콜백함수 : 위험원인
-    const handleCauseDataChange = (injuredSelected) => {
-        setSpeCause(data.speCause);
+    const handleCauseDataChange = (data) => {
+        setSpeCause(data);
     };
 
     // FalseTrap 콜백함수 : 실수함정
@@ -73,17 +84,16 @@ function UserfrequentReg() {
 
     // InspectionDetails 콜백 : 점검내용
     const handleInspectionDetailsDataChange = (data) => {
-        setSpeContent(data.content);
+        setSpeContent(data);
     };
 
     // ActionRquest 콜백 : 조치자(이름, 이메일)
     const handleActionRequestDetailsDataChange = (selectedEmail) => {
-        setSpeActPerson(selectedEmail.emailName);
-        setSpeActEmail(selectedEmail.emailAdd);
+        setSpeActPerson(selectedEmail.speActPerson);
+        setSpeActEmail(selectedEmail.speActEmail);
     };
 
-
-
+    // 개선대책
     const handleActContChange = (e) => {
         setSpeActContent(e.target.value);
     }
@@ -101,9 +111,9 @@ function UserfrequentReg() {
             speContent,
             speActPerson,
             speActEmail,
-            speActContent
+            speActContent,
         };
-
+        console.log(requestData); // 요청 데이터 콘솔에 출력
 
         // 수시점검 등록 요청
         axios
@@ -136,7 +146,7 @@ function UserfrequentReg() {
             <UserHeader/>
             <p>수시점검</p>
             <p>수시점검 내용등록</p>
-            <Inspector onFormDataChange={handleInpectorDataChange}/> {/* 점검자 */}
+            <Inspector onFormDataChange={handleInspectorDataChange}/> {/* 점검자 */}
             <Inspectionarea/> {/* 점검영역 */}
             <Facilityname/> {/* 설비명 */}
             <Danger onFormDataChange={handleDangerDataChange}/> {/* 위험분류 */}
@@ -163,7 +173,7 @@ function UserfrequentReg() {
               name="comment"
               id="comment"
               className="block w-72 rounded-md border-0  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 border-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 p-2 mr-3 ml-4"
-              defaultValue={""}
+              // defaultValue={""}
               value={speActContent}
               onChange={handleActContChange}
           />

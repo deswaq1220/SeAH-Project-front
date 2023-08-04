@@ -55,13 +55,16 @@ export default function ActionRquest({ onFormDataChange }) {
   };
 
   const [instances, setInstances] = useState([{}]);
-  // 인스턴스 추가 함수
+
+
+  // 인스턴스 추가 함수 : 이메일 추가
   const handleAddInstance = () => {
     setInstances([...instances, {}]);
   };
   const handleDeleteInstance = (index) => {
     setInstances(instances.filter((_, i) => i !== index));
   };
+
 
   return (
     <div

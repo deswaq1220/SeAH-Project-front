@@ -21,18 +21,36 @@ function classNames(...classes) {
 export default function Injured({onFormDataChange}) {
   const [injuredSelected, setInjuredSelected] = useState(injured[0]); //  부상부위
   const [customInjured, setCustomInjured] = useState("");
+    const [formData, setFormData] = useState({
+        speActContent: "",
+        speActEmail: "",
+        speActPerson: "",
+        speCause: "",
+        speContent:"",
+        speDanger:"",
+        speEmail:"",
+        speEmpNum:"",
+        speInjure: "",
+        spePerson:"",
+        speRiskAssess:"",
+        speTrap:"",
+    });
 
-  const handleInjuredChange = (injuredSelected) => {
-    setInjuredSelected(injuredSelected);
-    onFormDataChange(injuredSelected);
-  };
+    const handleFormDataChange = (updatedData) => {
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            ...updatedData,
+        }));
+    };
 
-  const handleSelectedChange = (value) => {
-    setInjuredSelected(value);
-    if (value.name === "[기타(직접입력)]") {
-      setCustomInjured(""); // Reset the custom danger input field
-    }
-  };
+    const handleCustomInjuredChange = (e) => {
+        const value = e.target.value;
+        setCustomInjured(value);
+        if (injuredSelected.name === "[기타(직접입력)]") {
+            // 선택된 옵션이 "[기타(직접입력)]"인 경우, 부모 컴포넌트의 상태를 업데이트합니다.
+            onFormDataChange({ speInjure: value });
+        }
+    };
 
   return (
     <div id="injured" className="flex items-baseline justify-start">
@@ -42,7 +60,7 @@ export default function Injured({onFormDataChange}) {
       <div className="flex flex-col">
         {/* 부상부위 */}
         {/*<Listbox value={injuredSelected} onChange={setInjuredSelected}>*/}
-        <Listbox value={injuredSelected} onChange={handleInjuredChange}>
+        <Listbox value={injuredSelected} onFormDataChange={handleFormDataChange}>
           {({ open }) => (
             <>
               <div className="relative mt-2">
@@ -114,11 +132,12 @@ export default function Injured({onFormDataChange}) {
         {/* Custom Input */}
         {injuredSelected.name === "[기타(직접입력)]" && (
           <input
-            type="text"
-            value={customInjured}
-            onChange={(e) => setCustomInjured(e.target.value)}
-            className="block w-40 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5 mt-1"
-            placeholder="직접 입력"
+              type="text"
+              value={customInjured}
+              name="speInjure"
+              onChange={handleCustomInjuredChange}
+              className="block w-40 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5 mt-1"
+              placeholder="직접 입력"
           />
         )}
       </div>
