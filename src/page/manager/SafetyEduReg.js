@@ -1,8 +1,8 @@
-import { useState, Fragment, useCallback } from "react";
+import { useState, Fragment, useCallback,useEffect } from "react";
 import Header from "../../components/Header";
 // import { format, addMonths, subMonths } from "date-fns";
 import { Listbox, Transition } from "@headlessui/react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate,useParams } from "react-router-dom";
 // import Notification from '../components/Notification'
 import {
   CheckIcon,
@@ -146,9 +146,17 @@ function SafetyEduReg() {
     setQrValue,
     resetForm,
     showNotification,
+    // handleEdit,
     
   } = useSafetyEduForm();
+
+  // const handleClick = () => {
+  //   handleEdit(); // 수정 핸들러 호출
+  // };
+
   
+
+
   
 
   return (
@@ -620,6 +628,7 @@ function SafetyEduReg() {
               <button
                 type="submit"
                 className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                // onClick={handleClick}
               >
                 저장하기
               </button>
