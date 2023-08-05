@@ -68,8 +68,8 @@ function UserfrequentReg() {
     // };
 
     // Dangersource 콜백함수 : 위험원인
-    const handleCauseDataChange = (data) => {
-        setSpeCause(data);
+    const handleCauseDataChange = (speCauseData) => {
+        setSpeCause(speCauseData.causeMenu);
     };
 
     // FalseTrap 콜백함수 : 실수함정
