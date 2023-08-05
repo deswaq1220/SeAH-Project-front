@@ -1,36 +1,58 @@
-import { Fragment, useState } from "react";
+import {Fragment, useEffect, useState} from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import axios from "axios";
+import {useParams} from "react-router-dom";
 
-
-// 위험원인
-const source = [
-  { id: 1, name: "[선택]" },
-  { id: 2, name: "[설비원인]" },
-  { id: 3, name: "[작업방법]" },
-  { id: 4, name: "[점검불량]" },
-  { id: 5, name: "[정비불량]" },
-  { id: 6, name: "[지식부족]" },
-  { id: 7, name: "[불안전한 행동]" },
-  { id: 8, name: "[기타(직접입력)]" },
-];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Dangersource({onFormDataChange}){
+export default function Dangersource({onFormDataChange}) {
+  const { masterdataPart } = useParams(); // url 영역 파라미터
+  const { masterdataFacility } = useParams(); // url 설비 파라미터
+  const [specialCauseList, setSpecialCauseList] = useState([]);       // 위험원인
+  const [sourceSelected, setSourceSelected] = useState([]);
+  const [customSource, setCustomSource] = useState("");
 
-const [sourceSelected, setSourceSelected] = useState(source[0]); // 위험분류
-const [customSource, setCustomSource] = useState("");
 
-const handleSelectedChange = (sourceSelected) => {
-  setSourceSelected(sourceSelected);
-  if (sourceSelected.name === "[기타(직접입력)]") {
-    setCustomSource(""); // Reset the custom danger input field
-  }
-  onFormDataChange(sourceSelected);
-};
+  useEffect(() => {
+    function specialCauseFetchDataWithAxios(masterdataPart, masterdataFacility) {
+      axios
+          .get(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`)
+          .then((response) => {
+            const speCauseListFromBack = response.data.specialCauseList;
+
+            const speCauseData = speCauseListFromBack.map((item) => {
+              return {
+                causeId: item.causeId,
+                causeMenu : item.causeMenu,
+              };
+            });
+            setSpecialCauseList(speCauseData);
+            console.log(speCauseData);
+          })
+          .catch((error) => {
+            console.error("Error fetching data: ", error);
+          });
+    }
+
+    specialCauseFetchDataWithAxios(masterdataPart, masterdataFacility);
+  }, [masterdataPart, masterdataFacility]);
+
+
+
+  const handleSelectedChange = (value) => {
+    setSourceSelected(value);
+      // if (value.causeMenu === "기타(직접입력)") {
+      //     // setCustomSource("");
+      // }
+      onFormDataChange(value);
+    console.log(value);
+  };
+
+
   return(
     <div id="danger" className="flex items-baseline justify-start">
         <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
@@ -43,7 +65,7 @@ const handleSelectedChange = (sourceSelected) => {
             <>
               <div className="relative mt-2">
                 <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-32 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
-                  <span className="block truncate">{sourceSelected.name}</span>
+                  <span className="block truncate">{sourceSelected.causeMenu}</span>
                   <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                     <ChevronUpDownIcon
                       className="h-5 w-5 text-gray-400"
@@ -60,9 +82,9 @@ const handleSelectedChange = (sourceSelected) => {
                   leaveTo="opacity-0"
                 >
                   <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                    {source.map((person) => (
+                      {specialCauseList.map((specialCauseItem) => (
                       <Listbox.Option
-                        key={person.id}
+                        key={specialCauseItem.causeId}
                         className={({ active }) =>
                           classNames(
                             active
@@ -71,7 +93,7 @@ const handleSelectedChange = (sourceSelected) => {
                             "relative cursor-default select-none py-2 pl-3 pr-9"
                           )
                         }
-                        value={person}
+                        value={specialCauseItem}
                       >
                         {({ selected, active }) => (
                           <>
@@ -81,7 +103,7 @@ const handleSelectedChange = (sourceSelected) => {
                                 "block truncate"
                               )}
                             >
-                              {person.name}
+                              {specialCauseItem.causeMenu}
                             </span>
 
                             {selected ? (
@@ -107,15 +129,16 @@ const handleSelectedChange = (sourceSelected) => {
             </>
           )}
         </Listbox>
-        {sourceSelected.name === "[기타(직접입력)]" && (
-        <input
-          type="text"
-          value={customSource}
-          onChange={(e) => setCustomSource(e.target.value)}
-          className="block w-40 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5 mt-1"
-          placeholder="직접 입력"
-        />
-      )}
+        {sourceSelected && sourceSelected.causeMenu === "기타(직접입력)" && (
+            <input
+              type="text"
+              value={customSource}
+              name = "speCause"
+              onChange={(e) => setCustomSource(e.target.value)}
+              className="block w-40 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5 mt-1"
+              placeholder="직접 입력"
+            />
+          )}
         </div>
       </div>
   )
