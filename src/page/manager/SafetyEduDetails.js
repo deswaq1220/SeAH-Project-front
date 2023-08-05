@@ -86,7 +86,7 @@ export default function SafetyEduDetails() {
             // // "http://172.20.10.5:3000/edudetails/${eduId}"
           }
         );
-        setUploadedFiles(response.data.eduFiles);
+//        setUploadedFiles(response.data.eduFiles);
         setEduData({ ...response.data, eduFiles: response.data.eduFiles });
         // console.log(response.data); // 확인용 로그
         // console.log(eduData);
@@ -293,7 +293,7 @@ export default function SafetyEduDetails() {
                             />
                             <div className="ml-4 flex min-w-0 flex-1 gap-2">
                               <span className="truncate font-medium">
-                                {eduFiles.eduFileName}
+                                {eduFiles}
                               </span>
                               <span className="flex-shrink-0 text-gray-400">
                                 {eduFiles.size}
