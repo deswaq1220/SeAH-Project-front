@@ -1,43 +1,54 @@
 
-import { Fragment, useState } from "react";
+import {Fragment, useEffect, useState} from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import {useParams} from "react-router-dom";
+import axios from "axios";
 
 
-  // 위험분류
-const danger = [
-  { id: 1, name: "[선택]" },
-  { id: 2, name: "[추락]" },
-  { id: 3, name: "[협착]" },
-  { id: 4, name: "[끼임]" },
-  { id: 5, name: "[말림]" },
-  { id: 6, name: "[전도]" },
-  { id: 7, name: "[절단]" },
-  { id: 8, name: "[베임]" },
-  { id: 9, name: "[찔림]" },
-  { id: 10, name: "[충돌]" },
-  { id: 11, name: "[화상]" },
-  { id: 12, name: "[화재폭발]" },
-  { id: 13, name: "[근골격]" },
-  { id: 14, name: "[지게차]" },
-  { id: 15, name: "[크레인]" },
-  { id: 16, name: "[누출]" },
-  { id: 17, name: "[환경사고]" },
-  { id: 18, name: "[기타]" },
-];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Danger({onFormDataChange}){
+  const { masterdataPart } = useParams(); // url 영역 파라미터
+  const { masterdataFacility } = useParams(); // url 설비 파라미터
+  const [specialDangerList, setSpecialDangerList] = useState([]) // 위험분류List
+  const [selectedDanger, setSelectedDanger] = useState([]); // 위험분류
 
-const [selected, setSelected] = useState(danger[0]); // 위험분류
+  // 위험분류 get
+  useEffect(() => {
+    function specialDangerFetchDataWithAxios(masterdataPart, masterdataFacility) {
+      axios
+          .get(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`)
+          .then((response) => {
+            const speDangerListFromBack = response.data.specialDangerList;
 
-const handleDangerChange = (selected) => {
-  setSelected(selected);
-  onFormDataChange(selected);
-}
+            const speDangerData = speDangerListFromBack.map((item) => {
+              return {
+                dangerMenu : item.dangerMenu,
+                dangerNum: item.dangerNum,
+              };
+            });
+            setSpecialDangerList(speDangerData);
+            console.log(speDangerData);
+          })
+          .catch((error) => {
+            console.error("Error fetching data: ", error);
+          });
+    }
+
+    specialDangerFetchDataWithAxios(masterdataPart, masterdataFacility);
+  }, [masterdataPart, masterdataFacility]);
+
+  // 선택한 값 세팅
+  const handleDangerChange = (value) => {
+    setSelectedDanger(value);
+    onFormDataChange(value);
+  }
+
+
 
   return(
     <div id="danger" className="flex items-baseline justify-start">
@@ -45,12 +56,12 @@ const handleDangerChange = (selected) => {
           위험분류
         </span>
         {/*<Listbox value={selected} onChange={setSelected}>*/}
-        <Listbox value={selected} onChange={handleDangerChange}>
+        <Listbox value={selectedDanger} onChange={handleDangerChange}>
           {({ open }) => (
             <>
               <div className="relative mt-2">
                 <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-32 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
-                  <span className="block truncate">{selected.name}</span>
+                  <span className="block truncate">{selectedDanger.dangerMenu}</span>
                   <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                     <ChevronUpDownIcon
                       className="h-5 w-5 text-gray-400"
@@ -67,9 +78,9 @@ const handleDangerChange = (selected) => {
                   leaveTo="opacity-0"
                 >
                   <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                    {danger.map((person) => (
+                    {specialDangerList.map((specialDangerItem) => (
                       <Listbox.Option
-                        key={person.id}
+                        key={specialDangerItem.dangerMenu}
                         className={({ active }) =>
                           classNames(
                             active
@@ -78,7 +89,7 @@ const handleDangerChange = (selected) => {
                             "relative cursor-default select-none py-2 pl-3 pr-9"
                           )
                         }
-                        value={person}
+                        value={specialDangerItem}
                       >
                         {({ selected, active }) => (
                           <>
@@ -88,7 +99,7 @@ const handleDangerChange = (selected) => {
                                 "block truncate"
                               )}
                             >
-                              {person.name}
+                              {specialDangerItem.dangerMenu}
                             </span>
 
                             {selected ? (

@@ -12,12 +12,12 @@ function classNames(...classes) {
 export default function Dangersource({onFormDataChange}) {
   const { masterdataPart } = useParams(); // url 영역 파라미터
   const { masterdataFacility } = useParams(); // url 설비 파라미터
-  const [specialCauseList, setSpecialCauseList] = useState([]);       // 위험원인
+  const [specialCauseList, setSpecialCauseList] = useState([]);       // 위험원인List
   const [sourceSelected, setSourceSelected] = useState([]);
   const [customSource, setCustomSource] = useState("");
 
 
-
+  // 위험원인 get
   useEffect(() => {
     function specialCauseFetchDataWithAxios(masterdataPart, masterdataFacility) {
       axios
@@ -51,9 +51,9 @@ export default function Dangersource({onFormDataChange}) {
   // 위험원인 선택 시 sourceSelected 값 업데이트하고 onFormDataChange 호출
   const handleSelectedChange = (value) => {
     setSourceSelected(value);
-    // 기타(직접입력)을 제외한 경우 onFormDataChange에 value.causeMenu값 넘김
+    // 기타(직접입력)을 제외한 경우 onFormDataChange에 value값 넘김
     if (value.causeMenu !== "[기타(직접입력)]") {
-      onFormDataChange(value.causeMenu);
+      onFormDataChange(value);
     } else {
       // 기타(직접입력)인 경우에는 customSource에 입력된 값을 넘김
       onFormDataChange({ causeMenu: customSource });

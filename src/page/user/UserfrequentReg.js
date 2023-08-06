@@ -48,24 +48,13 @@ function UserfrequentReg() {
 
     // Danger 콜백함수 : 위험분류
     const handleDangerDataChange = (selected) => {
-        setSpeDanger(selected.name);
+        setSpeDanger(selected.dangerMenu);
     };
 
-    // Ingured 콜백함수 : 부상부위
-    const handleInguredDataChange = (injuredSelected) => {
-        setSpeInjure(injuredSelected.name);
+    // Injured 콜백함수 : 부상부위
+    const handleInjuredDataChange = (speInjuredData) => {
+        setSpeInjure(speInjuredData.injuredMenu);
     };
-
-
-    // // Ingured 콜백함수 : 부상부위
-    // const handleInguredDataChange = (injuredSelected) => {
-    //     if (injuredSelected === "[기타(직접입력)]") {
-    //         // 직접입력 값을 speInjure로 업데이트
-    //         setSpeInjure(inputValueRef.current);
-    //     } else {
-    //         setSpeInjure(injuredSelected.name);
-    //     }
-    // };
 
     // Dangersource 콜백함수 : 위험원인
     const handleCauseDataChange = (speCauseData) => {
@@ -74,7 +63,7 @@ function UserfrequentReg() {
 
     // FalseTrap 콜백함수 : 실수함정
     const handleFalsetrapDataChange = (falsetrapSelected) => {
-        setSpeTrap(falsetrapSelected.name);
+        setSpeTrap(falsetrapSelected.trapMenu);
     };
 
     // RiskAssessment 콜백 : 위험성평가
@@ -150,7 +139,7 @@ function UserfrequentReg() {
             <Inspectionarea/> {/* 점검영역 */}
             <Facilityname/> {/* 설비명 */}
             <Danger onFormDataChange={handleDangerDataChange}/> {/* 위험분류 */}
-            <Injured onFormDataChange={handleInguredDataChange}/> {/* 부상부위 */}
+            <Injured onFormDataChange={handleInjuredDataChange}/> {/* 부상부위 */}
             <Dangersource onFormDataChange={handleCauseDataChange}/> {/* 위험원인 */}
             <Falsetrap onFormDataChange={handleFalsetrapDataChange}/> {/* 실수함정 */}
             <RiskAssessment onFormDataChange={handleRiskAssessmentDataChange}/> {/* 위험성평가 */}

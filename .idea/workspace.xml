@@ -7,6 +7,9 @@
     <list default="true" id="ea7e91ae-16cf-45f3-8a10-99db0e4e0dc4" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/page/user/UserfrequentReg.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserfrequentReg.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/danger.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/danger.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/falsetrap.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/falsetrap.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/injured.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/injured.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/page/user/sourceDanger.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/sourceDanger.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -44,7 +47,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.Shell Script&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.JavaScript&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -67,6 +70,8 @@
       <workItem from="1691212795821" duration="8800000" />
       <workItem from="1691239906256" duration="1226000" />
       <workItem from="1691241247221" duration="4901000" />
+      <workItem from="1691297623723" duration="9055000" />
+      <workItem from="1691307940639" duration="2016000" />
     </task>
     <servers />
   </component>

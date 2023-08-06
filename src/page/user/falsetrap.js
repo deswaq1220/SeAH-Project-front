@@ -1,20 +1,22 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import {useParams} from "react-router-dom";
+import axios from "axios";
 
-// 실수함정
-const falsetrap = [
-  { id: 1, name: "[N/A]" },
-  { id: 2, name: "[자만심]" },
-  { id: 3, name: "[시간압박]" },
-  { id: 4, name: "[미흡한 의사소통]" },
-  { id: 5, name: "[주의산만]" },
-  { id: 6, name: "[처음작업]" },
-  { id: 7, name: "[비일상작업]" },
-  { id: 8, name: "[과중한 업무부하]" },
-  { id: 9, name: "[4일이상 업무공백]" },
-  { id: 10, name: "[근무교대 시점]" },
-];
+// // 실수함정
+// const falsetrap = [
+//   { id: 1, name: "[N/A]" },
+//   { id: 2, name: "[자만심]" },
+//   { id: 3, name: "[시간압박]" },
+//   { id: 4, name: "[미흡한 의사소통]" },
+//   { id: 5, name: "[주의산만]" },
+//   { id: 6, name: "[처음작업]" },
+//   { id: 7, name: "[비일상작업]" },
+//   { id: 8, name: "[과중한 업무부하]" },
+//   { id: 9, name: "[4일이상 업무공백]" },
+//   { id: 10, name: "[근무교대 시점]" },
+// ];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -22,13 +24,42 @@ function classNames(...classes) {
 
 
 export default function Falsetrap({onFormDataChange}){
-  const [falsetrapSelected, setFalsetrapSelected] = useState(falsetrap[0]); //  실수함정
+  const { masterdataPart } = useParams(); // url 영역 파라미터
+  const { masterdataFacility } = useParams(); // url 설비 파라미터
+  const [specialTrapList, setSpecialTrapList] = useState([]) // 실수함정List
+  const [trapSelected, setTrapSelected] = useState([]); //  실수함정
 
-    const handleFalsetrapChange = (falsetrapSelected) => {
-        setFalsetrapSelected(falsetrapSelected);
-        onFormDataChange(falsetrapSelected);
-    };
 
+  // 실수함정 get
+  useEffect(() => {
+    function specialTrapFetchDataWithAxios(masterdataPart, masterdataFacility) {
+      axios
+          .get(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`)
+          .then((response) => {
+            const speTrapListFromBack = response.data.specialTrapList;
+
+            const speTrapData = speTrapListFromBack.map((item) => {
+              return {
+                trapMenu : item.trapMenu,
+                trapNum: item.trapNum,
+              };
+            });
+            setSpecialTrapList(speTrapData);
+            console.log(speTrapData);
+          })
+          .catch((error) => {
+            console.error("Error fetching data: ", error);
+          });
+    }
+
+    specialTrapFetchDataWithAxios(masterdataPart, masterdataFacility);
+  }, [masterdataPart, masterdataFacility]);
+
+  // 선택한 값 세팅
+  const handleTrapChange = (value) => {
+    setTrapSelected(value);
+    onFormDataChange(value);
+  };
 
   return(
     <div id="falsetrap" className="flex items-baseline justify-start">
@@ -37,13 +68,13 @@ export default function Falsetrap({onFormDataChange}){
         </span>
         {/* 실수함정 */}
         {/*<Listbox value={falsetrapSelected} onChange={setFalsetrapSelected}>*/}
-        <Listbox value={falsetrapSelected} onChange={handleFalsetrapChange}>
+        <Listbox value={trapSelected} onChange={handleTrapChange}>
           {({ open }) => (
             <>
               <div className="relative mt-2">
                 <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-32 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
                   <span className="block truncate">
-                    {falsetrapSelected.name}
+                    {trapSelected.trapMenu}
                   </span>
                   <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                     <ChevronUpDownIcon
@@ -61,9 +92,9 @@ export default function Falsetrap({onFormDataChange}){
                   leaveTo="opacity-0"
                 >
                   <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                    {falsetrap.map((person) => (
+                    {specialTrapList.map((specialTrapItem) => (
                       <Listbox.Option
-                        key={person.id}
+                        key={specialTrapItem.trapMenu}
                         className={({ active }) =>
                           classNames(
                             active
@@ -72,7 +103,7 @@ export default function Falsetrap({onFormDataChange}){
                             "relative cursor-default select-none py-2 pl-3 pr-9"
                           )
                         }
-                        value={person}
+                        value={specialTrapItem}
                       >
                         {({ selected, active }) => (
                           <>
@@ -82,7 +113,7 @@ export default function Falsetrap({onFormDataChange}){
                                 "block truncate"
                               )}
                             >
-                              {person.name}
+                              {specialTrapItem.trapMenu}
                             </span>
 
                             {selected ? (
