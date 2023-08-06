@@ -3,66 +3,48 @@ import {useEffect, useState} from "react";
 import axios from 'axios';
 import React, { PureComponent } from 'react';
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-// yarn add @nivo/line
 import { ResponsiveLine } from '@nivo/line'
 
 function SafetyInspectionStatisticsImg() {
-    const [lineChartData, setLineChartData] = useState([]);
-    const barChartData = [
-        {
-            name: '1월',
-            uv: 4000,
-            pv: 2400,
-        },
-        {
-            name: '2월',
-            uv: 3000,
-            pv: 1398,
-        },
-        {
-            name: '3월',
-            uv: 2000,
-            pv: 9800,
-        },
-        {
-            name: '4월',
-            uv: 2780,
-            pv: 3908,
-        },
-        {
-            name: '5월',
-            uv: 1890,
-            pv: 4800,
-        },
-        {
-            name: '6월',
-            uv: 2390,
-            pv: 3800,
-        },
-        {
-            name: '7월',
-            uv: 3490,
-            pv: 4300,
-        },
-    ];
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const lineChartResponse = await axios.get('http://localhost:8081/special/statistics/dangerandmonth', { params: { year: 2023, month: 7 } });
-                setLineChartData(lineChartResponse.data);
-                console.log("가져온 데이터 출력값:    ", lineChartResponse.data);
-            } catch (error) {
-                console.error("불러온 데이터에 에러가 발생했습니다:", error);
-            }
-        };
+    //const [lineChartData, setLineChartData] = useState([]);
+    const [barChartData, setBarChartData] = useState([]);
+    //const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
 
-        fetchData();
-    }, []);
+        useEffect(() => {
+            const fetchData = async () => {
+                try {
+                    //const lineChartResponse = await axios.get('http://localhost:8081/special/statistics/dangerandmonth', { params: { year: 2023, month: 7 } });
+                    //setLineChartData(lineChartResponse.data);
+
+                    const barChartResponse = await axios.get('http://localhost:8081/special/statistics/detaildanger', { params: { year: 2023} });
+                    const specialDangerData = barChartResponse.data; //백엔드에서 받아온 데이터
+                    const dataByMonth = {};
+
+                    specialDangerData.forEach((data) => {
+                        const month = data.month;
+                        const dangerKind = data.dangerKind;
+                        const count = data.count;
+
+                        if(!dataByMonth.hasOwnProperty(month)){
+                            dataByMonth[month] = {name: '${month}월'};
+                        }
+                        dataByMonth[month][dangerKind] = count;
+                    });
+                    const finalData = Object.values(dataByMonth);
+                    setBarChartData(finalData);
+                    console.log("가져온 데이터 출력값:    ", finalData);
+                } catch (error) {
+                    console.error("불러온 데이터에 에러가 발생했습니다:", error);
+                }
+            };
+
+            fetchData();
+        }, []);
 
     return (
         <div>
             <Header />
-            <div style={{ width: '800px', height: '500px', margin: '0 auto' }}>
+{/*            <div style={{ width: '800px', height: '500px', margin: '0 auto' }}>
                 {lineChartData.length > 0 ? (
                     <ResponsiveLine
                         data={lineChartData}
@@ -131,11 +113,10 @@ function SafetyInspectionStatisticsImg() {
                         ]}
                     />
                 ) : null}
-            </div>
+            </div>*/}
             안전점검 대시보드 페이지입니다
 
             <div>
-                <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                         width={500}
                         height={300}
@@ -148,14 +129,13 @@ function SafetyInspectionStatisticsImg() {
                         }}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name" />
+                        <XAxis dataKey="month" />
                         <YAxis />
                         <Tooltip />
                         <Legend />
-                        <Bar dataKey="pv" stackId="a" fill="#8884d8" />
-                        <Bar dataKey="uv" stackId="a" fill="#82ca9d" />
+                        <Bar dataKey="count" stackId="a" fill="#8884d8" />
+                        <Bar dataKey="dangerKind" stackId="a" fill="#82ca9d" />
                     </BarChart>
-                </ResponsiveContainer>
             </div>
         </div>
     );
