@@ -12,10 +12,11 @@ function SafetyInspectionStatisticsImg() {
     const currentYear = new Date(seoulTime).getFullYear();
     const [selectedYear, setSelectedYear] = useState(currentYear);
 
+    //이벤트1
     const handleYearChange = (event) => {
         setSelectedYear(parseInt(event.target.value));
     };
-
+    //이벤트2
     const handleSave = async () => {
         try {
             const barChartResponse = await axios.get("http://localhost:8081/special/statistics/detaildanger", {
@@ -23,8 +24,16 @@ function SafetyInspectionStatisticsImg() {
                     year: selectedYear,
                 },
             });
+
+            const lineChartResponse = await axios.get("http://localhost:8081/statistics/inspectioncount", {
+                params: {
+                    year: selectedYear,
+                },
+            });
+
             // 백엔드로부터 받은 데이터 처리
-            console.log("백엔드 응답 데이터:", barChartResponse.data);
+            console.log("백엔드 응답 데이터(lineChart)):", lineChartResponse.data);
+            console.log("백엔드 응답 데이터2(barChart):", barChartResponse.data);
         } catch (error) {
             console.error("백엔드 요청 에러:", error);
         }
@@ -70,7 +79,6 @@ function SafetyInspectionStatisticsImg() {
 
 
 
-
     //(BarChart) 특정년도의 월별 수시점검한 위험분류 건수
     const [barChartData, setBarChartData] = useState([]);
     const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
@@ -106,14 +114,22 @@ function SafetyInspectionStatisticsImg() {
                 try {
 
                     //(LineChart) 특정년도의 수시점검과 정기점검 건수
-                    const lineChartResponse = await axios.get('http://localhost:8081/special/statistics/dangerandmonth', { params: { year: 2023, month:7} });
-                    specialCountData(lineChartResponse.data);
+                    const lineChartResponse = await axios.get('http://localhost:8081/statistics/inspectioncount', { params: { year: selectedYear } });
+                    const specialCountData = lineChartResponse.data;
+                    console.log("첫번째"+ JSON.stringify(lineChartResponse.data, null, 2));
+
+                    // x가 1부터 12까지 있는 배열 생성하고, 해당하는 y 값이 있으면 사용하고 없으면 0을 사용
+                    const resultData = Array.from({ length: 12 }, (_, i) => {
+                        const foundData = specialCountData.find(data => data.data.some(item => item.x === i + 1));
+                        return { x: i + 1, y: foundData ? foundData.data.find(item => item.x === i + 1).y : 0 };
+                    });
+
+                    setLineChartData([{ data: resultData, id: "수시점검" }]);
+                    console.log("세번째"+ JSON.stringify(resultData));
 
 
                     //(BarChart) 특정년도의 월별 수시점검한 위험분류 건수
-                    const barChartResponse = await axios.get('http://localhost:8081/special/statistics/detaildanger', { params: {
-                            year: selectedYear
-                        }, });
+                    const barChartResponse = await axios.get('http://localhost:8081/special/statistics/detaildanger', { params: {year: selectedYear} });
                     const specialDangerData = barChartResponse.data; //백엔드에서 받아온 데이터
 
                     const dataByMonth = {};
@@ -162,7 +178,7 @@ function SafetyInspectionStatisticsImg() {
     return (
         <div>
             <Header />
-
+            <div>      안전점검 당해년도 점검 대시보드 페이지입니다</div>
             <div
                 id="Training_time"
                 className="flex items-baseline justify-start"
@@ -178,21 +194,13 @@ function SafetyInspectionStatisticsImg() {
                         value={selectedYear}
                         onChange={handleYearChange}
                     />
-
-                    <button
-                        type="submit"
-                        className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-                        onClick={handleSave}
-                    >
-                        검색
-                    </button>
-
+                    
                 </div>
             </div>
 
 
 
-
+            <div> (수시점검/정기점검) 점검 수 통계</div>
             <div style={{ width: '800px', height: '500px', margin: '0 auto' }}>
                 {lineChartData.length > 0 ? (
                     <ResponsiveLine
@@ -201,54 +209,56 @@ function SafetyInspectionStatisticsImg() {
                         xScale={{ type: 'point' }}
                         yScale={{
                             type: 'linear',
-                            min: 'auto',
-                            max: 'auto',
-                            stacked: true,
+                            min: 0,
+                            max: "auto",
+                            stacked: false,
                             reverse: false
                         }}
-                        yFormat=" >-.2f"
+                        yFormat="-.2f"
                         axisTop={null}
                         axisRight={null}
                         axisBottom={{
                             tickSize: 5,
-                            tickPadding: 1,
+                            tickPadding: 5,
                             tickRotation: 0,
-                            legend: '위험분류',
-                            legendOffset: 32,
+                            legend: '월',
+                            legendOffset: 36,
                             legendPosition: 'middle'
                         }}
                         axisLeft={{
-                            tickSize: 7,
-                            tickPadding: 3,
+                            tickSize: 5,
+                            tickPadding: 5,
                             tickRotation: 0,
-                            legend: '발생 건수',
+                            legend: '점검 건수',
                             legendOffset: -40,
                             legendPosition: 'middle'
                         }}
-                        enableGridX={false}
-                        enableGridY={false}
-                        colors={{ scheme: 'accent' }}
-                        pointSize={7}
-                        pointColor={{ from: 'color', modifiers: [] }}
+                        //enableGridX={false}
+                        //enableGridY={false}
+                        colors={{ scheme: 'category10' }}
+                        pointSize={8}
+                        pointColor={{ theme: 'background' }}
                         pointBorderWidth={2}
                         pointBorderColor={{ from: 'serieColor' }}
                         pointLabelYOffset={-12}
+                        areaOpacity={0.03}
+                        enableArea={true}
                         useMesh={true}
+
                         legends={[
                             {
-                                anchor: 'top-left',
+                                anchor: 'bottom-right',
                                 direction: 'column',
                                 justify: false,
-                                translateX: 21,
-                                translateY: 0,
+                                translateX: 121,
+                                translateY: -13,
+                                itemWidth: 100,
+                                itemHeight: 25,
                                 itemsSpacing: 6,
-                                itemDirection: 'left-to-right',
-                                itemWidth: 80,
-                                itemHeight: 20,
-                                itemOpacity: 0.75,
-                                symbolSize: 20,
+                                symbolSize: 19,
                                 symbolShape: 'circle',
-                                symbolBorderColor: 'rgba(0, 0, 0, .5)',
+                                itemDirection: 'left-to-right',
+                                itemTextColor: '#777',
                                 effects: [
                                     {
                                         on: 'hover',
@@ -263,8 +273,9 @@ function SafetyInspectionStatisticsImg() {
                     />
                 ) : null}
             </div>
-            안전점검 대시보드 페이지입니다
 
+
+            <div>  (수시점검) 당해 점검발생 건 - 위험분류 통계</div>
             <div style={{ height: '350px' }}>
                 {barChartData.length > 0 ? (
                     <ResponsiveContainer width={1200} height="100%">
