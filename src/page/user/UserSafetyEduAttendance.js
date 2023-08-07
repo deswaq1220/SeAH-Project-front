@@ -133,8 +133,8 @@ function UserSafetyEduAttendance() {
         console.error("Error fetching eduTitle:", error);
       });
 
-   // fetchEduList(); // 데이터 가져오기 함수 호출
-  //}, [eduId]); // eduId를 두 번째 인자로 넣어줌으로써 eduId가 변경될 때마다 useEffect가 실행되도록 함
+    fetchEduList(); // 데이터 가져오기 함수 호출
+  }, [eduId]); // eduId를 두 번째 인자로 넣어줌으로써 eduId가 변경될 때마다 useEffect가 실행되도록 함
 
   return (
     <div>
