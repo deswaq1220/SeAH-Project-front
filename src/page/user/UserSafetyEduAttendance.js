@@ -68,8 +68,11 @@ function UserSafetyEduAttendance() {
 
     // 출석 등록 요청 보내기
     axios
-      .post(`http://172.20.20.252:8081/usereduatten/register/${eduId}`, requestData, {
-        //http://172.20.10.24:8081/usereduatten/register 이거는 진짜 사용할때
+      .post(
+        // `http://172.20.20.252:8081/usereduatten/register/${eduId}`, 
+        `http://localhost:8081/usereduatten/register/${eduId}`, 
+        requestData, {
+        //http://localhost:8081/usereduatten/register 이거는 진짜 사용할때
         headers: {
           "Content-Type": "application/json",
         },

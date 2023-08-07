@@ -52,8 +52,11 @@ function SafetyEducationMain() {
       try {
         const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
         const currentYear = getYear(currentDate);
-        const response = await axios.get("http://172.20.20.252:8081/edumain", {
+        const response = await axios.get(
+          // "http://172.20.20.252:8081/edumain", {
+          `http://localhost:8081/edumain`, {
           params: {
+            year: currentYear,
             month: currentMonth,
           },
         });
@@ -190,6 +193,12 @@ function SafetyEducationMain() {
                         scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
+                        교육일
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
                         첨부파일
                       </th>
                       <th
@@ -236,6 +245,9 @@ function SafetyEducationMain() {
                               {edu.eduContent}
                             </Link>
                           </div>
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                          {edu.eduStartTime}
                         </td>
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
                           <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">

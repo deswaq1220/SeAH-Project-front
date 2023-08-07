@@ -33,10 +33,15 @@ function EduAttenStatics() {
       try {
         const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
         const currentYear = getYear(currentDate);
-        const response = await axios.get("http://172.20.20.252:8081/edustatistics/getmonth", {
+        const response = await axios.get(
+          // "http://172.20.20.252:8081/edustatistics/getmonth", 
+          "http://localhost:8081/edustatistics/getmonth", 
+          {
           params: {
             eduCategory: selectedCategory,
+            year: currentYear,
             month: currentMonth,
+            name: ""
           },
         });
         const sortedAttendeesList = response.data.sort((a, b) => {
@@ -58,9 +63,12 @@ function EduAttenStatics() {
   const handleSearch = async () => {
     try {
 
-      const response = await axios.get("http://172.20.20.252:8081/edustatistics/getmonth", {
+      const response = await axios.get(
+        // "http://172.20.20.252:8081/edustatistics/getmonth", {
+        "http://localhost:8081/edustatistics/getmonth", {
 
         params: {
+          year : currentDate.getFullYear(),
           eduCategory: selectedCategory,
           month: selectedMonth,
           department: searchDepartment,
@@ -171,7 +179,12 @@ function EduAttenStatics() {
             {categories.map((category) => (
               <button
                 key={category}
-                onClick={() => setSelectedCategory(category)}
+                // onClick={() => setSelectedCategory(category); handleSearch;}
+                onClick={() => {
+                  setSelectedCategory(category);
+                  
+                }}
+                
                 className={`px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium ${selectedCategory === category
                   ? "text-white bg-seahColor hover:bg-seahDeep focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-seahColor"
                   : "text-seahColor hover:text-seahDeep"
@@ -206,6 +219,11 @@ function EduAttenStatics() {
           <input
             type="text"
             onChange={(e) => setSearchName(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.keyCode === 13) {
+                handleSearch();
+              }
+            }}
             value={searchName}
             className="mt-1 block w-full border-gray-300 shadow-sm focus:ring-seahColor focus:border-seahColor sm:text-sm rounded-md"
           />
