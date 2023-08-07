@@ -1,5 +1,5 @@
 import UserHeader from "../../components/UserHeader";
-import { Link } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 // import { CheckCircleIcon } from "@heroicons/react/20/solid";
 
 import {CheckCircleIcon ,XCircleIcon } from "@heroicons/react/24/outline";
@@ -82,7 +82,6 @@ export default function Userfrequent() {
 
 
 
-
   return (
     <div className="container mx-auto sm:px-6 lg:px-8">
       <UserHeader />
@@ -98,7 +97,9 @@ export default function Userfrequent() {
               value= {`${masterdataPart} / ${masterdataFacility}`}
               readOnly
           />
-          <Link to="/userfrequentreg">
+
+          {/*수시점검 등록하기 클릭 시 등록페이지 이동*/}
+          <Link to= {`/special/new/${masterdataPart}/${masterdataFacility}`}>
 
           <button
             type="button"
