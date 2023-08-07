@@ -3,10 +3,75 @@ import {useEffect, useState} from "react";
 import axios from 'axios';
 //import React, { PureComponent } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-//import { ResponsiveLine } from '@nivo/line'
-
+import { ResponsiveLine } from '@nivo/line'
+import useSafetyEduForm from "../../useHook/useSafetyEduForm";
 function SafetyInspectionStatisticsImg() {
-    //const [lineChartData, setLineChartData] = useState([]);
+
+    //공통: 년도입력, 기본값은 당해로 지정되어 있음
+    const seoulTime = new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" });
+    const currentYear = new Date(seoulTime).getFullYear();
+    const [selectedYear, setSelectedYear] = useState(currentYear);
+
+    const handleYearChange = (event) => {
+        setSelectedYear(parseInt(event.target.value));
+    };
+
+    const handleSave = async () => {
+        try {
+            const barChartResponse = await axios.get("http://localhost:8081/special/statistics/detaildanger", {
+                params: {
+                    year: selectedYear,
+                },
+            });
+            // 백엔드로부터 받은 데이터 처리
+            console.log("백엔드 응답 데이터:", barChartResponse.data);
+        } catch (error) {
+            console.error("백엔드 요청 에러:", error);
+        }
+    };
+
+
+
+    //(LineChart) 특정년도의 수시점검과 정기점검 건수
+    const [lineChartData, setLineChartData] = useState([]);
+    const {
+        selected,
+        selectedDuty,
+        isCompleted,
+        uploadedFiles,
+        error,
+        formData,
+        handleChange,
+        handleStartTimeChange,
+        // handleEndTimeChange,
+        handleCreate,
+        onDrop,
+        deleteFile,
+        handleFileChange,
+        getRootProps,
+        getInputProps,
+        isDragActive,
+        formatTimeRange,
+        handleListboxChange,
+        handleDutyChange,
+        navigate,
+        handleSubmit,
+        selectedEtcTime,
+        calculateTotalTime,
+        handleEtcTimeChange,
+        selectedStartTime,
+        qrValue,
+        setQrValue,
+        resetForm,
+        showNotification,
+    } = useSafetyEduForm();
+
+
+
+
+
+
+    //(BarChart) 특정년도의 월별 수시점검한 위험분류 건수
     const [barChartData, setBarChartData] = useState([]);
     const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
     // 모든 dangerKind를 추출하여 하나의 배열로 모으기
@@ -25,23 +90,37 @@ function SafetyInspectionStatisticsImg() {
         return dataForAllMonths;
     };
 
+
+
         useEffect(() => {
+
+            if (selectedYear) {
+                fetchData();
+            }
+        }, [selectedYear]);
+
+
+
+
             const fetchData = async () => {
                 try {
-                    //const lineChartResponse = await axios.get('http://localhost:8081/special/statistics/dangerandmonth', { params: { year: 2023, month: 7 } });
-                    //setLineChartData(lineChartResponse.data);
 
-                    const barChartResponse = await axios.get('http://localhost:8081/special/statistics/detaildanger', { params: { year: 2023} });
+                    //(LineChart) 특정년도의 수시점검과 정기점검 건수
+                    const lineChartResponse = await axios.get('http://localhost:8081/special/statistics/dangerandmonth', { params: { year: 2023, month: 7 } });
+                    setLineChartData(lineChartResponse.data);
+
+
+                    //(BarChart) 특정년도의 월별 수시점검한 위험분류 건수
+                    const barChartResponse = await axios.get('http://localhost:8081/special/statistics/detaildanger', { params: {
+                            year: selectedYear,
+                        }, });
                     const specialDangerData = barChartResponse.data; //백엔드에서 받아온 데이터
-                    console.log("====barChartResponse:", barChartResponse); // 백엔드에서 받은 응답 로그
-                    console.log("====specialDangerData:", specialDangerData); // 데이터 확인 로그
 
                     const dataByMonth = {};
                     const allDangerKinds = specialDangerData.reduce((acc, data) => {
                         return [...acc, ...Object.keys(data).filter((key) => key !== 'month')];
                     }, []);
                     setUniqueDangerKinds([...new Set(allDangerKinds)]);
-
 
                     specialDangerData.forEach((data) => {
                         const month = data.month;
@@ -55,22 +134,16 @@ function SafetyInspectionStatisticsImg() {
                         });
                     });
 
-                    console.log("dataByMonth:", dataByMonth);
-
                     const barChartDataWithAllMonths = generateDataForAllMonths(dataByMonth, allDangerKinds);
 
-
                     setBarChartData(barChartDataWithAllMonths);
-                    console.log("가져온 데이터 출력값:    ", barChartDataWithAllMonths);
-                    console.log("uniqueDangerKinds:", uniqueDangerKinds);
 
                 } catch (error) {
                     console.error("불러온 데이터에 에러가 발생했습니다:", error);
                 }
             };
 
-            fetchData();
-        }, []);
+
 
     const formatCount = (value) => {
         return Math.round(value);
@@ -89,7 +162,38 @@ function SafetyInspectionStatisticsImg() {
     return (
         <div>
             <Header />
-{/*            <div style={{ width: '800px', height: '500px', margin: '0 auto' }}>
+
+            <div
+                id="Training_time"
+                className="flex items-baseline justify-start"
+            >
+              <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
+                검색년도
+              </span>
+                <div className="mt-2">
+                    <input
+                        type="number"
+                        id="yearInput"
+                        className="block w-56 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
+                        value={selectedYear}
+                        onChange={handleYearChange}
+                    />
+
+                    <button
+                        type="submit"
+                        className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                        onClick={handleSave}
+                    >
+                        검색
+                    </button>
+
+                </div>
+            </div>
+
+
+
+
+            <div style={{ width: '800px', height: '500px', margin: '0 auto' }}>
                 {lineChartData.length > 0 ? (
                     <ResponsiveLine
                         data={lineChartData}
@@ -158,7 +262,7 @@ function SafetyInspectionStatisticsImg() {
                         ]}
                     />
                 ) : null}
-            </div>*/}
+            </div>
             안전점검 대시보드 페이지입니다
 
             <div style={{ height: '350px' }}>
