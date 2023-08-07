@@ -106,13 +106,13 @@ function SafetyInspectionStatisticsImg() {
                 try {
 
                     //(LineChart) 특정년도의 수시점검과 정기점검 건수
-                    const lineChartResponse = await axios.get('http://localhost:8081/special/statistics/dangerandmonth', { params: { year: 2023, month: 7 } });
-                    setLineChartData(lineChartResponse.data);
+                    const lineChartResponse = await axios.get('http://localhost:8081/special/statistics/dangerandmonth', { params: { year: 2023, month:7} });
+                    specialCountData(lineChartResponse.data);
 
 
                     //(BarChart) 특정년도의 월별 수시점검한 위험분류 건수
                     const barChartResponse = await axios.get('http://localhost:8081/special/statistics/detaildanger', { params: {
-                            year: selectedYear,
+                            year: selectedYear
                         }, });
                     const specialDangerData = barChartResponse.data; //백엔드에서 받아온 데이터
 
