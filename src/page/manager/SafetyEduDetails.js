@@ -81,13 +81,15 @@ export default function SafetyEduDetails() {
     const fetchEduDetail = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8081/edudetails/${eduId}`,
+          `http://172.20.10.5:8081/edudetails/${eduId}`,
           {
             // // "http://172.20.10.5:3000/edudetails/${eduId}"
           }
         );
 //        setUploadedFiles(response.data.eduFiles);
         setEduData({ ...response.data, eduFiles: response.data.eduFiles });
+        console.log("파일이름 찾기");
+        console.log(eduData);
         // console.log(response.data); // 확인용 로그
         // console.log(eduData);
       } catch (error) {
@@ -131,7 +133,7 @@ export default function SafetyEduDetails() {
         강사: `${eduData.eduInstructor}`,
         작성자: eduData.eduWriter,
         교육대상자: eduData.eduTarget,
-        파일첨부: eduData.eduFiles,
+        파일첨부: eduData.eduFiles[0],
         설명: "T는 전체, F는 현장직 O는 사무직입니다",
       },
     ];

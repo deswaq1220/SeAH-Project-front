@@ -114,7 +114,7 @@ function UserSafetyEduAttendance() {
     const fetchEduList = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8081/edudetails/${eduId}`
+          `http://172.20.10.5:8081/edudetails/${eduId}`
         );
         console.log(response.data); // 서버로부터 받은 데이터 확인
         setEduList(response.data); // 해당 아이디에 해당하는 데이터를 상태 변수에 저장
@@ -123,7 +123,7 @@ function UserSafetyEduAttendance() {
       }
     };
     // GET 요청을 통해 eduTitle 가져오기
-    axios.get(`http://localhost:8081/usereduatten/register/${eduId}`)
+    axios.get(`http://172.20.10.5:8081/usereduatten/register/${eduId}`)
       .then((response) => {
         // 응답 데이터에서 eduTitle 값을 추출하여 상태 업데이트
         setEduTitle(response.data.eduTitle);
