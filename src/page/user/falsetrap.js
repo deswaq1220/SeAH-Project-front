@@ -13,7 +13,7 @@ export default function Falsetrap({onFormDataChange}){
   const { masterdataPart } = useParams(); // url 영역 파라미터
   const { masterdataFacility } = useParams(); // url 설비 파라미터
   const [specialTrapList, setSpecialTrapList] = useState([]) // 실수함정List
-  const [trapSelected, setTrapSelected] = useState([]); //  실수함정
+  const [trapSelected, setTrapSelected] = useState(""); //  실수함정
 
 
   // 실수함정 get
@@ -23,7 +23,6 @@ export default function Falsetrap({onFormDataChange}){
           .get(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`)
           .then((response) => {
             const speTrapListFromBack = response.data.specialTrapList;
-
             const speTrapData = speTrapListFromBack.map((item) => {
               return {
                 trapMenu : item.trapMenu,
@@ -31,7 +30,7 @@ export default function Falsetrap({onFormDataChange}){
               };
             });
             setSpecialTrapList(speTrapData);
-            console.log(speTrapData);
+            setTrapSelected(speTrapData[0]);
           })
           .catch((error) => {
             console.error("Error fetching data: ", error);

@@ -12,12 +12,13 @@ import Falsetrap from "./falsetrap";
 import RiskAssessment from "./riskAssessment";
 import InspectionDetails from "./Inspectiondetails";
 import ActionRquest from "./actionrequest";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 import data from "bootstrap/js/src/dom/data";
 import {toast} from "react-toastify";
 import Dangersource from "./sourceDanger";
 import IsCompelete from "./isCompelete";
+
 
 
 function classNames(...classes) {
@@ -102,6 +103,9 @@ function UserfrequentReg() {
         setSpeComplete(selected);
     };
 
+
+    const navigate = useNavigate();
+
     const handleFormSubmit = () => {
         const requestData = {
             speEmpNum,
@@ -136,6 +140,9 @@ function UserfrequentReg() {
                     autoClose: 3000, // 알림이 3초 후에 자동으로 사라짐
                     hideProgressBar: true,
                 });
+
+             // 저장성공시 해당설비의 리스트 페이지
+             navigate(`/special/list/${masterdataPart}/${masterdataFacility}`);
             })
             .catch((error) => {
                 console.log(requestData);
@@ -146,6 +153,7 @@ function UserfrequentReg() {
 
 
     return (
+
 
         <>
             <UserHeader/>
@@ -205,6 +213,7 @@ function UserfrequentReg() {
 
             </div>
         </>
+
     );
 }
 

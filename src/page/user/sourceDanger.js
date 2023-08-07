@@ -13,7 +13,7 @@ export default function Dangersource({onFormDataChange}) {
   const { masterdataPart } = useParams(); // url 영역 파라미터
   const { masterdataFacility } = useParams(); // url 설비 파라미터
   const [specialCauseList, setSpecialCauseList] = useState([]);       // 위험원인List
-  const [sourceSelected, setSourceSelected] = useState([]);
+  const [sourceSelected, setSourceSelected] = useState("");
   const [customSource, setCustomSource] = useState("");
 
 
@@ -32,7 +32,7 @@ export default function Dangersource({onFormDataChange}) {
               };
             });
             setSpecialCauseList(speCauseData);
-            console.log(speCauseData);
+            setSourceSelected(speCauseData[0]);
           })
           .catch((error) => {
             console.error("Error fetching data: ", error);

@@ -15,7 +15,7 @@ export default function Danger({onFormDataChange}){
   const { masterdataPart } = useParams(); // url 영역 파라미터
   const { masterdataFacility } = useParams(); // url 설비 파라미터
   const [specialDangerList, setSpecialDangerList] = useState([]) // 위험분류List
-  const [selectedDanger, setSelectedDanger] = useState([]); // 위험분류
+  const [selectedDanger, setSelectedDanger] = useState(""); // 위험분류
 
   // 위험분류 get
   useEffect(() => {
@@ -24,7 +24,6 @@ export default function Danger({onFormDataChange}){
           .get(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`)
           .then((response) => {
             const speDangerListFromBack = response.data.specialDangerList;
-
             const speDangerData = speDangerListFromBack.map((item) => {
               return {
                 dangerMenu : item.dangerMenu,
@@ -32,7 +31,7 @@ export default function Danger({onFormDataChange}){
               };
             });
             setSpecialDangerList(speDangerData);
-            console.log(speDangerData);
+            setSelectedDanger(speDangerData[0]);  // 리스트의 첫번째값으로 세팅
           })
           .catch((error) => {
             console.error("Error fetching data: ", error);
