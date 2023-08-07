@@ -169,6 +169,8 @@ const useSafetyEduForm = (eduData) => {
 
   const onDrop = useCallback(
     (acceptedFiles) => {
+      console.log("파일 확인");
+      console.log(acceptedFiles.file);
       setUploadedFiles([...uploadedFiles, ...acceptedFiles]);
 
       for (const file of acceptedFiles) {

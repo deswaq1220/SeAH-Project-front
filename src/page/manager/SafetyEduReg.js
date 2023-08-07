@@ -14,6 +14,13 @@ import { useDropzone } from "react-dropzone";
 import QRCode from "qrcode.react";
 import axios from "axios";
 import useSafetyEduForm from "../../useHook/useSafetyEduForm";
+import { FilePond, registerPlugin } from 'react-filepond';
+import 'filepond/dist/filepond.min.css'; // 스타일링을 위한 CSS
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+
+
+
 const people = [
   {
     id: 1,
@@ -22,22 +29,22 @@ const people = [
   {
     id: 2,
     name: "CREW",
-    time: 30
+    time: 30,
   },
   {
     id: 3,
     name: "DM",
-    time: 20
+    time: 20,
   },
   {
     id: 4,
     name: "MANAGE",
-    time : 120
+    time: 120,
   },
   {
     id: 5,
     name: "ETC",
-    time: 30
+    time: 30,
   },
 ];
 
@@ -97,6 +104,9 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
+// 추가 플러그인을 라이브러리에 등록
+registerPlugin(FilePondPluginImagePreview);
+
 const MAX_FILENAME_LENGTH = 30;
 const FILENAME_SUFFIX = "...";
 
@@ -115,7 +125,6 @@ const TruncatedFileName = ({ fileName }) => {
 };
 
 function SafetyEduReg() {
-
   const {
     selected,
     selectedDuty,
@@ -147,8 +156,6 @@ function SafetyEduReg() {
     resetForm,
     showNotification,
   } = useSafetyEduForm();
-  
-  
 
   return (
     <div>
@@ -531,7 +538,7 @@ function SafetyEduReg() {
                 파일첨부
               </span>
 
-              <div id="fileuploader" className="flex flex-col items-center">
+              {/* <div id="fileuploader" className="flex flex-col items-center">
                 <div
                   {...getRootProps()}
                   className={`dropzone ${
@@ -584,7 +591,7 @@ function SafetyEduReg() {
                     </div>
                   ))}
                 </div>
-              </div>
+              </div> */}
             </div>
 
             <div id="writer" className="flex items-baseline justify-start">
@@ -603,7 +610,7 @@ function SafetyEduReg() {
                     id="eduwriter"
                     value={formData.eduWriter}
                     onChange={handleChange}
-                     autoComplete="off"
+                    autoComplete="off"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
                   />
                 </div>
@@ -623,9 +630,25 @@ function SafetyEduReg() {
                 저장하기
               </button>
             </div>
+            <h1>파일 업로드</h1>
+              <FilePond
+                allowMultiple={true} // 다중 파일 업로드 허용
+                maxFiles={5} // 최대 파일 수 설정
+                // server={`http:localhost:8081/edureg`} // 파일 업로드를 처리하는 서버 엔드포인트
+                // 엔드포인트는 백엔드 구현되면 연결요
+                onupdatefiles={onDrop
+
+                //   (fileItems) => {
+                //   // 업로드한 파일 정보를 처리할 콜백 함수
+                //   console.log(fileItems.map((fileItem) => fileItem.file));
+                // }
+              }
+              />
           </form>
         </div>
       </div>
+
+      
       {/* {showNotification && <Notification />} */}
     </div>
   );

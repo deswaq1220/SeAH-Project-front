@@ -34,7 +34,7 @@ function UserMain() {
   return (
     <div id="wrap2">
     <div className="bg-white">
-      <div className="mx-auto max-w-2xl px-4 lg:max-w-7xl lg:px-8">
+      <div className="mx-auto max-w-2xㅁl px-4 lg:max-w-7xl lg:px-8">
       <div className="logoeara mt-4">
       <img src={logo} className="w-80 " />
       <p className=" text-seahColor text-lg ">안전도 <b>SeAH</b>답게!</p> 
