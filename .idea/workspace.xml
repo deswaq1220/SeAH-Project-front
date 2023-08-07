@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ea7e91ae-16cf-45f3-8a10-99db0e4e0dc4" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/UserfrequentReg.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserfrequentReg.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/danger.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/danger.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/falsetrap.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/falsetrap.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/injured.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/injured.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/sourceDanger.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/sourceDanger.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,6 +31,9 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2T3wsvKgr45aFUnESULXRG4nPkF" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -35,30 +43,18 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
+    "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "C:/SpringBootWork/SeAH-Project-front",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.sourceCode.Shell Script",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\IntelliJ IDEA 2023.1.1\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager">
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="SeAH-Project-front" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="SeAH-Project-front" />
-      <option name="filePath" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -72,6 +68,15 @@
       <workItem from="1690417906945" duration="2657000" />
       <workItem from="1690449110811" duration="1522000" />
       <workItem from="1690509547525" duration="5117000" />
+      <workItem from="1691021573184" duration="17941000" />
+      <workItem from="1691060443517" duration="3272000" />
+      <workItem from="1691108075597" duration="27789000" />
+      <workItem from="1691212795821" duration="8800000" />
+      <workItem from="1691239906256" duration="1226000" />
+      <workItem from="1691241247221" duration="4901000" />
+      <workItem from="1691297623723" duration="9055000" />
+      <workItem from="1691307940639" duration="2016000" />
+      <workItem from="1691367515265" duration="15865000" />
     </task>
     <servers />
   </component>

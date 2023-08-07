@@ -14,7 +14,7 @@ const department = [
   },
   {
     id: 2,
-    name: "소형연압팀",
+    name: "소형압연팀",
   },
   {
     id: 3,
@@ -45,7 +45,7 @@ function UserSafetyEduAttendance() {
   const year = today.getFullYear();
   const month = String(today.getMonth() + 1).padStart(2, "0");
   const day = String(today.getDate()).padStart(2, "0");
-
+  const [eduTitle,setEduTitle] = useState("")
   const formattedDate = `${year}. ${month}. ${day}`;
   const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
@@ -66,7 +66,7 @@ function UserSafetyEduAttendance() {
     };
 
     // 출석 등록 요청 보내기
-    axios
+
       .post(`http://172.20.10.5:8081/usereduatten/register/`, requestData, {
         //http://172.20.10.5:8081/usereduatten/register 이거는 진짜 사용할때
         headers: {
@@ -113,7 +113,7 @@ function UserSafetyEduAttendance() {
     const fetchEduList = async () => {
       try {
         const response = await axios.get(
-          `http://172.20.10.5:8081/edudetails/${eduId}`
+          `http://localhost:8081/edudetails/${eduId}`
         );
         console.log(response.data); // 서버로부터 받은 데이터 확인
         setEduList(response.data); // 해당 아이디에 해당하는 데이터를 상태 변수에 저장
@@ -131,7 +131,6 @@ function UserSafetyEduAttendance() {
         // 오류 처리
         console.error("Error fetching eduTitle:", error);
       });
-  }, [eduId]);
 
     fetchEduList(); // 데이터 가져오기 함수 호출
   }, [eduId]); // eduId를 두 번째 인자로 넣어줌으로써 eduId가 변경될 때마다 useEffect가 실행되도록 함
