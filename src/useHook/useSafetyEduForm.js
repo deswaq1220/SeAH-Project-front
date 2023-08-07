@@ -228,7 +228,7 @@ const useSafetyEduForm = (eduData) => {
     }
   };
 
-// 기타 카테고리에서 셀렉트 박스의 옵션을 변경했을 때 호출되는 함수
+// 기타 카테고리에서 셀렉트 박스의 옵션을 변경했을 때 호출되는 함수ㅈ
   const handleOptionChange = (e) => {
     const { value } = e.target;
     setSelectedEtcTime(Number(value)); // 선택한 값을 숫자로 변환하여 selectedEtcTime 상태를 업데이트
