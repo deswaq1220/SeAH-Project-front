@@ -60,8 +60,6 @@ function App() {
         <Route path="/userattendance/register/:eduId" element={<UserSafetyEduAttendance/>}></Route>{/* 사용자 사원출석페이지 */}
         {/*<Route path="/userfrequentreg" element={<UserfrequentReg/>}></Route>/!* 사용자 점검등록페이지 *!/*/}
         <Route path="/special/new/:masterdataPart/:masterdataFacility" element={<UserfrequentReg/>}></Route>{/* 사용자 점검등록페이지 */}
-
-        
         <Route path="/404" element={<Error/>}></Route> {/* 에러 */}
       </Routes>
       <ToastContainer/>

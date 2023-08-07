@@ -16,20 +16,6 @@ export default function Injured({onFormDataChange}) {
   // const [injuredSelected, setInjuredSelected] = useState(injured[0]); //  부상부위
   const [injuredSelected, setInjuredSelected] = useState([]); //  부상부위
   const [customInjured, setCustomInjured] = useState("");         // 기타[직접선택] 입력된 값
-  // const [formData, setFormData] = useState({
-  //     speActContent: "",
-  //     speActEmail: "",
-  //     speActPerson: "",
-  //     speCause: "",
-  //     speContent:"",
-  //     speDanger:"",
-  //     speEmail:"",
-  //     speEmpNum:"",
-  //     speInjure: "",
-  //     spePerson:"",
-  //     speRiskAssess:"",
-  //     speTrap:"",
-  // });
 
   // 부상부위 get
   useEffect(() => {

@@ -1,5 +1,5 @@
 import UserHeader from "../../components/UserHeader";
-import {Fragment, useEffect, useState} from "react";
+import React, {Fragment, useEffect, useState} from "react";
 import {Listbox, Transition} from "@headlessui/react";
 import {CheckIcon, ChevronUpDownIcon} from "@heroicons/react/20/solid";
 import DangerImg from "../../img/danger.png";
@@ -17,9 +17,17 @@ import axios from "axios";
 import data from "bootstrap/js/src/dom/data";
 import {toast} from "react-toastify";
 import Dangersource from "./sourceDanger";
+import IsCompelete from "./isCompelete";
+
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
+}
+
+class IsComplete extends React.Component<{ onFormDataChange: handleIsCompeleteDataChange }> {
+ render() {
+  return null;
+ }
 }
 
 function UserfrequentReg() {
@@ -37,13 +45,15 @@ function UserfrequentReg() {
     const [speActContent, setSpeActContent] = useState("");
     const [speActPerson, setSpeActPerson] = useState("");
     const [speActEmail, setSpeActEmail] = useState("");
+    const [speComplete, setSpeComplete] = useState("");
 
 
-    // Inspector 콜백 함수 : 점검자(이름, 이메일, 사원번호)
-    const handleInspectorDataChange = (formData) => {
-        setSpeEmpNum(formData);
-        setSpePerson(formData);
-        setSpeEmail(formData);
+
+ // Inspector 콜백 함수 : 점검자(이름, 이메일, 사원번호)
+    const handleInspectorDataChange = (inspectorForm) => {
+        setSpeEmpNum(inspectorForm.employeenumber);
+        setSpePerson(inspectorForm.inspectorname);
+        setSpeEmail(inspectorForm.inspectoremail);
     };
 
     // Danger 콜백함수 : 위험분류
@@ -68,7 +78,7 @@ function UserfrequentReg() {
 
     // RiskAssessment 콜백 : 위험성평가
     const handleRiskAssessmentDataChange = (riskAssessmentSelected) => {
-        setSpeRiskAssess(riskAssessmentSelected.name);
+        setSpeRiskAssess(riskAssessmentSelected);
     };
 
     // InspectionDetails 콜백 : 점검내용
@@ -87,6 +97,11 @@ function UserfrequentReg() {
         setSpeActContent(e.target.value);
     }
 
+    // IsCompelete 콜백 : 완료여부
+    const handleIsCompeleteDataChange = (selected) => {
+        setSpeComplete(selected);
+    };
+
     const handleFormSubmit = () => {
         const requestData = {
             speEmpNum,
@@ -101,6 +116,7 @@ function UserfrequentReg() {
             speActPerson,
             speActEmail,
             speActContent,
+            speComplete,
         };
         console.log(requestData); // 요청 데이터 콘솔에 출력
 
@@ -169,6 +185,9 @@ function UserfrequentReg() {
                 </div>
             </div>
             <ActionRquest onFormDataChange={handleActionRequestDetailsDataChange}/> {/* 조치요청 */}
+            {/* 혜영추가-완료여부 */}
+            <IsCompelete onFormDataChange={handleIsCompeleteDataChange}/> {/* 완료여부 */}
+
             <div className="flex justify-center w-full mt-8 mb-10">
                 <button
                     type="button"

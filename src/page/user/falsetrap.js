@@ -4,20 +4,6 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import {useParams} from "react-router-dom";
 import axios from "axios";
 
-// // 실수함정
-// const falsetrap = [
-//   { id: 1, name: "[N/A]" },
-//   { id: 2, name: "[자만심]" },
-//   { id: 3, name: "[시간압박]" },
-//   { id: 4, name: "[미흡한 의사소통]" },
-//   { id: 5, name: "[주의산만]" },
-//   { id: 6, name: "[처음작업]" },
-//   { id: 7, name: "[비일상작업]" },
-//   { id: 8, name: "[과중한 업무부하]" },
-//   { id: 9, name: "[4일이상 업무공백]" },
-//   { id: 10, name: "[근무교대 시점]" },
-// ];
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
