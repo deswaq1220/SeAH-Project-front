@@ -203,7 +203,7 @@ const useSafetyEduForm = (eduData) => {
 
   
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ noClick: true , onDrop, });
 
 
   // 교육 카테고리를 선택했을 때 호출되는 함수
