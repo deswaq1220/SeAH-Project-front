@@ -179,13 +179,10 @@ const useSafetyEduForm = (eduData) => {
   );
 
   const deleteFile = (index) => {
-    const updatedFiles = uploadedFiles.filter((_, i) => i !== index);
+    const updatedFiles = [...uploadedFiles];
+    updatedFiles.splice(index, 1);
     setUploadedFiles(updatedFiles);
-    setFormData((prevData) => ({
-      ...prevData,
-      files: updatedFiles,
-    }));
-    console.log("삭제는 됩니다? 하지만 화면에는 남아있습니다?")
+    setFormData(prevData => ({ ...prevData, files: updatedFiles })); // Update formData with new file array
   };
 
   const handleFileChange = (event) => {
