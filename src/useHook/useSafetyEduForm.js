@@ -203,7 +203,7 @@ const useSafetyEduForm = (eduData) => {
 
   
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ noClick: true , onDrop, });
 
 
   // 교육 카테고리를 선택했을 때 호출되는 함수
@@ -285,7 +285,7 @@ const useSafetyEduForm = (eduData) => {
 
     
       try {
-        const response = await axios.post(`http://localhost:8081/edureg` ,
+        const response = await axios.post(`http://172.20.10.5:8081/edureg` ,
         // // "http://172.20.10.5:3000/edureg"
         formDataWithFile, {
           headers: {
