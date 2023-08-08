@@ -285,7 +285,7 @@ const useSafetyEduForm = (eduData) => {
 
     
       try {
-        const response = await axios.post(`http://172.20.10.5:8081/edureg` ,
+        const response = await axios.post(`http://172.20.10.43:8081/edureg` ,
         // // "http://172.20.10.5:3000/edureg"
         formDataWithFile, {
           headers: {
