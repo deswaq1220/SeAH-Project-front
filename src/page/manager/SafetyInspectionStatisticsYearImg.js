@@ -4,8 +4,8 @@ import axios from 'axios';
 //import React, { PureComponent } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { ResponsiveLine } from '@nivo/line'
-//import useSafetyEduForm from "../../useHook/useSafetyEduForm";
 
+//네비게이션
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
@@ -18,71 +18,13 @@ function SafetyInspectionStatisticsYearImg() {
     const currentYear = new Date(seoulTime).getFullYear();
     const [selectedYear, setSelectedYear] = useState(currentYear);
 
-    //이벤트1
+    //이벤트1: 연도 검색이벤트
     const handleYearChange = (event) => {
         setSelectedYear(parseInt(event.target.value));
     };
-    //이벤트2
-    const handleSave = async () => {
-        try {
-            const barChartResponse = await axios.get("http://172.20.20.252:8081/special/statistics/detaildanger", {
-                params: {
-                    year: selectedYear,
-                },
-            });
-
-            const lineChartResponse = await axios.get("http://172.20.20.252:8081/statistics/inspectioncount", {
-                params: {
-                    year: selectedYear,
-                },
-            });
-
-            // 백엔드로부터 받은 데이터 처리
-            console.log("백엔드 응답 데이터(lineChart)):", lineChartResponse.data);
-            console.log("백엔드 응답 데이터2(barChart):", barChartResponse.data);
-        } catch (error) {
-            console.error("백엔드 요청 에러:", error);
-        }
-    };
-
-
 
     //(LineChart) 특정년도의 수시점검과 정기점검 건수
     const [lineChartData, setLineChartData] = useState([]);
-/*    const {
-        selected,
-        selectedDuty,
-        isCompleted,
-        uploadedFiles,
-        error,
-        formData,
-        handleChange,
-        handleStartTimeChange,
-        // handleEndTimeChange,
-        handleCreate,
-        onDrop,
-        deleteFile,
-        handleFileChange,
-        getRootProps,
-        getInputProps,
-        isDragActive,
-        formatTimeRange,
-        handleListboxChange,
-        handleDutyChange,
-        navigate,
-        handleSubmit,
-        selectedEtcTime,
-        calculateTotalTime,
-        handleEtcTimeChange,
-        selectedStartTime,
-        qrValue,
-        setQrValue,
-        resetForm,
-        showNotification,
-    } = useSafetyEduForm();*/
-
-
-
 
 
     //(BarChart) 특정년도의 월별 수시점검한 위험분류 건수
@@ -108,10 +50,10 @@ function SafetyInspectionStatisticsYearImg() {
 
         useEffect(() => {
 
-            /*if (selectedYear) {*/
+            if (selectedYear) {
                 fetchData();
-        });
-      /*  }, [selectedYear]);*/
+            }
+        }, [selectedYear]);
 
 
 
@@ -119,8 +61,8 @@ function SafetyInspectionStatisticsYearImg() {
                 try {
 
                     //(LineChart) 특정년도의 수시점검과 정기점검 건수
-                    const lineChartResponse = await axios.get('http://172.20.20.252:8081/statistics/inspectioncount', { params: { year: selectedYear } });
-                    //const lineChartResponse = await axios.get('http://localhost:8081/statistics/inspectioncount', { params: { year: selectedYear } });
+                    //const lineChartResponse = await axios.get('http://172.20.20.252:8081/statistics/inspectioncount', { params: { year: selectedYear } });
+                    const lineChartResponse = await axios.get('http://localhost:8081/statistics/inspectioncount', { params: { year: selectedYear } });
                     const specialCountData = lineChartResponse.data;
                     console.log("첫번째"+ JSON.stringify(lineChartResponse.data, null, 2));
 
@@ -135,8 +77,8 @@ function SafetyInspectionStatisticsYearImg() {
 
 
                     //(BarChart) 특정년도의 월별 수시점검한 위험분류 건수
-                    const barChartResponse = await axios.get('http://172.20.20.252:8081/special/statistics/detaildanger', { params: {year: selectedYear} });
-                    //const barChartResponse = await axios.get('http://localhost:8081/special/statistics/detaildanger', { params: {year: selectedYear} });
+                    //const barChartResponse = await axios.get('http://172.20.20.252:8081/special/statistics/detaildanger', { params: {year: selectedYear} });
+                    const barChartResponse = await axios.get('http://localhost:8081/special/statistics/detaildanger', { params: {year: selectedYear} });
                     const specialDangerData = barChartResponse.data; //백엔드에서 받아온 데이터
 
                     const dataByMonth = {};
@@ -176,7 +118,8 @@ function SafetyInspectionStatisticsYearImg() {
     const colors = ['rgba(130,205,255,0.8)', 'rgba(158,132,216,0.75)', 'rgba(130,202,157,0.89)', 'rgba(156,132,216,0.9)',
                             'rgba(255,159,180,0.94)', 'rgba(50,44,140,0.88)', '#84bbd8', 'rgba(237,138,76,0.87)',
                             '#f55e5e', 'rgba(150,77,238,0.91)', '#d7549d', 'rgba(121,183,101,0.95)',
-                            'rgba(88,192,182,0.82)', 'rgba(150,52,52,0.76)', '#07796c', 'rgba(239,204,110,0.83)'];
+                            'rgba(88,192,182,0.82)', 'rgba(150,52,52,0.76)', '#07796c', 'rgba(239,204,110,0.83)',
+                            'rgba(7,7,4,0.83)'];
 
 
 
@@ -265,7 +208,7 @@ function SafetyInspectionStatisticsYearImg() {
                 )}
             </Disclosure>
 
-            <div>      안전점검 당해년도 점검 대시보드 페이지입니다</div>
+            <div>      안전점검 당해년도 대시보드 페이지입니다</div>
 
 
 
@@ -406,7 +349,7 @@ function SafetyInspectionStatisticsYearImg() {
                     </BarChart>
                     </ResponsiveContainer>
                 ) : (
-                    <p>데이터를 불러오는 중입니다</p>
+                    <p>데이터를 불러오는 중에 오류가 생겼습니다</p>
                     )}
             </div>
         </div>

@@ -23,6 +23,7 @@ import EduAttenStatics from "./page/manager/EduAttenStatics"
 
 //다인 씀
 import SafetyInspectionStatisticsYearImg from "./page/manager/SafetyInspectionStatisticsYearImg";
+import SafetyInspectionStatisticsMonthImg from "./page/manager/SafetyInspectionStatisticsMonthImg";
 
 function App() {
   console.log(`
@@ -52,7 +53,8 @@ function App() {
         <Route path="/edustatistics/atten" element={<EduAttenStatics/>}></Route>{/* 관리자 안전교육 참가자통계*/}
 
         {/*다인 추가함 */}
-        <Route path="/inspection/statistics/yearimg" element={<SafetyInspectionStatisticsYearImg/>}></Route>{/* 관리자 수시점검통계 대시보드*/}
+        <Route path="/inspection/statistics/yearimg" element={<SafetyInspectionStatisticsYearImg/>}></Route>{/* 관리자 수시점검 연도 상세 분석 통계 대시보드*/}
+        <Route path="/inspection/statistics/monthimg" element={<SafetyInspectionStatisticsMonthImg/>}></Route>{/* 관리자 수시점검 월별통계 대시보드*/}
 
         {/* 사용자  */}
         <Route path="/user" element={<UserMain/>}></Route>  {/* 사용자 메인페이지*/}

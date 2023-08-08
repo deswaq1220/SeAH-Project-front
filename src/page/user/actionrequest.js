@@ -20,8 +20,8 @@ export default function ActionRquest({ onFormDataChange }) {
     function emailFetchDataWithAxios(masterdataPart, masterdataFacility) {
       axios
         .get(
-          `http://172.20.20.252:8081/special/new/${masterdataPart}/${masterdataFacility}`
-          //`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`
+          //`http://172.20.20.252:8081/special/new/${masterdataPart}/${masterdataFacility}`
+          `http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`
         )
         .then((response) => {
           const emailListFromBack = response.data.emailList;
