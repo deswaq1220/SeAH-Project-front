@@ -4,7 +4,7 @@ import axios from 'axios';
 //import React, { PureComponent } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { ResponsiveLine } from '@nivo/line'
-import useSafetyEduForm from "../../useHook/useSafetyEduForm";
+//import useSafetyEduForm from "../../useHook/useSafetyEduForm";
 function SafetyInspectionStatisticsImg() {
 
     //공통: 년도입력, 기본값은 당해로 지정되어 있음
@@ -43,7 +43,7 @@ function SafetyInspectionStatisticsImg() {
 
     //(LineChart) 특정년도의 수시점검과 정기점검 건수
     const [lineChartData, setLineChartData] = useState([]);
-    const {
+/*    const {
         selected,
         selectedDuty,
         isCompleted,
@@ -73,7 +73,7 @@ function SafetyInspectionStatisticsImg() {
         setQrValue,
         resetForm,
         showNotification,
-    } = useSafetyEduForm();
+    } = useSafetyEduForm();*/
 
 
 
@@ -161,9 +161,9 @@ function SafetyInspectionStatisticsImg() {
 
 
 
-    const formatCount = (value) => {
+/*    const formatCount = (value) => {
         return Math.round(value);
-    };
+    };*/
 
     const maxCount = Math.max(barChartData.map((data) => Math.max(Object.values(data).filter((val) => typeof val === 'number'))));
     const colors = ['rgba(130,205,255,0.8)', 'rgba(158,132,216,0.75)', 'rgba(130,202,157,0.89)', 'rgba(156,132,216,0.9)',
@@ -194,7 +194,7 @@ function SafetyInspectionStatisticsImg() {
                         value={selectedYear}
                         onChange={handleYearChange}
                     />
-                    
+
                 </div>
             </div>
 
