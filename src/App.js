@@ -56,12 +56,15 @@ function App() {
 
         {/* 사용자  */}
         <Route path="/user" element={<UserMain/>}></Route>  {/* 사용자 메인페이지*/}
-        {/*<Route path="/userfrequent" element={<Userfrequent/>}></Route>  /!* 사용자 메인페이지*!/*/}
-        <Route path="/special/list/:masterdataPart/:masterdataFacility" element={<Userfrequent/>}></Route>  {/* 사용자 메인페이지*/}
-        <Route path="/userselectInspection" element={<UserSelectInspection/>}></Route>  {/* 사용자 점검선택페이지*/}
         <Route path="/userattendance/register/:eduId" element={<UserSafetyEduAttendance/>}></Route>{/* 사용자 사원출석페이지 */}
         {/*<Route path="/userfrequentreg" element={<UserfrequentReg/>}></Route>/!* 사용자 점검등록페이지 *!/*/}
-        <Route path="/special/new/:masterdataPart/:masterdataFacility" element={<UserfrequentReg/>}></Route>{/* 사용자 점검등록페이지 */}
+
+        {/* 사용자 수시점검 */}
+        <Route path="/special/:masterdataPart/:masterdataFacility" element={<UserSelectInspection/>}></Route>  {/* 사용자 점검선택페이지*/}
+        <Route path="/special/list/:masterdataPart/:masterdataFacility" element={<Userfrequent/>}></Route>  {/* 사용자 수시점검 설비별 리스트페이지*/}
+        <Route path="/special/new/:masterdataPart/:masterdataFacility" element={<UserfrequentReg/>}></Route>{/* 사용자 수시점검등록페이지 */}
+
+
         <Route path="/404" element={<Error/>}></Route> {/* 에러 */}
       </Routes>
       <ToastContainer/>

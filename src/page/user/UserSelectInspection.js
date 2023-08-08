@@ -16,53 +16,8 @@ import {
 } from "@heroicons/react/24/outline";
 import {useEffect, useState} from "react";
 import axios from "axios";
+import {useParams} from "react-router-dom";
 
-const actions = [
-  {
-    title: "정기점검",
-    sub: "공정별 어쩌구,, 뭐시기를 정기점검 데모텍스트",
-    href: "#",
-    icon: ClipboardDocumentListIcon,
-    iconForeground: "text-teal-700",
-    iconBackground: "bg-teal-50",
-  },
-  {
-    title: "수시점검",
-    sub: "공정별 어쩌구,, 뭐시기를 수시점검 데모텍스트",
-    href: "/special/list/:masterdataPart/:masterdataFacility",
-    icon: ClipboardDocumentCheckIcon,
-    iconForeground: "text-purple-700",
-    iconBackground: "bg-purple-50",
-  },
-];
-
-const regular = [
-  // { name: '정기점검', href: '#', icon: UsersIcon, current: false },
-  {
-    name: "점검완료",
-    href: "#",
-    icon: ShieldCheckIcon,
-    count: "5",
-    current: true,
-    iconForeground: "text-green-600",
-  },
-  {
-    name: "미점검",
-    href: "#",
-    icon: XCircleIcon,
-    count: "12",
-    current: false,
-    iconForeground: "text-yellow-600",
-  },
-  {
-    name: "조치필요",
-    href: "#",
-    icon: ShieldExclamationIcon,
-    count: "20+",
-    current: false,
-    iconForeground: "text-red-600",
-  },
-];
 
 
 function classNames(...classes) {
@@ -70,15 +25,69 @@ function classNames(...classes) {
 }
 
 export default function UserSelectInspection() {
-  const [monthlyAll, setMonthlyAll] = useState(0);
-  const [monthlyComplete, setMonthlyComplete] = useState(0);
-  const [monthlyNoComplete, setMonthlyNoComplete] = useState(0);
+  const { masterdataPart } = useParams(); // url 영역 파라미터
+  const { masterdataFacility } = useParams(); // url 설비 파라미터
+
+
+  // function 위에 있던거 function으로 옮겼음
+  const actions = [
+    {
+      title: "정기점검",
+      sub: "공정별 어쩌구,, 뭐시기를 정기점검 데모텍스트",
+      href: "#",
+      icon: ClipboardDocumentListIcon,
+      iconForeground: "text-teal-700",
+      iconBackground: "bg-teal-50",
+    },
+    {
+      title: "수시점검",
+      sub: "공정별 어쩌구,, 뭐시기를 수시점검 데모텍스트",
+      href: `/special/list/${masterdataPart}/${masterdataFacility}`,
+      icon: ClipboardDocumentCheckIcon,
+      iconForeground: "text-purple-700",
+      iconBackground: "bg-purple-50",
+    },
+  ];
+
+  const regular = [
+    // { name: '정기점검', href: '#', icon: UsersIcon, current: false },
+    {
+      name: "점검완료",
+      href: "#",
+      icon: ShieldCheckIcon,
+      count: "5",
+      current: true,
+      iconForeground: "text-green-600",
+    },
+    {
+      name: "미점검",
+      href: "#",
+      icon: XCircleIcon,
+      count: "12",
+      current: false,
+      iconForeground: "text-yellow-600",
+    },
+    {
+      name: "조치필요",
+      href: "#",
+      icon: ShieldExclamationIcon,
+      count: "20+",
+      current: false,
+      iconForeground: "text-red-600",
+    },
+  ];
+
+
+
+  const [monthlyAll, setMonthlyAll] = useState(0);                // 월별 수시점검 실시 정보
+  const [monthlyComplete, setMonthlyComplete] = useState(0);      // 월별 수시점검 완료 정보
+  const [monthlyNoComplete, setMonthlyNoComplete] = useState(0);  // 이번달 deadline 중 조치필요 정보
 
   useEffect(() => {
     // Json값 가져와서 세팅
-    function fetchDataWithAxios() {
+    function fetchDataWithAxios(masterdataPart, masterdataFacility) {
       axios
-          .get("http://localhost:8081/userselectInspection")
+          .get(`http://localhost:8081/special/${masterdataPart}/${masterdataFacility}`)
           .then((response) => {
             const data = response.data;
             // 가져온 데이터로 상태 변수 업데이트
@@ -89,10 +98,12 @@ export default function UserSelectInspection() {
           })
           .catch((error) => {
             console.error("Error fetching data:", error);
+            console.error("에러가?:", error);
           });
     }
-    fetchDataWithAxios();
-  }, []);
+
+    fetchDataWithAxios(masterdataPart, masterdataFacility);
+  }, [masterdataPart, masterdataFacility]);
 
 
   const frequent = [
