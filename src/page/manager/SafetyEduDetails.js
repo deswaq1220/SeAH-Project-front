@@ -20,10 +20,9 @@ export default function SafetyEduDetails() {
     const fetchEduDetail = async () => {
       try {
         const response = await axios.get(
-          `http://172.20.10.43:8081/edudetails/${eduId}`,
-          {
-            // // "http://172.20.10.5:3000/edudetails/${eduId}"
-          }
+          // `http://172.20.20.252:8081/edudetails/${eduId}`,
+            `http://localhost:8081/edudetails/${eduId}`
+          
         );
         setEduData(response.data);
       } catch (error) {
@@ -211,7 +210,7 @@ export default function SafetyEduDetails() {
 
                   <Link to={`/userattendance/register/${eduData.eduId}`}>
                     <QRCode
-                      value={`http://172.20.10.43:3000/userattendance/register/${eduData.eduId}`}
+                      value={`http://172.20.20.252:3000/userattendance/register/${eduData.eduId}`}
                     />
                   </Link>
 

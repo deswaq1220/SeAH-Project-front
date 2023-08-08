@@ -26,16 +26,6 @@ function EduAttenStatics() {
   const [searchDepartment, setSearchDepartment] = useState("부서");
   const [searchName, setSearchName] = useState("");
 
-  const filteredAttendeesList = attendeesList.filter((item) => {
-    const isDepartmentMatched =
-      searchDepartment === "부서" || item.attenDepartment === searchDepartment;
-    const isNameMatched =
-      searchName === "이름" ||
-      item.attenName.toLowerCase().includes(searchName.toLowerCase());
-
-    return isDepartmentMatched && isNameMatched;
-  });
-
 
   useEffect(() => {
     // 현재 월의 로그를 가져오는 함수
@@ -43,10 +33,15 @@ function EduAttenStatics() {
       try {
         const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
         const currentYear = getYear(currentDate);
-        const response = await axios.get("http://localhost:8081/edustatistics/getmonth", {
+        const response = await axios.get(
+          // "http://172.20.20.252:8081/edustatistics/getmonth", 
+          "http://localhost:8081/edustatistics/getmonth", 
+          {
           params: {
             eduCategory: selectedCategory,
+            year: currentYear,
             month: currentMonth,
+            name: ""
           },
         });
         const sortedAttendeesList = response.data.sort((a, b) => {
@@ -64,23 +59,30 @@ function EduAttenStatics() {
     getLogsForCurrentMonth();
   }, [selectedCategory, currentDate]);
 
-  //이름 검색
-  const handleSearch = () => {
-    axios
-      .get("http://localhost:8081/edustatistics/getmonth", {
+  // 이름 검색
+  const handleSearch = async () => {
+    try {
+
+      const response = await axios.get(
+        // "http://172.20.20.252:8081/edustatistics/getmonth", {
+        "http://localhost:8081/edustatistics/getmonth", {
+
         params: {
+          year : currentDate.getFullYear(),
           eduCategory: selectedCategory,
           month: selectedMonth,
-          department : searchDepartment,
-          name: searchName, // 이름으로 검색하기 위해 searchName을 전달
+          department: searchDepartment,
+          name: searchName,
         },
-      })
-      .then((response) => {
-        setAttendeesList(response.data);
-      })
-      .catch((error) => {
-        console.error("Error 난리 났다 난리났어", error);
       });
+      const sortedAttendeesList = response.data.sort((a, b) => {
+        // eduStartTime을 기준으로 오름차순 정렬
+        return new Date(a.eduStartTime) - new Date(b.eduStartTime);
+      });
+      setAttendeesList(sortedAttendeesList);
+    } catch (error) {
+      console.error("데이터 난리났다 난리났어:", error);
+    }
   };
 
 
@@ -177,7 +179,12 @@ function EduAttenStatics() {
             {categories.map((category) => (
               <button
                 key={category}
-                onClick={() => setSelectedCategory(category)}
+                // onClick={() => setSelectedCategory(category); handleSearch;}
+                onClick={() => {
+                  setSelectedCategory(category);
+                  
+                }}
+                
                 className={`px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium ${selectedCategory === category
                   ? "text-white bg-seahColor hover:bg-seahDeep focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-seahColor"
                   : "text-seahColor hover:text-seahDeep"
@@ -200,6 +207,7 @@ function EduAttenStatics() {
             className="mt-1 block w-full border-gray-300 shadow-sm focus:ring-seahColor focus:border-seahColor sm:text-sm rounded-md"
           >
             {department.map((dept) => (
+
               <option key={dept.id} value={dept.name}>
                 {dept.name}
               </option>
@@ -211,6 +219,11 @@ function EduAttenStatics() {
           <input
             type="text"
             onChange={(e) => setSearchName(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.keyCode === 13) {
+                handleSearch();
+              }
+            }}
             value={searchName}
             className="mt-1 block w-full border-gray-300 shadow-sm focus:ring-seahColor focus:border-seahColor sm:text-sm rounded-md"
           />

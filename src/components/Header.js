@@ -20,7 +20,7 @@ const products = [
 
 const eduProducts = [
   { name: '안전교육', description: '안전교육 리스트 및 등록을 할 수 있습니다', href: '/eduMain', icon: BookOpenIcon },
-  { name: '대시보드', description: '집체교육,뭐뭐교육,뭐뭐교육을 통계를 조회할 수 있습니다', href: '#', icon: ChartPieIcon },
+  { name: '대시보드', description: '안전교육 통계를 조회할 수 있습니다', href: '/edustatistics', icon: ChartPieIcon },
 ]
 // const callsToAction = [
 //   { name: "Watch demo", href: "#", icon: PlayCircleIcon },

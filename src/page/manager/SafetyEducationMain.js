@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../components/Header";
-import { format, addMonths, subMonths } from "date-fns";
+// import { format, addMonths, subMonths } from "date-fns";
+import { format, addMonths, subMonths, getMonth, getYear } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Pagination from "../../components/Pagination";
@@ -13,6 +14,9 @@ function SafetyEducationMain() {
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 번호
   const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedMonth, setSelectedMonth] = useState("");
+
   // 현재 페이지에 해당하는 항목들을 추출하는 함수
   const getCurrentPageItems = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -20,20 +24,54 @@ function SafetyEducationMain() {
     return eduList.slice(startIndex, endIndex);
   };
 
+
+  const getDisplayedId = (eduId) => {
+    const index = eduList.findIndex((edu) => edu.eduId === eduId);
+    return index !== -1 ? index + 1 : ""; // 인덱스를 1부터 시작하도록 +1 해줍니다.
+  };
+
+  // useEffect(() => {
+  //   // 서버로부터 안전교육 데이터를 가져오는 함수
+  //   const fetchEduList = async () => {
+  //     try {
+  //       const response = await axios.get(`http://localhost:8081/edumain`); // 서버의 API 엔드포인트에 맞게 경로를 수정해야 합니다.
+  //       // "http://172.20.10.5:3000/edumain"
+  //       setEduList(response.data); // 서버로부터 받은 데이터를 상태 변수에 저장
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+
+  //   fetchEduList(); // 데이터 가져오기 함수 호출
+  // }, []); // 빈 배열을 두 번째 인자로 넘겨주면 컴포넌트가 처음 마운트되었을 때만 데이터를 가져옵니다.
+
+
+
   useEffect(() => {
-    // 서버로부터 안전교육 데이터를 가져오는 함수
-    const fetchEduList = async () => {
+    const getLogsForCurrentMonth = async () => {
       try {
-        const response = await axios.get(`http://172.20.10.43:8081/edumain`); // 서버의 API 엔드포인트에 맞게 경로를 수정해야 합니다.
-        // "http://172.20.10.5:3000/edumain"
-        setEduList(response.data); // 서버로부터 받은 데이터를 상태 변수에 저장
+        const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
+        const currentYear = getYear(currentDate);
+        const response = await axios.get("http://localhost:8081/edumain", {
+          params: {
+            year: currentYear,
+            month: currentMonth,
+          },
+        });
+        const sortedEduList = response.data.sort((a, b) => {
+          // eduStartTime을 기준으로 오름차순 정렬
+          return new Date(a.eduStartTime) - new Date(b.eduStartTime);
+        });
+        setEduList(sortedEduList);
+        setSelectedMonth(currentMonth);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("데이터 가져오기 오류:", error);
       }
     };
 
-    fetchEduList(); // 데이터 가져오기 함수 호출
-  }, []); // 빈 배열을 두 번째 인자로 넘겨주면 컴포넌트가 처음 마운트되었을 때만 데이터를 가져옵니다.
+    // 현재 월의 로그를 가져오는 함수 호출
+    getLogsForCurrentMonth();
+  }, [selectedCategory, currentDate]);
 
   const goToPreviousMonth = () => {
     const previousMonthDate = subMonths(currentDate, 1);
@@ -153,6 +191,12 @@ function SafetyEducationMain() {
                         scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
+                        교육일
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
                         첨부파일
                       </th>
                       <th
@@ -175,7 +219,7 @@ function SafetyEducationMain() {
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           <div className="flex items-center">
                             <div className="mt-1 text-gray-500">
-                              {edu.eduNum}
+                              {getDisplayedId(edu.eduId)}
                             </div>
                           </div>
                         </td>
@@ -199,6 +243,9 @@ function SafetyEducationMain() {
                               {edu.eduContent}
                             </Link>
                           </div>
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                          {edu.eduStartTime}
                         </td>
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
                           <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">

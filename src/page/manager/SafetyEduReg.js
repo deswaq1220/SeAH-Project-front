@@ -1,4 +1,4 @@
-import { useState, Fragment, useCallback } from "react";
+import { useState, Fragment, useCallback, useEffect } from "react";
 import Header from "../../components/Header";
 // import { format, addMonths, subMonths } from "date-fns";
 import { Listbox, Transition } from "@headlessui/react";
@@ -32,7 +32,7 @@ const people = [
   {
     id: 4,
     name: "MANAGE",
-    time : 120
+    time: 120
   },
   {
     id: 5,
@@ -114,6 +114,8 @@ const TruncatedFileName = ({ fileName }) => {
   return <div>{displayedFileName}</div>;
 };
 
+
+//교육일지 등록
 function SafetyEduReg() {
 
   const {
@@ -147,8 +149,8 @@ function SafetyEduReg() {
     resetForm,
     showNotification,
   } = useSafetyEduForm();
-  
-  
+
+
 
   return (
     <div>
@@ -534,9 +536,8 @@ function SafetyEduReg() {
               <div id="fileuploader" className="flex flex-col items-center">
                 <div
                   {...getRootProps()}
-                  className={`dropzone ${
-                    isDragActive ? "active" : ""
-                  } col-span-full w-full md:w-96`}
+                  className={`dropzone ${isDragActive ? "active" : ""
+                    } col-span-full w-full md:w-96`}
                 >
                   <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                     <div className="text-center">
@@ -603,7 +604,7 @@ function SafetyEduReg() {
                     id="eduwriter"
                     value={formData.eduWriter}
                     onChange={handleChange}
-                     autoComplete="off"
+                    autoComplete="off"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
                   />
                 </div>
