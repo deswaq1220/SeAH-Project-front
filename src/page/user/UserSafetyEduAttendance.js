@@ -40,7 +40,7 @@ function UserSafetyEduAttendance() {
   const { eduId } = useParams();
   const [eduList, setEduList] = useState([]); // 안전교육 데이터를 담을 상태 변수
   const [eduData, setEduData] = useState(null);
-  const [eduTitle, setEduTitle] = useState(null);
+  // const [eduTitle, setEduTitle] = useState(null);
   const [isAttendanceCompleted, setIsAttendanceCompleted] = useState(false); // 출석 완료 여부 상태 변수
   const today = new Date();
   const year = today.getFullYear();
@@ -126,7 +126,9 @@ function UserSafetyEduAttendance() {
       }
     };
     // GET 요청을 통해 eduTitle 가져오기
-    axios.get(`http://172.20.20.252:8081/usereduatten/register/${eduId}`)
+    axios.get(
+      // `http://172.20.20.252:8081/usereduatten/register/${eduId}`)
+      `http://localhost:8081/usereduatten/register/${eduId}`)
       .then((response) => {
         // 응답 데이터에서 eduTitle 값을 추출하여 상태 업데이트
         setEduTitle(response.data.eduTitle);
