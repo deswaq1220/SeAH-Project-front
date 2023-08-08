@@ -21,7 +21,8 @@ export default function Dangersource({onFormDataChange}) {
   useEffect(() => {
     function specialCauseFetchDataWithAxios(masterdataPart, masterdataFacility) {
       axios
-          .get(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`)
+          .get(`http://172.20.20.252:8081/special/new/${masterdataPart}/${masterdataFacility}`)
+          //.get(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`)
           .then((response) => {
             const speCauseListFromBack = response.data.specialCauseList;
 
