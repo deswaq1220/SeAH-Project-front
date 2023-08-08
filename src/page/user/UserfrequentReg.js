@@ -25,11 +25,11 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
-class IsComplete extends React.Component<{ onFormDataChange: handleIsCompeleteDataChange }> {
- render() {
-  return null;
- }
-}
+// class IsComplete extends React.Component<{ onFormDataChange: handleIsCompeleteDataChange }> {
+//  render() {
+//   return null;
+//  }
+// }
 
 function UserfrequentReg() {
     const {masterdataPart} = useParams();           // url 영역 파라미터
@@ -126,6 +126,7 @@ function UserfrequentReg() {
 
         // 수시점검 등록 요청
         axios
+            // .post(`http://172.20.20.252:8081/special/new/${masterdataPart}/${masterdataFacility}`, requestData, {  // 세아
             .post(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`, requestData, {
                 headers: {
                     "Content-Type": "application/json",

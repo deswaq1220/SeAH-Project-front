@@ -20,6 +20,7 @@ export default function Injured({onFormDataChange}) {
   useEffect(() => {
     function specialInjureFetchDataWithAxios(masterdataPart, masterdataFacility) {
       axios
+          // .get(`http://172.20.20.252:8081/special/new/${masterdataPart}/${masterdataFacility}`)  // 세아
           .get(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`)
           .then((response) => {
             // 백에서 보내주는 부상부위 리스트

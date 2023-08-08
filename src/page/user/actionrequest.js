@@ -10,60 +10,82 @@ function classNames(...classes) {
 
 export default function ActionRquest({ onFormDataChange }) {
   // get 정보
-  // const [peopleSelected, SetPeopleSelected] = useState(people[0]); //  실수함정
+
   // qr 정보따라 url 파라미터 세팅되어야됨
   const { masterdataPart } = useParams(); // url 영역 파라미터
   const { masterdataFacility } = useParams(); // url 설비 파라미터
   const [emailList, setEmailList] = useState([]);
 
+  // 선택된 이메일 담을 변수
+  const [instances, setInstances] = useState([{ selectedEmail: null }]);
+
+  // 백에서 데이터가져와서 뿌리기 : 해당 영역 + 고정수신자의 이메일정보
   useEffect(() => {
     function emailFetchDataWithAxios(masterdataPart, masterdataFacility) {
       axios
         .get(
+          // `http://172.20.20.252:8081/special/new/${masterdataPart}/${masterdataFacility}`  // 세아
           `http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`
         )
-        .then((response) => {
-          const emailListFromBack = response.data.emailList;
-
-          const emailData = emailListFromBack.map((item) => {
-            return {
+          .then((response) => {
+            const emailListFromBack = response.data.emailList;
+            const emailData = emailListFromBack.map((item) => ({
               emailId: item.emailId,
               emailName: item.emailName,
               emailAdd: item.emailAdd,
               masterStatus: item.masterStatus,
-            };
+            }));
+            setEmailList(emailData);
+          })
+          .catch((error) => {
+            console.error("Error fetching data: ", error);
           });
-          setEmailList(emailData);
-        })
-        .catch((error) => {
-          console.error("Error fetching data: ", error);
-        });
     }
     emailFetchDataWithAxios(masterdataPart, masterdataFacility);
   }, [masterdataPart, masterdataFacility]);
 
-  // 선택된 이메일 담을 변수
-  const [selectedEmail, setSelectedEmail] = useState(null);
+  const handleActionChange = (instanceIndex, selectedEmail) => {
+    const updatedInstances = [...instances];
+    updatedInstances[instanceIndex] = { selectedEmail };
+    setInstances(updatedInstances);
 
-  // post 정보
-  const handleActionChange = (selectedEmail) => {
-    setSelectedEmail(selectedEmail);
+    //  ,로 구분된 문자열로 변환하여 넘기기
+    const updatedEmails = updatedInstances
+        .map((instance) => instance.selectedEmail)
+        .filter((email) => email !== null);
+
+    const selectedEmailNames = updatedEmails.map((email) => email.emailName).join(", ");
+    const selectedEmailAddresses = updatedEmails.map((email) => email.emailAdd).join(", ");
+
     onFormDataChange({
-      speActPerson: selectedEmail?.emailName || "", // 선택한 이메일이 있다면 이름 저장
-      speActEmail: selectedEmail?.emailAdd || "", // 선택한 이메일이 있다면 이메일 저장
+      speActPerson: selectedEmailNames,
+      speActEmail: selectedEmailAddresses,
     });
   };
 
-  const [instances, setInstances] = useState([{}]);
-
-
-  // 인스턴스 추가 함수 : 이메일 추가
   const handleAddInstance = () => {
     setInstances([...instances, {}]);
   };
+
+  // 이메일 정보 삭제 : -버튼
   const handleDeleteInstance = (index) => {
-    setInstances(instances.filter((_, i) => i !== index));
+    const updatedInstances = instances.filter((_, i) => i !== index);
+    const updatedEmails = updatedInstances
+        .map((instance) => instance.selectedEmail)
+        .filter((email) => email !== null);
+
+    const selectedEmailNames = updatedEmails.map((email) => email.emailName).join(", ");
+    const selectedEmailAddresses = updatedEmails.map((email) => email.emailAdd).join(", ");
+
+    setInstances(updatedInstances);
+
+    // 다시 업데이트
+    onFormDataChange({
+      speActPerson: selectedEmailNames,
+      speActEmail: selectedEmailAddresses,
+    });
   };
+
 
 
   return (
@@ -78,14 +100,18 @@ export default function ActionRquest({ onFormDataChange }) {
         {/* 조치요청 */}
         {instances.map((instance, index) => (
           <div key={index} className="flex justify-between">
-            {/*<Listbox value={selectedEmail} onChange={setSelectedEmail}>*/}
-            <Listbox value={selectedEmail} onChange={handleActionChange}>
+            <Listbox
+                value={instance.selectedEmail || null}
+                onChange={(selectedEmail) =>
+                    handleActionChange(index, selectedEmail)
+                }
+            >
               {({ open }) => (
                 <>
                   <div className="relative mt-2 ml-4">
                     <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-32 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6 ml-2">
                       <span className="block truncate">
-                        {selectedEmail ? selectedEmail.emailName : "[선택]"}
+                         {instance.selectedEmail ? instance.selectedEmail.emailName : "[선택]"}
                         {/* {peopleSelected.name} */}
                       </span>
                       <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
@@ -105,18 +131,12 @@ export default function ActionRquest({ onFormDataChange }) {
                     >
                       <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                         {emailList.map((emailList) => (
-                          <Listbox.Option
-                            key={emailList.emailId}
-                            className={({ active }) =>
-                              classNames(
-                                active
-                                  ? "bg-seahColor text-white"
-                                  : "text-gray-900",
-                                "relative cursor-default select-none py-2 pl-3 pr-9"
-                              )
-                            }
-                            value={emailList}
-                          >
+                            <Listbox.Option
+                                key={emailList.emailId}
+                                disabled={emailList.masterStatus === 'Y'}
+                                className={({active}) => classNames(active ? "bg-seahColor text-white" : emailList.masterStatus === 'Y' ? "bg-gray-200 " : "text-gray-900", "relative cursor-default select-none py-2 pl-3 pr-9")}
+                                value={emailList}
+                            >
                             {({ selected, active }) => (
                               <>
                                 <span
@@ -160,13 +180,15 @@ export default function ActionRquest({ onFormDataChange }) {
                 placeholder="E-Mail"
                 autoComplete=""
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5 ml-1"
-                value={selectedEmail ? selectedEmail.emailAdd : ""}
+                value={instance.selectedEmail ? instance.selectedEmail.emailAdd : ""}
                 readOnly
                 onChange={(e) => {
-                  setSelectedEmail({
-                    ...selectedEmail,
+                  const updatedInstances = [...instances];
+                  updatedInstances[index].selectedEmail = {
+                    ...instance.selectedEmail,
                     emailAdd: e.target.value,
-                  });
+                  };
+                  setInstances(updatedInstances);
                 }}
               />
               {index === 0 ? (
