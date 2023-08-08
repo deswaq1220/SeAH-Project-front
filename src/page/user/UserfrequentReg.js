@@ -1,7 +1,7 @@
 import UserHeader from "../../components/UserHeader";
-import React, {Fragment, useEffect, useState} from "react";
-import {Listbox, Transition} from "@headlessui/react";
-import {CheckIcon, ChevronUpDownIcon} from "@heroicons/react/20/solid";
+import React, { Fragment, useEffect, useState } from "react";
+import { Listbox, Transition } from "@headlessui/react";
+import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import DangerImg from "../../img/danger.png";
 import Inspector from "./inspector";
 import Inspectionarea from "./inspectionarea";
@@ -12,10 +12,10 @@ import Falsetrap from "./falsetrap";
 import RiskAssessment from "./riskAssessment";
 import InspectionDetails from "./Inspectiondetails";
 import ActionRquest from "./actionrequest";
-import {useNavigate, useParams} from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import data from "bootstrap/js/src/dom/data";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 import Dangersource from "./sourceDanger";
 import IsCompelete from "./isCompelete";
 
@@ -25,15 +25,15 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
-class IsComplete extends React.Component<{ onFormDataChange: handleIsCompeleteDataChange }> {
- render() {
-  return null;
- }
-}
+// class IsComplete extends React.Component<{ onFormDataChange: handleIsCompeleteDataChange }> {
+//     render() {
+//         return null;
+//     }
+// }
 
 function UserfrequentReg() {
-    const {masterdataPart} = useParams();           // url 영역 파라미터
-    const {masterdataFacility} = useParams();       // url 설비 파라미터
+    const { masterdataPart } = useParams();           // url 영역 파라미터
+    const { masterdataFacility } = useParams();       // url 설비 파라미터
     const [speEmpNum, setSpeEmpNum] = useState("");
     const [spePerson, setSpePerson] = useState("");
     const [speEmail, setSpeEmail] = useState("");
@@ -50,7 +50,7 @@ function UserfrequentReg() {
 
 
 
- // Inspector 콜백 함수 : 점검자(이름, 이메일, 사원번호)
+    // Inspector 콜백 함수 : 점검자(이름, 이메일, 사원번호)
     const handleInspectorDataChange = (inspectorForm) => {
         setSpeEmpNum(inspectorForm.employeenumber);
         setSpePerson(inspectorForm.inspectorname);
@@ -141,8 +141,8 @@ function UserfrequentReg() {
                     hideProgressBar: true,
                 });
 
-             // 저장성공시 해당설비의 리스트 페이지
-             navigate(`/special/list/${masterdataPart}/${masterdataFacility}`);
+                // 저장성공시 해당설비의 리스트 페이지
+                navigate(`/special/list/${masterdataPart}/${masterdataFacility}`);
             })
             .catch((error) => {
                 console.log(requestData);
@@ -156,45 +156,45 @@ function UserfrequentReg() {
 
 
         <>
-            <UserHeader/>
+            <UserHeader />
             <p>수시점검</p>
             <p>수시점검 내용등록</p>
-            <Inspector onFormDataChange={handleInspectorDataChange}/> {/* 점검자 */}
-            <Inspectionarea/> {/* 점검영역 */}
-            <Facilityname/> {/* 설비명 */}
-            <Danger onFormDataChange={handleDangerDataChange}/> {/* 위험분류 */}
-            <Injured onFormDataChange={handleInjuredDataChange}/> {/* 부상부위 */}
-            <Dangersource onFormDataChange={handleCauseDataChange}/> {/* 위험원인 */}
-            <Falsetrap onFormDataChange={handleFalsetrapDataChange}/> {/* 실수함정 */}
-            <RiskAssessment onFormDataChange={handleRiskAssessmentDataChange}/> {/* 위험성평가 */}
+            <Inspector onFormDataChange={handleInspectorDataChange} /> {/* 점검자 */}
+            <Inspectionarea /> {/* 점검영역 */}
+            <Facilityname /> {/* 설비명 */}
+            <Danger onFormDataChange={handleDangerDataChange} /> {/* 위험분류 */}
+            <Injured onFormDataChange={handleInjuredDataChange} /> {/* 부상부위 */}
+            <Dangersource onFormDataChange={handleCauseDataChange} /> {/* 위험원인 */}
+            <Falsetrap onFormDataChange={handleFalsetrapDataChange} /> {/* 실수함정 */}
+            <RiskAssessment onFormDataChange={handleRiskAssessmentDataChange} /> {/* 위험성평가 */}
             {/* 위험분류 표 */}
             <div className="flex flex-col justify-center items-center border border-gray-300 px-3 mx-3 ">
                 <p className=" font-semibold text-lg">평가표</p>
                 <img src={DangerImg} className=" p-3 w-100"></img>
             </div>
-            <InspectionDetails onFormDataChange={handleInspectionDetailsDataChange}/> {/* 점검내용 */}
+            <InspectionDetails onFormDataChange={handleInspectionDetailsDataChange} /> {/* 점검내용 */}
             {/* 개선대책 */}
             <div id="ReformMeasures" className="grid sm:flex items-baseline justify-start">
-        <span
-            className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 my-4 ml-4 ">
-          개선대책
-        </span>
+                <span
+                    className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 my-4 ml-4 ">
+                    개선대책
+                </span>
 
                 <div className="mt-2 ">
-          <textarea
-              rows={4}
-              name="comment"
-              id="comment"
-              className="block w-72 rounded-md border-0  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 border-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 p-2 mr-3 ml-4"
-              // defaultValue={""}
-              value={speActContent}
-              onChange={handleActContChange}
-          />
+                    <textarea
+                        rows={4}
+                        name="comment"
+                        id="comment"
+                        className="block w-72 rounded-md border-0  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 border-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 p-2 mr-3 ml-4"
+                        // defaultValue={""}
+                        value={speActContent}
+                        onChange={handleActContChange}
+                    />
                 </div>
             </div>
-            <ActionRquest onFormDataChange={handleActionRequestDetailsDataChange}/> {/* 조치요청 */}
+            <ActionRquest onFormDataChange={handleActionRequestDetailsDataChange} /> {/* 조치요청 */}
             {/* 혜영추가-완료여부 */}
-            <IsCompelete onFormDataChange={handleIsCompeleteDataChange}/> {/* 완료여부 */}
+            <IsCompelete onFormDataChange={handleIsCompeleteDataChange} /> {/* 완료여부 */}
 
             <div className="flex justify-center w-full mt-8 mb-10">
                 <button

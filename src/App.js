@@ -16,8 +16,6 @@ import EmailForm from "./Email";
 import UserSelectInspection from "./page/user/UserSelectInspection";
 import Userfrequent from "./page/user/Userfrequent";
 import UserfrequentReg from "./page/user/UserfrequentReg";
-
-// 수인 씀
 import EduStatics from "./page/manager/EduStatics"
 import EduAttenStatics from "./page/manager/EduAttenStatics"
 
@@ -46,8 +44,6 @@ function App() {
         <Route path="/inspection" element={<SafetyInspection/>}></Route>{/* 관리자 안점점검 페이지 */}
         <Route path="/reinfo" element={<ReferenceInfo/>}></Route> {/* 관리자 기준정보페이지 */}
         <Route path="/sendEmail" element={<EmailForm/>}></Route> {/* 이메일 */}
-
-        {/*수인 추가함 */}
         <Route path="/edustatistics" element={<EduStatics/>}></Route>{/* 관리자 안전교육통계*/}
         <Route path="/edustatistics/atten" element={<EduAttenStatics/>}></Route>{/* 관리자 안전교육 참가자통계*/}
 

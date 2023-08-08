@@ -3,6 +3,7 @@ import Header from "../../components/Header";
 import axios from "axios";
 import { format, addMonths, subMonths, getMonth, getYear } from "date-fns";
 import Pagination from "../../components/Pagination";
+import { useNavigate } from 'react-router-dom';
 
 function EduStatics() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -20,13 +21,20 @@ function EduStatics() {
     ETC: 0,
   });
 
+  const navigate = useNavigate();
 
-  const handleStatClick = async(category) => {
+  const handleButtonClick = () => {
+    navigate('/edustatistics/atten');
+  };
+
+
+
+  const handleStatClick = async (category) => {
     try {
-      const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
+      const currentMonth = getMonth(currentDate) + 1;
       const currentYear = getYear(currentDate);
-      // 월&카테고리 별 교육시간 총 합계
-      const response = await  axios.get(
+  
+      const response = await axios.get(
         `http://localhost:8081/edustatistics/getmonthlyedulist`, {
         params: {
           year: currentYear,
@@ -36,14 +44,12 @@ function EduStatics() {
       });
       const data = response.data;
       console.log(data);
-
-      setEduList(data);
+      setEduList(data); // eduList 업데이트
     } catch (error) {
       console.error("데이터 가져오기 오류:", error);
     }
-
+  
     console.log(`Clicked on category: ${category}`);
-
   };
 
   // 현재 페이지에 해당하는 항목들을 추출하는 함수
@@ -53,7 +59,7 @@ function EduStatics() {
     return eduList.slice(startIndex, endIndex);
   };
 
-  
+
   const getDisplayedId = (eduId) => {
     const index = data.findIndex((edu) => edu.eduId === eduId);
     return index !== -1 ? index + 1 : ""; // 인덱스를 1부터 시작하도록 +1 해줍니다.
@@ -66,13 +72,14 @@ function EduStatics() {
       try {
         const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
         const currentYear = getYear(currentDate);
+        
         // 월&카테고리 별 교육시간 총 합계
         const response = await axios.get(
           `http://localhost:8081/edustatistics/getmonthlyruntime`, {
-         
+
           params: {
             year: currentYear,
-            month: currentMonth        
+            month: currentMonth
           },
         });
         const data = response.data;
@@ -110,10 +117,11 @@ function EduStatics() {
         setEduList(data);
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
+        setEduList([]);
       }
     };
     getStartPage();
-  }, []);
+  }, [currentDate]);
 
   //달력 넣기
   const goToPreviousMonth = () => {
@@ -132,27 +140,21 @@ function EduStatics() {
 
     return `${year}. ${month}`;
   };
-  const edu = [
-    { name: '전체 시간', value: `10 분` },
-    { name: '크루미팅', value: `23 분` },
-  ];
 
   //테일윈드에서 가져옴
   const stats = [
-    { name: '전체 시간', value: `${monthlyEduTime.total} 분` , category: null},
-    { name: '크루미팅', value: `${monthlyEduTime.CREW} 분`, category: 'CREW'},
-    { name: 'DM미팅', value: `${monthlyEduTime.DM} 분` ,category: 'DM'},
+    { name: '전체 시간', value: `${monthlyEduTime.total} 분`, category: null },
+    { name: '크루미팅', value: `${monthlyEduTime.CREW} 분`, category: 'CREW' },
+    { name: 'DM미팅', value: `${monthlyEduTime.DM} 분`, category: 'DM' },
     { name: '관리감독', value: `${monthlyEduTime.MANAGE} 분`, category: 'MANAGE' },
-    { name: '기타', value: `${monthlyEduTime.ETC} 분`,category: 'ETC' },
+    { name: '기타', value: `${monthlyEduTime.ETC} 분`, category: 'ETC' },
   ];
 
-  function classNames(...classes) {
-    return classes.filter(Boolean).join(' ');
-  }
 
   return (
     <div>
       <Header />
+
       {/* 달력  */}
       <div className="flex flex-col justify-center items-center text-3xl mt-28">
         <h1 className="text-base font-semibold leading-6 text-gray-900">
@@ -193,7 +195,15 @@ function EduStatics() {
             </svg>
           </button>
         </div>
+        <button
+        type="submit"
+        className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+        onClick={handleButtonClick}
+      >
+        출석 조회
+      </button>
       </div>
+
       {/* 여기까지가 달력 */}
 
       <dl className="mx-auto grid grid-cols-1 gap-px bg-gray-900/5 sm:grid-cols-2 lg:grid-cols-4">
@@ -207,12 +217,12 @@ function EduStatics() {
             <dd className="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">
               {stat.value}
             </dd>
-            
+
           </div>
         ))}
       </dl>
 
-{/* 해당 카테고리 교육 목록 출력 */}
+      {/* 해당 카테고리 교육 목록 출력 */}
       <div className="flex justify-center">
         <div className="px-4 sm:px-6 lg:px-8 max-w-screen-xl w-full">
           <div className="sm:flex sm:items-center">
@@ -256,7 +266,7 @@ function EduStatics() {
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
                     {getCurrentPageItems().map((edu, index) => (
-                      
+
                       <tr key={index}>
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           <div className="flex items-center">
@@ -285,15 +295,16 @@ function EduStatics() {
       </div>
       <div className="flex justify-center">
         <div className="px-4 sm:px-6 lg:px-8 max-w-screen-xl w-full">
-          {eduList.length > 0 ?(
+          {eduList.length > 0 ? (
 
-          <Pagination
-            currentPage={currentPage}
-            itemsPerPage={itemsPerPage}
-            totalItems={eduList.length}
-            setCurrentPage={setCurrentPage}
-          />
-          ) :(null)}
+            <Pagination
+              currentPage={currentPage}
+              itemsPerPage={itemsPerPage}
+              totalItems={eduList.length}
+              setCurrentPage={setCurrentPage}
+            />
+          ) : (
+            <p className="flex justify-center">해당 월의 교육은 없습니다.</p>)}
         </div>
       </div>
 

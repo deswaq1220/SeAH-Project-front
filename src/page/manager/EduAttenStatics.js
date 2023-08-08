@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Header from "../../components/Header";
 import axios from "axios";
 import Pagination from "../../components/Pagination";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 import { format, addMonths, subMonths, getMonth, getYear } from "date-fns";
 // 부서 드롭다운
 const department = [
@@ -35,15 +37,15 @@ function EduAttenStatics() {
         const currentYear = getYear(currentDate);
         const response = await axios.get(
           // "http://172.20.20.252:8081/edustatistics/getmonth", 
-          "http://localhost:8081/edustatistics/getmonth", 
+          "http://localhost:8081/edustatistics/getmonth",
           {
-          params: {
-            eduCategory: selectedCategory,
-            year: currentYear,
-            month: currentMonth,
-            name: ""
-          },
-        });
+            params: {
+              eduCategory: selectedCategory,
+              year: currentYear,
+              month: currentMonth,
+              name: ""
+            },
+          });
         const sortedAttendeesList = response.data.sort((a, b) => {
           // eduStartTime을 기준으로 오름차순 정렬
           return new Date(a.eduStartTime) - new Date(b.eduStartTime);
@@ -68,7 +70,7 @@ function EduAttenStatics() {
         "http://localhost:8081/edustatistics/getmonth", {
 
         params: {
-          year : currentDate.getFullYear(),
+          year: currentDate.getFullYear(),
           eduCategory: selectedCategory,
           month: selectedMonth,
           department: searchDepartment,
@@ -84,6 +86,48 @@ function EduAttenStatics() {
       console.error("데이터 난리났다 난리났어:", error);
     }
   };
+
+    // 엑셀!!!!!!!!!!!
+    const createExcelData = (attendeesList) => {
+      // 교육 정보를 바탕으로 엑셀 데이터를 생성하는 로직 작성
+      const data = [
+        {
+          카테고리: `${attendeesList.eduCategory}`,
+          제목: `${attendeesList.eduTitle}`,
+          교육일정: `${attendeesList.eduStartTime}`,
+          교육시간: `${attendeesList.eduSumTime} 분`,
+          부서: attendeesList.attenDepartment,
+          사원번호: `${attendeesList.attenEmployeeNumber}`,
+          이름: attendeesList.attenName,
+        },
+      ];
+  
+      return data;
+    };
+  
+    const handleExport = () => {
+      if (!attendeesList) return; // eduData가 없을 경우 빠른 리턴
+  
+      // 엑셀 데이터 생성
+      const data = createExcelData(attendeesList);
+  
+      // 엑셀 시트 생성
+      const worksheet = XLSX.utils.json_to_sheet(data);
+  
+      // 엑셀 워크북 생성
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+  
+      // 엑셀 파일 저장
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+      const excelFile = new Blob([excelBuffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      saveAs(excelFile, `${attendeesList.eduCategory}_안전교육.xlsx`);
+    };
 
 
   //카테고리 라벨
@@ -182,9 +226,9 @@ function EduAttenStatics() {
                 // onClick={() => setSelectedCategory(category); handleSearch;}
                 onClick={() => {
                   setSelectedCategory(category);
-                  
+
                 }}
-                
+
                 className={`px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium ${selectedCategory === category
                   ? "text-white bg-seahColor hover:bg-seahDeep focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-seahColor"
                   : "text-seahColor hover:text-seahDeep"
@@ -242,7 +286,14 @@ function EduAttenStatics() {
           <div className="sm:flex sm:items-center">
             <div className="sm:flex-auto">
             </div>
+            <button
+              type="button"
+              className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+            >
+              엑셀 저장
+            </button>
           </div>
+
           <div className="mt-8 flow-root">
             <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -313,6 +364,7 @@ function EduAttenStatics() {
                   </tbody>
                 </table>
               </div>
+
             </div>
           </div>
         </div>
