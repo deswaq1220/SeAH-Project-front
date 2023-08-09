@@ -58,7 +58,7 @@ function App() {
         {/* 사용자  */}
         <Route path="/user" element={<UserMain/>}></Route>  {/* 사용자 메인페이지*/}
         <Route path="/userattendance/register/:eduId" element={<UserSafetyEduAttendance/>}></Route>{/* 사용자 사원출석페이지 */}
-        {/*<Route path="/userfrequentreg" element={<UserfrequentReg/>}></Route>/!* 사용자 점검등록페이지 *!/*/}
+
 
         {/* 사용자 수시점검 */}
         <Route path="/special/:masterdataPart/:masterdataFacility" element={<UserSelectInspection/>}></Route>  {/* 사용자 점검선택페이지*/}
