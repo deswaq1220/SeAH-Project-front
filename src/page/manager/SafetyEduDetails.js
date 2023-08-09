@@ -347,6 +347,7 @@ export default function SafetyEduDetails() {
                       </button>
                   )}
 
+
                   <button
                       type="submit"
                       className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mr-1"
