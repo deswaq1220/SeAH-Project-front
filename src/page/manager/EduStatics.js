@@ -4,6 +4,8 @@ import axios from "axios";
 import { format, addMonths, subMonths, getMonth, getYear } from "date-fns";
 import Pagination from "../../components/Pagination";
 import { useNavigate } from 'react-router-dom';
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 function EduStatics() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -23,40 +25,13 @@ function EduStatics() {
 
   const navigate = useNavigate();
 
-  const handleButtonClick = () => {
-    navigate('/edustatistics/atten');
-  };
-
-
-
-  const handleStatClick = async (category) => {
-    try {
-      const currentMonth = getMonth(currentDate) + 1;
-      const currentYear = getYear(currentDate);
-      // 월&카테고리 별 교육시간 총 합계
-      const response = await  axios.get(
-        // `http://172.20.20.252:8081/edustatistics/getmonthlyedulist`, {   // 세아
-        `http://localhost:8081/edustatistics/getmonthlyedulist`, {
-        params: {
-          year: currentYear,
-          month: currentMonth,
-          eduCategory: category
-        },
-      });
-      const data = response.data;
-      console.log(data);
-      setEduList(data); // eduList 업데이트
-    } catch (error) {
-      console.error("데이터 가져오기 오류:", error);
-    }
-  
-    console.log(`Clicked on category: ${category}`);
-  };
 
   // 현재 페이지에 해당하는 항목들을 추출하는 함수
   const getCurrentPageItems = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
+    console.log("검색 리스트2?"  + eduList);
+    
     return eduList.slice(startIndex, endIndex);
   };
 
@@ -103,7 +78,7 @@ function EduStatics() {
   }, [currentDate]);
 
   useEffect(() => {
-    const getStartPage = async () => {
+    const  getStartPage =async  () => {
       try {
         const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
         const currentYear = getYear(currentDate);
@@ -118,6 +93,7 @@ function EduStatics() {
           },
         });
         const data = response.data;
+    
         setEduList(data);
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
@@ -126,6 +102,77 @@ function EduStatics() {
     };
     getStartPage();
   }, [currentDate]);
+
+  const handleStatClick = async (category) => {
+    try {
+      const currentMonth = getMonth(currentDate) + 1;
+      const currentYear = getYear(currentDate);
+      // 월&카테고리 별 교육시간 총 합계
+      const response =  await axios.get(
+        // `http://172.20.20.252:8081/edustatistics/getmonthlyedulist`, {   // 세아
+        `http://localhost:8081/edustatistics/getmonthlyedulist`, {
+        params: {
+          year: currentYear,
+          month: currentMonth,
+          eduCategory: category
+        },
+      });
+      const data = response.data;
+      
+      setEduList(data); // eduList 업데이트
+
+      console.log("리스트 좀 제발 " + data);
+    } catch (error) {
+      console.error("데이터 가져오기 오류:", error);
+    }
+  
+    console.log(`Clicked on category: ${category}`);
+  };
+
+    // 엑셀!!!!!!!!!!!
+    const createExcelData = (eduList) => {
+
+      // 교육 정보를 바탕으로 엑셀 데이터를 생성하는 로직 작성
+      const data = eduList.map((item) => ({
+        제목: `${item[0]}`,
+        교육일정: `${item[1]}`,
+        교육시간: `${item[2]} 분`,
+      }));
+        
+      return data;
+    };
+    
+    const handleExport = () => {
+      
+      if (!eduList || eduList.length === 0) {
+        console.log("데이터가 없습니다.");
+        return;
+      }
+      // 엑셀 데이터 생성
+      const data = createExcelData(eduList);
+      
+      console.log("저장");
+      // 엑셀 시트 생성
+      const worksheet = XLSX.utils.json_to_sheet(data);
+  
+      // 엑셀 워크북 생성
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+  
+      // 엑셀 파일 저장
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+      const excelFile = new Blob([excelBuffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      saveAs(excelFile, `안전교육시간.xlsx`);
+    };
+
+
+
+
 
   //달력 넣기
   const goToPreviousMonth = () => {
@@ -227,6 +274,13 @@ function EduStatics() {
               <h1 className="mt-2 text-sm text-gray-700">
                 {getFormattedDate()} 안전교육 목록입니다
               </h1>
+              <button
+              type="button"
+              className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+              onClick={handleExport}
+            >
+              엑셀 저장
+            </button>
             </div>
           </div>
           <div className="mt-8 flow-root">

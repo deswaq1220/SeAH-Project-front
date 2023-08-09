@@ -16,8 +16,7 @@ import logo from "../img/logo.png";
 // 점검 메뉴
 const products = [
   { name: '안전점검', description: '안전점검 등록 자', href: '/inspection', icon: ClipboardDocumentListIcon },
-  { name: '안전점검시간 통계', description: '안전점검 통계를 조회할 수 있습니다', href: '#', icon: ChartPieIcon },
-  { name: '안전교육 출석 통계', description: '안전점검 통계를 조회할 수 있습니다', href: '#', icon: ChartPieIcon },
+  { name: '안전점검 통계', description: '안전점검 통계를 조회할 수 있습니다', href: '/inspection/statistics/yearimg', icon: ChartPieIcon },
 ]
 
 // 교육 메뉴

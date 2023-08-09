@@ -37,8 +37,8 @@ function EduAttenStatics() {
         const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
         const currentYear = getYear(currentDate);
         const response = await axios.get(
-           "http://172.20.20.252:8081/edustatistics/getmonth",
-          //"http://localhost:8081/edustatistics/getmonth",
+          //  "http://172.20.20.252:8081/edustatistics/getmonth",
+          "http://localhost:8081/edustatistics/getmonth",
           {
             params: {
               eduCategory: selectedCategory,
@@ -52,8 +52,7 @@ function EduAttenStatics() {
           return new Date(a.eduStartTime) - new Date(b.eduStartTime);
         });
         setAttendeesList(sortedAttendeesList);
-        console.log("저ㅓㅇ렬"+sortedAttendeesList);
-        console.log("그냥 어텐"+ attendeesList);
+        setSortedAttendeesList(sortedAttendeesList);
         setSelectedMonth(currentMonth);
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
@@ -85,8 +84,7 @@ function EduAttenStatics() {
         return new Date(a.eduStartTime) - new Date(b.eduStartTime);
       });
       setAttendeesList(sortedAttendeesList);
-       console.log("검색 저ㅓㅇ렬"+sortedAttendeesList);
-        console.log("검색 어텐"+ attendeesList);
+      setSortedAttendeesList(sortedAttendeesList);
     } catch (error) {
       console.error("데이터 난리났다 난리났어:", error);
     }
@@ -94,25 +92,25 @@ function EduAttenStatics() {
 
     // 엑셀!!!!!!!!!!!
     const createExcelData = (sortedAttendeesList) => {
+
       // 교육 정보를 바탕으로 엑셀 데이터를 생성하는 로직 작성
-      const data = [
-        {
-          카테고리: `${sortedAttendeesList.eduCategory}`,
-          제목: `${sortedAttendeesList.eduTitle}`,
-          교육일정: `${sortedAttendeesList.eduStartTime}`,
-          교육시간: `${sortedAttendeesList.eduSumTime} 분`,
-          부서: sortedAttendeesList.attenDepartment,
-          사원번호: `${sortedAttendeesList.attenEmployeeNumber}`,
-          이름: sortedAttendeesList.attenName,
-        },
-      ];
-  
+      const data = sortedAttendeesList.map((item) => ({
+        제목: `${item.eduTitle}`,
+        교육일정: `${item.eduStartTime}`,
+        교육시간: `${item.eduSumTime} 분`,
+        부서: item.attenDepartment,
+        사원번호: `${item.attenEmployeeNumber}`,
+        이름: item.attenName,
+      }));
+    
       return data;
     };
   
     const handleExport = () => {
-      if (!sortedAttendeesList) return; // eduData가 없을 경우 빠른 리턴
-  
+      if (!sortedAttendeesList || sortedAttendeesList.length === 0) {
+        console.log("데이터가 없습니다.");
+        return;
+      }
       // 엑셀 데이터 생성
       const data = createExcelData(sortedAttendeesList);
   
@@ -131,7 +129,7 @@ function EduAttenStatics() {
       const excelFile = new Blob([excelBuffer], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });
-      saveAs(excelFile, `${sortedAttendeesList.eduCategory}_안전교육.xlsx`);
+      saveAs(excelFile, `안전교육출석명단.xlsx`);
     };
 
 
