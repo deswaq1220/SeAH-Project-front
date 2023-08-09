@@ -19,6 +19,7 @@ function EduAttenStatics() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedMonth, setSelectedMonth] = useState("");
   const [attendeesList, setAttendeesList] = useState([]);
+  const [sortedAttendeesList, setSortedAttendeesList] = useState([]);
   const categories = ["CREW", "MANAGE", "DM", "ETC"];
   // 선택된 카테고리를 상태로 관리
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -51,6 +52,8 @@ function EduAttenStatics() {
           return new Date(a.eduStartTime) - new Date(b.eduStartTime);
         });
         setAttendeesList(sortedAttendeesList);
+        console.log("저ㅓㅇ렬"+sortedAttendeesList);
+        console.log("그냥 어텐"+ attendeesList);
         setSelectedMonth(currentMonth);
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
@@ -66,8 +69,8 @@ function EduAttenStatics() {
     try {
 
       const response = await axios.get(
-        "http://172.20.20.252:8081/edustatistics/getmonth", {   // 세아
-        // "http://localhost:8081/edustatistics/getmonth", {
+        // "http://172.20.20.252:8081/edustatistics/getmonth", {   // 세아
+        "http://localhost:8081/edustatistics/getmonth", {
 
         params: {
           year: currentDate.getFullYear(),
@@ -82,23 +85,25 @@ function EduAttenStatics() {
         return new Date(a.eduStartTime) - new Date(b.eduStartTime);
       });
       setAttendeesList(sortedAttendeesList);
+       console.log("검색 저ㅓㅇ렬"+sortedAttendeesList);
+        console.log("검색 어텐"+ attendeesList);
     } catch (error) {
       console.error("데이터 난리났다 난리났어:", error);
     }
   };
 
     // 엑셀!!!!!!!!!!!
-    const createExcelData = (attendeesList) => {
+    const createExcelData = (sortedAttendeesList) => {
       // 교육 정보를 바탕으로 엑셀 데이터를 생성하는 로직 작성
       const data = [
         {
-          카테고리: `${attendeesList.eduCategory}`,
-          제목: `${attendeesList.eduTitle}`,
-          교육일정: `${attendeesList.eduStartTime}`,
-          교육시간: `${attendeesList.eduSumTime} 분`,
-          부서: attendeesList.attenDepartment,
-          사원번호: `${attendeesList.attenEmployeeNumber}`,
-          이름: attendeesList.attenName,
+          카테고리: `${sortedAttendeesList.eduCategory}`,
+          제목: `${sortedAttendeesList.eduTitle}`,
+          교육일정: `${sortedAttendeesList.eduStartTime}`,
+          교육시간: `${sortedAttendeesList.eduSumTime} 분`,
+          부서: sortedAttendeesList.attenDepartment,
+          사원번호: `${sortedAttendeesList.attenEmployeeNumber}`,
+          이름: sortedAttendeesList.attenName,
         },
       ];
   
@@ -106,10 +111,10 @@ function EduAttenStatics() {
     };
   
     const handleExport = () => {
-      if (!attendeesList) return; // eduData가 없을 경우 빠른 리턴
+      if (!sortedAttendeesList) return; // eduData가 없을 경우 빠른 리턴
   
       // 엑셀 데이터 생성
-      const data = createExcelData(attendeesList);
+      const data = createExcelData(sortedAttendeesList);
   
       // 엑셀 시트 생성
       const worksheet = XLSX.utils.json_to_sheet(data);
@@ -126,7 +131,7 @@ function EduAttenStatics() {
       const excelFile = new Blob([excelBuffer], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });
-      saveAs(excelFile, `${attendeesList.eduCategory}_안전교육.xlsx`);
+      saveAs(excelFile, `${sortedAttendeesList.eduCategory}_안전교육.xlsx`);
     };
 
 
@@ -289,6 +294,7 @@ function EduAttenStatics() {
             <button
               type="button"
               className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+              onClick={handleExport}
             >
               엑셀 저장
             </button>

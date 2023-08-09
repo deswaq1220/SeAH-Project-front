@@ -35,8 +35,8 @@ function EduStatics() {
       const currentYear = getYear(currentDate);
       // 월&카테고리 별 교육시간 총 합계
       const response = await  axios.get(
-        `http://172.20.20.252:8081/edustatistics/getmonthlyedulist`, {   // 세아
-        // `http://localhost:8081/edustatistics/getmonthlyedulist`, {
+        // `http://172.20.20.252:8081/edustatistics/getmonthlyedulist`, {   // 세아
+        `http://localhost:8081/edustatistics/getmonthlyedulist`, {
         params: {
           year: currentYear,
           month: currentMonth,
@@ -76,8 +76,8 @@ function EduStatics() {
         
         // 월&카테고리 별 교육시간 총 합계
         const response = await axios.get(
-          `http://172.20.20.252:8081/edustatistics/getmonthlyruntime`, {   // 세아
-          // `http://localhost:8081/edustatistics/getmonthlyruntime`, {
+          // `http://172.20.20.252:8081/edustatistics/getmonthlyruntime`, {   // 세아
+          `http://localhost:8081/edustatistics/getmonthlyruntime`, {
 
           params: {
             year: currentYear,
@@ -108,8 +108,8 @@ function EduStatics() {
         const currentYear = getYear(currentDate);
         // 월&카테고리 별 교육시간 총 합계
         const response = await axios.get(
-          `http://172.20.20.252:8081/edustatistics/getmonthlyedulist`, {   // 세아
-          // `http://localhost:8081/edustatistics/getmonthlyedulist`, {
+          // `http://172.20.20.252:8081/edustatistics/getmonthlyedulist`, {   // 세아
+          `http://localhost:8081/edustatistics/getmonthlyedulist`, {
           params: {
             year: currentYear,
             month: currentMonth,
@@ -198,13 +198,6 @@ function EduStatics() {
             </svg>
           </button>
         </div>
-        <button
-        type="submit"
-        className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-        onClick={handleButtonClick}
-      >
-        출석 조회
-      </button>
       </div>
 
       {/* 여기까지가 달력 */}
