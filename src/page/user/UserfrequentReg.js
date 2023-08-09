@@ -31,31 +31,28 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-class IsComplete extends React.Component<{
-  onFormDataChange: handleIsCompeleteDataChange,
-}> {
-  render() {
-    return null;
-  }
-}
+// class IsComplete extends React.Component<{ onFormDataChange: handleIsCompeleteDataChange }> {
+//     render() {
+//         return null;
+//     }
+// }
 
 function UserfrequentReg() {
-  const { masterdataPart } = useParams(); // url 영역 파라미터
-  const { masterdataFacility } = useParams(); // url 설비 파라미터
-  const [speEmpNum, setSpeEmpNum] = useState("");
-  const [spePerson, setSpePerson] = useState("");
-  const [speEmail, setSpeEmail] = useState("");
-  const [speDanger, setSpeDanger] = useState("");
-  const [speInjure, setSpeInjure] = useState("");
-  const [speCause, setSpeCause] = useState("");
-  const [speTrap, setSpeTrap] = useState("");
-  const [speRiskAssess, setSpeRiskAssess] = useState("");
-  const [speContent, setSpeContent] = useState("");
-  const [speActContent, setSpeActContent] = useState("");
-  const [speActPerson, setSpeActPerson] = useState("");
-  const [speActEmail, setSpeActEmail] = useState("");
-  const [speComplete, setSpeComplete] = useState("");
-  const [eduId, setEduId] = useState(''); // eduId 상태
+    const { masterdataPart } = useParams();           // url 영역 파라미터
+    const { masterdataFacility } = useParams();       // url 설비 파라미터
+    const [speEmpNum, setSpeEmpNum] = useState("");
+    const [spePerson, setSpePerson] = useState("");
+    const [speEmail, setSpeEmail] = useState("");
+    const [speDanger, setSpeDanger] = useState("");
+    const [speInjure, setSpeInjure] = useState("");
+    const [speCause, setSpeCause] = useState("");
+    const [speTrap, setSpeTrap] = useState("");
+    const [speRiskAssess, setSpeRiskAssess] = useState("");
+    const [speContent, setSpeContent] = useState("");
+    const [speActContent, setSpeActContent] = useState("");
+    const [speActPerson, setSpeActPerson] = useState("");
+    const [speActEmail, setSpeActEmail] = useState("");
+    const [speComplete, setSpeComplete] = useState("");
 
   // Inspector 콜백 함수 : 점검자(이름, 이메일, 사원번호)
   const handleInspectorDataChange = (inspectorForm) => {
@@ -112,54 +109,32 @@ function UserfrequentReg() {
 
   const navigate = useNavigate();
 
-  const handleFormSubmit = () => {
-    const requestData = {
-      speEmpNum,
-      spePerson,
-      speEmail,
-      speDanger,
-      speInjure,
-      speCause,
-      speTrap,
-      speRiskAssess,
-      speContent,
-      speActPerson,
-      speActEmail,
-      speActContent,
-      speComplete,
-    };
-    console.log(requestData); // 요청 데이터 콘솔에 출력
+  // const handleFormSubmit = () => {
+  //   const requestData = {
+  //     speEmpNum,
+  //     spePerson,
+  //     speEmail,
+  //     speDanger,
+  //     speInjure,
+  //     speCause,
+  //     speTrap,
+  //     speRiskAssess,
+  //     speContent,
+  //     speActPerson,
+  //     speActEmail,
+  //     speActContent,
+  //     speComplete,
+  //   }
 
-    // 수시점검 등록 요청
-    axios
-      .post(
-        `http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`,
-        requestData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response);
+    
+  //   // Inspector 콜백 함수 : 점검자(이름, 이메일, 사원번호)
+  //   const handleInspectorDataChange = (inspectorForm) => {
+  //       setSpeEmpNum(inspectorForm.employeenumber);
+  //       setSpePerson(inspectorForm.inspectorname);
+  //       setSpeEmail(inspectorForm.inspectoremail);
+  //   };
+  //   console.log(requestData); // 요청 데이터 콘솔에 출력
 
-        // 등록이 완료되었다는 알림 띄우기
-        toast.success("등록이 완료되었습니다.", {
-          position: "top-center",
-          autoClose: 3000, // 알림이 3초 후에 자동으로 사라짐
-          hideProgressBar: true,
-        });
-
-        // 저장성공시 해당설비의 리스트 페이지
-        navigate(`/special/list/${masterdataPart}/${masterdataFacility}`);
-      })
-      .catch((error) => {
-        console.log(requestData);
-        console.error(error);
-        alert("수시점검 등록에 실패했습니다. 다시 시도해주세요.");
-      });
-  };
 
 //   //파일업로드용
 //   const uppy = new Uppy({
@@ -224,8 +199,8 @@ function UserfrequentReg() {
                     hideProgressBar: true,
                 });
 
-             // 저장성공시 해당설비의 리스트 페이지
-             navigate(`/special/list/${masterdataPart}/${masterdataFacility}`);
+                // 저장성공시 해당설비의 리스트 페이지
+                navigate(`/special/list/${masterdataPart}/${masterdataFacility}`);
             })
             .catch((error) => {
                 console.log(requestData);
@@ -239,29 +214,29 @@ function UserfrequentReg() {
 
 
         <>
-            <UserHeader/>
+            <UserHeader />
             <p>수시점검</p>
             <p>수시점검 내용등록</p>
-            <Inspector onFormDataChange={handleInspectorDataChange}/> {/* 점검자 */}
-            <Inspectionarea/> {/* 점검영역 */}
-            <Facilityname/> {/* 설비명 */}
-            <Danger onFormDataChange={handleDangerDataChange}/> {/* 위험분류 */}
-            <Injured onFormDataChange={handleInjuredDataChange}/> {/* 부상부위 */}
-            <Dangersource onFormDataChange={handleCauseDataChange}/> {/* 위험원인 */}
-            <Falsetrap onFormDataChange={handleFalsetrapDataChange}/> {/* 실수함정 */}
-            <RiskAssessment onFormDataChange={handleRiskAssessmentDataChange}/> {/* 위험성평가 */}
+            <Inspector onFormDataChange={handleInspectorDataChange} /> {/* 점검자 */}
+            <Inspectionarea /> {/* 점검영역 */}
+            <Facilityname /> {/* 설비명 */}
+            <Danger onFormDataChange={handleDangerDataChange} /> {/* 위험분류 */}
+            <Injured onFormDataChange={handleInjuredDataChange} /> {/* 부상부위 */}
+            <Dangersource onFormDataChange={handleCauseDataChange} /> {/* 위험원인 */}
+            <Falsetrap onFormDataChange={handleFalsetrapDataChange} /> {/* 실수함정 */}
+            <RiskAssessment onFormDataChange={handleRiskAssessmentDataChange} /> {/* 위험성평가 */}
             {/* 위험분류 표 */}
             <div className="flex flex-col justify-center items-center border border-gray-300 px-3 mx-3 ">
                 <p className=" font-semibold text-lg">평가표</p>
                 <img src={DangerImg} className=" p-3 w-100"></img>
             </div>
-            <InspectionDetails onFormDataChange={handleInspectionDetailsDataChange}/> {/* 점검내용 */}
+            <InspectionDetails onFormDataChange={handleInspectionDetailsDataChange} /> {/* 점검내용 */}
             {/* 개선대책 */}
             <div id="ReformMeasures" className="grid sm:flex items-baseline justify-start">
-        <span
-            className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 my-4 ml-4 ">
-          개선대책
-        </span>
+                <span
+                    className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 my-4 ml-4 ">
+                    개선대책
+                </span>
 
         <div className="mt-2 ">
           <textarea
