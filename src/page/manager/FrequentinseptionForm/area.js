@@ -18,7 +18,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function FrequentInsForm() {
+export default function FrequentInsArea() {
   const [selected, setSelected] = useState(people[0]);
   return (
     <>
