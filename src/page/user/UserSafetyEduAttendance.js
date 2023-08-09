@@ -41,6 +41,7 @@ function UserSafetyEduAttendance() {
   const [eduList, setEduList] = useState([]); // 안전교육 데이터를 담을 상태 변수
   const [eduData, setEduData] = useState(null);
   // const [eduTitle, setEduTitle] = useState(null);
+  const [eduTitle, setEduTitle] = useState("")
   const [isAttendanceCompleted, setIsAttendanceCompleted] = useState(false); // 출석 완료 여부 상태 변수
   const today = new Date();
   const year = today.getFullYear();
@@ -142,6 +143,11 @@ function UserSafetyEduAttendance() {
     fetchEduList(); // 데이터 가져오기 함수 호출
   }, [eduId]); // eduId를 두 번째 인자로 넣어줌으로써 eduId가 변경될 때마다 useEffect가 실행되도록 함
 
+
+  
+
+
+
   return (
     <div>
       <UserHeader></UserHeader>
@@ -156,7 +162,7 @@ function UserSafetyEduAttendance() {
               {formattedDate}
             </h3>
             <p className="mt-1 max-w-2xl text-lg leading-6 text-gray-500">
-            {eduList.eduTitle}교육 사원출석 페이지입니다
+            <span className=" font-bold text-seahColor">{eduList.eduTitle}</span> 교육 사원출석 페이지입니다
             </p>
           </div>
           <form className="w-full md:grid-cols-2" onSubmit={handleSubmit}>
@@ -245,7 +251,7 @@ function UserSafetyEduAttendance() {
               </Listbox>
             </div>
             <div id="name" className="flex items-baseline justify-start">
-              <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
+              <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 border border-gray-200">
                 이름
               </span>
               <div className="sm:col-span-3">
@@ -267,7 +273,7 @@ function UserSafetyEduAttendance() {
               id="Employee_number"
               className="flex items-baseline justify-start"
             >
-              <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
+              <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 border border-gray-200 ">
                 사원번호
               </span>
               <div className="sm:col-span-3">
