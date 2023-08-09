@@ -123,6 +123,9 @@ const TruncatedFileName = ({ fileName }) => {
 
   return <div>{displayedFileName}</div>;
 };
+const handleFileUpload = (acceptedFiles) => {
+  // console.log(acceptedFiles);
+};
 
 function SafetyEduReg() {
   const {
@@ -631,7 +634,15 @@ function SafetyEduReg() {
               </button>
             </div>
             <h1>파일 업로드</h1>
-              <FilePond
+            <FilePond
+        allowMultiple={true}
+        maxFiles={5}
+        onupdatefiles={(fileItems) => {
+          const acceptedFiles = fileItems.map((fileItem) => fileItem.file);
+          handleFileUpload(acceptedFiles);
+        }}
+      />
+              {/* <FilePond
                 allowMultiple={true} // 다중 파일 업로드 허용
                 maxFiles={5} // 최대 파일 수 설정
                 // server={`http:localhost:8081/edureg`} // 파일 업로드를 처리하는 서버 엔드포인트
@@ -643,7 +654,7 @@ function SafetyEduReg() {
                 //   console.log(fileItems.map((fileItem) => fileItem.file));
                 // }
               }
-              />
+              /> */}
           </form>
         </div>
       </div>
