@@ -61,8 +61,8 @@ function SafetyInspectionStatisticsYearImg() {
 
                     //(LineChart) 특정년도의 수시점검과 정기점검 건수
 
-                    const lineChartResponse = await axios.get('http://172.20.20.252:8081/statistics/inspectioncount', { params: { year: selectedYear } });   // 세아
-                    // const lineChartResponse = await axios.get('http://localhost:8081/statistics/inspectioncount', { params: { year: selectedYear } });
+                    //const lineChartResponse = await axios.get('http://172.20.20.252:8081/statistics/inspectioncount', { params: { year: selectedYear } });   // 세아
+                     const lineChartResponse = await axios.get('http://localhost:8081/statistics/inspectioncount', { params: { year: selectedYear } });
 
                     const specialCountData = lineChartResponse.data;
                     console.log("첫번째"+ JSON.stringify(lineChartResponse.data, null, 2));
@@ -79,8 +79,8 @@ function SafetyInspectionStatisticsYearImg() {
 
                     //(BarChart) 특정년도의 월별 수시점검한 위험분류 건수
 
-                    const barChartResponse = await axios.get('http://172.20.20.252:8081/special/statistics/detaildanger', { params: {year: selectedYear} });   // 세아
-                    // const barChartResponse = await axios.get('http://localhost:8081/special/statistics/detaildanger', { params: {year: selectedYear} });
+                    //const barChartResponse = await axios.get('http://172.20.20.252:8081/special/statistics/detaildanger', { params: {year: selectedYear} });   // 세아
+                     const barChartResponse = await axios.get('http://localhost:8081/special/statistics/detaildanger', { params: {year: selectedYear} });
                     const specialDangerData = barChartResponse.data; //백엔드에서 받아온 데이터
 
                     const dataByMonth = {};
@@ -147,14 +147,14 @@ function SafetyInspectionStatisticsYearImg() {
                                     <div className="hidden lg:ml-6 lg:block">
                                         <div className="flex space-x-4">
                                             {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
-                                            <a href="#" className="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white">
+                                            <a href="http://localhost:3000/inspection/statistics/yearimg" className="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white">
                                                 연도 상세 분석
                                             </a>
                                             <a
-                                                href="#"
+                                                href="http://localhost:3000/inspection/statistics/monthimg"
                                                 className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                                             >
-                                                월별 분석
+                                                월간 분석
                                             </a>
                                         </div>
                                     </div>

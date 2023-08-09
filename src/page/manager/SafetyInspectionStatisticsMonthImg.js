@@ -28,10 +28,11 @@ function SafetyInspectionStatisticsMonthImg() {
         setSelectedYear(event.target.value);
     };
 
-
+    const [spcCount, setSpcCount] = useState([]);
     const [partCount, setPartCount] = useState([]);
     const [dangerCount, setDangerCount] = useState([]);
     const [causeCount, setCauseCount] = useState([]);
+
     useEffect(() => {
 
         if (selectedYear) {
@@ -42,25 +43,34 @@ function SafetyInspectionStatisticsMonthImg() {
 
     const fetchData = async () => {
         try {
+
+            //점검건수 값
+            //await axios.get(`http://172.20.20.252:8081/special/statistics/count`, { params: { yearmonth: selectedYear } })  //세아
+            await axios.get(`http://localhost:8081/special/statistics/count`, { params: { yearmonth: selectedYear } })
+                .then(response => {
+                    setSpcCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
+                    console.log(response.data);
+                })
+
             //영역값
-            await axios.get(`http://172.20.20.252:8081/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })  //세아
-            //await axios.get(`http://localhost:8081/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })
+            //await axios.get(`http://172.20.20.252:8081/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })  //세아
+            await axios.get(`http://localhost:8081/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })
                 .then(response => {
                     setPartCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
                     console.log(response.data);
                 })
 
             //위험분류값
-            await axios.get(`http://172.20.20.252:8081/special/statistics/dangerandmonth`, { params: { yearmonth: selectedYear } })  //세아
             //await axios.get(`http://172.20.20.252:8081/special/statistics/dangerandmonth`, { params: { yearmonth: selectedYear } })  //세아
+            await axios.get(`http://localhost:8081/special/statistics/dangerandmonth`, { params: { yearmonth: selectedYear } })
                 .then(response => {
                     setDangerCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
                     console.log(response.data);
                 })
 
             //위험원인값
-            await axios.get(`http://172.20.20.252:8081/special/statistics/causeandmonth`, { params: { yearmonth: selectedYear } })  //세아
-            //await axios.get(`http://localhost:8081/special/statistics/causeandmonth`, { params: { yearmonth: selectedYear } })  //세아
+            //await axios.get(`http://172.20.20.252:8081/special/statistics/causeandmonth`, { params: { yearmonth: selectedYear } })  //세아
+            await axios.get(`http://localhost:8081/special/statistics/causeandmonth`, { params: { yearmonth: selectedYear } })
                 .then(response => {
                     setCauseCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
                     console.log(response.data);
@@ -96,14 +106,14 @@ function SafetyInspectionStatisticsMonthImg() {
                                   <div className="hidden lg:ml-6 lg:block">
                                       <div className="flex space-x-4">
                                           {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
-                                          <a href="#" className="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white">
+                                          <a href="http://localhost:3000/inspection/statistics/yearimg" className="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white">
                                               연도 상세 분석
                                           </a>
                                           <a
-                                              href="#"
+                                              href="http://localhost:3000/inspection/statistics/monthimg"
                                               className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                                           >
-                                              월별 분석
+                                              월간 분석
                                           </a>
                                       </div>
                                   </div>
@@ -186,15 +196,12 @@ function SafetyInspectionStatisticsMonthImg() {
 
           {/*점검 총계*/}
           <div>
-              <h3 className="text-base font-semibold leading-2 text-gray-900">수시점검 총계</h3>
-{/*              <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-1">
-                  {count.map((item, index) => (
-                      <div key={index} className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-                          <dt className="truncate text-sm font-medium text-gray-500">{item[0]}</dt>
-                          <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{item[1]}</dd>
+              <h3 className="text-base font-semibold leading-2 text-gray-900">이번달 수시점검 건수</h3>
+              <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-1">
+                      <div className="overflow-hidden rounded-lg bg-amber-100 px-4 py-5 shadow sm:p-6">
+                          <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{spcCount}건</dd>
                       </div>
-                  ))}
-              </dl>*/}
+              </dl>
           </div>
 
           {/*영역별(완료)*/}
@@ -203,34 +210,34 @@ function SafetyInspectionStatisticsMonthImg() {
               <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-10">
                   {partCount.map((item, index) => (
                       <div key={index} className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-                          <dt className="truncate text-sm font-medium text-gray-500">{item[0]}</dt>
-                          <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{item[1]}</dd>
+                          <dt className="truncate text-sm font-medium text-gray-500">{item[0]}파트</dt>
+                          <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{item[1]}건</dd>
                       </div>
                   ))}
               </dl>
           </div>
 
-          {/*위험분류별(컬럼 수랑 값이랑 맞춰서 해야함 중복중인듯)(완료)*/}
+          {/*위험분류별(완료)*/}
           <div>
               <h3 className="text-base font-semibold leading-2 text-gray-900">위험분류 분석</h3>
               <dl className="mt-1 grid grid-cols-2 gap-5 sm:grid-cols-9">
                   {dangerCount.map((item, index) => (
                       <div key={index} className="overflow-hidden rounded-lg bg-indigo-200 px-4 py-5 shadow sm:p-6">
-                          <dt className="truncate text-sm font-medium text-gray-500">{item[0]}</dt>
-                          <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{item[1]}</dd>
+                          <dt className="truncate text-sm font-medium text-gray-500">분류: {item[0]}</dt>
+                          <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{item[1]}건</dd>
                       </div>
                   ))}
               </dl>
           </div>
 
-         {/*위험원인별*/}
+         {/*위험원인별(완료)*/}
           <div>
               <h3 className="text-base font-semibold leading-2 text-gray-900">위험원인 분석</h3>
               <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-10">
                   {causeCount.map((item, index) => (
                       <div key={index} className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-                          <dt className="truncate text-sm font-medium text-gray-500">{item[0]}</dt>
-                          <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{item[1]}</dd>
+                          <dt className="truncate text-sm font-medium text-gray-500">원인: {item[0]}</dt>
+                          <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{item[1]}건</dd>
                       </div>
                   ))}
               </dl>
