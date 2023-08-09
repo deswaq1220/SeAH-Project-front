@@ -15,9 +15,11 @@ export default function ActionRquest({ onFormDataChange }) {
   const { masterdataPart } = useParams(); // url 영역 파라미터
   const { masterdataFacility } = useParams(); // url 설비 파라미터
   const [emailList, setEmailList] = useState([]);
-
   // 선택된 이메일 담을 변수
   const [instances, setInstances] = useState([{ selectedEmail: null }]);
+
+
+
 
   // 백에서 데이터가져와서 뿌리기 : 해당 영역 + 고정수신자의 이메일정보
   useEffect(() => {
@@ -63,6 +65,7 @@ export default function ActionRquest({ onFormDataChange }) {
     });
   };
 
+  // 이메일 정보 추가 : +버튼
   const handleAddInstance = () => {
     setInstances([...instances, {}]);
   };
@@ -85,6 +88,7 @@ export default function ActionRquest({ onFormDataChange }) {
       speActEmail: selectedEmailAddresses,
     });
   };
+
 
 
 
@@ -130,12 +134,12 @@ export default function ActionRquest({ onFormDataChange }) {
                       leaveTo="opacity-0"
                     >
                       <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                        {emailList.map((emailList) => (
+                        {emailList.map((emailListItem) => (
                             <Listbox.Option
-                                key={emailList.emailId}
-                                disabled={emailList.masterStatus === 'Y'}
-                                className={({active}) => classNames(active ? "bg-seahColor text-white" : emailList.masterStatus === 'Y' ? "bg-gray-200 " : "text-gray-900", "relative cursor-default select-none py-2 pl-3 pr-9")}
-                                value={emailList}
+                                key={emailListItem.emailId}
+                                disabled={emailListItem.masterStatus === 'Y'}
+                                className={({active}) => classNames(active ? "bg-seahColor text-white" : emailListItem.masterStatus === 'Y' ? "bg-gray-200 " : "text-gray-900", "relative cursor-default select-none py-2 pl-3 pr-9")}
+                                value={emailListItem}
                             >
                             {({ selected, active }) => (
                               <>
@@ -145,7 +149,7 @@ export default function ActionRquest({ onFormDataChange }) {
                                     "block truncate"
                                   )}
                                 >
-                                  {emailList.emailName}
+                                  {emailListItem.emailName}
                                 </span>
 
                                 {selected ? (
