@@ -23,6 +23,31 @@ function SafetyInspectionStatisticsYearImg() {
         setSelectedYear(parseInt(event.target.value));
     };
 
+    //이벤트2
+    const handleSave = async () => {
+        try {
+            // const barChartResponse = await axios.get("http://http://172.20.20.252/:8081/special/statistics/detaildanger", {  // 세아
+            const barChartResponse = await axios.get("http://localhost:8081/special/statistics/detaildanger", {
+                params: {
+                    year: selectedYear,
+                },
+            });
+
+            // const lineChartResponse = await axios.get("http://http://172.20.20.252/:8081/statistics/inspectioncount", {  // 세아
+            const lineChartResponse = await axios.get("http://localhost:8081/statistics/inspectioncount", {
+                params: {
+                    year: selectedYear,
+                },
+            });
+
+            // 백엔드로부터 받은 데이터 처리
+            console.log("백엔드 응답 데이터(lineChart)):", lineChartResponse.data);
+            console.log("백엔드 응답 데이터2(barChart):", barChartResponse.data);
+        } catch (error) {
+            console.error("백엔드 요청 에러:", error);
+        }
+    };
+
 
     //(LineChart) 특정년도의 수시점검과 정기점검 건수
     const [lineChartData, setLineChartData] = useState([]);
@@ -60,7 +85,6 @@ function SafetyInspectionStatisticsYearImg() {
                 try {
 
                     //(LineChart) 특정년도의 수시점검과 정기점검 건수
-
                     const lineChartResponse = await axios.get('http://172.20.20.252:8081/statistics/inspectioncount', { params: { year: selectedYear } });   // 세아
                     // const lineChartResponse = await axios.get('http://localhost:8081/statistics/inspectioncount', { params: { year: selectedYear } });
 
@@ -78,11 +102,9 @@ function SafetyInspectionStatisticsYearImg() {
 
 
                     //(BarChart) 특정년도의 월별 수시점검한 위험분류 건수
-
                     const barChartResponse = await axios.get('http://172.20.20.252:8081/special/statistics/detaildanger', { params: {year: selectedYear} });   // 세아
                     // const barChartResponse = await axios.get('http://localhost:8081/special/statistics/detaildanger', { params: {year: selectedYear} });
                     const specialDangerData = barChartResponse.data; //백엔드에서 받아온 데이터
-
                     const dataByMonth = {};
                     const allDangerKinds = specialDangerData.reduce((acc, data) => {
                         return [...acc, ...Object.keys(data).filter((key) => key !== 'month')];

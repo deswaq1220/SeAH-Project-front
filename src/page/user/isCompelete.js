@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 
@@ -22,6 +22,10 @@ export default function IsCompelete({ onFormDataChange }) {
   onFormDataChange(completionStatusSelected.value);
  };
 
+ // 처음 세팅된 미완료 선택 안해도 그 값으로 업데이트되게
+ useEffect(() => {
+  handleCompletionStatusChange(completionStatusOptions[0]);
+ }, []); // 초기화될 때 한 번만 실행하도록 빈 배열 전달
 
   return (
     <div id="injured" className="flex items-baseline justify-start">
