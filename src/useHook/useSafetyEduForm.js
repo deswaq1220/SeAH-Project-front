@@ -212,11 +212,11 @@ const useSafetyEduForm = (eduData) => {
   };
   
 
-  // const deleteFile = (index) => {
-  //   const updatedFiles = [...uploadedFiles];
-  //   updatedFiles.splice(index, 1);
-  //   setUploadedFiles(updatedFiles);
-  // };
+  const deleteFile = (index) => {
+    const updatedFiles = [...uploadedFiles];
+    updatedFiles.splice(index, 1);
+    setUploadedFiles(updatedFiles);
+  };
 
   const handleFileChange = (event) => {
     //이거 이상함? 나중에 터지면 여기 문제일수도

@@ -41,12 +41,6 @@ export default function Injured({ onFormDataChange }) {
           .catch((error) => {
             console.error("Error fetching data: ", error);
           });
-          setSpecialInjuredList(speInjuredData);
-          setInjuredSelected(speInjuredData[0]);
-        })
-        .catch((error) => {
-          console.error("Error fetching data: ", error);
-        });
     }
 
     specialInjureFetchDataWithAxios(masterdataPart, masterdataFacility);
