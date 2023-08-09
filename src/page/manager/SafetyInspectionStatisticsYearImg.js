@@ -10,6 +10,8 @@ import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import iconsgraph from "../../img/iconsgraph.png";
+
 
 function SafetyInspectionStatisticsYearImg() {
 
@@ -140,8 +142,8 @@ function SafetyInspectionStatisticsYearImg() {
                                     <div className="flex-shrink-0">
                                         <img
                                             className="h-8 w-auto"
-                                            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                                            alt="Your Company"
+                                            src={iconsgraph}
+                                            /*alt="Your Company"*/
                                         />
                                     </div>
                                     <div className="hidden lg:ml-6 lg:block">
@@ -169,11 +171,13 @@ function SafetyInspectionStatisticsYearImg() {
                                                 <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                                             </div>
                                             <input
-                                                id="search"
+                                                id="yearInput"
                                                 name="search"
                                                 className="block w-full rounded-md border-0 bg-gray-700 py-1.5 pl-10 pr-3 text-gray-300 placeholder:text-gray-400 focus:bg-white focus:text-gray-900 focus:ring-0 sm:text-sm sm:leading-6"
-                                                placeholder="Search"
-                                                type="search"
+                                                placeholder="검색년도: 2023"
+                                                type="number"
+                                                value={selectedYear}
+                                                onChange={handleYearChange}
                                             />
                                         </div>
                                     </div>
@@ -210,34 +214,11 @@ function SafetyInspectionStatisticsYearImg() {
                 )}
             </Disclosure>
 
-            <div>      안전점검 당해년도 대시보드 페이지입니다</div>
 
-
-
-
-            <div
-                id="Training_time"
-                className="flex items-baseline justify-start"
-            >
-              <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
-                검색년도
-              </span>
-                <div className="mt-2">
-                    <input
-                        type="number"
-                        id="yearInput"
-                        className="block w-56 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
-                        value={selectedYear}
-                        onChange={handleYearChange}
-                    />
-
-                </div>
-            </div>
-
-
-
+    <div className="flex">
+        <div className="w-1/2 p-4">
             <div> (수시점검/정기점검) 점검 수 통계</div>
-            <div style={{ width: '800px', height: '500px', margin: '0 auto' }}>
+            <div style={{ width: 'auto', height: '700px', margin: '0 auto' }}>
                 {lineChartData.length > 0 ? (
                     <ResponsiveLine
                         data={lineChartData}
@@ -254,7 +235,7 @@ function SafetyInspectionStatisticsYearImg() {
                         axisTop={null}
                         axisRight={null}
                         axisBottom={{
-                            tickSize: 5,
+                            tickSize: 10,
                             tickPadding: 5,
                             tickRotation: 0,
                             legend: '월',
@@ -262,12 +243,13 @@ function SafetyInspectionStatisticsYearImg() {
                             legendPosition: 'middle'
                         }}
                         axisLeft={{
-                            tickSize: 5,
+                            tickSize: 10,
                             tickPadding: 5,
                             tickRotation: 0,
                             legend: '점검 건수',
                             legendOffset: -40,
-                            legendPosition: 'middle'
+                            legendPosition: 'middle',
+
                         }}
                         //enableGridX={false}
                         //enableGridY={false}
@@ -309,52 +291,55 @@ function SafetyInspectionStatisticsYearImg() {
                     />
                 ) : null}
             </div>
+        </div>
 
-
+        <div className="w-1/2 p-4">
             <div>  (수시점검) 당해 점검발생 건 - 위험분류 통계</div>
-            <div style={{ height: '350px' }}>
-                {barChartData.length > 0 ? (
-                    <ResponsiveContainer width={1200} height="100%">
-                    <BarChart
-                        //width={500}
-                        height={300}
-                        data={barChartData}
-                        margin={{
-                            top: 20,
-                            right: 30,
-                            left: 20,
-                            bottom: 5,
-                        }}
-                        barSize={20}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="month"
-                               tickFormatter={(value) => {
-                                   const monthIndex = parseInt(value, 10) - 1;
-                                   if (months[monthIndex]) {
-                                       return months[monthIndex];
-                                   }
-                                   return '';
-                               }} />
-                        <YAxis domain={[0, maxCount]}/>
-                        <Tooltip />
-                        <Legend />
+                <div style={{ height: '700px' }}>
+                    {barChartData.length > 0 ? (
+                        <ResponsiveContainer width={1200} height="100%">
+                        <BarChart
+                            //width={500}
+                            height={300}
+                            data={barChartData}
+                            margin={{
+                                top: 20,
+                                right: 30,
+                                left: 20,
+                                bottom: 5,
+                            }}
+                            barSize={20}
+                        >
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="month"
+                                   tickFormatter={(value) => {
+                                       const monthIndex = parseInt(value, 10) - 1;
+                                       if (months[monthIndex]) {
+                                           return months[monthIndex];
+                                       }
+                                       return '';
+                                   }} />
+                            <YAxis domain={[0, maxCount]}/>
+                            <Tooltip />
+                            <Legend />
 
-                        {uniqueDangerKinds.map((dangerKind, index) => (
-                            <Bar
-                                key={index}
-                                dataKey={dangerKind}
-                                stackId="a"
-                                fill={colors[index % colors.length]}
-                            />
-                        ))}
-                    </BarChart>
-                    </ResponsiveContainer>
-                ) : (
-                    <p>데이터를 불러오는 중에 오류가 생겼습니다</p>
-                    )}
+                            {uniqueDangerKinds.map((dangerKind, index) => (
+                                <Bar
+                                    key={index}
+                                    dataKey={dangerKind}
+                                    stackId="a"
+                                    fill={colors[index % colors.length]}
+                                />
+                            ))}
+                        </BarChart>
+                        </ResponsiveContainer>
+                    ) : (
+                        <p>데이터를 불러오는 중에 오류가 생겼습니다</p>
+                        )}
+                </div>
             </div>
         </div>
+    </div>
     );
 }
 

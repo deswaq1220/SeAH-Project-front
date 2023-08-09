@@ -4,6 +4,7 @@ import {Disclosure} from "@headlessui/react";
 //네비게이션
 import {Fragment, useEffect, useState} from 'react'
 //import { Disclosure, Menu, Transition } from '@headlessui/react'
+import iconsgraph from "../../img/iconsgraph.png"
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import {MagnifyingGlassIcon} from "@heroicons/react/20/solid";
 import axios from "axios";
@@ -99,8 +100,8 @@ function SafetyInspectionStatisticsMonthImg() {
                                   <div className="flex-shrink-0">
                                       <img
                                           className="h-8 w-auto"
-                                          src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                                          alt="Your Company"
+                                          src={iconsgraph}
+                                          /*alt="Your Company"*/
                                       />
                                   </div>
                                   <div className="hidden lg:ml-6 lg:block">
@@ -195,22 +196,23 @@ function SafetyInspectionStatisticsMonthImg() {
       {/*수시점검 통계*/}
 
           {/*점검 총계*/}
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           <div>
-              <h3 className="text-base font-semibold leading-2 text-gray-900">이번달 수시점검 건수</h3>
+              <h5 className="text-xl font-semibold leading-2 text-gray-900">이번달 수시점검 건수</h5>
               <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-1">
-                      <div className="overflow-hidden rounded-lg bg-amber-100 px-4 py-5 shadow sm:p-6">
-                          <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{spcCount}건</dd>
-                      </div>
+                  <div className="overflow-hidden rounded-lg bg-amber-100 px-3 py-5 shadow sm:p-40 max-w-screen-xl flex items-center justify-center">
+                      <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{spcCount}건</dd>
+                  </div>
               </dl>
           </div>
 
           {/*영역별(완료)*/}
           <div>
-              <h3 className="text-base font-semibold leading-2 text-gray-900">점검영역 분석</h3>
-              <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-10">
+              <h3 className="text-xl font-semibold leading-2 text-gray-900">점검영역 분석</h3>
+              <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-4">
                   {partCount.map((item, index) => (
-                      <div key={index} className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-                          <dt className="truncate text-sm font-medium text-gray-500">{item[0]}파트</dt>
+                      <div key={index} className="overflow-hidden rounded-lg bg-white px-4 py-10 shadow sm:max-w-screen-xl">
+                          <dt className="truncate text-sm font-medium text-gray-900">{item[0]}파트</dt>
                           <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{item[1]}건</dd>
                       </div>
                   ))}
@@ -219,11 +221,11 @@ function SafetyInspectionStatisticsMonthImg() {
 
           {/*위험분류별(완료)*/}
           <div>
-              <h3 className="text-base font-semibold leading-2 text-gray-900">위험분류 분석</h3>
-              <dl className="mt-1 grid grid-cols-2 gap-5 sm:grid-cols-9">
+              <h3 className="text-xl font-semibold leading-2 text-gray-900">위험분류 분석</h3>
+              <dl className="mt-1 grid grid-cols-2 gap-5 sm:grid-cols-5">
                   {dangerCount.map((item, index) => (
-                      <div key={index} className="overflow-hidden rounded-lg bg-indigo-200 px-4 py-5 shadow sm:p-6">
-                          <dt className="truncate text-sm font-medium text-gray-500">분류: {item[0]}</dt>
+                      <div key={index} className="overflow-hidden rounded-lg bg-indigo-100 px-4 py-5 shadow sm:p-6">
+                          <dt className="truncate text-sm font-medium text-gray-900">분류: {item[0]}</dt>
                           <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{item[1]}건</dd>
                       </div>
                   ))}
@@ -232,16 +234,17 @@ function SafetyInspectionStatisticsMonthImg() {
 
          {/*위험원인별(완료)*/}
           <div>
-              <h3 className="text-base font-semibold leading-2 text-gray-900">위험원인 분석</h3>
-              <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-10">
+              <h3 className="text-xl font-semibold leading-2 text-gray-900">위험원인 분석</h3>
+              <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-4">
                   {causeCount.map((item, index) => (
-                      <div key={index} className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-                          <dt className="truncate text-sm font-medium text-gray-500">원인: {item[0]}</dt>
+                      <div key={index} className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:max-w-screen-xl">
+                          <dt className="truncate text-sm font-medium text-gray-900">원인: {item[0]}</dt>
                           <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{item[1]}건</dd>
                       </div>
                   ))}
               </dl>
           </div>
+      </div>
 {/*
           위험성 평가별
           <div>
