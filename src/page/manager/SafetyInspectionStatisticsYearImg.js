@@ -26,15 +26,15 @@ function SafetyInspectionStatisticsYearImg() {
     //이벤트2
     const handleSave = async () => {
         try {
-            // const barChartResponse = await axios.get("http://http://172.20.20.252/:8081/special/statistics/detaildanger", {  // 세아
-            const barChartResponse = await axios.get("http://localhost:8081/special/statistics/detaildanger", {
+            const barChartResponse = await axios.get("http://http://172.20.20.252/:8081/special/statistics/detaildanger", {  // 세아
+            // const barChartResponse = await axios.get("http://localhost:8081/special/statistics/detaildanger", {
                 params: {
                     year: selectedYear,
                 },
             });
 
-            // const lineChartResponse = await axios.get("http://http://172.20.20.252/:8081/statistics/inspectioncount", {  // 세아
-            const lineChartResponse = await axios.get("http://localhost:8081/statistics/inspectioncount", {
+            const lineChartResponse = await axios.get("http://http://172.20.20.252/:8081/statistics/inspectioncount", {  // 세아
+            // const lineChartResponse = await axios.get("http://localhost:8081/statistics/inspectioncount", {
                 params: {
                     year: selectedYear,
                 },
