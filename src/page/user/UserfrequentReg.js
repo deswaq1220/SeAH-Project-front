@@ -30,6 +30,10 @@ registerPlugin(FilePondPluginImagePreview);
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
+const handleFileUpload = (acceptedFiles) => {
+    // console.log(acceptedFiles);
+};
+
 
 // class IsComplete extends React.Component<{ onFormDataChange: handleIsCompeleteDataChange }> {
 //     render() {
@@ -255,16 +259,16 @@ function UserfrequentReg() {
       <IsCompelete onFormDataChange={handleIsCompeleteDataChange} />{" "}{/* 완료여부 */}
       {/* 경원추가 */}
       <h1>파일 업로드</h1>
-      <FilePond
-        allowMultiple={true} // 다중 파일 업로드 허용
-        maxFiles={5} // 최대 파일 수 설정
-        server={`/api`} // 파일 업로드를 처리하는 서버 엔드포인트
-        // 엔드포인트는 백엔드 구현되면 연결요
-        onupdatefiles={fileItems => {
-          // 업로드한 파일 정보를 처리할 콜백 함수
-          console.log(fileItems.map(fileItem => fileItem.file));
-        }}
-      />
+            <FilePond
+                allowMultiple={true}
+                maxFiles={5}
+                onupdatefiles={(fileItems) => {
+                    const acceptedFiles = fileItems.map(
+                        (fileItem) => fileItem.file
+                    );
+                    handleFileUpload(acceptedFiles);
+                }}
+            />
 
       <div className="flex justify-center w-full mt-8 mb-10">
         <button
