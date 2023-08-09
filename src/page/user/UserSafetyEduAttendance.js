@@ -52,46 +52,45 @@ function UserSafetyEduAttendance() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+  
+  
     // Form 데이터 가져오기
-    const attenDepartment = selected.name; // 사용자가 선택한 부서명
+    const attenDepartment = selected.name;
     const attenName = selected.attenName;
     const attenEmployeeNumber = selected.attenEmployeeNumber;
-
-    // 출석 등록을 위한 요청 데이터 생성
+  
     const requestData = {
       attenDepartment,
       attenName,
       attenEmployeeNumber,
       eduId,
     };
-
-    // 출석 등록 요청 보내기
+  
+    // 버튼이 비활성화되어 있더라도 클릭 이벤트가 발생하도록 수정
     axios
       .post(
-        `http://172.20.20.252:8081/usereduatten/register/${eduId}`,     // 세아
-        // `http://localhost:8081/usereduatten/register/${eduId}`,
-        requestData, {
-        //http://localhost:8081/usereduatten/register 이거는 진짜 사용할때
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+        `http://localhost:8081/usereduatten/register/${eduId}`,
+        requestData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((response) => {
-        // 성공적으로 응답을 받았을 때 처리
         console.log(response);
-
-        // 출석이 완료되었다는 알림 띄우기
+  
         toast.success("출석이 완료되었습니다.", {
           position: "top-center",
-          autoClose: 3000, // 알림이 3초 후에 자동으로 사라짐
+          autoClose: 3000,
           hideProgressBar: true,
+          style: {
+            marginTop: "5rem", // 원하는 세로 위치로 조정
+          },
         });
-        // 출석이 완료되었으므로 출석하기 버튼 비활성화
         setIsAttendanceCompleted(true);
       })
       .catch((error) => {
-        // 오류가 발생했을 때 처리
         console.error(error);
         alert("출석 등록에 실패했습니다. 다시 시도해주세요.");
       });
@@ -117,8 +116,8 @@ function UserSafetyEduAttendance() {
     const fetchEduList = async () => {
       try {
         const response = await axios.get(
-          `http://172.20.20.252:8081/edudetails/${eduId}`    // 세아
-          // `http://localhost:8081/edudetails/${eduId}`
+          // `http://172.20.20.252:8081/edudetails/${eduId}`    // 세아
+          `http://localhost:8081/edudetails/${eduId}`
         );
         console.log(response.data); // 서버로부터 받은 데이터 확인
         setEduList(response.data); // 해당 아이디에 해당하는 데이터를 상태 변수에 저장
@@ -128,8 +127,8 @@ function UserSafetyEduAttendance() {
     };
     // GET 요청을 통해 eduTitle 가져오기
     axios.get(
-      `http://172.20.20.252:8081/usereduatten/register/${eduId}`)   // 세아
-      // `http://localhost:8081/usereduatten/register/${eduId}`)
+      // `http://172.20.20.252:8081/usereduatten/register/${eduId}`)   // 세아
+      `http://localhost:8081/usereduatten/register/${eduId}`)
       .then((response) => {
         // 응답 데이터에서 eduTitle 값을 추출하여 상태 업데이트
         setEduTitle(response.data.eduTitle);

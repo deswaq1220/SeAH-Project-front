@@ -81,8 +81,8 @@ export default function SafetyEduDetails() {
     const fetchEduDetail = async () => {
       try {
         const response = await axios.get(
-            `http://172.20.20.252:8081/edudetails/${eduId}`,        // 세아
-            // `http://localhost:8081/edudetails/${eduId}`
+            // `http://172.20.20.252:8081/edudetails/${eduId}`,        // 세아
+            `http://localhost:8081/edudetails/${eduId}`
 
         );
 //        setUploadedFiles(response.data.eduFiles);
@@ -294,7 +294,7 @@ export default function SafetyEduDetails() {
                                     />
                                     <div className="ml-4 flex min-w-0 flex-1 gap-2">
                               <span className="truncate font-medium">
-                                {eduFiles.eduFileName}
+                                {eduFiles}
                               </span>
                                       <span className="flex-shrink-0 text-gray-400">
                                 {eduFiles.size}

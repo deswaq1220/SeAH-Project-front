@@ -59,7 +59,7 @@ export default function UserHeader() {
         aria-label="Global"
       >
         <div className="flex lg:flex-1">
-          <Link to="/user" className="-m-1.5 p-1.5">
+          <Link to="/404" className="-m-1.5 p-1.5">
             <span className="sr-only">Your Company</span>
             <img className="h-8 w-auto" src={logo} alt="" />
           </Link>
