@@ -19,6 +19,7 @@ function EduAttenStatics() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedMonth, setSelectedMonth] = useState("");
   const [attendeesList, setAttendeesList] = useState([]);
+  const [sortedAttendeesList, setSortedAttendeesList] = useState([]);
   const categories = ["CREW", "MANAGE", "DM", "ETC"];
   // 선택된 카테고리를 상태로 관리
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -36,8 +37,8 @@ function EduAttenStatics() {
         const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
         const currentYear = getYear(currentDate);
         const response = await axios.get(
-           "http://172.20.20.252:8081/edustatistics/getmonth",
-          //"http://localhost:8081/edustatistics/getmonth",
+          //  "http://172.20.20.252:8081/edustatistics/getmonth",
+          "http://localhost:8081/edustatistics/getmonth",
           {
             params: {
               eduCategory: selectedCategory,
@@ -51,6 +52,7 @@ function EduAttenStatics() {
           return new Date(a.eduStartTime) - new Date(b.eduStartTime);
         });
         setAttendeesList(sortedAttendeesList);
+        setSortedAttendeesList(sortedAttendeesList);
         setSelectedMonth(currentMonth);
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
@@ -66,8 +68,8 @@ function EduAttenStatics() {
     try {
 
       const response = await axios.get(
-        "http://172.20.20.252:8081/edustatistics/getmonth", {   // 세아
-        // "http://localhost:8081/edustatistics/getmonth", {
+        // "http://172.20.20.252:8081/edustatistics/getmonth", {   // 세아
+        "http://localhost:8081/edustatistics/getmonth", {
 
         params: {
           year: currentDate.getFullYear(),
@@ -82,34 +84,35 @@ function EduAttenStatics() {
         return new Date(a.eduStartTime) - new Date(b.eduStartTime);
       });
       setAttendeesList(sortedAttendeesList);
+      setSortedAttendeesList(sortedAttendeesList);
     } catch (error) {
       console.error("데이터 난리났다 난리났어:", error);
     }
   };
 
     // 엑셀!!!!!!!!!!!
-    const createExcelData = (attendeesList) => {
+    const createExcelData = (sortedAttendeesList) => {
+
       // 교육 정보를 바탕으로 엑셀 데이터를 생성하는 로직 작성
-      const data = [
-        {
-          카테고리: `${attendeesList.eduCategory}`,
-          제목: `${attendeesList.eduTitle}`,
-          교육일정: `${attendeesList.eduStartTime}`,
-          교육시간: `${attendeesList.eduSumTime} 분`,
-          부서: attendeesList.attenDepartment,
-          사원번호: `${attendeesList.attenEmployeeNumber}`,
-          이름: attendeesList.attenName,
-        },
-      ];
-  
+      const data = sortedAttendeesList.map((item) => ({
+        제목: `${item.eduTitle}`,
+        교육일정: `${item.eduStartTime}`,
+        교육시간: `${item.eduSumTime} 분`,
+        부서: item.attenDepartment,
+        사원번호: `${item.attenEmployeeNumber}`,
+        이름: item.attenName,
+      }));
+    
       return data;
     };
   
     const handleExport = () => {
-      if (!attendeesList) return; // eduData가 없을 경우 빠른 리턴
-  
+      if (!sortedAttendeesList || sortedAttendeesList.length === 0) {
+        console.log("데이터가 없습니다.");
+        return;
+      }
       // 엑셀 데이터 생성
-      const data = createExcelData(attendeesList);
+      const data = createExcelData(sortedAttendeesList);
   
       // 엑셀 시트 생성
       const worksheet = XLSX.utils.json_to_sheet(data);
@@ -126,7 +129,7 @@ function EduAttenStatics() {
       const excelFile = new Blob([excelBuffer], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });
-      saveAs(excelFile, `${attendeesList.eduCategory}_안전교육.xlsx`);
+      saveAs(excelFile, `안전교육출석명단.xlsx`);
     };
 
 
@@ -289,6 +292,7 @@ function EduAttenStatics() {
             <button
               type="button"
               className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+              onClick={handleExport}
             >
               엑셀 저장
             </button>
