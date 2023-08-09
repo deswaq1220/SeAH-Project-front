@@ -26,6 +26,7 @@ const EmailForm = () => {
     };
 
     fetch('http://172.20.20.252:8081/api/send-email', {
+    //fetch('http://localhost:8081/api/send-email', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

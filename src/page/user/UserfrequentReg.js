@@ -18,11 +18,17 @@ import data from "bootstrap/js/src/dom/data";
 import { toast } from "react-toastify";
 import Dangersource from "./sourceDanger";
 import IsCompelete from "./isCompelete";
+import { FilePond, registerPlugin } from 'react-filepond';
+import 'filepond/dist/filepond.min.css'; // 스타일링을 위한 CSS
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 
 
+// 추가 플러그인을 라이브러리에 등록
+registerPlugin(FilePondPluginImagePreview);
 
 function classNames(...classes) {
-    return classes.filter(Boolean).join(" ");
+  return classes.filter(Boolean).join(" ");
 }
 
 // class IsComplete extends React.Component<{ onFormDataChange: handleIsCompeleteDataChange }> {
@@ -48,63 +54,114 @@ function UserfrequentReg() {
     const [speActEmail, setSpeActEmail] = useState("");
     const [speComplete, setSpeComplete] = useState("");
 
+  // Inspector 콜백 함수 : 점검자(이름, 이메일, 사원번호)
+  const handleInspectorDataChange = (inspectorForm) => {
+    setSpeEmpNum(inspectorForm.employeenumber);
+    setSpePerson(inspectorForm.inspectorname);
+    setSpeEmail(inspectorForm.inspectoremail);
+  };
+
+  // Danger 콜백함수 : 위험분류
+  const handleDangerDataChange = (selected) => {
+    setSpeDanger(selected.dangerMenu);
+  };
+
+  // Injured 콜백함수 : 부상부위
+  const handleInjuredDataChange = (speInjuredData) => {
+    setSpeInjure(speInjuredData.injuredMenu);
+  };
+
+  // Dangersource 콜백함수 : 위험원인
+  const handleCauseDataChange = (speCauseData) => {
+    setSpeCause(speCauseData.causeMenu);
+  };
+
+  // FalseTrap 콜백함수 : 실수함정
+  const handleFalsetrapDataChange = (falsetrapSelected) => {
+    setSpeTrap(falsetrapSelected.trapMenu);
+  };
+
+  // RiskAssessment 콜백 : 위험성평가
+  const handleRiskAssessmentDataChange = (riskAssessmentSelected) => {
+    setSpeRiskAssess(riskAssessmentSelected);
+  };
+
+  // InspectionDetails 콜백 : 점검내용
+  const handleInspectionDetailsDataChange = (data) => {
+    setSpeContent(data);
+  };
+
+  // ActionRquest 콜백 : 조치자(이름, 이메일)
+  const handleActionRequestDetailsDataChange = (selectedEmail) => {
+    setSpeActPerson(selectedEmail.speActPerson);
+    setSpeActEmail(selectedEmail.speActEmail);
+  };
+
+  // 개선대책
+  const handleActContChange = (e) => {
+    setSpeActContent(e.target.value);
+  };
+
+  // IsCompelete 콜백 : 완료여부
+  const handleIsCompeleteDataChange = (selected) => {
+    setSpeComplete(selected);
+  };
+
+  const navigate = useNavigate();
+
+  // const handleFormSubmit = () => {
+  //   const requestData = {
+  //     speEmpNum,
+  //     spePerson,
+  //     speEmail,
+  //     speDanger,
+  //     speInjure,
+  //     speCause,
+  //     speTrap,
+  //     speRiskAssess,
+  //     speContent,
+  //     speActPerson,
+  //     speActEmail,
+  //     speActContent,
+  //     speComplete,
+  //   }
+
+    
+  //   // Inspector 콜백 함수 : 점검자(이름, 이메일, 사원번호)
+  //   const handleInspectorDataChange = (inspectorForm) => {
+  //       setSpeEmpNum(inspectorForm.employeenumber);
+  //       setSpePerson(inspectorForm.inspectorname);
+  //       setSpeEmail(inspectorForm.inspectoremail);
+  //   };
+  //   console.log(requestData); // 요청 데이터 콘솔에 출력
 
 
-    // Inspector 콜백 함수 : 점검자(이름, 이메일, 사원번호)
-    const handleInspectorDataChange = (inspectorForm) => {
-        setSpeEmpNum(inspectorForm.employeenumber);
-        setSpePerson(inspectorForm.inspectorname);
-        setSpeEmail(inspectorForm.inspectoremail);
-    };
-
-    // Danger 콜백함수 : 위험분류
-    const handleDangerDataChange = (selected) => {
-        setSpeDanger(selected.dangerMenu);
-    };
-
-    // Injured 콜백함수 : 부상부위
-    const handleInjuredDataChange = (speInjuredData) => {
-        setSpeInjure(speInjuredData.injuredMenu);
-    };
-
-    // Dangersource 콜백함수 : 위험원인
-    const handleCauseDataChange = (speCauseData) => {
-        setSpeCause(speCauseData.causeMenu);
-    };
-
-    // FalseTrap 콜백함수 : 실수함정
-    const handleFalsetrapDataChange = (falsetrapSelected) => {
-        setSpeTrap(falsetrapSelected.trapMenu);
-    };
-
-    // RiskAssessment 콜백 : 위험성평가
-    const handleRiskAssessmentDataChange = (riskAssessmentSelected) => {
-        setSpeRiskAssess(riskAssessmentSelected);
-    };
-
-    // InspectionDetails 콜백 : 점검내용
-    const handleInspectionDetailsDataChange = (data) => {
-        setSpeContent(data);
-    };
-
-    // ActionRquest 콜백 : 조치자(이름, 이메일)
-    const handleActionRequestDetailsDataChange = (selectedEmail) => {
-        setSpeActPerson(selectedEmail.speActPerson);
-        setSpeActEmail(selectedEmail.speActEmail);
-    };
-
-    // 개선대책
-    const handleActContChange = (e) => {
-        setSpeActContent(e.target.value);
-    }
-
-    // IsCompelete 콜백 : 완료여부
-    const handleIsCompeleteDataChange = (selected) => {
-        setSpeComplete(selected);
-    };
+//   //파일업로드용
+//   const uppy = new Uppy({
+//     restrictions: {
+//       allowedFileTypes: [
+//         ".jpg",
+//         ".jpeg",
+//         ".png",
+//         ".pdf",
+//         ".doc",
+//         ".docx",
+//         "bmp",
+//         "HEIC",
+//       ],
+//       maxFileSize: 10485760,
+//       maxNumberOfFiles: 5,
+//     },
+//     autoProceed: true, // 파일 선택 후 업로드를 수동으로 시작하도록 설정
+//   });
+  
+// //   uppy.use(XHRUpload, {
+// //     endpoint: "http://localhost:8081/edureg",
+// //     formData: true,
+// //     fieldName: "files", // 서버로 파일을 보낼 때 사용할 필드 이름
+// //   });
 
 
-    const navigate = useNavigate();
 
     const handleFormSubmit = () => {
         const requestData = {
@@ -127,7 +184,7 @@ function UserfrequentReg() {
         // 수시점검 등록 요청
         axios
             .post(`http://172.20.20.252:8081/special/new/${masterdataPart}/${masterdataFacility}`, requestData, {   // 세아
-            // .post(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`, requestData, {
+             //.post(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`, requestData, {
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -181,41 +238,51 @@ function UserfrequentReg() {
                     개선대책
                 </span>
 
-                <div className="mt-2 ">
-                    <textarea
-                        rows={4}
-                        name="comment"
-                        id="comment"
-                        className="block w-72 rounded-md border-0  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 border-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 p-2 mr-3 ml-4"
-                        // defaultValue={""}
-                        value={speActContent}
-                        onChange={handleActContChange}
-                    />
-                </div>
-            </div>
-            <ActionRquest onFormDataChange={handleActionRequestDetailsDataChange} /> {/* 조치요청 */}
-            {/* 혜영추가-완료여부 */}
-            <IsCompelete onFormDataChange={handleIsCompeleteDataChange} /> {/* 완료여부 */}
+        <div className="mt-2 ">
+          <textarea
+            rows={4}
+            name="comment"
+            id="comment"
+            className="block w-72 rounded-md border-0  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 border-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 p-2 mr-3 ml-4"
+            // defaultValue={""}
+            value={speActContent}
+            onChange={handleActContChange}
+          />
+        </div>
+      </div>
+      <ActionRquest onFormDataChange={handleActionRequestDetailsDataChange} />{" "}{/* 조치요청 */}
+      {/* 혜영추가-완료여부 */}
+      <IsCompelete onFormDataChange={handleIsCompeleteDataChange} />{" "}{/* 완료여부 */}
+      {/* 경원추가 */}
+      <h1>파일 업로드</h1>
+      <FilePond
+        allowMultiple={true} // 다중 파일 업로드 허용
+        maxFiles={5} // 최대 파일 수 설정
+        server={`/api`} // 파일 업로드를 처리하는 서버 엔드포인트
+        // 엔드포인트는 백엔드 구현되면 연결요
+        onupdatefiles={fileItems => {
+          // 업로드한 파일 정보를 처리할 콜백 함수
+          console.log(fileItems.map(fileItem => fileItem.file));
+        }}
+      />
 
-            <div className="flex justify-center w-full mt-8 mb-10">
-                <button
-                    type="button"
-                    className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mr-2"
-                >
-                    등록취소
-                </button>
-                <button
-                    type="submit"
-                    className="rounded-md bg-seahColor px-7 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus:outline-none"
-                    onClick={handleFormSubmit}            // 등록 버튼 클릭 시 handleFormSubmit 실행
-                >
-                    등록
-                </button>
-
-            </div>
-        </>
-
-    );
+      <div className="flex justify-center w-full mt-8 mb-10">
+        <button
+          type="button"
+          className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mr-2"
+        >
+          등록취소
+        </button>
+        <button
+          type="submit"
+          className="rounded-md bg-seahColor px-7 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus:outline-none"
+          onClick={handleFormSubmit} // 등록 버튼 클릭 시 handleFormSubmit 실행
+        >
+          등록
+        </button>
+      </div>
+    </>
+  );
 }
 
 export default UserfrequentReg;

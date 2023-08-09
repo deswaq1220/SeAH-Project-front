@@ -20,7 +20,9 @@ import EduStatics from "./page/manager/EduStatics"
 import EduAttenStatics from "./page/manager/EduAttenStatics"
 
 //다인 씀
-import SafetyInspectionStatisticsImg from "./page/manager/SafetyInspectionStatisticsImg";
+import SafetyInspectionStatisticsYearImg from "./page/manager/SafetyInspectionStatisticsYearImg";
+import SafetyInspectionStatisticsMonthImg from "./page/manager/SafetyInspectionStatisticsMonthImg";
+
 
 function App() {
   console.log(`
@@ -41,6 +43,7 @@ function App() {
         <Route path="/eduMain" element={<SafetyEducationMain/>}></Route>{/* 관리자 안전교육페이지 */}
         <Route path="/edudetails/:eduId" element={<SafetyEduDetails/>}></Route>{/* 관리자 안전교육상세*/}
         <Route path="/edureg" element={<SafetyEduReg/>}></Route>{/* 관리자 안전교육 등록페이지 */}
+        <Route path="/edureg/:eduId" element={<SafetyEduReg/>}></Route>{/* 관리자 안전교육 등록페이지 */}
         <Route path="/inspection" element={<SafetyInspection/>}></Route>{/* 관리자 안점점검 페이지 */}
         <Route path="/reinfo" element={<ReferenceInfo/>}></Route> {/* 관리자 기준정보페이지 */}
         <Route path="/sendEmail" element={<EmailForm/>}></Route> {/* 이메일 */}
@@ -48,7 +51,9 @@ function App() {
         <Route path="/edustatistics/atten" element={<EduAttenStatics/>}></Route>{/* 관리자 안전교육 참가자통계*/}
 
         {/*다인 추가함 */}
-        <Route path="/inspection/statistics/img" element={<SafetyInspectionStatisticsImg/>}></Route>{/* 관리자 수시점검통계 대시보드*/}
+        <Route path="/inspection/statistics/yearimg" element={<SafetyInspectionStatisticsYearImg/>}></Route>{/* 관리자 수시점검 연도 상세 분석 통계 대시보드*/}
+        <Route path="/inspection/statistics/monthimg" element={<SafetyInspectionStatisticsMonthImg/>}></Route>{/* 관리자 수시점검 월별통계 대시보드*/}
+
 
         {/* 사용자  */}
         <Route path="/user" element={<UserMain/>}></Route>  {/* 사용자 메인페이지*/}
@@ -60,6 +65,7 @@ function App() {
         <Route path="/special/list/:masterdataPart/:masterdataFacility" element={<Userfrequent/>}></Route>  {/* 사용자 수시점검 설비별 리스트페이지*/}
         <Route path="/special/new/:masterdataPart/:masterdataFacility" element={<UserfrequentReg/>}></Route>{/* 사용자 수시점검등록페이지 */}
 
+        <Route path="/userfrequentreg" element={<UserfrequentReg/>}></Route>{/* 수시점검 등록페이지 */}
 
         <Route path="/404" element={<Error/>}></Route> {/* 에러 */}
       </Routes>

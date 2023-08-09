@@ -4,82 +4,28 @@ import axios from 'axios';
 //import React, { PureComponent } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { ResponsiveLine } from '@nivo/line'
-//import useSafetyEduForm from "../../useHook/useSafetyEduForm";
-function SafetyInspectionStatisticsImg() {
+
+//네비게이션
+import { Fragment } from 'react'
+import { Disclosure, Menu, Transition } from '@headlessui/react'
+import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+
+function SafetyInspectionStatisticsYearImg() {
 
     //공통: 년도입력, 기본값은 당해로 지정되어 있음
     const seoulTime = new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" });
     const currentYear = new Date(seoulTime).getFullYear();
     const [selectedYear, setSelectedYear] = useState(currentYear);
 
-    //이벤트1
+    //이벤트1: 연도 검색이벤트
     const handleYearChange = (event) => {
         setSelectedYear(parseInt(event.target.value));
     };
-    //이벤트2
-    const handleSave = async () => {
-        try {
-            const barChartResponse = await axios.get("http://172.20.20.252:8081/special/statistics/detaildanger", {  // 세아
-            // const barChartResponse = await axios.get("http://localhost:8081/special/statistics/detaildanger", {
-                params: {
-                    year: selectedYear,
-                },
-            });
-
-            const lineChartResponse = await axios.get("http://172.20.20.252:8081/statistics/inspectioncount", {   // 세아
-            // const lineChartResponse = await axios.get("http://localhost:8081/statistics/inspectioncount", {
-                params: {
-                    year: selectedYear,
-                },
-            });
-
-            // 백엔드로부터 받은 데이터 처리
-            console.log("백엔드 응답 데이터(lineChart)):", lineChartResponse.data);
-            console.log("백엔드 응답 데이터2(barChart):", barChartResponse.data);
-        } catch (error) {
-            console.error("백엔드 요청 에러:", error);
-        }
-    };
-
 
 
     //(LineChart) 특정년도의 수시점검과 정기점검 건수
     const [lineChartData, setLineChartData] = useState([]);
-/*    const {
-        selected,
-        selectedDuty,
-        isCompleted,
-        uploadedFiles,
-        error,
-        formData,
-        handleChange,
-        handleStartTimeChange,
-        // handleEndTimeChange,
-        handleCreate,
-        onDrop,
-        deleteFile,
-        handleFileChange,
-        getRootProps,
-        getInputProps,
-        isDragActive,
-        formatTimeRange,
-        handleListboxChange,
-        handleDutyChange,
-        navigate,
-        handleSubmit,
-        selectedEtcTime,
-        calculateTotalTime,
-        handleEtcTimeChange,
-        selectedStartTime,
-        qrValue,
-        setQrValue,
-        resetForm,
-        showNotification,
-    } = useSafetyEduForm();*/
-
-
-
-
 
     //(BarChart) 특정년도의 월별 수시점검한 위험분류 건수
     const [barChartData, setBarChartData] = useState([]);
@@ -110,14 +56,14 @@ function SafetyInspectionStatisticsImg() {
         }, [selectedYear]);
 
 
-
-
             const fetchData = async () => {
                 try {
 
                     //(LineChart) 특정년도의 수시점검과 정기점검 건수
+
                     const lineChartResponse = await axios.get('http://172.20.20.252:8081/statistics/inspectioncount', { params: { year: selectedYear } });   // 세아
                     // const lineChartResponse = await axios.get('http://localhost:8081/statistics/inspectioncount', { params: { year: selectedYear } });
+
                     const specialCountData = lineChartResponse.data;
                     console.log("첫번째"+ JSON.stringify(lineChartResponse.data, null, 2));
 
@@ -132,6 +78,7 @@ function SafetyInspectionStatisticsImg() {
 
 
                     //(BarChart) 특정년도의 월별 수시점검한 위험분류 건수
+
                     const barChartResponse = await axios.get('http://172.20.20.252:8081/special/statistics/detaildanger', { params: {year: selectedYear} });   // 세아
                     // const barChartResponse = await axios.get('http://localhost:8081/special/statistics/detaildanger', { params: {year: selectedYear} });
                     const specialDangerData = barChartResponse.data; //백엔드에서 받아온 데이터
@@ -173,16 +120,101 @@ function SafetyInspectionStatisticsImg() {
     const colors = ['rgba(130,205,255,0.8)', 'rgba(158,132,216,0.75)', 'rgba(130,202,157,0.89)', 'rgba(156,132,216,0.9)',
                             'rgba(255,159,180,0.94)', 'rgba(50,44,140,0.88)', '#84bbd8', 'rgba(237,138,76,0.87)',
                             '#f55e5e', 'rgba(150,77,238,0.91)', '#d7549d', 'rgba(121,183,101,0.95)',
-                            'rgba(88,192,182,0.82)', 'rgba(150,52,52,0.76)', '#07796c', 'rgba(239,204,110,0.83)'];
+                            'rgba(88,192,182,0.82)', 'rgba(150,52,52,0.76)', '#07796c', 'rgba(239,204,110,0.83)',
+                            'rgba(7,7,4,0.83)'];
 
 
 
 
 
     return (
+
         <div>
             <Header />
-            <div>      안전점검 당해년도 점검 대시보드 페이지입니다</div>
+            <Disclosure as="nav" className="bg-gray-800">
+                {({ open }) => (
+                    <>
+                        <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
+                            <div className="relative flex h-16 items-center justify-between">
+                                <div className="flex items-center px-2 lg:px-0">
+                                    <div className="flex-shrink-0">
+                                        <img
+                                            className="h-8 w-auto"
+                                            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                                            alt="Your Company"
+                                        />
+                                    </div>
+                                    <div className="hidden lg:ml-6 lg:block">
+                                        <div className="flex space-x-4">
+                                            {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
+                                            <a href="#" className="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white">
+                                                연도 상세 분석
+                                            </a>
+                                            <a
+                                                href="#"
+                                                className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                                            >
+                                                월별 분석
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex flex-1 justify-center px-2 lg:ml-6 lg:justify-end">
+                                    <div className="w-full max-w-lg lg:max-w-xs">
+                                        <label htmlFor="search" className="sr-only">
+                                            Search
+                                        </label>
+                                        <div className="relative">
+                                            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                                <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                                            </div>
+                                            <input
+                                                id="search"
+                                                name="search"
+                                                className="block w-full rounded-md border-0 bg-gray-700 py-1.5 pl-10 pr-3 text-gray-300 placeholder:text-gray-400 focus:bg-white focus:text-gray-900 focus:ring-0 sm:text-sm sm:leading-6"
+                                                placeholder="Search"
+                                                type="search"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex lg:hidden">
+                                    {/* Mobile menu button */}
+                                    <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                                        <span className="absolute -inset-0.5" />
+                                        <span className="sr-only">Open main menu</span>
+                                        {open ? (
+                                            <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
+                                        ) : (
+                                            <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
+                                        )}
+                                    </Disclosure.Button>
+                                </div>
+                                <div className="hidden lg:ml-4 lg:block">
+                                    <div className="flex items-center">
+                                        <button
+                                            type="button"
+                                            className="relative flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                                        >
+                                            <span className="absolute -inset-1.5" />
+                                            <span className="sr-only">View notifications</span>
+                                            <BellIcon className="h-6 w-6" aria-hidden="true" />
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </>
+                )}
+            </Disclosure>
+
+            <div>      안전점검 당해년도 대시보드 페이지입니다</div>
+
+
+
+
             <div
                 id="Training_time"
                 className="flex items-baseline justify-start"
@@ -319,11 +351,11 @@ function SafetyInspectionStatisticsImg() {
                     </BarChart>
                     </ResponsiveContainer>
                 ) : (
-                    <p>데이터를 불러오는 중입니다</p>
+                    <p>데이터를 불러오는 중에 오류가 생겼습니다</p>
                     )}
             </div>
         </div>
     );
 }
 
-export default SafetyInspectionStatisticsImg;
+export default SafetyInspectionStatisticsYearImg;

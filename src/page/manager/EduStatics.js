@@ -79,6 +79,7 @@ function EduStatics() {
           // `http://172.20.20.252:8081/edustatistics/getmonthlyruntime`, {   // 세아
           `http://localhost:8081/edustatistics/getmonthlyruntime`, {
 
+
           params: {
             year: currentYear,
             month: currentMonth
