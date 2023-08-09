@@ -47,7 +47,6 @@ function UserSafetyEduAttendance() {
   const year = today.getFullYear();
   const month = String(today.getMonth() + 1).padStart(2, "0");
   const day = String(today.getDate()).padStart(2, "0");
-  const [eduTitle,setEduTitle] = useState("")
   const formattedDate = `${year}. ${month}. ${day}`;
   const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
