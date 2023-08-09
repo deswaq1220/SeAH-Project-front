@@ -2,7 +2,7 @@ import { useState, Fragment, useCallback, useEffect } from "react";
 import Header from "../../components/Header";
 // import { format, addMonths, subMonths } from "date-fns";
 import { Listbox, Transition } from "@headlessui/react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate,useParams } from "react-router-dom";
 // import Notification from '../components/Notification'
 import {
   CheckIcon,
@@ -14,6 +14,13 @@ import { useDropzone } from "react-dropzone";
 import QRCode from "qrcode.react";
 import axios from "axios";
 import useSafetyEduForm from "../../useHook/useSafetyEduForm";
+import { FilePond, registerPlugin } from 'react-filepond';
+import 'filepond/dist/filepond.min.css'; // 스타일링을 위한 CSS
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+
+
+
 const people = [
   {
     id: 1,
@@ -22,12 +29,12 @@ const people = [
   {
     id: 2,
     name: "CREW",
-    time: 30
+    time: 30,
   },
   {
     id: 3,
     name: "DM",
-    time: 20
+    time: 20,
   },
   {
     id: 4,
@@ -37,7 +44,7 @@ const people = [
   {
     id: 5,
     name: "ETC",
-    time: 30
+    time: 30,
   },
 ];
 
@@ -97,6 +104,9 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
+// 추가 플러그인을 라이브러리에 등록
+registerPlugin(FilePondPluginImagePreview);
+
 const MAX_FILENAME_LENGTH = 30;
 const FILENAME_SUFFIX = "...";
 
@@ -113,11 +123,13 @@ const TruncatedFileName = ({ fileName }) => {
 
   return <div>{displayedFileName}</div>;
 };
+const handleFileUpload = (acceptedFiles) => {
+  // console.log(acceptedFiles);
+};
 
 
 //교육일지 등록
 function SafetyEduReg() {
-
   const {
     selected,
     selectedDuty,
@@ -148,9 +160,19 @@ function SafetyEduReg() {
     setQrValue,
     resetForm,
     showNotification,
+    // handleEdit,
+    
   } = useSafetyEduForm();
 
 
+  // const handleClick = () => {
+  //   handleEdit(); // 수정 핸들러 호출
+  // };
+
+  
+
+
+  
 
   return (
     <div>
@@ -533,7 +555,7 @@ function SafetyEduReg() {
                 파일첨부
               </span>
 
-              <div id="fileuploader" className="flex flex-col items-center">
+              {/* <div id="fileuploader" className="flex flex-col items-center">
                 <div
                   {...getRootProps()}
                   className={`dropzone ${isDragActive ? "active" : ""
@@ -585,7 +607,7 @@ function SafetyEduReg() {
                     </div>
                   ))}
                 </div>
-              </div>
+              </div> */}
             </div>
 
             <div id="writer" className="flex items-baseline justify-start">
@@ -620,13 +642,38 @@ function SafetyEduReg() {
               <button
                 type="submit"
                 className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                // onClick={handleClick}
               >
                 저장하기
               </button>
             </div>
+            <h1>파일 업로드</h1>
+            <FilePond
+        allowMultiple={true}
+        maxFiles={5}
+        onupdatefiles={(fileItems) => {
+          const acceptedFiles = fileItems.map((fileItem) => fileItem.file);
+          handleFileUpload(acceptedFiles);
+        }}
+      />
+              {/* <FilePond
+                allowMultiple={true} // 다중 파일 업로드 허용
+                maxFiles={5} // 최대 파일 수 설정
+                // server={`http:localhost:8081/edureg`} // 파일 업로드를 처리하는 서버 엔드포인트
+                // 엔드포인트는 백엔드 구현되면 연결요
+                onupdatefiles={onDrop
+
+                //   (fileItems) => {
+                //   // 업로드한 파일 정보를 처리할 콜백 함수
+                //   console.log(fileItems.map((fileItem) => fileItem.file));
+                // }
+              }
+              /> */}
           </form>
         </div>
       </div>
+
+      
       {/* {showNotification && <Notification />} */}
     </div>
   );
