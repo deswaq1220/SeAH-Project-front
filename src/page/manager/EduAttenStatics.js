@@ -66,8 +66,8 @@ function EduAttenStatics() {
     try {
 
       const response = await axios.get(
-        // "http://172.20.20.252:8081/edustatistics/getmonth", {
-        "http://localhost:8081/edustatistics/getmonth", {
+        "http://172.20.20.252:8081/edustatistics/getmonth", {   // 세아
+        // "http://localhost:8081/edustatistics/getmonth", {
 
         params: {
           year: currentDate.getFullYear(),

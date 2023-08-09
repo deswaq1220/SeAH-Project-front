@@ -4,7 +4,7 @@ import axios from 'axios';
 //import React, { PureComponent } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { ResponsiveLine } from '@nivo/line'
-import useSafetyEduForm from "../../useHook/useSafetyEduForm";
+//import useSafetyEduForm from "../../useHook/useSafetyEduForm";
 function SafetyInspectionStatisticsImg() {
 
     //공통: 년도입력, 기본값은 당해로 지정되어 있음
@@ -19,13 +19,15 @@ function SafetyInspectionStatisticsImg() {
     //이벤트2
     const handleSave = async () => {
         try {
-            const barChartResponse = await axios.get("http://localhost:8081/special/statistics/detaildanger", {
+            const barChartResponse = await axios.get("http://172.20.20.252:8081/special/statistics/detaildanger", {  // 세아
+            // const barChartResponse = await axios.get("http://localhost:8081/special/statistics/detaildanger", {
                 params: {
                     year: selectedYear,
                 },
             });
 
-            const lineChartResponse = await axios.get("http://localhost:8081/statistics/inspectioncount", {
+            const lineChartResponse = await axios.get("http://172.20.20.252:8081/statistics/inspectioncount", {   // 세아
+            // const lineChartResponse = await axios.get("http://localhost:8081/statistics/inspectioncount", {
                 params: {
                     year: selectedYear,
                 },
@@ -43,7 +45,7 @@ function SafetyInspectionStatisticsImg() {
 
     //(LineChart) 특정년도의 수시점검과 정기점검 건수
     const [lineChartData, setLineChartData] = useState([]);
-    const {
+/*    const {
         selected,
         selectedDuty,
         isCompleted,
@@ -73,7 +75,7 @@ function SafetyInspectionStatisticsImg() {
         setQrValue,
         resetForm,
         showNotification,
-    } = useSafetyEduForm();
+    } = useSafetyEduForm();*/
 
 
 
@@ -114,7 +116,8 @@ function SafetyInspectionStatisticsImg() {
                 try {
 
                     //(LineChart) 특정년도의 수시점검과 정기점검 건수
-                    const lineChartResponse = await axios.get('http://localhost:8081/statistics/inspectioncount', { params: { year: selectedYear } });
+                    const lineChartResponse = await axios.get('http://172.20.20.252:8081/statistics/inspectioncount', { params: { year: selectedYear } });   // 세아
+                    // const lineChartResponse = await axios.get('http://localhost:8081/statistics/inspectioncount', { params: { year: selectedYear } });
                     const specialCountData = lineChartResponse.data;
                     console.log("첫번째"+ JSON.stringify(lineChartResponse.data, null, 2));
 
@@ -129,7 +132,8 @@ function SafetyInspectionStatisticsImg() {
 
 
                     //(BarChart) 특정년도의 월별 수시점검한 위험분류 건수
-                    const barChartResponse = await axios.get('http://localhost:8081/special/statistics/detaildanger', { params: {year: selectedYear} });
+                    const barChartResponse = await axios.get('http://172.20.20.252:8081/special/statistics/detaildanger', { params: {year: selectedYear} });   // 세아
+                    // const barChartResponse = await axios.get('http://localhost:8081/special/statistics/detaildanger', { params: {year: selectedYear} });
                     const specialDangerData = barChartResponse.data; //백엔드에서 받아온 데이터
 
                     const dataByMonth = {};
@@ -161,9 +165,9 @@ function SafetyInspectionStatisticsImg() {
 
 
 
-    const formatCount = (value) => {
+/*    const formatCount = (value) => {
         return Math.round(value);
-    };
+    };*/
 
     const maxCount = Math.max(barChartData.map((data) => Math.max(Object.values(data).filter((val) => typeof val === 'number'))));
     const colors = ['rgba(130,205,255,0.8)', 'rgba(158,132,216,0.75)', 'rgba(130,202,157,0.89)', 'rgba(156,132,216,0.9)',
@@ -194,7 +198,7 @@ function SafetyInspectionStatisticsImg() {
                         value={selectedYear}
                         onChange={handleYearChange}
                     />
-                    
+
                 </div>
             </div>
 
