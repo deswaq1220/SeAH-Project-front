@@ -118,17 +118,17 @@ const useSafetyEduForm = (eduData) => {
   useEffect(() => {
     // 서버에서 교육 세부 정보 가져오기 (교육 아이디값 이용)
     axios
-      .get(`http://172.20.10.5:8081/edudetails/${eduId}`)
-      .then((response) => {
-        // 가져온 데이터로 상태 업데이트
-        console.log(response.data);
-        
-        setFormData(response.data);
-      })
-      .catch((error) => {
-        // 에러 처리
-        console.error("교육 세부 정보를 가져오는 중 에러 발생:", error);
-      });
+        .get(`http://172.20.10.5:8081/edudetails/${eduId}`)
+        .then((response) => {
+          // 가져온 데이터로 상태 업데이트
+          console.log(response.data);
+
+          setFormData(response.data);
+        })
+        .catch((error) => {
+          // 에러 처리
+          console.error("교육 세부 정보를 가져오는 중 에러 발생:", error);
+        });
   }, [eduId]);
 
   const handleChange = (e) => {
@@ -158,52 +158,25 @@ const useSafetyEduForm = (eduData) => {
   };
 
 
-  // const onDrop = useCallback(
-  //   (acceptedFiles) => {
-  //     console.log("파일 확인");
-  //     console.log(acceptedFiles.file);
-  //     setUploadedFiles([...uploadedFiles, ...acceptedFiles]);
+  const onDrop = useCallback(
+      (acceptedFiles) => {
+        setUploadedFiles([...uploadedFiles, ...acceptedFiles]);
 
-  //     for (const file of acceptedFiles) {
-  //       formDataWithFile.append("files", file);
-  //     }
-      
-  //     if (acceptedFiles.length > 0) {
-  //       setFormData({
-  //         ...formData,
-  //         files: acceptedFiles // Update the file property in the formData state
-  //       });
-  //     }
-      
-      
-  //     console.log(acceptedFiles);
-  //   },
-  //   [formData, uploadedFiles]
-  // );
+        // for (const file of acceptedFiles) {
+        //   formData.append("files", file);
+        // }
 
+        if (acceptedFiles.length > 0) {
+          setFormData({
+            ...formData,
+            files: acceptedFiles, // Update the file property in the formData state
+          });
+        }
 
-  const handleFileUpload = (files) => {
-    console.log("파일 확인");
-    console.log(files);
-  
-    // 업로드된 파일 정보를 상태 업데이트
-    setUploadedFiles([...uploadedFiles, ...files]);
-  
-    // FormData에 파일 추가
-    // const formDataWithFile = new FormData();
-    for (const file of files) {
-      formDataWithFile.append("files", file);
-    }
-  
-    // 상태 업데이트
-    setFormData({
-      ...formData,
-      files: [...formData.files, ...files]
-    });
-  
-    console.log(files);
-  };
-  
+        console.log(acceptedFiles);
+      },
+      [formData, uploadedFiles]
+  );
 
   const deleteFile = (index) => {
     const updatedFiles = [...uploadedFiles];
@@ -218,10 +191,7 @@ const useSafetyEduForm = (eduData) => {
     setFormData((prevFormData) => ({ ...prevFormData, file: selectedFile }));
   };
 
-  
-
-  // const { getRootProps, getInputProps, isDragActive } = useDropzone({ noClick: true , onDrop, });
-
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   // 교육 카테고리를 선택했을 때 호출되는 함수
   const handleListboxChange = (selectedItem) => {
@@ -245,7 +215,7 @@ const useSafetyEduForm = (eduData) => {
     }
   };
 
-// 기타 카테고리에서 셀렉트 박스의 옵션을 변경했을 때 호출되는 함수ㅈ
+  // 기타 카테고리에서 셀렉트 박스의 옵션을 변경했을 때 호출되는 함수
   const handleOptionChange = (e) => {
     const { value } = e.target;
     setSelectedEtcTime(Number(value)); // 선택한 값을 숫자로 변환하여 selectedEtcTime 상태를 업데이트
@@ -266,157 +236,71 @@ const useSafetyEduForm = (eduData) => {
   // 교육등록 핸들러
   const navigate = useNavigate();
 
-    const handleSubmit = async (event) => {
-      event.preventDefault();
-      
-    
-      if (!formData.eduContent) {
-        // eduContent 필드가 비어있을 경우 에러 처리
-        setError("본문내용없음");
-        return;
-      }
-      if (!formData.eduInstructor) {
-        // eduInstructor 필드가 비어있을 경우 에러 처리
-        setError("강사없음");
-        return;
-      }
-    
-      console.log(formData);
-      
-    
-      formDataWithFile.append("eduCategory", formData.eduCategory);
-      formDataWithFile.append("eduTitle", formData.eduTitle);
-      formDataWithFile.append("eduInstructor", formData.eduInstructor);
-      formDataWithFile.append("eduPlace", formData.eduPlace);
-      formDataWithFile.append("eduStartTime", formData.eduStartTime);
-      formDataWithFile.append("eduSumTime", formData.eduSumTime);
-      
-     
-      console.log("formDataWithFile 파일" + formDataWithFile.get("files"));
-      formDataWithFile.append("eduTarget", formData.eduTarget);
-      formDataWithFile.append("eduContent", formData.eduContent);
-      formDataWithFile.append("eduWriter", formData.eduWriter);
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-    
-      try {
+    if (!formData.eduContent || !formData.eduInstructor) {
+      setError("본문 내용 또는 강사를 입력하세요.");
+      return;
+    }
+    console.log("여긴가1?: " + formData.eduContent);
+    formDataWithFile.append("eduCategory", formData.eduCategory);
+    formDataWithFile.append("eduTitle", formData.eduTitle);
+    formDataWithFile.append("eduInstructor", formData.eduInstructor);
+    formDataWithFile.append("eduPlace", formData.eduPlace);
+    formDataWithFile.append("eduStartTime", formData.eduStartTime);
+    formDataWithFile.append("eduSumTime", formData.eduSumTime);
+    formDataWithFile.append("eduTarget", formData.eduTarget);
+    formDataWithFile.append("eduContent", formData.eduContent);
+    formDataWithFile.append("eduWriter", formData.eduWriter);
+
+    console.log("여긴가?: " + formDataWithFile.eduTitle);
+    try {
+      if (formData.eduId) {
+        // 기존 교육 데이터를 수정하는 경우 (PUT 요청)
         const response = await axios.post(
-          `http://172.20.20.252:8081/edureg` ,   // 세아
-          // `http://localhost:8081/edureg` ,
-        formDataWithFile, {
-          headers: {
-            
-            "Content-Type": "multipart/form-data",
-          },
-          withCredentials: true, // 이 부분 추가
-        });
-
-        //저장 성공 시 처리 로직 추가
-    setFormData({
-      eduCategory: "",
-      eduTitle: "",
-      eduInstructor: "",
-      eduPlace: "",
-      eduStartTime: new Date(),
-      eduSumTime: "",
-      eduTarget: "",
-      eduContent: "",
-      eduWriter: "",
-      files: null,
-    });
-
-    // 데이터 전송 후 formDataWithFile 초기화
-    formDataWithFile.delete("eduCategory");
-    formDataWithFile.delete("eduTitle");
-    formDataWithFile.delete("eduInstructor");
-    formDataWithFile.delete("eduPlace");
-    formDataWithFile.delete("eduStartTime");
-    formDataWithFile.delete("eduSumTime");
-    formDataWithFile.delete("eduTarget");
-    formDataWithFile.delete("eduContent");
-    formDataWithFile.delete("eduWriter");
-    formDataWithFile.delete("files");
-
-     // 성공적으로 저장되면 알림 띄우기
-     setShowNotification(true);
-
-     // 3초 후에 알림이 자동으로 사라지도록 설정
-     setTimeout(() => {
-       setShowNotification(false);
-     }, 3000);
-    
-        console.log("저장내용:", formDataWithFile);
-        // 저장 성공 시 처리 로직 추가
-        navigate("/eduMain"); // 저장 성공 후 화면 이동
-        
-      } catch (error) {
-        console.log("여기 오류:", error);
-        // 저장 실패 시 처리 로직 추가
+            // `http://localhost:8081/edudetails/${formData.eduId}`,
+            `http://172.20.20.252:8081/edudetails/${formData.eduId}`, //세아
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+              withCredentials: true,
+            }
+        );
+        console.log("수정 결과:", response.data);
+      } else {
+        // 새로운 교육 데이터를 등록하는 경우 (POST 요청)
+        const response = await axios.post(
+            // "http://localhost:8081/edureg",
+            "http://172.20.20.252:8081/edureg", // 세아
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+              withCredentials: true,
+            }
+        );
+        console.log("등록 결과:", response.data);
       }
-    };
-  
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault();
-  
-  //   if (!formData.eduContent || !formData.eduInstructor) {
-  //     setError("본문 내용 또는 강사를 입력하세요.");
-  //     return;
-  //   }
-  //   console.log("여긴가1?: " + formData.eduContent);
-  //   // formDataWithFile.append("eduCategory", formData.eduCategory);
-  //   // formDataWithFile.append("eduTitle", formData.eduTitle);
-  //   // formDataWithFile.append("eduInstructor", formData.eduInstructor);
-  //   // formDataWithFile.append("eduPlace", formData.eduPlace);
-  //   // formDataWithFile.append("eduStartTime", formData.eduStartTime);
-  //   // formDataWithFile.append("eduSumTime", formData.eduSumTime);
-  //   // formDataWithFile.append("eduTarget", formData.eduTarget);
-  //   // formDataWithFile.append("eduContent", formData.eduContent);
-  //   // formDataWithFile.append("eduWriter", formData.eduWriter);
-    
-  //   // console.log("여긴가?: " + formDataWithFile.eduTitle);
-  //   try { 
-  //     if (formData.eduId) {
-  //       // 기존 교육 데이터를 수정하는 경우 (PUT 요청)
-  //       const response = await axios.post(
-  //         `http://172.20.10.5:8081/edudetails/${formData.eduId}`,
-  //         formData,
-  //         {
-  //           headers: {
-  //             "Content-Type": "multipart/form-data",
-  //           },
-  //           withCredentials: true,
-  //         }
-  //       );
-  //       console.log("수정 결과:", response.data);
-  //     } else {
-  //       // 새로운 교육 데이터를 등록하는 경우 (POST 요청)
-  //       const response = await axios.post(
-  //         "http://172.20.10.5:8081/edureg",
-  //         formData,
-  //         {
-  //           headers: {
-  //             "Content-Type": "multipart/form-data",
-  //           },
-  //           withCredentials: true,
-  //         }
-  //       );
-  //       console.log("등록 결과:", response.data);
-  //     }
-  
-  //     // 성공적으로 저장되면 알림 띄우기
-  //     setShowNotification(true);
-  //     // 3초 후에 알림이 자동으로 사라지도록 설정
-  //     setTimeout(() => {
-  //       setShowNotification(false);
-  //     }, 3000);
-  
-  //     // 저장 성공 시 처리 로직 추가
-  //     navigate("/eduMain"); // 저장 성공 후 화면 이동
-  //   } catch (error) {
-  //     console.error("저장/수정 에러:", error);
-  //     // 저장/수정 실패 시 처리 로직 추가
-  //   }
-  // };
+
+      // 성공적으로 저장되면 알림 띄우기
+      setShowNotification(true);
+      // 3초 후에 알림이 자동으로 사라지도록 설정
+      setTimeout(() => {
+        setShowNotification(false);
+      }, 3000);
+
+      // 저장 성공 시 처리 로직 추가
+      navigate("/eduMain"); // 저장 성공 후 화면 이동
+    } catch (error) {
+      console.error("저장/수정 에러:", error);
+      // 저장/수정 실패 시 처리 로직 추가
+    }
+  };
 
   const [selectedEtcTime, setSelectedEtcTime] = useState(30);
 
@@ -434,7 +318,7 @@ const useSafetyEduForm = (eduData) => {
     setSelectedEtcTime(Number(value));
   };
 
-  
+
 
   return {
     selected,
@@ -447,12 +331,12 @@ const useSafetyEduForm = (eduData) => {
     handleChange,
     handleStartTimeChange,
     handleCreate,
-    // onDrop,
+    onDrop,
     deleteFile,
     handleFileChange,
-    // getRootProps,
-    // getInputProps,
-    // isDragActive,
+    getRootProps,
+    getInputProps,
+    isDragActive,
     handleListboxChange,
     handleDutyChange,
     navigate,
@@ -464,7 +348,6 @@ const useSafetyEduForm = (eduData) => {
     qrValue,
     handleOptionChange,
     showNotification,
-    // handleEdit,
   };
 };
 
