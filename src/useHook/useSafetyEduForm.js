@@ -167,33 +167,56 @@ const useSafetyEduForm = (eduData) => {
   }, [eduData]);
 
 
-  const onDrop = useCallback(
-    (acceptedFiles) => {
-      setUploadedFiles([...uploadedFiles, ...acceptedFiles]);
+  // const onDrop = useCallback(
+  //   (acceptedFiles) => {
+  //     console.log("파일 확인");
+  //     console.log(acceptedFiles.file);
+  //     setUploadedFiles([...uploadedFiles, ...acceptedFiles]);
 
-      for (const file of acceptedFiles) {
-        formDataWithFile.append("files", file);
-      }
+  //     for (const file of acceptedFiles) {
+  //       formDataWithFile.append("files", file);
+  //     }
       
-      if (acceptedFiles.length > 0) {
-        setFormData({
-          ...formData,
-          files: acceptedFiles // Update the file property in the formData state
-        });
-      }
+  //     if (acceptedFiles.length > 0) {
+  //       setFormData({
+  //         ...formData,
+  //         files: acceptedFiles // Update the file property in the formData state
+  //       });
+  //     }
       
       
-      console.log(acceptedFiles);
-    },
-    [formData, uploadedFiles]
-  );
+  //     console.log(acceptedFiles);
+  //   },
+  //   [formData, uploadedFiles]
+  // );
+  const handleFileUpload = (files) => {
+    console.log("파일 확인");
+    console.log(files);
+  
+    // 업로드된 파일 정보를 상태 업데이트
+    setUploadedFiles([...uploadedFiles, ...files]);
+  
+    // FormData에 파일 추가
+    // const formDataWithFile = new FormData();
+    for (const file of files) {
+      formDataWithFile.append("files", file);
+    }
+  
+    // 상태 업데이트
+    setFormData({
+      ...formData,
+      files: [...formData.files, ...files]
+    });
+  
+    console.log(files);
+  };
   
 
-  const deleteFile = (index) => {
-    const updatedFiles = [...uploadedFiles];
-    updatedFiles.splice(index, 1);
-    setUploadedFiles(updatedFiles);
-  };
+  // const deleteFile = (index) => {
+  //   const updatedFiles = [...uploadedFiles];
+  //   updatedFiles.splice(index, 1);
+  //   setUploadedFiles(updatedFiles);
+  // };
 
   const handleFileChange = (event) => {
     //이거 이상함? 나중에 터지면 여기 문제일수도
@@ -203,7 +226,7 @@ const useSafetyEduForm = (eduData) => {
 
   
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ noClick: true , onDrop, });
+  // const { getRootProps, getInputProps, isDragActive } = useDropzone({ noClick: true , onDrop, });
 
 
   // 교육 카테고리를 선택했을 때 호출되는 함수
@@ -371,12 +394,12 @@ const useSafetyEduForm = (eduData) => {
     handleChange,
     handleStartTimeChange,
     handleCreate,
-    onDrop,
+    // onDrop,
     deleteFile,
     handleFileChange,
-    getRootProps,
-    getInputProps,
-    isDragActive,
+    // getRootProps,
+    // getInputProps,
+    // isDragActive,
     handleListboxChange,
     handleDutyChange,
     navigate,
