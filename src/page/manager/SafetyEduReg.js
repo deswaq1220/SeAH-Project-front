@@ -638,7 +638,7 @@ function SafetyEduReg() {
                 저장하기
               </button>
             </div>
-            <h1>파일 업로드</h1>*/}
+            <h1>파일 업로드</h1>
             {/*<FilePond*/}
             {/*    allowMultiple={true}*/}
             {/*    maxFiles={5}*/}
