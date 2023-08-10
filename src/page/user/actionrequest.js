@@ -14,10 +14,12 @@ export default function ActionRquest({ onFormDataChange }) {
   // qr 정보따라 url 파라미터 세팅되어야됨
   const { masterdataPart } = useParams(); // url 영역 파라미터
   const { masterdataFacility } = useParams(); // url 설비 파라미터
-  const [emailList, setEmailList] = useState([]);
+  const [emailDataList, setEmailDataList] = useState([]);
   // 선택된 이메일 담을 변수
   const [instances, setInstances] = useState([{ selectedEmail: null }]);
-
+  // 넘길 이메일 데이터 : 선택 + 고정수신자----------------------------------
+  const [fullEmailData, setEmailData] = useState([{ selectedEmail: null }]);
+// -----------------------------------
 
 
 
@@ -37,7 +39,8 @@ export default function ActionRquest({ onFormDataChange }) {
               emailAdd: item.emailAdd,
               masterStatus: item.masterStatus,
             }));
-            setEmailList(emailData);
+            setEmailDataList(emailData);
+
           })
           .catch((error) => {
             console.error("Error fetching data: ", error);
@@ -46,6 +49,11 @@ export default function ActionRquest({ onFormDataChange }) {
     emailFetchDataWithAxios(masterdataPart, masterdataFacility);
   }, [masterdataPart, masterdataFacility]);
 
+  // 고정수신자 세팅--------------------------
+  const handleFixMailData = () => {
+    console.log("확인용"+emailDataList.length);
+  }
+// -----------------------------------
   const handleActionChange = (instanceIndex, selectedEmail) => {
     const updatedInstances = [...instances];
     updatedInstances[instanceIndex] = { selectedEmail };
@@ -64,6 +72,7 @@ export default function ActionRquest({ onFormDataChange }) {
       speActEmail: selectedEmailAddresses,
     });
   };
+
 
   // 이메일 정보 추가 : +버튼
   const handleAddInstance = () => {
@@ -131,7 +140,7 @@ export default function ActionRquest({ onFormDataChange }) {
                       leaveTo="opacity-0"
                     >
                       <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                        {emailList.map((emailListItem) => (
+                        {emailDataList.map((emailListItem) => (
                             <Listbox.Option
                                 key={emailListItem.emailId}
                                 disabled={emailListItem.masterStatus === 'Y'}

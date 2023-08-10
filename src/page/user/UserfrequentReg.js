@@ -277,16 +277,11 @@ function UserfrequentReg() {
       <FilePond
         allowMultiple={true} // 다중 파일 업로드 허용
         maxFiles={5} // 최대 파일 수 설정
-        // server={`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`} // 파일 업로드를 처리하는 서버 엔드포인트
         // 엔드포인트는 백엔드 구현되면 연결요
         onupdatefiles={fileItems => {
             // 파일 정보를 상태에 저장하거나 처리
             const selectedFiles = fileItems.map(fileItem => fileItem.file);
             setFiles(selectedFiles);
-
-
-          // 업로드한 파일 정보를 처리할 콜백 함수
-          // console.log(fileItems.map(fileItem => fileItem.file));
         }}
       />
 
