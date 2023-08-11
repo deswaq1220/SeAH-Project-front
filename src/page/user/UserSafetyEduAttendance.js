@@ -69,8 +69,9 @@ function UserSafetyEduAttendance() {
     // 출석 등록 요청 보내기
     axios
       .post(
-        // `http://172.20.20.252:8081/usereduatten/register/${eduId}`,     // 세아
-        `http://localhost:8081/usereduatten/register/${eduId}`,
+        `http://172.20.20.252:8081/usereduatten/register/${eduId}`,     // 세아
+        // `http://localhost:8081/usereduatten/register/${eduId}`,
+        // `http://192.168.202.1:8081/usereduatten/register/${eduId}`,
         requestData, {
         //http://localhost:8081/usereduatten/register 이거는 진짜 사용할때
         headers: {
@@ -117,8 +118,9 @@ function UserSafetyEduAttendance() {
     const fetchEduList = async () => {
       try {
         const response = await axios.get(
-          // `http://172.20.20.252:8081/edudetails/${eduId}`    // 세아
-          `http://localhost:8081/edudetails/${eduId}`
+          `http://172.20.20.252:8081/edudetails/${eduId}`    // 세아
+          // `http://localhost:8081/edudetails/${eduId}`
+          // `http://192.168.202.1:8081/edudetails/${eduId}`
         );
         console.log(response.data); // 서버로부터 받은 데이터 확인
         setEduList(response.data); // 해당 아이디에 해당하는 데이터를 상태 변수에 저장
@@ -128,8 +130,9 @@ function UserSafetyEduAttendance() {
     };
     // GET 요청을 통해 eduTitle 가져오기
     axios.get(
-      // `http://172.20.20.252:8081/usereduatten/register/${eduId}`)   // 세아
-      `http://localhost:8081/usereduatten/register/${eduId}`)
+      `http://172.20.20.252:8081/usereduatten/register/${eduId}`)   // 세아
+      // `http://localhost:8081/usereduatten/register/${eduId}`)
+      // `http://192.168.202.1:8081/usereduatten/register/${eduId}`)
       .then((response) => {
         // 응답 데이터에서 eduTitle 값을 추출하여 상태 업데이트
         setEduTitle(response.data.eduTitle);

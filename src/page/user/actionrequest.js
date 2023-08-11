@@ -18,7 +18,7 @@ export default function ActionRquest({ onFormDataChange }) {
   // 선택된 이메일 담을 변수
   const [instances, setInstances] = useState([{ selectedEmail: null }]);
   // 넘길 이메일 데이터 : 선택 + 고정수신자----------------------------------
-  const [fullEmailData, setEmailData] = useState([{ selectedEmail: null }]);
+  // const [fullEmailData, setEmailData] = useState([{ selectedEmail: null }]);
 // -----------------------------------
 
 
@@ -28,8 +28,9 @@ export default function ActionRquest({ onFormDataChange }) {
     function emailFetchDataWithAxios(masterdataPart, masterdataFacility) {
       axios
         .get(
-          // `http://172.20.20.252:8081/special/new/${masterdataPart}/${masterdataFacility}`   // 세아
-          `http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`
+          `http://172.20.20.252:8081/special/new/${masterdataPart}/${masterdataFacility}`   // 세아
+          // `http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`
+          // `http://192.168.202.1:8081/special/new/${masterdataPart}/${masterdataFacility}`
         )
           .then((response) => {
             const emailListFromBack = response.data.emailList;
@@ -50,9 +51,9 @@ export default function ActionRquest({ onFormDataChange }) {
   }, [masterdataPart, masterdataFacility]);
 
   // 고정수신자 세팅--------------------------
-  const handleFixMailData = () => {
-    console.log("확인용"+emailDataList.length);
-  }
+  // const handleFixMailData = () => {
+  //   console.log("확인용"+emailDataList.length);
+  // }
 // -----------------------------------
   const handleActionChange = (instanceIndex, selectedEmail) => {
     const updatedInstances = [...instances];
