@@ -18,11 +18,11 @@ const department = [
   },
   {
     id: 3,
-    name: "주조반",
+    name: "주조팀",
   },
   {
     id: 4,
-    name: "압출반",
+    name: "압출팀",
   },
 ];
 
