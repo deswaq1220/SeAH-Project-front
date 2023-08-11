@@ -13,7 +13,8 @@ import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import * as XLSX from "xlsx";
 
-
+//엑셀저장
+import { saveAs } from "file-saver";
 
 function SafetyInspectionStatisticsYearImg() {
 
@@ -47,20 +48,6 @@ function SafetyInspectionStatisticsYearImg() {
     const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
     // 모든 dangerKind를 추출하여 하나의 배열로 모으기
     const [uniqueDangerKinds, setUniqueDangerKinds] = useState([]); //중복값 제거
-    const generateDataForAllMonths = (dataByMonth, uniqueDangerKinds) => {
-        const dataForAllMonths = [];
-        for (let i = 1; i <= 12; i++) {
-            const month = i;
-            if (!dataByMonth[month]) {
-                // 해당 월에 데이터가 없으면 0으로 초기화하여 추가
-                dataForAllMonths.push({ month, ...Object.fromEntries(uniqueDangerKinds.map((kind) => [kind, 0])) });
-            } else {
-                dataForAllMonths.push(dataByMonth[month]);
-            }
-        }
-        return dataForAllMonths;
-    };
-
 
 
 
@@ -119,32 +106,47 @@ function SafetyInspectionStatisticsYearImg() {
                     const barChartDataWithAllMonths = generateDataForAllMonths(dataByMonth, allDangerKinds);
 
                     setBarChartData(barChartDataWithAllMonths);
-                    console.log("==================체크중" + JSON.stringify(lineChartData));
+                    console.log("==================체크중" + JSON.stringify(barChartDataWithAllMonths));
                 } catch (error) {
                     console.error("불러온 데이터에 에러가 발생했습니다:", error);
                 }
             };
 
 
+    const generateDataForAllMonths = (dataByMonth, uniqueDangerKinds) => {
+        const dataForAllMonths = [];
+        for (let i = 1; i <= 12; i++) {
+            const month = i;
+            if (!dataByMonth[month]) {
+                // 해당 월에 데이터가 없으면 0으로 초기화하여 추가
+                dataForAllMonths.push({ month: `${month}월`, ...Object.fromEntries(uniqueDangerKinds.map((kind) => [kind, 0])) });
+            } else {
+                dataForAllMonths.push(dataByMonth[month]);
+            }
+        }
+        return dataForAllMonths;
+    };
 
-    //이벤트2: 엑셀저장폼
-    const createExcelData = (lineChartData) => {
+
+
+    //이벤트2: 수시/정기점검 건수 엑셀저장폼
+    const createInspectionCountExcelData = (lineChartData) => {
         // 차트 정보를 바탕으로 엑셀 데이터를 생성하는 로직 작성
         const data = lineChartData[0].data.map(item => ({
             구분: lineChartData[0].id, // 수시점검 or 정기점검
+            연도: selectedYear,
             월: item.x,
             점검건수: item.y
         }));
-
         return data;
     };
 
 
-    //이벤트2: 엑셀저장로직
+    //이벤트2: 수시/정기점검 건수 엑셀저장로직
     const handleExport = () => {
 
         // 엑셀 데이터 생성
-        const data = createExcelData(lineChartData);
+        const data = createInspectionCountExcelData(lineChartData);
 
         // 엑셀 시트 생성
         const worksheet = XLSX.utils.json_to_sheet(data);
@@ -164,6 +166,73 @@ function SafetyInspectionStatisticsYearImg() {
         saveAs(excelFile, `안전점검통계.xlsx`);
     };
 
+
+    //이벤트3: 수시점검 위험분류 엑셀저장폼
+    const createDangerExcelData = (barChartData, uniqueDangerKinds) => {
+        // 차트 정보를 바탕으로 엑셀 데이터를 생성하는 로직 작성
+
+        const data = [];
+
+        const generatedData = generateDataForAllMonths(barChartData, uniqueDangerKinds); // 월별 데이터 생성
+
+        for (const monthData of generatedData) {
+            const rowData = {
+                월: monthData.month,
+            };
+
+            for (const dangerValue of uniqueDangerKinds) {
+                rowData[dangerValue] = monthData[dangerValue] || 0; // 해당 위험분류 값이 없으면 0으로 설정
+            }
+
+            data.push(rowData);
+        }
+        return data;
+
+
+/*        const data =[];
+
+        for (const monthData of barChartData) {
+            const rowData = {
+                월: monthData.month,
+            };
+
+
+            Object.entries(monthData).forEach(([key, value]) => {
+                if (key !== 'month') {
+                    rowData[key] = value;
+                }
+            });
+
+            data.push(rowData);
+        }
+
+        return data;*/
+    };
+
+
+    //이벤트3: 수시점검 위험분류 엑셀저장로직
+    const handleExport2 = () => {
+
+        // 엑셀 데이터 생성
+        const data = createDangerExcelData(barChartData, uniqueDangerKinds);
+
+        // 엑셀 시트 생성
+        const worksheet = XLSX.utils.json_to_sheet(data);
+
+        // 엑셀 워크북 생성
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+        // 엑셀 파일 저장
+        const excelBuffer = XLSX.write(workbook, {
+            bookType: "xlsx",
+            type: "array",
+        });
+        const excelFile = new Blob([excelBuffer], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+        saveAs(excelFile, `연간 수시점검 위험분류 분석.xlsx`);
+    };
 
     const maxCount = Math.max(barChartData.map((data) => Math.max(Object.values(data).filter((val) => typeof val === 'number'))));
     const colors = ['rgba(130,205,255,0.8)', 'rgba(230,12,239,0.85)', 'rgba(130,202,157,0.89)', 'rgba(156,132,216,0.9)',
@@ -259,14 +328,16 @@ function SafetyInspectionStatisticsYearImg() {
 
     <div className="flex">
         <div className="w-1/2 p-4">
-            <h5 className="text-xl font-semibold leading-2 text-gray-900">당해 수시점검/정기점검 건수 분석</h5>
-            <button
-                type="button"
-                className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-                onClick={handleExport}
-            >
-                엑셀 저장
-            </button>
+            <div className="flex justify-between items-center">
+                <h5 className="text-xl font-semibold leading-2 text-gray-900">수시ㆍ정기점검 건수 분석</h5>
+                    <button
+                        type="button"
+                        className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                        onClick={handleExport}
+                    >
+                        엑셀 저장
+                    </button>
+            </div>
             <div style={{ width: 'auto', height: '700px', margin: '0 auto' }}>
                 {lineChartData.length > 0 ? (
                     <ResponsiveLine
@@ -300,8 +371,7 @@ function SafetyInspectionStatisticsYearImg() {
                             legendPosition: 'middle',
 
                         }}
-                        //enableGridX={false}
-                        //enableGridY={false}
+
                         colors={{ scheme: 'category10' }}
                         pointSize={8}
                         pointColor={{ theme: 'background' }}
@@ -343,11 +413,19 @@ function SafetyInspectionStatisticsYearImg() {
         </div>
 
         <div className="w-1/2 p-4">
-            <div>  </div>
-            <h5 className="text-xl font-semibold leading-2 text-gray-900">(수시점검) 당해 점검발생 건 - 위험분류 통계</h5>
+            <div className="flex justify-between items-center">
+                <h5 className="text-xl font-semibold leading-2 text-gray-900">연간 수시점검 위험분류 분석</h5>
+                <button
+                    type="button"
+                    className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                    onClick={handleExport2}
+                >
+                    엑셀 저장
+                </button>
+            </div>
                 <div style={{ height: '700px' }}>
                     {barChartData.length > 0 ? (
-                        <ResponsiveContainer width={1200} height="100%">
+                        <ResponsiveContainer width="100%" height="100%">
                         <BarChart
                             //width={500}
                             height={300}
