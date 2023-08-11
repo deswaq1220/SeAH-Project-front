@@ -162,26 +162,27 @@ function UserfrequentReg() {
 
     const handleFormSubmit = () => {
         const formData = new FormData();        // 폼데이터 객체 생성
-        const requestData = {
-            speEmpNum,
-            spePerson,
-            speEmail,
-            speDanger,
-            speInjure,
-            speCause,
-            speTrap,
-            speRiskAssess,
-            speContent,
-            speActPerson,
-            speActEmail,
-            speActContent,
-            speComplete,
-        };
-
+        // const requestData = {
+        //     speEmpNum,
+        //     spePerson,
+        //     speEmail,
+        //     speDanger,
+        //     speInjure,
+        //     speCause,
+        //     speTrap,
+        //     speRiskAssess,
+        //     speContent,
+        //     speActPerson,
+        //     speActEmail,
+        //     speActContent,
+        //     speComplete,
+        // };
 
         // 업로드 파일 배열 저장
-        for(let i=0; i<files.length; i++){
-            formData.append('files', files[i]);
+        if(files !== null){
+         for(let i=0; i<files.length; i++){
+          formData.append('files', files[i]);
+         }
         }
         formData.append('speEmpNum', speEmpNum);
         formData.append('spePerson', spePerson);
@@ -201,8 +202,8 @@ function UserfrequentReg() {
 
         // 수시점검 등록 요청
         axios
-            .post(`http://172.20.20.252:8081/special/new/${masterdataPart}/${masterdataFacility}`, formData, {   // 세아
-            //  .post(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`, formData, {
+            // .post(`http://172.20.20.252:8081/special/new/${masterdataPart}/${masterdataFacility}`, formData, {   // 세아
+             .post(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`, formData, {
             //  .post(`http://192.168.202.1:8081/special/new/${masterdataPart}/${masterdataFacility}`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
@@ -222,7 +223,7 @@ function UserfrequentReg() {
                 navigate(`/special/list/${masterdataPart}/${masterdataFacility}`);
             })
             .catch((error) => {
-                console.log(requestData);
+                // console.log(requestData);
                 console.log(formData);
                 console.error(error);
                 alert("수시점검 등록에 실패했습니다. 다시 시도해주세요.");
@@ -231,7 +232,6 @@ function UserfrequentReg() {
 
 
     return (
-
 
         <>
             <UserHeader />

@@ -18,7 +18,7 @@ export default function ActionRquest({ onFormDataChange }) {
   // 선택된 이메일 담을 변수
   const [instances, setInstances] = useState([{ selectedEmail: null }]);
   // 넘길 이메일 데이터 : 선택 + 고정수신자----------------------------------
-  // const [fullEmailData, setEmailData] = useState([{ selectedEmail: null }]);
+  const [fullEmailData, setFullEmailData] = useState([{ selectedEmailFull: null }]);
 // -----------------------------------
 
 
@@ -28,8 +28,8 @@ export default function ActionRquest({ onFormDataChange }) {
     function emailFetchDataWithAxios(masterdataPart, masterdataFacility) {
       axios
         .get(
-          `http://172.20.20.252:8081/special/new/${masterdataPart}/${masterdataFacility}`   // 세아
-          // `http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`
+          // `http://172.20.20.252:8081/special/new/${masterdataPart}/${masterdataFacility}`   // 세아
+          `http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`
           // `http://192.168.202.1:8081/special/new/${masterdataPart}/${masterdataFacility}`
         )
           .then((response) => {
@@ -42,25 +42,48 @@ export default function ActionRquest({ onFormDataChange }) {
             }));
             setEmailDataList(emailData);
 
+            // 고정수신자 세팅
+            const yInstances = emailListFromBack
+                .filter((item) => item.masterStatus === "Y")
+                .map((item) => ({
+                  selectedEmailFull: item
+                }));
+
+            const yEmailNames = yInstances.map((item) => item.emailName).join(", ");
+            const yEmailAddresses = yInstances.map((item) => item.emailAdd).join(", ");
+
+            setFullEmailData({
+              speActPerson : yEmailNames,
+              speActEmail : yEmailAddresses
+            });
           })
           .catch((error) => {
             console.error("Error fetching data: ", error);
           });
     }
     emailFetchDataWithAxios(masterdataPart, masterdataFacility);
+
   }, [masterdataPart, masterdataFacility]);
 
-  // 고정수신자 세팅--------------------------
-  // const handleFixMailData = () => {
-  //   console.log("확인용"+emailDataList.length);
-  // }
+
 // -----------------------------------
   const handleActionChange = (instanceIndex, selectedEmail) => {
     const updatedInstances = [...instances];
     updatedInstances[instanceIndex] = { selectedEmail };
     setInstances(updatedInstances);
 
-    //  ,로 구분된 문자열로 변환하여 넘기기
+    // 기존의 fullEmailData에 추가된 이메일들 가져오기
+    const existingEmails = fullEmailData.map(item => item.selectedEmailFull);
+
+    // 선택된 이메일이 이미 추가되었는지 확인
+    if (!existingEmails.some(email => email.emailId === selectedEmail.emailId)) {
+      // 새로운 이메일 선택을 fullEmailData에 추가하기
+      const updatedFullEmailData = [...fullEmailData];
+      updatedFullEmailData.push({ selectedEmailFull: selectedEmail });
+      setFullEmailData(updatedFullEmailData);
+    }
+
+    // ,로 구분된 문자열로 변환하여 넘기기
     const updatedEmails = updatedInstances
         .map((instance) => instance.selectedEmail)
         .filter((email) => email !== null);
@@ -73,6 +96,26 @@ export default function ActionRquest({ onFormDataChange }) {
       speActEmail: selectedEmailAddresses,
     });
   };
+
+
+  // const handleActionChange = (instanceIndex, selectedEmail) => {
+  //   const updatedInstances = [...instances];
+  //   updatedInstances[instanceIndex] = { selectedEmail };
+  //   setInstances(updatedInstances);
+  //
+  //   //  ,로 구분된 문자열로 변환하여 넘기기
+  //   const updatedEmails = updatedInstances
+  //       .map((instance) => instance.selectedEmail)
+  //       .filter((email) => email !== null);
+  //
+  //   const selectedEmailNames = updatedEmails.map((email) => email.emailName).join(", ");
+  //   const selectedEmailAddresses = updatedEmails.map((email) => email.emailAdd).join(", ");
+  //
+  //   onFormDataChange({
+  //     speActPerson: selectedEmailNames,
+  //     speActEmail: selectedEmailAddresses,
+  //   });
+  // };
 
 
   // 이메일 정보 추가 : +버튼
