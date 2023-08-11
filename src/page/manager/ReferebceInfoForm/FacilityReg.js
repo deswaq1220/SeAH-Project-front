@@ -51,7 +51,7 @@ export default function FacilityReg() {
             />
           </div>
         </div>
-        <div className="flex flex-col ml-2">
+        <div className="flex flex-col ml-2 z-10">
           <Listbox value={selected} onChange={setSelected}>
             {({ open }) => (
               <>
