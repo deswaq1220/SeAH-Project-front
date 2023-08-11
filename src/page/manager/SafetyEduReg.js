@@ -168,7 +168,6 @@ function SafetyEduReg() {
   return (
     <div>
       <Header />
-
       <div className="flex justify-center">
         <div
           id="safeEdureg"
