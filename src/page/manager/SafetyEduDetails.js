@@ -328,8 +328,8 @@ export default function SafetyEduDetails() {
 
                         <Link to={`/userattendance/register/${eduData.eduId}`}>
                           <QRCode
-                              // value={`http://172.20.20.252:3000/userattendance/register/${eduData.eduId}`}
-                              value={`http://localhost:8081/userattendance/register/${eduData.eduId}`}
+                              value={`http://172.20.20.252:3000/userattendance/register/${eduData.eduId}`}
+                              // value={`http://localhost:8081/userattendance/register/${eduData.eduId}`}
                               // value={`http://192.168.202.1:8081/userattendance/register/${eduData.eduId}`}
                           />
                         </Link>
