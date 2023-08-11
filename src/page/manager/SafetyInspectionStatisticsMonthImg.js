@@ -1,11 +1,11 @@
 import Header from "../../components/Header";
 import {Disclosure} from "@headlessui/react";
+import {ChartPieIcon} from "@heroicons/react/24/solid"; //아이콘
 
 //네비게이션
 import {Fragment, useEffect, useState} from 'react'
 //import { Disclosure, Menu, Transition } from '@headlessui/react'
-import iconsgraph from "../../img/iconsgraph.png"
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import {Bars3Icon, BellIcon, CheckCircleIcon, XMarkIcon} from '@heroicons/react/24/outline'
 import {MagnifyingGlassIcon} from "@heroicons/react/20/solid";
 import axios from "axios";
 function SafetyInspectionStatisticsMonthImg() {
@@ -26,7 +26,16 @@ function SafetyInspectionStatisticsMonthImg() {
 
     //이벤트1: 연도 검색이벤트
     const handleYearChange = (event) => {
-        setSelectedYear(event.target.value);
+        const inputValue = event.target.value;
+        const collectFormat = /^\d{4}-\d{2}$/.test(inputValue);
+
+        if (inputValue.length >= 7) {
+            if (collectFormat) {
+                setSelectedYear(inputValue);
+            } else {
+                alert('올바른 검색 형식으로 입력해주세요. ex: 2023-08');
+            }
+        }
     };
 
     const [spcCount, setSpcCount] = useState([]);
@@ -46,32 +55,32 @@ function SafetyInspectionStatisticsMonthImg() {
         try {
 
             //점검건수 값
-            await axios.get(`http://172.20.20.252:8081/special/statistics/count`, { params: { yearmonth: selectedYear } })  //세아
-            //await axios.get(`http://localhost:8081/special/statistics/count`, { params: { yearmonth: selectedYear } })
+            //await axios.get(`http://172.20.20.252:8081/special/statistics/count`, { params: { yearmonth: selectedYear } })  //세아
+            await axios.get(`http://localhost:8081/special/statistics/count`, { params: { yearmonth: selectedYear } })
                 .then(response => {
                     setSpcCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
                     console.log(response.data);
                 })
 
             //영역값
-            await axios.get(`http://172.20.20.252:8081/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })  //세아
-            //await axios.get(`http://localhost:8081/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })
+            // await axios.get(`http://172.20.20.252:8081/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })  //세아
+            await axios.get(`http://localhost:8081/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })
                 .then(response => {
                     setPartCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
                     console.log(response.data);
                 })
 
             //위험분류값
-            await axios.get(`http://172.20.20.252:8081/special/statistics/dangerandmonth`, { params: { yearmonth: selectedYear } })  //세아
-            //await axios.get(`http://localhost:8081/special/statistics/dangerandmonth`, { params: { yearmonth: selectedYear } })
+            //await axios.get(`http://172.20.20.252:8081/special/statistics/dangerandmonth`, { params: { yearmonth: selectedYear } })  //세아
+            await axios.get(`http://localhost:8081/special/statistics/dangerandmonth`, { params: { yearmonth: selectedYear } })
                 .then(response => {
                     setDangerCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
                     console.log(response.data);
                 })
 
             //위험원인값
-            await axios.get(`http://172.20.20.252:8081/special/statistics/causeandmonth`, { params: { yearmonth: selectedYear } })  //세아
-            //await axios.get(`http://localhost:8081/special/statistics/causeandmonth`, { params: { yearmonth: selectedYear } })
+                // await axios.get(`http://172.20.20.252:8081/special/statistics/causeandmonth`, { params: { yearmonth: selectedYear } })  //세아
+            await axios.get(`http://localhost:8081/special/statistics/causeandmonth`, { params: { yearmonth: selectedYear } })
                 .then(response => {
                     setCauseCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
                     console.log(response.data);
@@ -98,18 +107,12 @@ function SafetyInspectionStatisticsMonthImg() {
                           <div className="relative flex h-16 items-center justify-between">
                               <div className="flex items-center px-2 lg:px-0">
                                   <div className="flex-shrink-0">
-                                      <img
-                                          className="h-8 w-auto"
-                                          src={iconsgraph}
-                                          /*alt="Your Company"*/
-                                      />
+                                      <ChartPieIcon className="h-8 w-8 text-cyan-500" aria-hidden="true" />
                                   </div>
                                   <div className="hidden lg:ml-6 lg:block">
                                       <div className="flex space-x-4">
-                                          {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
-
                                           <a href="http://172.20.20.252:3000/inspection/statistics/yearimg" className="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white">
-                                              연도 상세 분석
+                                              연간 분석
                                           </a>
                                           <a
                                               href="http://172.20.20.252:3000/inspection/statistics/monthimg"
@@ -131,11 +134,12 @@ function SafetyInspectionStatisticsMonthImg() {
                                               <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                                           </div>
                                           <input
-                                              id="search"
+                                              id="yearInput"
                                               name="search"
                                               className="block w-full rounded-md border-0 bg-gray-700 py-1.5 pl-10 pr-3 text-gray-300 placeholder:text-gray-400 focus:bg-white focus:text-gray-900 focus:ring-0 sm:text-sm sm:leading-6"
-                                              placeholder="Search"
-                                              type="search"
+                                              placeholder="검색형태: 2023-08"
+                                              type="text"
+                                              onChange={handleYearChange}
                                           />
                                       </div>
                                   </div>
@@ -171,27 +175,6 @@ function SafetyInspectionStatisticsMonthImg() {
                   </>
               )}
           </Disclosure>
-
-
-          <div
-              id="Training_time"
-              className="flex items-baseline justify-start"
-          >
-              <span className=" w-30 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
-                검색년월:(형식-2023-08)
-              </span>
-              <div className="mt-2">
-                  <input
-                      type="number"
-                      id="yearInput"
-                      className="block w-56 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
-                      value={selectedYear}
-                      onChange={handleYearChange}
-                  />
-
-              </div>
-          </div>
-
 
 
 

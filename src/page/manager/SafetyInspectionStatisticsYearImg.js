@@ -4,13 +4,14 @@ import axios from 'axios';
 //import React, { PureComponent } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { ResponsiveLine } from '@nivo/line'
+import {ChartPieIcon} from "@heroicons/react/24/solid"; //아이콘
 
 //네비게이션
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import iconsgraph from "../../img/iconsgraph.png";
+
 
 
 function SafetyInspectionStatisticsYearImg() {
@@ -22,21 +23,30 @@ function SafetyInspectionStatisticsYearImg() {
 
     //이벤트1: 연도 검색이벤트
     const handleYearChange = (event) => {
-        setSelectedYear(parseInt(event.target.value));
+        const inputValue = event.target.value;
+        const collectFormat = /^\d{4}$/.test(inputValue);
+
+        if (inputValue.length >= 4) {
+            if (collectFormat) {
+                setSelectedYear(parseInt(inputValue));
+            } else {
+                alert('올바른 검색 형식으로 입력해주세요. ex: 2023');
+            }
+        }
     };
 
     //이벤트2
     const handleSave = async () => {
         try {
-            const barChartResponse = await axios.get("http://http://172.20.20.252/:8081/special/statistics/detaildanger", {  // 세아
-            // const barChartResponse = await axios.get("http://localhost:8081/special/statistics/detaildanger", {
+            // const barChartResponse = await axios.get("http://http://172.20.20.252/:8081/special/statistics/detaildanger", {  // 세아
+             const barChartResponse = await axios.get("http://localhost:8081/special/statistics/detaildanger", {
                 params: {
                     year: selectedYear,
                 },
             });
 
-            const lineChartResponse = await axios.get("http://http://172.20.20.252/:8081/statistics/inspectioncount", {  // 세아
-            // const lineChartResponse = await axios.get("http://localhost:8081/statistics/inspectioncount", {
+            // const lineChartResponse = await axios.get("http://http://172.20.20.252/:8081/statistics/inspectioncount", {  // 세아
+             const lineChartResponse = await axios.get("http://localhost:8081/statistics/inspectioncount", {
                 params: {
                     year: selectedYear,
                 },
@@ -88,8 +98,8 @@ function SafetyInspectionStatisticsYearImg() {
 
                     //(LineChart) 특정년도의 수시점검과 정기점검 건수
 
-                    const lineChartResponse = await axios.get('http://172.20.20.252:8081/statistics/inspectioncount', { params: { year: selectedYear } });   // 세아
-                    // const lineChartResponse = await axios.get('http://localhost:8081/statistics/inspectioncount', { params: { year: selectedYear } });
+                    //const lineChartResponse = await axios.get('http://172.20.20.252:8081/statistics/inspectioncount', { params: { year: selectedYear } });   // 세아
+                     const lineChartResponse = await axios.get('http://localhost:8081/statistics/inspectioncount', { params: { year: selectedYear } });
 
                     const specialCountData = lineChartResponse.data;
                     console.log("첫번째"+ JSON.stringify(lineChartResponse.data, null, 2));
@@ -105,8 +115,8 @@ function SafetyInspectionStatisticsYearImg() {
 
 
                     //(BarChart) 특정년도의 월별 수시점검한 위험분류 건수
-                    const barChartResponse = await axios.get('http://172.20.20.252:8081/special/statistics/detaildanger', { params: {year: selectedYear} });   // 세아
-                    // const barChartResponse = await axios.get('http://localhost:8081/special/statistics/detaildanger', { params: {year: selectedYear} });
+                    //const barChartResponse = await axios.get('http://172.20.20.252:8081/special/statistics/detaildanger', { params: {year: selectedYear} });   // 세아
+                    const barChartResponse = await axios.get('http://localhost:8081/special/statistics/detaildanger', { params: {year: selectedYear} });
 
                     const specialDangerData = barChartResponse.data; //백엔드에서 받아온 데이터
                     const dataByMonth = {};
@@ -143,7 +153,7 @@ function SafetyInspectionStatisticsYearImg() {
     };*/
 
     const maxCount = Math.max(barChartData.map((data) => Math.max(Object.values(data).filter((val) => typeof val === 'number'))));
-    const colors = ['rgba(130,205,255,0.8)', 'rgba(158,132,216,0.75)', 'rgba(130,202,157,0.89)', 'rgba(156,132,216,0.9)',
+    const colors = ['rgba(130,205,255,0.8)', 'rgba(230,12,239,0.85)', 'rgba(130,202,157,0.89)', 'rgba(156,132,216,0.9)',
                             'rgba(255,159,180,0.94)', 'rgba(50,44,140,0.88)', '#84bbd8', 'rgba(237,138,76,0.87)',
                             '#f55e5e', 'rgba(150,77,238,0.91)', '#d7549d', 'rgba(121,183,101,0.95)',
                             'rgba(88,192,182,0.82)', 'rgba(150,52,52,0.76)', '#07796c', 'rgba(239,204,110,0.83)',
@@ -164,17 +174,13 @@ function SafetyInspectionStatisticsYearImg() {
                             <div className="relative flex h-16 items-center justify-between">
                                 <div className="flex items-center px-2 lg:px-0">
                                     <div className="flex-shrink-0">
-                                        <img
-                                            className="h-8 w-auto"
-                                            src={iconsgraph}
-                                            /*alt="Your Company"*/
-                                        />
+                                        <ChartPieIcon className="h-8 w-8 text-cyan-500" aria-hidden="true" />
                                     </div>
                                     <div className="hidden lg:ml-6 lg:block">
                                         <div className="flex space-x-4">
                                             {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
                                             <a href="http://172.20.20.252:3000/inspection/statistics/yearimg" className="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white">
-                                                연도 상세 분석
+                                                연간 분석
                                             </a>
                                             <a
                                                 href="http://172.20.20.252:3000/inspection/statistics/monthimg" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
@@ -197,9 +203,9 @@ function SafetyInspectionStatisticsYearImg() {
                                                 id="yearInput"
                                                 name="search"
                                                 className="block w-full rounded-md border-0 bg-gray-700 py-1.5 pl-10 pr-3 text-gray-300 placeholder:text-gray-400 focus:bg-white focus:text-gray-900 focus:ring-0 sm:text-sm sm:leading-6"
-                                                placeholder="검색년도: 2023"
+                                                placeholder="검색형태: 2023"
                                                 type="number"
-                                                value={selectedYear}
+                                                //value={selectedYear}
                                                 onChange={handleYearChange}
                                             />
                                         </div>
@@ -240,7 +246,7 @@ function SafetyInspectionStatisticsYearImg() {
 
     <div className="flex">
         <div className="w-1/2 p-4">
-            <div> (수시점검/정기점검) 점검 수 통계</div>
+            <h5 className="text-xl font-semibold leading-2 text-gray-900">당해 수시점검/정기점검 건수 분석</h5>
             <div style={{ width: 'auto', height: '700px', margin: '0 auto' }}>
                 {lineChartData.length > 0 ? (
                     <ResponsiveLine
@@ -317,7 +323,8 @@ function SafetyInspectionStatisticsYearImg() {
         </div>
 
         <div className="w-1/2 p-4">
-            <div>  (수시점검) 당해 점검발생 건 - 위험분류 통계</div>
+            <div>  </div>
+            <h5 className="text-xl font-semibold leading-2 text-gray-900">(수시점검) 당해 점검발생 건 - 위험분류 통계</h5>
                 <div style={{ height: '700px' }}>
                     {barChartData.length > 0 ? (
                         <ResponsiveContainer width={1200} height="100%">
