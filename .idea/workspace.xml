@@ -5,19 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c20fbe9c-9169-4241-9ec0-dff0f7b0e503" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/page/manager/test.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/manager/SafetyEduDetails.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/SafetyEduDetails.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/manager/SafetyEduReg.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/SafetyEduReg.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/UserMain.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserMain.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/UserSafetyEduAttendance.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserSafetyEduAttendance.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/UserfrequentReg.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserfrequentReg.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/actionrequest.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/actionrequest.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/danger.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/danger.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/injured.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/injured.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/useHook/useSafetyEduForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/useHook/useSafetyEduForm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/SafetyInspectionStatisticsMonthImg.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/SafetyInspectionStatisticsMonthImg.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

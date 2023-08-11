@@ -8,6 +8,10 @@ import {Fragment, useEffect, useState} from 'react'
 import {Bars3Icon, BellIcon, CheckCircleIcon, XMarkIcon} from '@heroicons/react/24/outline'
 import {MagnifyingGlassIcon} from "@heroicons/react/20/solid";
 import axios from "axios";
+
+//엑셀
+import * as XLSX from "xlsx";
+import { saveAs } from 'file-saver';
 function SafetyInspectionStatisticsMonthImg() {
 
     //공통: 년도입력, 기본값은 당해로 지정되어 있음
@@ -37,6 +41,37 @@ function SafetyInspectionStatisticsMonthImg() {
             }
         }
     };
+
+    // 이벤트2: 월간 분석 결과 엑셀로 내보내기
+    const handleExport = () => {
+        const data = [
+            { sheetName: '이번달 수시점검 건수', data: [{ "수시점검 건수": spcCount }] },
+            { sheetName: '점검영역 분석', data: partCount.map(item => ({ "점검영역": item[0], "건수": item[1] })) },
+            { sheetName: '위험분류 분석', data: dangerCount.map(item => ({ "위험분류": item[0], "건수": item[1] })) },
+            { sheetName: '위험원인 분석', data: causeCount.map(item => ({ "위험원인": item[0], "건수": item[1] })) },
+        ];
+
+        const workbook = XLSX.utils.book_new();
+
+        data.forEach(({ sheetName, data }) => {
+            const worksheet = XLSX.utils.json_to_sheet(data);
+            XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
+        });
+
+        const excelBuffer = XLSX.write(workbook, {
+            bookType: 'xlsx',
+            type: 'array',
+        });
+
+        const excelFile = new Blob([excelBuffer], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        });
+
+        saveAs(excelFile, '분석_결과.xlsx');
+    };
+
+
+
 
     const [spcCount, setSpcCount] = useState([]);
     const [partCount, setPartCount] = useState([]);
@@ -181,9 +216,17 @@ function SafetyInspectionStatisticsMonthImg() {
       {/*수시점검 통계*/}
 
           {/*점검 총계*/}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div className="mt-4 mx-4 grid grid-cols-1 gap-6 sm:grid-cols-2">
           <div>
-              <h5 className="text-xl font-semibold leading-2 text-gray-900">이번달 수시점검 건수</h5>
+              <div className="flex justify-between items-baseline">
+                  <h5 className="text-xl font-semibold leading-2 text-gray-900">이번달 수시점검 건수</h5>
+                  <button
+                      className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                      onClick={handleExport}
+                  >
+                      월간분석 엑셀 저장
+                  </button>
+              </div>
               <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-1">
                   <div className="overflow-hidden rounded-lg bg-amber-100 px-3 py-5 shadow sm:p-40 max-w-screen-xl flex items-center justify-center">
                       <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{spcCount}건</dd>
