@@ -11,6 +11,7 @@ import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import * as XLSX from "xlsx";
 
 
 
@@ -20,6 +21,9 @@ function SafetyInspectionStatisticsYearImg() {
     const seoulTime = new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" });
     const currentYear = new Date(seoulTime).getFullYear();
     const [selectedYear, setSelectedYear] = useState(currentYear);
+
+
+
 
     //이벤트1: 연도 검색이벤트
     const handleYearChange = (event) => {
@@ -34,32 +38,6 @@ function SafetyInspectionStatisticsYearImg() {
             }
         }
     };
-
-    //이벤트2
-    const handleSave = async () => {
-        try {
-            // const barChartResponse = await axios.get("http://http://172.20.20.252/:8081/special/statistics/detaildanger", {  // 세아
-             const barChartResponse = await axios.get("http://localhost:8081/special/statistics/detaildanger", {
-                params: {
-                    year: selectedYear,
-                },
-            });
-
-            // const lineChartResponse = await axios.get("http://http://172.20.20.252/:8081/statistics/inspectioncount", {  // 세아
-             const lineChartResponse = await axios.get("http://localhost:8081/statistics/inspectioncount", {
-                params: {
-                    year: selectedYear,
-                },
-            });
-
-            // 백엔드로부터 받은 데이터 처리
-            console.log("백엔드 응답 데이터(lineChart)):", lineChartResponse.data);
-            console.log("백엔드 응답 데이터2(barChart):", barChartResponse.data);
-        } catch (error) {
-            console.error("백엔드 요청 에러:", error);
-        }
-    };
-
 
     //(LineChart) 특정년도의 수시점검과 정기점검 건수
     const [lineChartData, setLineChartData] = useState([]);
@@ -82,6 +60,7 @@ function SafetyInspectionStatisticsYearImg() {
         }
         return dataForAllMonths;
     };
+
 
 
 
@@ -140,7 +119,7 @@ function SafetyInspectionStatisticsYearImg() {
                     const barChartDataWithAllMonths = generateDataForAllMonths(dataByMonth, allDangerKinds);
 
                     setBarChartData(barChartDataWithAllMonths);
-
+                    console.log("==================체크중" + JSON.stringify(lineChartData));
                 } catch (error) {
                     console.error("불러온 데이터에 에러가 발생했습니다:", error);
                 }
@@ -148,9 +127,43 @@ function SafetyInspectionStatisticsYearImg() {
 
 
 
-/*    const formatCount = (value) => {
-        return Math.round(value);
-    };*/
+    //이벤트2: 엑셀저장폼
+    const createExcelData = (lineChartData) => {
+        // 차트 정보를 바탕으로 엑셀 데이터를 생성하는 로직 작성
+        const data = lineChartData[0].data.map(item => ({
+            구분: lineChartData[0].id, // 수시점검 or 정기점검
+            월: item.x,
+            점검건수: item.y
+        }));
+
+        return data;
+    };
+
+
+    //이벤트2: 엑셀저장로직
+    const handleExport = () => {
+
+        // 엑셀 데이터 생성
+        const data = createExcelData(lineChartData);
+
+        // 엑셀 시트 생성
+        const worksheet = XLSX.utils.json_to_sheet(data);
+
+        // 엑셀 워크북 생성
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+        // 엑셀 파일 저장
+        const excelBuffer = XLSX.write(workbook, {
+            bookType: "xlsx",
+            type: "array",
+        });
+        const excelFile = new Blob([excelBuffer], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+        saveAs(excelFile, `안전점검통계.xlsx`);
+    };
+
 
     const maxCount = Math.max(barChartData.map((data) => Math.max(Object.values(data).filter((val) => typeof val === 'number'))));
     const colors = ['rgba(130,205,255,0.8)', 'rgba(230,12,239,0.85)', 'rgba(130,202,157,0.89)', 'rgba(156,132,216,0.9)',
@@ -247,6 +260,13 @@ function SafetyInspectionStatisticsYearImg() {
     <div className="flex">
         <div className="w-1/2 p-4">
             <h5 className="text-xl font-semibold leading-2 text-gray-900">당해 수시점검/정기점검 건수 분석</h5>
+            <button
+                type="button"
+                className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                onClick={handleExport}
+            >
+                엑셀 저장
+            </button>
             <div style={{ width: 'auto', height: '700px', margin: '0 auto' }}>
                 {lineChartData.length > 0 ? (
                     <ResponsiveLine

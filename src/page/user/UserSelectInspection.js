@@ -3,12 +3,6 @@ import UserHeader from "../../components/UserHeader";
 import {
   ClipboardDocumentListIcon,
   ClipboardDocumentCheckIcon,
-  CalendarIcon,
-  ChartPieIcon,
-  DocumentDuplicateIcon,
-  FolderIcon,
-  HomeIcon,
-  UsersIcon,
   DocumentCheckIcon,
   ShieldCheckIcon,
   ShieldExclamationIcon,
@@ -87,8 +81,8 @@ export default function UserSelectInspection() {
     // Json값 가져와서 세팅
     function fetchDataWithAxios(masterdataPart, masterdataFacility) {
       axios
-          .get(`http://172.20.20.252:8081/special/${masterdataPart}/${masterdataFacility}`)   // 세아
-          // .get(`http://localhost:8081/special/${masterdataPart}/${masterdataFacility}`)
+          //.get(`http://172.20.20.252:8081/special/${masterdataPart}/${masterdataFacility}`)   // 세아
+           .get(`http://localhost:8081/special/${masterdataPart}/${masterdataFacility}`)
           .then((response) => {
             const data = response.data;
             // 가져온 데이터로 상태 변수 업데이트
