@@ -1,7 +1,7 @@
 import { Fragment, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
-import QRCode from "qrcode.react"; // QR 코드 라이브러리 추가
+import axios from "axios"; // axios를 임포트
 const people = [
   { id: 1, name: "[선택]" },
   { id: 2, name: "[주조]" },
@@ -18,13 +18,27 @@ function classNames(...classes) {
 export default function FacilityReg() {
   const [selected, setSelected] = useState(people[0]);
   const [facilityName, setFacilityName] = useState(""); // 설비명 관련 상태 추가
-  const [qrValue, setQRValue] = useState(""); // QR 코드 데이터
 
-  // QR 코드 생성 버튼 클릭 시 호출되는 함수
-  const generateQRCode = () => {
-    const combinedValue = `${facilityName} - ${selected.name}`; // 설비명과 영역을 합친 문자열 생성
-    setQRValue(combinedValue); // 합친 문자열을 QR 코드 데이터로 설정
+
+  const handleRegister = async () => {
+    // 버튼 클릭 시 호출되는 함수
+
+    const requestData = {
+      masterdataFacility: facilityName,
+      masterdataPart: selected.name,
+    };
+
+    try {
+      const response = await axios.post("http://localhost:8081/master", requestData); // POST 요청 보내기
+      console.log("서버 응답:", response.data);
+      // 서버로부터 응답을 받아와 필요한 처리 수행
+    } catch (error) {
+      console.error("서버 요청 오류:", error);
+    }
   };
+
+
+ 
 
   return (
     <div className="px-8">
@@ -127,24 +141,19 @@ export default function FacilityReg() {
         </div>
         <div className="flex flex-col ml-2">
           <label
-            htmlFor="qr"
+            htmlFor="submit"
             className="block text-sm font-medium leading-6 text-gray-900"
           >
-            QR코드
+            생성
           </label>
           <button
-            type="submit"
-            id="qr"
-            onClick={generateQRCode}
+            type="button"
+            id="submit"
+            onClick={handleRegister}
             className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mt-2"
           >
-            생성하기
+            등록하기
           </button>
-          {qrValue && (
-            <div className="mt-4">
-              <QRCode value={qrValue} />
-            </div>
-          )}
         </div>
       </div>
     </div>
