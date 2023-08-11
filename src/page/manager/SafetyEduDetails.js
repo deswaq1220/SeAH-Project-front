@@ -9,6 +9,7 @@ import useSafetyEduForm from "../../useHook/useSafetyEduForm";
 import QRCode from "qrcode.react";
 import { CheckCircleIcon } from "@heroicons/react/20/solid";
 import { format } from 'date-fns';
+import { toast } from "react-toastify";
 
 export default function SafetyEduDetails() {
   const { eduId } = useParams(); // useParams 훅을 사용하여 URL 파라미터에서 eduId 가져오기
@@ -56,13 +57,13 @@ export default function SafetyEduDetails() {
 
         );
         // console.log(response.data);
-      //  setUploadedFiles(response.data.eduFiles);
+        //  setUploadedFiles(response.data.eduFiles);
         setEduData({ ...response.data, eduFiles: response.data.eduFiles });
-   
+
         console.log("파일이름 찾기");
         console.log(eduData.eduFiles);
         // console.log(response.data); // 확인용 로그
-        
+
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -154,6 +155,28 @@ export default function SafetyEduDetails() {
     }
   };
 
+  // 교육 삭제
+  const handleDelete = async () => {
+    try {
+      const response = await axios.delete(
+          `http://localhost:8081/edudetails/${eduId}`
+      );
+
+      if (response.status === 200) {
+        console.log('교육 삭제됨');
+        toast.success("교육이 삭제되었습니다.", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: true,
+        });
+        navigate('/eduMain');
+      }
+    } catch (error) {
+      console.error('교육 삭제 에라 에러', error);
+    }
+  };
+
+
   const handleEditClick = () => {
     // educationId는 해당 교육의 아이디 값입니다.
     navigate(`/edureg/${eduId}`);
@@ -187,8 +210,9 @@ export default function SafetyEduDetails() {
                   <button
                       type="submit"
                       className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                  onClick={handleDelete}
                   >
-                    저장하기
+                    삭제하기
                   </button>
                 </div>
               </div>
@@ -200,7 +224,7 @@ export default function SafetyEduDetails() {
                       교육시간
                     </dt>
                     <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                    {eduData.eduStartTime}
+                      {eduData.eduStartTime}
                     </dd>
                     <dt className="text-base font-bold leading-6 text-gray-900">
                       총 교육시간
@@ -252,7 +276,7 @@ export default function SafetyEduDetails() {
                               role="list"
                               className="divide-y divide-gray-100 rounded-md border border-gray-200"
                           >
-                            {eduData.eduFiles.map((eduFiles, index) => (
+                            {eduData.eduFiles.map((eduFile, index) => (
                                 <li
                                     key={index}
                                     className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6"
@@ -264,9 +288,9 @@ export default function SafetyEduDetails() {
                                     />
                                     <div className="ml-4 flex min-w-0 flex-1 gap-2">
                               <span className="truncate font-medium">
-                                {eduFiles}
+                                {eduFile.eduFileName}
                               </span>
-                                    
+
                                     </div>
                                   </div>
                                   {/* <div className="ml-4 flex-shrink-0">
