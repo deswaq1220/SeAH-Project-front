@@ -1,8 +1,8 @@
-import {useState, Fragment, useCallback, useEffect} from "react";
+import { useState, Fragment, useCallback, useEffect } from "react";
 import Header from "../../components/Header";
 // import { format, addMonths, subMonths } from "date-fns";
-import {Listbox, Transition} from "@headlessui/react";
-import {Link, useNavigate, useParams} from "react-router-dom";
+import { Listbox, Transition } from "@headlessui/react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 // import Notification from '../components/Notification'
 import {
     CheckIcon,
@@ -10,11 +10,11 @@ import {
     PhotoIcon,
     CheckCircleIcon,
 } from "@heroicons/react/20/solid";
-import {useDropzone} from "react-dropzone";
+import { useDropzone } from "react-dropzone";
 import QRCode from "qrcode.react";
 import axios from "axios";
 import useSafetyEduForm from "../../useHook/useSafetyEduForm";
-import {FilePond, registerPlugin} from 'react-filepond';
+import { FilePond, registerPlugin } from 'react-filepond';
 import 'filepond/dist/filepond.min.css'; // 스타일링을 위한 CSS
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
@@ -110,7 +110,7 @@ registerPlugin(FilePondPluginImagePreview);
 const MAX_FILENAME_LENGTH = 30;
 const FILENAME_SUFFIX = "...";
 
-const TruncatedFileName = ({fileName}) => {
+const TruncatedFileName = ({ fileName }) => {
     if (fileName.length <= MAX_FILENAME_LENGTH) {
         return <div>{fileName}</div>;
     }
@@ -172,7 +172,7 @@ function SafetyEduReg() {
 
     return (
         <div>
-            <Header/>
+            <Header />
 
             <div className="flex justify-center">
                 <div
@@ -185,30 +185,30 @@ function SafetyEduReg() {
                         encType="multipart/form-data"
                     >
                         <div id="sortation" className="flex items-baseline justify-start">
-              <span
-                  className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
-                구분
-              </span>
+                            <span
+                                className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
+                                구분
+                            </span>
                             <Listbox value={selected} onChange={handleListboxChange}>
-                                {({open}) => (
+                                {({ open }) => (
                                     <>
                                         <div className="relative mt-2">
                                             <Listbox.Button
                                                 className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-16 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
-                        <span className="flex items-center">
-                          <span className="ml-3 block truncate">
-                            {selected
-                                ? mapEduCategoryName(selected.name)
-                                : "선택"}
-                          </span>
-                        </span>
+                                                <span className="flex items-center">
+                                                    <span className="ml-3 block truncate">
+                                                        {selected
+                                                            ? mapEduCategoryName(selected.name)
+                                                            : "선택"}
+                                                    </span>
+                                                </span>
                                                 <span
                                                     className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-                          <ChevronUpDownIcon
-                              className="h-5 w-5 text-gray-400"
-                              aria-hidden="true"
-                          />
-                        </span>
+                                                    <ChevronUpDownIcon
+                                                        className="h-5 w-5 text-gray-400"
+                                                        aria-hidden="true"
+                                                    />
+                                                </span>
                                             </Listbox.Button>
 
                                             <Transition
@@ -223,7 +223,7 @@ function SafetyEduReg() {
                                                     {people.map((person) => (
                                                         <Listbox.Option
                                                             key={person.id}
-                                                            className={({active}) =>
+                                                            className={({ active }) =>
                                                                 classNames(
                                                                     active
                                                                         ? "bg-seahColor text-white"
@@ -233,19 +233,19 @@ function SafetyEduReg() {
                                                             }
                                                             value={person}
                                                         >
-                                                            {({selected, active}) => (
+                                                            {({ selected, active }) => (
                                                                 <>
                                                                     <div className="flex items-center">
-                                    <span
-                                        className={classNames(
-                                            selected
-                                                ? "font-semibold"
-                                                : "font-normal",
-                                            "ml-3 block truncate"
-                                        )}
-                                    >
-                                      {mapEduCategoryName(person.name)}
-                                    </span>
+                                                                        <span
+                                                                            className={classNames(
+                                                                                selected
+                                                                                    ? "font-semibold"
+                                                                                    : "font-normal",
+                                                                                "ml-3 block truncate"
+                                                                            )}
+                                                                        >
+                                                                            {mapEduCategoryName(person.name)}
+                                                                        </span>
                                                                     </div>
 
                                                                     {selected ? (
@@ -257,11 +257,11 @@ function SafetyEduReg() {
                                                                                 "absolute inset-y-0 right-0 flex items-center pr-4"
                                                                             )}
                                                                         >
-                                      <CheckIcon
-                                          className="h-5 w-5"
-                                          aria-hidden="true"
-                                      />
-                                    </span>
+                                                                            <CheckIcon
+                                                                                className="h-5 w-5"
+                                                                                aria-hidden="true"
+                                                                            />
+                                                                        </span>
                                                                     ) : null}
                                                                 </>
                                                             )}
@@ -278,10 +278,10 @@ function SafetyEduReg() {
                             id="Training_title"
                             className="flex items-baseline justify-start"
                         >
-              <span
-                  className="w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
-                교육 제목
-              </span>
+                            <span
+                                className="w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
+                                교육 제목
+                            </span>
                             {selected.name === "ETC" ? (
                                 <div className="sm:col-span-3 w-56">
                                     <div className="mt-2">
@@ -312,10 +312,10 @@ function SafetyEduReg() {
                             )}
                         </div>
                         <div id="charge" className="flex items-baseline justify-start">
-              <span
-                  className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
-                강사
-              </span>
+                            <span
+                                className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
+                                강사
+                            </span>
                             <div className="sm:col-span-3">
                                 <label
                                     htmlFor="educharge"
@@ -335,10 +335,10 @@ function SafetyEduReg() {
                             </div>
                         </div>
                         <div id="eduPlace" className="flex items-baseline justify-start">
-              <span
-                  className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
-                교육장소
-              </span>
+                            <span
+                                className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
+                                교육장소
+                            </span>
                             <div className="sm:col-span-3">
                                 <label
                                     htmlFor="educharge"
@@ -362,10 +362,10 @@ function SafetyEduReg() {
                             id="Training_time"
                             className="flex items-baseline justify-start"
                         >
-              <span
-                  className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
-                교육시간
-              </span>
+                            <span
+                                className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
+                                교육시간
+                            </span>
                             <div className="mt-2">
                                 <label
                                     htmlFor="starttimepicker"
@@ -426,30 +426,30 @@ function SafetyEduReg() {
                             id="Training_target"
                             className="flex items-baseline justify-start"
                         >
-              <span
-                  className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
-                교육대상
-              </span>
+                            <span
+                                className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
+                                교육대상
+                            </span>
                             <Listbox value={selectedDuty} onChange={handleDutyChange}>
-                                {({open}) => (
+                                {({ open }) => (
                                     <>
                                         <div className="relative mt-2">
                                             <Listbox.Button
                                                 className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-16 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
-                        <span className="flex items-center">
-                          <span className="ml-3 block truncate">
-                            {selectedDuty
-                                ? mapDutyName(selectedDuty.name)
-                                : "선택"}
-                          </span>
-                        </span>
+                                                <span className="flex items-center">
+                                                    <span className="ml-3 block truncate">
+                                                        {selectedDuty
+                                                            ? mapDutyName(selectedDuty.name)
+                                                            : "선택"}
+                                                    </span>
+                                                </span>
                                                 <span
                                                     className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-                          <ChevronUpDownIcon
-                              className="h-5 w-5 text-gray-400"
-                              aria-hidden="true"
-                          />
-                        </span>
+                                                    <ChevronUpDownIcon
+                                                        className="h-5 w-5 text-gray-400"
+                                                        aria-hidden="true"
+                                                    />
+                                                </span>
                                             </Listbox.Button>
 
                                             <Transition
@@ -464,7 +464,7 @@ function SafetyEduReg() {
                                                     {duty.map((dutyItem) => (
                                                         <Listbox.Option
                                                             key={dutyItem.id}
-                                                            className={({active}) =>
+                                                            className={({ active }) =>
                                                                 classNames(
                                                                     active
                                                                         ? "bg-seahColor text-white"
@@ -474,19 +474,19 @@ function SafetyEduReg() {
                                                             }
                                                             value={dutyItem}
                                                         >
-                                                            {({selected, active}) => (
+                                                            {({ selected, active }) => (
                                                                 <>
                                                                     <div className="flex items-center">
-                                    <span
-                                        className={classNames(
-                                            selected
-                                                ? "font-semibold"
-                                                : "font-normal",
-                                            "ml-3 block truncate"
-                                        )}
-                                    >
-                                      {mapDutyName(dutyItem.name)}
-                                    </span>
+                                                                        <span
+                                                                            className={classNames(
+                                                                                selected
+                                                                                    ? "font-semibold"
+                                                                                    : "font-normal",
+                                                                                "ml-3 block truncate"
+                                                                            )}
+                                                                        >
+                                                                            {mapDutyName(dutyItem.name)}
+                                                                        </span>
                                                                     </div>
 
                                                                     {selected ? (
@@ -498,11 +498,11 @@ function SafetyEduReg() {
                                                                                 "absolute inset-y-0 right-0 flex items-center pr-4"
                                                                             )}
                                                                         >
-                                      <CheckIcon
-                                          className="h-5 w-5"
-                                          aria-hidden="true"
-                                      />
-                                    </span>
+                                                                            <CheckIcon
+                                                                                className="h-5 w-5"
+                                                                                aria-hidden="true"
+                                                                            />
+                                                                        </span>
                                                                     ) : null}
                                                                 </>
                                                             )}
@@ -516,22 +516,22 @@ function SafetyEduReg() {
                             </Listbox>
                         </div>
                         <div id="content" className="flex items-baseline justify-start">
-              <span
-                  className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
-                교육내용
-              </span>
+                            <span
+                                className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
+                                교육내용
+                            </span>
 
                             <div className="mt-2 w-80">
-                <textarea
-                    id="about"
-                    name="eduContent"
-                    rows={3}
-                    value={formData.eduContent}
-                    onChange={handleChange}
-                    autoComplete="off"
-                    className="block w-full h-16 rounded-md border-0 py-1.5 px-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6"
-                    defaultValue={""}
-                />
+                                <textarea
+                                    id="about"
+                                    name="eduContent"
+                                    rows={3}
+                                    value={formData.eduContent}
+                                    onChange={handleChange}
+                                    autoComplete="off"
+                                    className="block w-full h-16 rounded-md border-0 py-1.5 px-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6"
+                                    defaultValue={""}
+                                />
                             </div>
                         </div>
                         {/* <div id="qr" className="flex items-baseline justify-start">
@@ -560,16 +560,16 @@ function SafetyEduReg() {
               )}
             </div> */}
                         <div id="file" className="flex items-baseline justify-start ">
-              <span
-                  className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
-                파일첨부
-              </span>
+                            <span
+                                className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
+                                파일첨부
+                            </span>
 
                             <div id="fileuploader" className="flex flex-col items-center">
                                 <div
                                     {...getRootProps()}
                                     className={`dropzone ${isDragActive ? "active" : ""
-                                    } col-span-full w-full md:w-96`}
+                                        } col-span-full w-full md:w-96`}
                                 >
                                     <div
                                         className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
@@ -606,7 +606,7 @@ function SafetyEduReg() {
                                     {uploadedFiles.map((file, index) => (
                                         <div key={file.name} className="flex items-start mt-2">
                                             <div className="text-left">
-                                                <TruncatedFileName fileName={file.name}/>
+                                                <TruncatedFileName fileName={file.name} />
                                             </div>
                                             <button
                                                 onClick={() => deleteFile(file.name)}
@@ -622,10 +622,10 @@ function SafetyEduReg() {
                         </div>
 
                         <div id="writer" className="flex items-baseline justify-start">
-              <span
-                  className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
-                작성자
-              </span>
+                            <span
+                                className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
+                                작성자
+                            </span>
                             <div className="sm:col-span-3">
                                 <label
                                     htmlFor="educharge"
@@ -654,7 +654,7 @@ function SafetyEduReg() {
                             <button
                                 type="submit"
                                 className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-                                // onClick={handleClick}
+                            // onClick={handleClick}
                             >
                                 저장하기
                             </button>

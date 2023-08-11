@@ -8,10 +8,11 @@ import axios from "axios";
 import useSafetyEduForm from "../../useHook/useSafetyEduForm";
 import QRCode from "qrcode.react";
 import { CheckCircleIcon } from "@heroicons/react/20/solid";
+import { format } from 'date-fns';
 
 export default function SafetyEduDetails() {
   const { eduId } = useParams(); // useParams 훅을 사용하여 URL 파라미터에서 eduId 가져오기
-  const [eduData, setEduData] = useState(null);
+  const [eduData, setEduData] = useState([]);
   const { isCompleted, handleCreate, qrValue, formData, setFormData } =
       useSafetyEduForm(eduData);
   const apiUrl = process.env.REACT_APP_API_BASE_URL;
@@ -46,51 +47,22 @@ export default function SafetyEduDetails() {
 
 
 
-  // useEffect(() => {
-  //   // 서버에서 교육 세부 정보 가져오기 (교육 아이디값 이용)
-  //   axios
-  //     .get(`http://localhost:8081/edudetails/${eduId}`)
-  //     .then((response) => {
-  //       // 가져온 데이터로 상태 업데이트
-  //       setEducation((prevEducation) => ({
-  //         ...prevEducation,
-  //         formData: {
-  //           eduTitle: response.data.eduTitle,
-  //           eduInstructor: response.data.eduInstructor,
-  //           eduPlace: response.data.eduPlace,
-  //           eduCategory: response.data.eduCategory,
-  //           eduStartTime: response.data.eduStartTime,
-  //           eduSumTime: response.data.eduSumTime,
-  //           eduTarget: response.data.eduTarget,
-  //           eduContent: response.data.eduContent,
-  //           eduWriter: response.data.eduWriter,
-  //           eduId: response.data.eduId,
-  //           // 기타 필드들도 API 응답에 따라 추가
-  //         },
-  //       }));
-  //     })
-  //     .catch((error) => {
-  //       // 에러 처리
-  //       console.error("교육 세부 정보를 가져오는 중 에러 발생:", error);
-  //     });
-  // }, [eduId]);
-
-
-
   useEffect(() => {
     const fetchEduDetail = async () => {
       try {
         const response = await axios.get(
-            `http://172.20.20.252:8081/edudetails/${eduId}`,        // 세아
-            // `http://localhost:8081/edudetails/${eduId}`
+            // `http://172.20.20.252:8081/edudetails/${eduId}`,        // 세아
+            `http://localhost:8081/edudetails/${eduId}`
 
         );
-//        setUploadedFiles(response.data.eduFiles);
+        // console.log(response.data);
+      //  setUploadedFiles(response.data.eduFiles);
         setEduData({ ...response.data, eduFiles: response.data.eduFiles });
+   
         console.log("파일이름 찾기");
-        console.log(eduData);
+        console.log(eduData.eduFiles);
         // console.log(response.data); // 확인용 로그
-        console.log(eduData);
+        
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -126,7 +98,7 @@ export default function SafetyEduDetails() {
       {
         분류: `${eduData.eduCategory}`,
         제목: `${eduData.eduTitle}`,
-        교육시작시간: `${eduData.eduStartTime}`,
+        교육시작시간:  `${eduData.eduStartTime}`,
         교육시간: `${eduData.eduSumTime} 분`,
         교육내용: eduData.eduContent,
         강사: `${eduData.eduInstructor}`,
@@ -182,8 +154,6 @@ export default function SafetyEduDetails() {
     }
   };
 
-
-
   const handleEditClick = () => {
     // educationId는 해당 교육의 아이디 값입니다.
     navigate(`/edureg/${eduId}`);
@@ -230,7 +200,7 @@ export default function SafetyEduDetails() {
                       교육시간
                     </dt>
                     <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                      {eduData.eduStartTime} ~ {eduData.eduEndTime}
+                    {eduData.eduStartTime}
                     </dd>
                     <dt className="text-base font-bold leading-6 text-gray-900">
                       총 교육시간
@@ -294,11 +264,9 @@ export default function SafetyEduDetails() {
                                     />
                                     <div className="ml-4 flex min-w-0 flex-1 gap-2">
                               <span className="truncate font-medium">
-                                {eduFiles.eduFileName}
+                                {eduFiles}
                               </span>
-                                      <span className="flex-shrink-0 text-gray-400">
-                                {eduFiles.size}
-                              </span>
+                                    
                                     </div>
                                   </div>
                                   {/* <div className="ml-4 flex-shrink-0">
@@ -327,8 +295,8 @@ export default function SafetyEduDetails() {
 
                         <Link to={`/userattendance/register/${eduData.eduId}`}>
                           <QRCode
-                              value={`http://172.20.20.252:3000/userattendance/register/${eduData.eduId}`}
-                              // value={`http://localhost:8081/userattendance/register/${eduData.eduId}`}
+                              // value={`http://172.20.20.252:3000/userattendance/register/${eduData.eduId}`}
+                              value={`http://localhost:8081/userattendance/register/${eduData.eduId}`}
                           />
                         </Link>
 

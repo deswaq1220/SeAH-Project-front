@@ -35,8 +35,8 @@ function SafetyEducationMain() {
       try {
         const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
         const currentYear = getYear(currentDate);
-        const response = await axios.get("http://172.20.20.252:8081/edumain", {   // 세아
-        //const response = await axios.get("http://localhost:8081/edumain", {
+        // const response = await axios.get("http://172.20.20.252:8081/edumain", {   // 세아
+        const response = await axios.get("http://localhost:8081/edumain", {
           params: {
             year: currentYear,
             month: currentMonth,
@@ -46,6 +46,7 @@ function SafetyEducationMain() {
           // eduStartTime을 기준으로 오름차순 정렬
           return new Date(a.eduStartTime) - new Date(b.eduStartTime);
         });
+        console.log(response.data[0].eduFiles[0]);
         setEduList(sortedEduList);
         setSelectedMonth(currentMonth);
       } catch (error) {
@@ -229,13 +230,19 @@ function SafetyEducationMain() {
                           </div>
                         </td>
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                        {format(new Date(edu.eduStartTime), "yyyy-MM-dd HH:mm")}
+                          {format(new Date(edu.eduStartTime), "yyyy-MM-dd HH시 mm분")}
+                          
                         </td>
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                          <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                            첨부
-                          </span>
+
+                          {edu.eduFiles.length > 0 ? (
+                            <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                             첨부
+                            </span>
+                          ) 
+                          : null}
                         </td>
+
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
                           {edu.eduWriter}
                         </td>
@@ -250,15 +257,15 @@ function SafetyEducationMain() {
       </div>
       <div className="flex justify-center">
         <div className="px-4 sm:px-6 lg:px-8 max-w-screen-xl w-full">
-          {eduList.length > 0 ?(
+          {eduList.length > 0 ? (
 
-          <Pagination
-            currentPage={currentPage}
-            itemsPerPage={itemsPerPage}
-            totalItems={eduList.length}
-            setCurrentPage={setCurrentPage}
-          />
-          ) :(null)}
+            <Pagination
+              currentPage={currentPage}
+              itemsPerPage={itemsPerPage}
+              totalItems={eduList.length}
+              setCurrentPage={setCurrentPage}
+            />
+          ) : (null)}
         </div>
       </div>
     </div>
