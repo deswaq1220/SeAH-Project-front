@@ -219,7 +219,7 @@ function UserfrequentReg() {
                 // 등록이 완료되었다는 알림 띄우기
                 toast.success("등록이 완료되었습니다.", {
                     position: "top-center",
-                    autoClose: 3000, // 알림이 3초 후에 자동으로 사라짐
+                    autoClose: 1000, // 알림이 3초 후에 자동으로 사라짐
                     hideProgressBar: true,
                 });
 

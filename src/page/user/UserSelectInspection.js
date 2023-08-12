@@ -87,8 +87,8 @@ export default function UserSelectInspection() {
     // Json값 가져와서 세팅
     function fetchDataWithAxios(masterdataPart, masterdataFacility) {
       axios
-          // .get(`http://172.20.20.252:8081/special/${masterdataPart}/${masterdataFacility}`)   // 세아
-          .get(`http://localhost:8081/special/${masterdataPart}/${masterdataFacility}`)
+          .get(`http://172.20.20.252:8081/special/${masterdataPart}/${masterdataFacility}`)   // 세아
+          // .get(`http://localhost:8081/special/${masterdataPart}/${masterdataFacility}`)
           // .get(`http://192.168.202.1:8081/special/${masterdataPart}/${masterdataFacility}`)
           .then((response) => {
             const data = response.data;
@@ -199,7 +199,7 @@ export default function UserSelectInspection() {
           <p className="flex justify-center font-semibold text-lg mb-2">
             <DocumentCheckIcon className="w-6 h-6 mr-1" />
             {/*------------------------  수정 필요  -------------------------*/}
-            7월 점검현황
+            8월 점검현황
             {/*------------------------  수정 필요  -------------------------*/}
           </p>
           <p className=" text-lg font-semibold">정기점검</p>
