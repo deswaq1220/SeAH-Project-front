@@ -53,6 +53,7 @@ function UserfrequentReg() {
     const [speActPerson, setSpeActPerson] = useState("");
     const [speActEmail, setSpeActEmail] = useState("");
     const [speComplete, setSpeComplete] = useState("");
+    const [files, setFiles] = useState(null);
 
   // Inspector 콜백 함수 : 점검자(이름, 이메일, 사원번호)
   const handleInspectorDataChange = (inspectorForm) => {
@@ -164,30 +165,52 @@ function UserfrequentReg() {
 
 
     const handleFormSubmit = () => {
-        const requestData = {
-            speEmpNum,
-            spePerson,
-            speEmail,
-            speDanger,
-            speInjure,
-            speCause,
-            speTrap,
-            speRiskAssess,
-            speContent,
-            speActPerson,
-            speActEmail,
-            speActContent,
-            speComplete,
-        };
-        console.log(requestData); // 요청 데이터 콘솔에 출력
+        const formData = new FormData();        // 폼데이터 객체 생성
+        // const requestData = {
+        //     speEmpNum,
+        //     spePerson,
+        //     speEmail,
+        //     speDanger,
+        //     speInjure,
+        //     speCause,
+        //     speTrap,
+        //     speRiskAssess,
+        //     speContent,
+        //     speActPerson,
+        //     speActEmail,
+        //     speActContent,
+        //     speComplete,
+        // };
+
+        // 업로드 파일 배열 저장
+        if(files !== null){
+         for(let i=0; i<files.length; i++){
+          formData.append('files', files[i]);
+         }
+        }
+        formData.append('speEmpNum', speEmpNum);
+        formData.append('spePerson', spePerson);
+        formData.append('speEmail', speEmail);
+        formData.append('speDanger', speDanger);
+        formData.append('speInjure', speInjure);
+        formData.append('speCause', speCause);
+        formData.append('speTrap', speTrap);
+        formData.append('speRiskAssess', speRiskAssess);
+        formData.append('speContent', speContent);
+        formData.append('speActPerson', speActPerson);
+        formData.append('speActEmail', speActEmail);
+        formData.append('speActContent', speActContent);
+        formData.append('speComplete', speComplete);
+
+        console.log(formData); // 요청 데이터 콘솔에 출력
 
         // 수시점검 등록 요청
         axios
-            .post(`http://172.20.20.252:8081/special/new/${masterdataPart}/${masterdataFacility}`, requestData, {   // 세아
-             //.post(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`, requestData, {
-
+            .post(`http://172.20.20.252:8081/special/new/${masterdataPart}/${masterdataFacility}`, formData, {   // 세아
+            //  .post(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`, formData, {
+            //  .post(`http://192.168.202.1:8081/special/new/${masterdataPart}/${masterdataFacility}`, formData, {
                 headers: {
-                    "Content-Type": "application/json",
+                    "Content-Type": "multipart/form-data",
                 },
             })
             .then((response) => {
@@ -204,7 +227,8 @@ function UserfrequentReg() {
                 navigate(`/special/list/${masterdataPart}/${masterdataFacility}`);
             })
             .catch((error) => {
-                console.log(requestData);
+                // console.log(requestData);
+                console.log(formData);
                 console.error(error);
                 alert("수시점검 등록에 실패했습니다. 다시 시도해주세요.");
             });
@@ -212,7 +236,6 @@ function UserfrequentReg() {
 
 
     return (
-
 
         <>
             <UserHeader />
@@ -256,16 +279,29 @@ function UserfrequentReg() {
       <IsCompelete onFormDataChange={handleIsCompeleteDataChange} />{" "}{/* 완료여부 */}
       {/* 경원추가 */}
       <h1>파일 업로드</h1>
-            <FilePond
-                allowMultiple={true}
-                maxFiles={5}
-                onupdatefiles={(fileItems) => {
-                    const acceptedFiles = fileItems.map(
-                        (fileItem) => fileItem.file
-                    );
-                    handleFileUpload(acceptedFiles);
-                }}
-            />
+
+             {/* <FilePond */}
+            {/* //     allowMultiple={true}
+            //     maxFiles={5}
+            //     onupdatefiles={(fileItems) => {
+            //         const acceptedFiles = fileItems.map(
+            //             (fileItem) => fileItem.file
+            //         );
+            //         handleFileUpload(acceptedFiles);
+            //     }}
+            // /> */}
+
+      <FilePond
+        allowMultiple={true} // 다중 파일 업로드 허용
+        maxFiles={5} // 최대 파일 수 설정
+        // 엔드포인트는 백엔드 구현되면 연결요
+        onupdatefiles={(fileItems) => {
+            // 파일 정보를 상태에 저장하거나 처리
+            const selectedFiles = fileItems.map(fileItem => fileItem.file);
+            setFiles(selectedFiles);
+        }}
+      />
+
 
       <div className="flex justify-center w-full mt-8 mb-10">
         <button
