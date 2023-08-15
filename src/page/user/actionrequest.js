@@ -14,10 +14,12 @@ export default function ActionRquest({ onFormDataChange }) {
   // qr 정보따라 url 파라미터 세팅되어야됨
   const { masterdataPart } = useParams(); // url 영역 파라미터
   const { masterdataFacility } = useParams(); // url 설비 파라미터
-  const [emailList, setEmailList] = useState([]);
+  const [emailDataList, setEmailDataList] = useState([]);
   // 선택된 이메일 담을 변수
   const [instances, setInstances] = useState([{ selectedEmail: null }]);
-
+  // 넘길 이메일 데이터 : 선택 + 고정수신자----------------------------------
+  // const [fullEmailData, setFullEmailData] = useState([{ selectedEmailFull: null }]);
+// -----------------------------------
 
 
 
@@ -37,21 +39,50 @@ export default function ActionRquest({ onFormDataChange }) {
               emailAdd: item.emailAdd,
               masterStatus: item.masterStatus,
             }));
-            setEmailList(emailData);
+            setEmailDataList(emailData);
+
+            // 고정수신자 세팅
+            // const yInstances = emailListFromBack
+            //     .filter((item) => item.masterStatus === "Y")
+            //     .map((item) => ({
+            //       selectedEmailFull: item
+            //     }));
+            //
+            // const yEmailNames = yInstances.map((item) => item.emailName).join(", ");
+            // const yEmailAddresses = yInstances.map((item) => item.emailAdd).join(", ");
+            //
+            // setFullEmailData({
+            //   speActPerson : yEmailNames,
+            //   speActEmail : yEmailAddresses
+            // });
           })
           .catch((error) => {
             console.error("Error fetching data: ", error);
           });
     }
     emailFetchDataWithAxios(masterdataPart, masterdataFacility);
+
   }, [masterdataPart, masterdataFacility]);
 
+
+// -----------------------------------
   const handleActionChange = (instanceIndex, selectedEmail) => {
     const updatedInstances = [...instances];
     updatedInstances[instanceIndex] = { selectedEmail };
     setInstances(updatedInstances);
 
-    //  ,로 구분된 문자열로 변환하여 넘기기
+    // // 기존의 fullEmailData에 추가된 이메일들 가져오기
+    // const existingEmails = fullEmailData.map(item => item.selectedEmailFull);
+    //
+    // // 선택된 이메일이 이미 추가되었는지 확인
+    // if (!existingEmails.some(email => email.emailId === selectedEmail.emailId)) {
+    //   // 새로운 이메일 선택을 fullEmailData에 추가하기
+    //   const updatedFullEmailData = [...fullEmailData];
+    //   updatedFullEmailData.push({ selectedEmailFull: selectedEmail });
+    //   setFullEmailData(updatedFullEmailData);
+    // }
+
+    // ,로 구분된 문자열로 변환하여 넘기기
     const updatedEmails = updatedInstances
         .map((instance) => instance.selectedEmail)
         .filter((email) => email !== null);
@@ -64,6 +95,27 @@ export default function ActionRquest({ onFormDataChange }) {
       speActEmail: selectedEmailAddresses,
     });
   };
+
+
+  // const handleActionChange = (instanceIndex, selectedEmail) => {
+  //   const updatedInstances = [...instances];
+  //   updatedInstances[instanceIndex] = { selectedEmail };
+  //   setInstances(updatedInstances);
+  //
+  //   //  ,로 구분된 문자열로 변환하여 넘기기
+  //   const updatedEmails = updatedInstances
+  //       .map((instance) => instance.selectedEmail)
+  //       .filter((email) => email !== null);
+  //
+  //   const selectedEmailNames = updatedEmails.map((email) => email.emailName).join(", ");
+  //   const selectedEmailAddresses = updatedEmails.map((email) => email.emailAdd).join(", ");
+  //
+  //   onFormDataChange({
+  //     speActPerson: selectedEmailNames,
+  //     speActEmail: selectedEmailAddresses,
+  //   });
+  // };
+
 
   // 이메일 정보 추가 : +버튼
   const handleAddInstance = () => {
@@ -131,7 +183,7 @@ export default function ActionRquest({ onFormDataChange }) {
                       leaveTo="opacity-0"
                     >
                       <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                        {emailList.map((emailListItem) => (
+                        {emailDataList.map((emailListItem) => (
                             <Listbox.Option
                                 key={emailListItem.emailId}
                                 disabled={emailListItem.masterStatus === 'Y'}
