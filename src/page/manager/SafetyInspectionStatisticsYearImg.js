@@ -16,12 +16,17 @@ import * as XLSX from "xlsx";
 //엑셀저장
 import { saveAs } from "file-saver";
 
+//검색창
+import "../../style/YearPicker.css";
+
 function SafetyInspectionStatisticsYearImg() {
 
     //공통: 년도입력, 기본값은 당해로 지정되어 있음
     const seoulTime = new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" });
     const currentYear = new Date(seoulTime).getFullYear();
     const [selectedYear, setSelectedYear] = useState(currentYear);
+
+    const years = Array.from({ length: 20 }, (_, index) => currentYear +index);
 
 
 
@@ -40,8 +45,12 @@ function SafetyInspectionStatisticsYearImg() {
         }
     };
 
-    //(LineChart) 특정년도의 수시점검과 정기점검 건수
+    //(LineChart) 특정년도의 수시점검과 정기점검 건수(월별로 표현된거 1월: 2건, 2월: 3건..)
     const [lineChartData, setLineChartData] = useState([]);
+
+    //(LineChart) 특정년도의 수시점검과 정기점검 건수(월
+    const [inspectionCountData, setInspectionCount] = useState([]);
+
 
     //(BarChart) 특정년도의 월별 수시점검한 위험분류 건수
     const [barChartData, setBarChartData] = useState([]);
@@ -59,13 +68,13 @@ function SafetyInspectionStatisticsYearImg() {
         }, [selectedYear]);
 
 
+
             const fetchData = async () => {
                 try {
 
                     //(LineChart) 특정년도의 수시점검과 정기점검 건수
-
                     //const lineChartResponse = await axios.get('http://172.20.20.252:8081/statistics/inspectioncount', { params: { year: selectedYear } });   // 세아
-                     const lineChartResponse = await axios.get('http://localhost:8081/statistics/inspectioncount', { params: { year: selectedYear } });
+                    const lineChartResponse = await axios.get('http://localhost:8081/statistics/inspectioncount', { params: { year: selectedYear } });
 
                     const specialCountData = lineChartResponse.data;
                     console.log("첫번째"+ JSON.stringify(lineChartResponse.data, null, 2));
@@ -80,6 +89,16 @@ function SafetyInspectionStatisticsYearImg() {
                     console.log("세번째"+ JSON.stringify(resultData));
 
 
+                    //(lineChart) 연간 수시점검 건수 표시
+                    //const speCountByYear = await axios.get('http://172.20.20.252:8081/special/statistics/yearcount', { params: { year: selectedYear } });   // 세아
+                    const speCountByYearResponse = await axios.get('http://localhost:8081/special/statistics/yearcount', { params: { year: selectedYear } });
+                    const speCountByYear = speCountByYearResponse.data;
+                    setInspectionCount(speCountByYear);
+
+
+
+
+
                     //(BarChart) 특정년도의 월별 수시점검한 위험분류 건수
                     //const barChartResponse = await axios.get('http://172.20.20.252:8081/special/statistics/detaildanger', { params: {year: selectedYear} });   // 세아
                     const barChartResponse = await axios.get('http://localhost:8081/special/statistics/detaildanger', { params: {year: selectedYear} });
@@ -90,6 +109,7 @@ function SafetyInspectionStatisticsYearImg() {
                         return [...acc, ...Object.keys(data).filter((key) => key !== 'month')];
                     }, []);
                     setUniqueDangerKinds([...new Set(allDangerKinds)]);
+
 
                     specialDangerData.forEach((data) => {
                         const month = data.month;
@@ -116,21 +136,24 @@ function SafetyInspectionStatisticsYearImg() {
     const generateDataForAllMonths = (dataByMonth, uniqueDangerKinds) => {
         const dataForAllMonths = [];
         for (let i = 1; i <= 12; i++) {
-            const month = i;
-            if (!dataByMonth[month]) {
+            const month2 = i;
+            if (!dataByMonth[month2]) {
                 // 해당 월에 데이터가 없으면 0으로 초기화하여 추가
-                dataForAllMonths.push({ month: `${month}월`, ...Object.fromEntries(uniqueDangerKinds.map((kind) => [kind, 0])) });
+                dataForAllMonths.push({ month: `${month2}월`, ...Object.fromEntries(uniqueDangerKinds.map((kind) => [kind, 0])) });
             } else {
-                dataForAllMonths.push(dataByMonth[month]);
+                dataForAllMonths.push(dataByMonth[month2]);
             }
         }
         return dataForAllMonths;
+        
     };
+
 
 
 
     //이벤트2: 수시/정기점검 건수 엑셀저장폼
     const createInspectionCountExcelData = (lineChartData) => {
+
         // 차트 정보를 바탕으로 엑셀 데이터를 생성하는 로직 작성
         const data = lineChartData[0].data.map(item => ({
             구분: lineChartData[0].id, // 수시점검 or 정기점검
@@ -138,6 +161,18 @@ function SafetyInspectionStatisticsYearImg() {
             월: item.x,
             점검건수: item.y
         }));
+
+        // 점검건수 총 합계 계산
+        const totalInspectionCount = data.reduce((sum, item) => sum + item.점검건수, 0);
+
+        // 점검건수 총 합계를 데이터에 추가
+        data.push({
+            구분: '수시점검',
+            연도: selectedYear,
+            월: '전체합계',
+            점검건수: totalInspectionCount
+        });
+
         return data;
     };
 
@@ -168,49 +203,48 @@ function SafetyInspectionStatisticsYearImg() {
 
 
     //이벤트3: 수시점검 위험분류 엑셀저장폼
-    const createDangerExcelData = (barChartData, uniqueDangerKinds) => {
-        // 차트 정보를 바탕으로 엑셀 데이터를 생성하는 로직 작성
-
-        const data = [];
-
-        const generatedData = generateDataForAllMonths(barChartData, uniqueDangerKinds); // 월별 데이터 생성
-
-        for (const monthData of generatedData) {
-            const rowData = {
-                월: monthData.month,
-            };
-
-            for (const dangerValue of uniqueDangerKinds) {
-                rowData[dangerValue] = monthData[dangerValue] || 0; // 해당 위험분류 값이 없으면 0으로 설정
-            }
-
-            data.push(rowData);
-        }
-        return data;
-
-
-/*        const data =[];
-
-        for (const monthData of barChartData) {
-            const rowData = {
-                월: monthData.month,
-            };
-
-
-            Object.entries(monthData).forEach(([key, value]) => {
-                if (key !== 'month') {
-                    rowData[key] = value;
+      //수시점검 위험분류 분석 엑셀시트만들 때 월별 데이터 생성 메소드
+        const generateDataForAllMonthsForExcel = (dataByMonth, uniqueDangerKinds) => {
+            const dataForAllMonths = [];
+            for (let i = 0; i <= 11; i++) {
+                const month2 = i;
+                if (!dataByMonth[month2]) {
+                    // 해당 월에 데이터가 없으면 0으로 초기화하여 추가
+                    dataForAllMonths.push({ month: `${month2}월`, ...Object.fromEntries(uniqueDangerKinds.map((kind) => [kind, 0])) });
+                } else {
+                    dataForAllMonths.push(dataByMonth[month2]);
                 }
-            });
+            }
+            return dataForAllMonths;
 
-            data.push(rowData);
-        }
+        };
+        const createDangerExcelData = (dataByMonth, uniqueDangerKinds) => {
 
-        return data;*/
-    };
+            // 차트 정보를 바탕으로 엑셀 데이터를 생성하는 로직 작성
+            const data = [];
+            const generatedData = generateDataForAllMonthsForExcel(dataByMonth, uniqueDangerKinds); // 월별 데이터 생성
+            console.log("지금"+generatedData);
+
+            for(const monthData of generatedData) {
+                const rowData = {
+                    월: parseInt(monthData.month),
+                };
+
+                let monthlyTotal = 0; // 각 월별 합계를 저장할 변수
+
+                for(const dangerValue of uniqueDangerKinds) {
+                    rowData[dangerValue] = monthData[dangerValue] || 0; // 해당 위험분류 값이 없으면 0으로 설정
+                    monthlyTotal += rowData[dangerValue]; // 해당 월의 위험분류 값 누적
+                }
+
+                rowData['월별 합계'] = monthlyTotal; // 합계 추가
+                data.push(rowData);
+            }
+            return data;
+        };
 
 
-    //이벤트3: 수시점검 위험분류 엑셀저장로직
+    //이벤트4: 수시점검 위험분류 엑셀저장로직
     const handleExport2 = () => {
 
         // 엑셀 데이터 생성
@@ -278,18 +312,18 @@ function SafetyInspectionStatisticsYearImg() {
                                             Search
                                         </label>
                                         <div className="relative">
-                                            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 " style={{ backgroundColor: 'rgba(57, 65, 80, 1)' }}>
                                                 <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                                             </div>
-                                            <input
-                                                id="yearInput"
-                                                name="search"
-                                                className="block w-full rounded-md border-0 bg-gray-700 py-1.5 pl-10 pr-3 text-gray-300 placeholder:text-gray-400 focus:bg-white focus:text-gray-900 focus:ring-0 sm:text-sm sm:leading-6"
-                                                placeholder="검색형태: 2023"
-                                                type="number"
-                                                //value={selectedYear}
-                                                onChange={handleYearChange}
-                                            />
+                                            <div className="year-picker ml-8">
+                                                <select id="yearSelect" value={selectedYear} onChange={handleYearChange} className="year-picker-select">
+                                                    {years.map((year) => (
+                                                        <option key={year} value={year}>
+                                                            {year}년
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -305,19 +339,6 @@ function SafetyInspectionStatisticsYearImg() {
                                         )}
                                     </Disclosure.Button>
                                 </div>
-                                <div className="hidden lg:ml-4 lg:block">
-                                    <div className="flex items-center">
-                                        <button
-                                            type="button"
-                                            className="relative flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                                        >
-                                            <span className="absolute -inset-1.5" />
-                                            <span className="sr-only">View notifications</span>
-                                            <BellIcon className="h-6 w-6" aria-hidden="true" />
-                                        </button>
-
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
@@ -329,7 +350,7 @@ function SafetyInspectionStatisticsYearImg() {
     <div className="flex">
         <div className="w-1/2 p-4">
             <div className="flex justify-between items-center">
-                <h5 className="text-xl font-semibold leading-2 text-gray-900">수시ㆍ정기점검 건수 분석</h5>
+                <h5 className="text-xl font-semibold leading-2 text-gray-900">연간 수시ㆍ정기점검 건수 분석</h5>
                     <button
                         type="button"
                         className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
@@ -410,6 +431,16 @@ function SafetyInspectionStatisticsYearImg() {
                     />
                 ) : null}
             </div>
+            <div>
+                <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-2">
+                    <div className="overflow-hidden rounded-lg bg-light px-3 py-5 shadow sm:p-2 max-w-screen-sm flex items-center justify-center">
+                        <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">수시점검: {inspectionCountData}건</dd>
+                    </div>
+                    <div className="overflow-hidden rounded-lg bg-light px-3 py-5 shadow sm:p-2 max-w-screen-sm flex items-center justify-center">
+                        <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">정기점검: y건</dd>
+                    </div>
+                </dl>
+            </div>
         </div>
 
         <div className="w-1/2 p-4">
@@ -423,6 +454,7 @@ function SafetyInspectionStatisticsYearImg() {
                     엑셀 저장
                 </button>
             </div>
+
                 <div style={{ height: '700px' }}>
                     {barChartData.length > 0 ? (
                         <ResponsiveContainer width="100%" height="100%">
