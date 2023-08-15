@@ -23,7 +23,6 @@ import 'filepond/dist/filepond.min.css'; // 스타일링을 위한 CSS
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 
-
 // 추가 플러그인을 라이브러리에 등록
 registerPlugin(FilePondPluginImagePreview);
 
@@ -50,6 +49,9 @@ function UserfrequentReg() {
  const [speActEmail, setSpeActEmail] = useState("");
  const [speComplete, setSpeComplete] = useState("");
  const [files, setFiles] = useState(null);
+ // 이메일 세팅
+    const [yEmailNameStr, setYEmailNameStr] = useState("");
+    const [yEmailAddStr, setYEmailAddStr] = useState("");
 
  // Inspector 콜백 함수 : 점검자(이름, 이메일, 사원번호)
  const handleInspectorDataChange = (inspectorForm) => {
@@ -90,9 +92,11 @@ function UserfrequentReg() {
  };
 
  // ActionRquest 콜백 : 조치자(이름, 이메일)
- const handleActionRequestDetailsDataChange = (selectedEmail) => {
-  setSpeActPerson(selectedEmail.speActPerson);
-  setSpeActEmail(selectedEmail.speActEmail);
+ const handleActionRequestDetailsDataChange = (data) => {
+  setSpeActPerson(data.speActPerson);
+  setSpeActEmail(data.speActEmail);
+  setYEmailNameStr(data.yEmailName);
+  setYEmailAddStr(data.yEmailAdd);
  };
 
  // 개선대책
@@ -188,10 +192,11 @@ function UserfrequentReg() {
   formData.append('speTrap', speTrap);
   formData.append('speRiskAssess', speRiskAssess);
   formData.append('speContent', speContent);
-  formData.append('speActPerson', speActPerson);
-  formData.append('speActEmail', speActEmail);
+  formData.append('speActPerson', speActPerson+', '+yEmailNameStr);
+  formData.append('speActEmail', speActEmail+', '+yEmailAddStr);
   formData.append('speActContent', speActContent);
   formData.append('speComplete', speComplete);
+
 
   console.log(formData); // 요청 데이터 콘솔에 출력
 
@@ -268,7 +273,7 @@ function UserfrequentReg() {
           />
        </div>
       </div>
-      <ActionRquest onFormDataChange={handleActionRequestDetailsDataChange} />{" "}{/* 조치요청 */}
+         <ActionRquest onFormDataChange={handleActionRequestDetailsDataChange} />{" "}{/* 조치요청 */}
       {/* 혜영추가-완료여부 */}
       <IsCompelete onFormDataChange={handleIsCompeleteDataChange} />{" "}{/* 완료여부 */}
       {/* 경원추가 */}
