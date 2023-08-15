@@ -192,8 +192,21 @@ function UserfrequentReg() {
   formData.append('speTrap', speTrap);
   formData.append('speRiskAssess', speRiskAssess);
   formData.append('speContent', speContent);
-  formData.append('speActPerson', speActPerson+', '+yEmailNameStr);
-  formData.append('speActEmail', speActEmail+', '+yEmailAddStr);
+
+  // 조치자 이름
+  if (speActPerson) { // speActPerson이 선택되었을 경우
+     formData.append('speActPerson', speActPerson + ', ' + yEmailNameStr);
+  } else { // speActPerson이 선택되지 않았을 경우
+     formData.append('speActPerson', yEmailNameStr);
+  }
+
+  // 조치자 이메일
+  if (speActPerson) { // speActEmail이 선택되었을 경우
+      formData.append('speActEmail', speActEmail+', '+yEmailAddStr);
+  } else { // speActEmail이 선택되지 않았을 경우
+     formData.append('speActEmail', yEmailAddStr);
+  }
+
   formData.append('speActContent', speActContent);
   formData.append('speComplete', speComplete);
 
