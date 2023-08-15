@@ -25,8 +25,8 @@ const EmailForm = () => {
       recipients: emailData.recipients.split(',').map(recipient => recipient.trim())
     };
 
-    fetch('http://172.20.20.252:8081/api/send-email', {
-    // fetch('http://localhost:8081/api/send-email', {
+    //fetch('http://172.20.20.252:8081/api/send-email', {
+     fetch('http://localhost:8081/api/send-email', {
     // fetch('http://192.168.202.1:8081/api/send-email', {
       method: 'POST',
       headers: {
