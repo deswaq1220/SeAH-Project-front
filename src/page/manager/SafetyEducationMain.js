@@ -24,11 +24,25 @@ function SafetyEducationMain() {
     return eduList.slice(startIndex, endIndex);
   };
 
-
   const getDisplayedId = (eduId) => {
     const index = eduList.findIndex((edu) => edu.eduId === eduId);
     return index !== -1 ? index + 1 : ""; // 인덱스를 1부터 시작하도록 +1 해줍니다.
   };
+
+  // useEffect(() => {
+  //   // 서버로부터 안전교육 데이터를 가져오는 함수
+  //   const fetchEduList = async () => {
+  //     try {
+  //       const response = await axios.get(`http://localhost:8081/edumain`); // 서버의 API 엔드포인트에 맞게 경로를 수정해야 합니다.
+  //       // "http://172.20.10.5:3000/edumain"
+  //       setEduList(response.data); // 서버로부터 받은 데이터를 상태 변수에 저장
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+
+  //   fetchEduList(); // 데이터 가져오기 함수 호출
+  // }, []); // 빈 배열을 두 번째 인자로 넘겨주면 컴포넌트가 처음 마운트되었을 때만 데이터를 가져옵니다.
 
   useEffect(() => {
     const getLogsForCurrentMonth = async () => {
@@ -250,15 +264,18 @@ function SafetyEducationMain() {
       </div>
       <div className="flex justify-center">
         <div className="px-4 sm:px-6 lg:px-8 max-w-screen-xl w-full">
-          {eduList.length > 0 ?(
-
-          <Pagination
-            currentPage={currentPage}
-            itemsPerPage={itemsPerPage}
-            totalItems={eduList.length}
-            setCurrentPage={setCurrentPage}
-          />
-          ) :(null)}
+          {eduList.length > 0 ? (
+            <Pagination
+              currentPage={currentPage}
+              itemsPerPage={itemsPerPage}
+              totalItems={eduList.length}
+              setCurrentPage={setCurrentPage}
+            />
+          ) : (
+            <div className="text-center mt-8">
+              <p className="text-gray-500">등록된 교육이 없습니다.</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

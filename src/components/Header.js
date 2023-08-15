@@ -186,7 +186,7 @@ export default function Header() {
           
           
           <Link
-            to="/reinfo"
+            to="/reginfo"
             className="text-lg font-semibold leading-6 text-gray-900 hover:text-seahColor"
           >
             기준정보관리
