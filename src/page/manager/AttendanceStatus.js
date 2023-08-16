@@ -16,8 +16,8 @@ export default function AttenStatus() {
 
   useEffect(() => {
     // 교육 아이디에 맞는 출석목록 데이터를 받아오는 API 호출
-    //axios.get(`http://172.20.20.252:8081/usereduatten/list/${eduId}`) //세아
-    axios.get(`http://localhost:8081/usereduatten/list/${eduId}`)
+    axios.get(`http://172.20.20.252:8081/usereduatten/list/${eduId}`) //세아
+    // axios.get(`http://localhost:8081/usereduatten/list/${eduId}`)
       .then(response => {
         // 받아온 출석목록 데이터를 attendanceList 상태에 저장
         setAttendanceList(response.data);
@@ -32,8 +32,8 @@ export default function AttenStatus() {
     const fetchEduDetail = async () => {
       try {
         const response = await axios.get(
-          // `http://172.20.20.252:8081/edudetails/${eduId}`,        // 세아
-          `http://localhost:8081/edudetails/${eduId}`
+          `http://172.20.20.252:8081/edudetails/${eduId}`,        // 세아
+          // `http://localhost:8081/edudetails/${eduId}`
         );
         //        setUploadedFiles(response.data.eduFiles);
         setEduData({ ...response.data, eduFiles: response.data.eduFiles });
