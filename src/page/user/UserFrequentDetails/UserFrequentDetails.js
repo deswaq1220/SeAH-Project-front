@@ -1,7 +1,66 @@
+import React, { useState, useEffect } from "react";
 import { PaperClipIcon } from "@heroicons/react/20/solid";
 import UserHeader from "../../../components/UserHeader";
-
+import { useParams } from "react-router-dom";
+import axios from "axios";
 export default function UserFrequentDetails() {
+  const { speId } = useParams(); // URL 파라미터로부터 speId를 가져옵니다.
+  const [inspectionData, setInspectionData] = useState(null); // API로부터 받은 데이터를 저장할 상태 변수
+
+  useEffect(() => {
+    // API 요청을 보내 데이터를 가져옵니다.
+    axios
+      .get(`http://localhost:8081/special/detail/${speId}`) // 실제 API 주소로 수정해야합니다.
+      .then((response) => {
+        setInspectionData(response.data); // 데이터를 상태 변수에 저장합니다.
+        console.log(inspectionData);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, [speId]); // speId가 변경될 때마다 useEffect가 실행됩니다.
+
+  if (!inspectionData) {
+    // 데이터가 아직 로드되지 않았을 때의 처리
+    return <div>Loading...</div>;
+  }
+
+  const formatDate = (dateString) => {
+    const options = {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    };
+    return new Date(dateString).toLocaleDateString("ko-KR", options);
+  };
+
+  const getRiskAssessmentText = (riskAssessment) => {
+    switch (riskAssessment) {
+      case "HIGH":
+        return "고 위험(6~9): 즉시 개선";
+      case "MEDIUM":
+        return "중 위험(3~4): 개선 필요";
+      case "LOW":
+        return "저 위험(1~2): 수용 가능";
+      default:
+        return "";
+    }
+  };
+
+  const getComplateText = (complate) => {
+    switch(complate){
+      case "NO":
+        return "미완료";
+      case "OK":
+        return "완료";
+      default:
+        return "";
+    }
+  }
+
   return (
     <div>
       <UserHeader />
@@ -31,99 +90,99 @@ export default function UserFrequentDetails() {
         <div className="mt-6 border-t border-gray-100">
           <dl className="divide-y divide-gray-100">
             <div className="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
-              <dt className="text-lg font-bold leading-6 text-gray-900">
+              <dt className="text-base font-bold leading-6 text-gray-900">
                 점검일시
               </dt>
               <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                날짜 자리
+              {formatDate(inspectionData.speDetailFindId.speDate)}
               </dd>
             </div>
             <div className="bg-white px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
-              <dt className="text-lg font-bold leading-6 text-gray-900">
+              <dt className="text-base font-bold leading-6 text-gray-900">
                 점검자
               </dt>
               <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                부서 / 이름
+              {inspectionData.speDetailFindId.spePerson}
               </dd>
             </div>
             <div className="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
-              <dt className="text-lg font-bold leading-6 text-gray-900">
+              <dt className="text-base font-bold leading-6 text-gray-900">
                 점검영역
               </dt>
               <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                주조
+              {inspectionData.speDetailFindId.spePart}
               </dd>
             </div>
             <div className="bg-white px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
-              <dt className="text-lg font-bold leading-6 text-gray-900">
+              <dt className="text-base font-bold leading-6 text-gray-900">
                 설비명
               </dt>
               <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                직접집진기(900m2/min)
+              {inspectionData.speDetailFindId.speFacility}
               </dd>
             </div>
             <div className="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
-              <dt className="text-lg font-bold leading-6 text-gray-900">
+              <dt className="text-base font-bold leading-6 text-gray-900">
                 위험분류 및 부상부위
               </dt>
               <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                찔림 / 다리
+              {inspectionData.speDetailFindId.speDanger} / {inspectionData.speDetailFindId.speInjure}
               </dd>
             </div>
             <div className="bg-white px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
-              <dt className="text-lg font-bold leading-6 text-gray-900">
+              <dt className="text-base font-bold leading-6 text-gray-900">
                 위험원인
               </dt>
               <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                불안전한 행동 ...........and so on
+              {inspectionData.speDetailFindId.speCause}
               </dd>
             </div>
             <div className="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
-              <dt className="text-lg font-bold leading-6 text-gray-900">
+              <dt className="text-base font-bold leading-6 text-gray-900">
                 실수함정
               </dt>
               <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                자만심
+              {inspectionData.speDetailFindId.speTrap}
               </dd>
             </div>
             <div className="bg-white px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
-              <dt className="text-lg font-bold leading-6 text-gray-900">
+              <dt className="text-base font-bold leading-6 text-gray-900">
                 위험성평가
               </dt>
               <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                저 위험(1~2): 수용가능
+              {getRiskAssessmentText(inspectionData.speDetailFindId.speRiskAssess)}
               </dd>
             </div>
             <div className="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
-              <dt className="text-lg font-bold leading-6 text-gray-900">
+              <dt className="text-base font-bold leading-6 text-gray-900">
                 점검내용
               </dt>
               <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                내용
+              {inspectionData.speDetailFindId.speContent}
               </dd>
             </div>
             <div className="bg-white px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
-              <dt className="text-lg font-bold leading-6 text-gray-900">
+              <dt className="text-base font-bold leading-6 text-gray-900">
                 개선대책
               </dt>
               <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                내용
+              {inspectionData.speDetailFindId.speActContent}
               </dd>
             </div>
             <div className="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
-              <dt className="text-lg font-bold leading-6 text-gray-900">
+              <dt className="text-base font-bold leading-6 text-gray-900">
                 조치요청
               </dt>
               <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                이메일@seah.com
+              {inspectionData.speDetailFindId.speActEmail} / {inspectionData.speDetailFindId.speActPerson}
               </dd>
             </div>
             <div className="bg-white px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
-              <dt className="text-lg font-bold leading-6 text-gray-900">
+              <dt className="text-base font-bold leading-6 text-gray-900">
                 완료여부
               </dt>
               <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                미완료
+              {getComplateText(inspectionData.speDetailFindId.speComplete)}
               </dd>
             </div>
           </dl>
@@ -133,7 +192,7 @@ export default function UserFrequentDetails() {
             type="button"
             className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mr-2"
           >
-           확인
+            확인
           </button>
           <button
             type="button"
