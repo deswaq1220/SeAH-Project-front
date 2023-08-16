@@ -81,6 +81,7 @@ function SafetyInspectionStatisticsMonthImg() {
     const [dangerCount, setDangerCount] = useState([]);
     const [causeCount, setCauseCount] = useState([]);
 
+
     useEffect(() => {
 
         if (selectedYear) {
@@ -93,24 +94,24 @@ function SafetyInspectionStatisticsMonthImg() {
         try {
 
             //점검건수 값
-            await axios.get(`http://172.20.20.252:8081/special/statistics/count`, { params: { yearmonth: selectedYear } })  //세아
-            // await axios.get(`http://localhost:8081/special/statistics/count`, { params: { yearmonth: selectedYear } })
+            // await axios.get(`http://172.20.20.252:8081/special/statistics/count`, { params: { yearmonth: selectedYear } })  //세아
+             await axios.get(`http://localhost:8081/special/statistics/count`, { params: { yearmonth: selectedYear } })
                 .then(response => {
                     setSpcCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
                     console.log(response.data);
                 })
 
-            //영역값
-            await axios.get(`http://172.20.20.252:8081/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })  //세아
-            // await axios.get(`http://localhost:8081/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })
+/*            //영역값
+            //await axios.get(`http://172.20.20.252:8081/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })  //세아
+             await axios.get(`http://localhost:8081/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })
                 .then(response => {
                     setPartCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
                     console.log(response.data);
-                })
+                })*/
 
             //영역값2
-            await axios.get(`http://172.20.20.252:8081/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })  //세아
-                // await axios.get(`http://localhost:8081/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })
+            //await axios.get(`http://172.20.20.252:8081/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })  //세아
+              await axios.get(`http://localhost:8081/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })
                 .then(response => {
                     setPartCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
                     console.log(response.data);
@@ -119,16 +120,16 @@ function SafetyInspectionStatisticsMonthImg() {
 
 
             //위험분류값
-            await axios.get(`http://172.20.20.252:8081/special/statistics/dangerandmonth`, { params: { yearmonth: selectedYear } })  //세아
-            // await axios.get(`http://localhost:8081/special/statistics/dangerandmonth`, { params: { yearmonth: selectedYear } })
+            //await axios.get(`http://172.20.20.252:8081/special/statistics/dangerandmonth`, { params: { yearmonth: selectedYear } })  //세아
+             await axios.get(`http://localhost:8081/special/statistics/dangerandmonth`, { params: { yearmonth: selectedYear } })
                 .then(response => {
                     setDangerCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
                     console.log(response.data);
                 })
 
             //위험원인값
-                await axios.get(`http://172.20.20.252:8081/special/statistics/causeandmonth`, { params: { yearmonth: selectedYear } })  //세아
-            // await axios.get(`http://localhost:8081/special/statistics/causeandmonth`, { params: { yearmonth: selectedYear } })
+             //   await axios.get(`http://172.20.20.252:8081/special/statistics/causeandmonth`, { params: { yearmonth: selectedYear } })  //세아
+             await axios.get(`http://localhost:8081/special/statistics/causeandmonth`, { params: { yearmonth: selectedYear } })
                 .then(response => {
                     setCauseCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
                     console.log(response.data);
@@ -220,22 +221,22 @@ function SafetyInspectionStatisticsMonthImg() {
                   {/* 위쪽 영역 */}
                   <div className="grid grid-cols-4 gap-6">
                       {/*아래쪽 영역 1번*/}
-                          <div>
-                              <div className="flex justify-between items-baseline">
-                                  <h5 className="text-xl font-semibold leading-2 text-gray-900">정기점검 건수</h5>
-                                  <button
-                                      className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-                                      onClick={handleExport}
-                                  >
-                                      월간 분석 엑셀 저장
-                                  </button>
-                              </div>
-                              <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-1">
-                                  <div className="overflow-hidden rounded-lg bg-amber-100 px-3 py-5 shadow sm:p-40 max-w-screen-xl flex items-center justify-center">
-                                      <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{spcCount}건</dd>
-                                  </div>
-                              </dl>
+                      <div>
+                          <div className="flex justify-between items-baseline">
+                              <h5 className="text-xl font-semibold leading-2 text-gray-900">정기점검 건수</h5>
+                              <button
+                                  className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                                  onClick={handleExport}
+                              >
+                                  월간 분석 엑셀 저장
+                              </button>
                           </div>
+                          <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-1">
+                              <div className="overflow-hidden rounded-lg bg-amber-100 px-3 py-5 shadow sm:p-40 max-w-screen-xl flex items-center justify-center">
+                                  <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{spcCount}건</dd>
+                              </div>
+                          </dl>
+                      </div>
                       {/*위쪽 영역 2번 - 영역별(완료)*/}
                       <div>
                           <h3 className="text-xl font-semibold leading-2 text-gray-900">점검영역 분석</h3>
@@ -250,7 +251,6 @@ function SafetyInspectionStatisticsMonthImg() {
                                   ))}
                           </dl>
                       </div>
-
                   </div>
 
                   <hr className="border-t  my-6" style={{ borderColor: 'InactiveBorder' }}/>
@@ -287,50 +287,47 @@ function SafetyInspectionStatisticsMonthImg() {
                                       </div>
                                   ))}
                           </dl>*/}
+                          <div style={{ height: '360px' }}>
+                              <ResponsiveRadar
+                                  data={partCount}
+                                  keys={['수시점검']}
+                                  indexBy="sort"
 
-                          <ResponsiveRadar
-                              data={data}
-                              keys={[ 'chardonay', 'carmenere', 'syrah' ]}
-                              indexBy="taste"
-                              valueFormat=" >-.2f"
-                              margin={{ top: 50, right: 80, bottom: 50, left: 80 }}
-                              borderColor={{ from: 'color', modifiers: [] }}
-                              gridLevels={7}
-                              gridShape="linear"
-                              gridLabelOffset={17}
-                              dotSize={10}
-                              dotColor={{ from: 'color', modifiers: [] }}
-                              dotBorderWidth={2}
-                              enableDotLabel={true}
-                              dotLabelYOffset={-13}
-                              colors={{ scheme: 'category10' }}
-                              fillOpacity={0.2}
-                              motionConfig="wobbly"
-                              legends={[
-                                  {
-                                      anchor: 'top-left',
-                                      direction: 'column',
-                                      translateX: -50,
-                                      translateY: -40,
-                                      itemWidth: 80,
-                                      itemHeight: 20,
-                                      itemTextColor: '#999',
-                                      symbolSize: 12,
-                                      symbolShape: 'circle',
-                                      effects: [
-                                          {
-                                              on: 'hover',
-                                              style: {
-                                                  itemTextColor: '#000'
+                                  margin={{ top: 40, right: 80, bottom: 50, left: 80 }}
+                                  borderWidth={0.5}
+                                  borderColor={{ from: 'color' }}
+                                  gridLabelOffset={36}
+                                  dotSize={10}
+                                  dotColor={'#f4f4f6'}
+                                  dotBorderWidth={2}
+                                  enableDotLabel={true}
+                                  dotLabelYOffset={-8}
+                                  colors={'rgba(11,107,8,0.54)'}
+                                  blendMode="multiply"
+                                  motionConfig="wobbly"
+                                  legends={[
+                                      {
+                                          anchor: 'top-left',
+                                          direction: 'column',
+                                          translateX: -50,
+                                          translateY: -40,
+                                          itemWidth: 80,
+                                          itemHeight: 20,
+                                          itemTextColor: '#999',
+                                          symbolSize: 12,
+                                          symbolShape: 'circle',
+                                          effects: [
+                                              {
+                                                  on: 'hover',
+                                                  style: {
+                                                      itemTextColor: '#000'
+                                                  }
                                               }
-                                          }
-                                      ]
-                                  }
-                              ]}
-                          />
-
-
-
+                                          ]
+                                      }
+                                  ]}
+                              />
+                          </div>
 
                       </div>
                       {/*아래쪽 영역 3번 - 위험분류별(완료)*/}
