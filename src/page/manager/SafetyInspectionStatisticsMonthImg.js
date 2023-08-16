@@ -9,6 +9,9 @@ import {Bars3Icon, BellIcon, CheckCircleIcon, XMarkIcon} from '@heroicons/react/
 import {MagnifyingGlassIcon} from "@heroicons/react/20/solid";
 import axios from "axios";
 
+//그래프
+import { ResponsiveRadar } from '@nivo/radar'
+
 //엑셀
 import * as XLSX from "xlsx";
 import { saveAs } from 'file-saver';
@@ -104,6 +107,16 @@ function SafetyInspectionStatisticsMonthImg() {
                     setPartCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
                     console.log(response.data);
                 })
+
+            //영역값2
+            await axios.get(`http://172.20.20.252:8081/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })  //세아
+                // await axios.get(`http://localhost:8081/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })
+                .then(response => {
+                    setPartCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
+                    console.log(response.data);
+                })
+
+
 
             //위험분류값
             await axios.get(`http://172.20.20.252:8081/special/statistics/dangerandmonth`, { params: { yearmonth: selectedYear } })  //세아
@@ -264,7 +277,7 @@ function SafetyInspectionStatisticsMonthImg() {
                       {/*아래쪽 영역 2번 - 영역별(완료)*/}
                       <div>
                           <h3 className="text-xl font-semibold leading-2 text-gray-900">점검영역 분석</h3>
-                          <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-3">
+{/*                          <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-3">
                               {partCount
                                   .sort((a, b) => b[1] - a[1]) // 배열을 내림차순으로 정렬
                                   .map((item, index) => (
@@ -273,7 +286,52 @@ function SafetyInspectionStatisticsMonthImg() {
                                           <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">{item[1]}건</dd>
                                       </div>
                                   ))}
-                          </dl>
+                          </dl>*/}
+
+                          <ResponsiveRadar
+                              data={data}
+                              keys={[ 'chardonay', 'carmenere', 'syrah' ]}
+                              indexBy="taste"
+                              valueFormat=" >-.2f"
+                              margin={{ top: 50, right: 80, bottom: 50, left: 80 }}
+                              borderColor={{ from: 'color', modifiers: [] }}
+                              gridLevels={7}
+                              gridShape="linear"
+                              gridLabelOffset={17}
+                              dotSize={10}
+                              dotColor={{ from: 'color', modifiers: [] }}
+                              dotBorderWidth={2}
+                              enableDotLabel={true}
+                              dotLabelYOffset={-13}
+                              colors={{ scheme: 'category10' }}
+                              fillOpacity={0.2}
+                              motionConfig="wobbly"
+                              legends={[
+                                  {
+                                      anchor: 'top-left',
+                                      direction: 'column',
+                                      translateX: -50,
+                                      translateY: -40,
+                                      itemWidth: 80,
+                                      itemHeight: 20,
+                                      itemTextColor: '#999',
+                                      symbolSize: 12,
+                                      symbolShape: 'circle',
+                                      effects: [
+                                          {
+                                              on: 'hover',
+                                              style: {
+                                                  itemTextColor: '#000'
+                                              }
+                                          }
+                                      ]
+                                  }
+                              ]}
+                          />
+
+
+
+
                       </div>
                       {/*아래쪽 영역 3번 - 위험분류별(완료)*/}
                       <div>
