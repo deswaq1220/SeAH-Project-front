@@ -29,28 +29,14 @@ function SafetyEducationMain() {
     return index !== -1 ? index + 1 : ""; // 인덱스를 1부터 시작하도록 +1 해줍니다.
   };
 
-  // useEffect(() => {
-  //   // 서버로부터 안전교육 데이터를 가져오는 함수
-  //   const fetchEduList = async () => {
-  //     try {
-  //       const response = await axios.get(`http://localhost:8081/edumain`); // 서버의 API 엔드포인트에 맞게 경로를 수정해야 합니다.
-  //       // "http://172.20.10.5:3000/edumain"
-  //       setEduList(response.data); // 서버로부터 받은 데이터를 상태 변수에 저장
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-
-  //   fetchEduList(); // 데이터 가져오기 함수 호출
-  // }, []); // 빈 배열을 두 번째 인자로 넘겨주면 컴포넌트가 처음 마운트되었을 때만 데이터를 가져옵니다.
 
   useEffect(() => {
     const getLogsForCurrentMonth = async () => {
       try {
         const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
         const currentYear = getYear(currentDate);
-        // const response = await axios.get("http://172.20.20.252:8081/edumain", {   // 세아
-        const response = await axios.get("http://localhost:8081/edumain", {
+        const response = await axios.get("http://172.20.20.252:8081/edumain", {   // 세아
+        // const response = await axios.get("http://localhost:8081/edumain", {
           params: {
             year: currentYear,
             month: currentMonth,

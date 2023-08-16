@@ -118,8 +118,8 @@ const useSafetyEduForm = (eduData) => {
   useEffect(() => {
     // 서버에서 교육 세부 정보 가져오기 (교육 아이디값 이용)
     axios
-        //.get(`http://172.20.10.5:8081/edudetails/${eduId}`)
-         .get(`http://localhost:8081/edudetails/${eduId}`)
+        .get(`http://172.20.10.5:8081/edudetails/${eduId}`)
+        //  .get(`http://localhost:8081/edudetails/${eduId}`)
         .then((response) => {
           // 가져온 데이터로 상태 업데이트
           console.log(response.data);
@@ -261,8 +261,8 @@ const useSafetyEduForm = (eduData) => {
       if (formData.eduId) {
         // 기존 교육 데이터를 수정하는 경우 (PUT 요청)
         const response = await axios.post(
-             `http://localhost:8081/edudetails/${formData.eduId}`,
-            //`http://172.20.20.252:8081/edudetails/${formData.eduId}`, //세아
+            //  `http://localhost:8081/edudetails/${formData.eduId}`,
+            `http://172.20.20.252:8081/edudetails/${formData.eduId}`, //세아
             formData,
             {
               headers: {
@@ -275,8 +275,8 @@ const useSafetyEduForm = (eduData) => {
       } else {
         // 새로운 교육 데이터를 등록하는 경우 (POST 요청)
         const response = await axios.post(
-             "http://localhost:8081/edureg",
-            //"http://172.20.20.252:8081/edureg", // 세아
+            //  "http://localhost:8081/edureg",
+            "http://172.20.20.252:8081/edureg", // 세아
             formData,
             {
               headers: {
