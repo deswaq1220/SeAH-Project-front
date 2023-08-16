@@ -156,7 +156,7 @@ export default function SafetyEduDetails() {
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-          `http://localhost:8081/edudetails/${eduId}`
+          `http://172.20.20.252:8081/edudetails/${eduId}`
       );
 
       if (response.status === 200) {
@@ -228,6 +228,15 @@ export default function SafetyEduDetails() {
                     </dt>
                     <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                       {eduData.eduSumTime} 분
+                    </dd>
+                  </div>
+
+                  <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                    <dt className="text-base font-bold leading-6 text-gray-900">
+                      교육장소
+                    </dt>
+                    <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0 whitespace-pre-wrap ">
+                      {eduData.eduPlace}
                     </dd>
                   </div>
 
@@ -310,8 +319,8 @@ export default function SafetyEduDetails() {
 
                   <Link to={`/userattendance/register/${eduData.eduId}`}>
                     <QRCode
-                      //value={`http://172.20.20.252:3000/userattendance/register/${eduData.eduId}`}
-                       value={`http://localhost:8081/userattendance/register/${eduData.eduId}`}
+                      value={`http://172.20.20.252:3000/userattendance/register/${eduData.eduId}`}
+//                       value={`http://localhost:3000/userattendance/register/${eduData.eduId}`}
                     />
                   </Link>
 
