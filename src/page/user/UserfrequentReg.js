@@ -206,8 +206,8 @@ function UserfrequentReg() {
 
         // 수시점검 등록 요청
         axios
-        //.post(`http://172.20.20.252:8081/special/new/${masterdataPart}/${masterdataFacility}`, requestData, {   // 세아
-             .post(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`, requestData, {
+        //.post(`http://172.20.20.252:8081/special/new/${masterdataPart}/${masterdataFacility}`, formData, {   // 세아
+             .post(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`, formData, {
 
                 headers: {
                     "Content-Type": "multipart/form-data",
