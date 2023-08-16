@@ -349,7 +349,7 @@ function EduAttenStatics() {
                           {item.eduTitle}
                         </td>
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
-                          {format(new Date(item.eduStartTime), "yyyy-MM-dd HH시 mm분")}
+                        {format(new Date(item.eduStartTime), "yyyy-MM-dd HH시 mm분")}
                         </td>
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           {item.eduSumTime} 분

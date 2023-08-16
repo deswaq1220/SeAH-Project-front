@@ -132,9 +132,9 @@ function EduStatics() {
 
       // 교육 정보를 바탕으로 엑셀 데이터를 생성하는 로직 작성
       const data = eduList.map((item) => ({
-        제목: `${item[0]}`,
-        교육일정: `${item[1]}`,
-        교육시간: `${item[2]} 분`,
+        제목: `${item[1]}`,
+        교육일정: `${item[2]}`,
+        교육시간: `${item[3]} 분`,
       }));
         
       return data;
@@ -328,7 +328,7 @@ function EduStatics() {
                           {edu[1]}
                         </td>
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                          {edu[2]}
+                        {format(new Date(edu[2]), 'yyyy-MM-dd HH시 mm분')}
                         </td>
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
                           {edu[3]} 분
