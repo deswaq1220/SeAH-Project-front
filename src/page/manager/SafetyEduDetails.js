@@ -3,22 +3,24 @@ import Header from "../../components/Header";
 import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
 import { useEffect, useState } from "react";
-import { useParams, Link, useLocation,useNavigate } from "react-router-dom";
+import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import useSafetyEduForm from "../../useHook/useSafetyEduForm";
 import QRCode from "qrcode.react";
 import { CheckCircleIcon } from "@heroicons/react/20/solid";
+import { format } from 'date-fns';
+import { toast } from "react-toastify";
 
 export default function SafetyEduDetails() {
   const { eduId } = useParams(); // useParams 훅을 사용하여 URL 파라미터에서 eduId 가져오기
-  const [eduData, setEduData] = useState(null);
+  const [eduData, setEduData] = useState([]);
   const { isCompleted, handleCreate, qrValue, formData, setFormData } =
-      useSafetyEduForm(eduData);
+    useSafetyEduForm(eduData);
   const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
   const [uploadedFiles, setUploadedFiles] = useState([]);
 
-  const [updatedData, setUpdatedData] = useState({}); // Initialize with an empty object
+  const [updatedData, setUpdatedData] = useState({});
 
   const navigate = useNavigate();
 
@@ -40,58 +42,25 @@ export default function SafetyEduDetails() {
       eduContent: "", // 교육내용
       eduWriter: "",
       eduId: "",
-      // 기타 폼 필드들도 여기에 추가
     },
   });
-
-
-
-  // useEffect(() => {
-  //   // 서버에서 교육 세부 정보 가져오기 (교육 아이디값 이용)
-  //   axios
-  //     .get(`http://localhost:8081/edudetails/${eduId}`)
-  //     .then((response) => {
-  //       // 가져온 데이터로 상태 업데이트
-  //       setEducation((prevEducation) => ({
-  //         ...prevEducation,
-  //         formData: {
-  //           eduTitle: response.data.eduTitle,
-  //           eduInstructor: response.data.eduInstructor,
-  //           eduPlace: response.data.eduPlace,
-  //           eduCategory: response.data.eduCategory,
-  //           eduStartTime: response.data.eduStartTime,
-  //           eduSumTime: response.data.eduSumTime,
-  //           eduTarget: response.data.eduTarget,
-  //           eduContent: response.data.eduContent,
-  //           eduWriter: response.data.eduWriter,
-  //           eduId: response.data.eduId,
-  //           // 기타 필드들도 API 응답에 따라 추가
-  //         },
-  //       }));
-  //     })
-  //     .catch((error) => {
-  //       // 에러 처리
-  //       console.error("교육 세부 정보를 가져오는 중 에러 발생:", error);
-  //     });
-  // }, [eduId]);
-
 
 
   useEffect(() => {
     const fetchEduDetail = async () => {
       try {
         const response = await axios.get(
-            // `http://172.20.20.252:8081/edudetails/${eduId}`,        // 세아
-            // `http://192.168.202.1:8081/edudetails/${eduId}`         // 혜영
-            `http://localhost:8081/edudetails/${eduId}`
+            `http://172.20.20.252:8081/edudetails/${eduId}`,        // 세아
+            //  `http://localhost:8081/edudetails/${eduId}`
 
         );
-//        setUploadedFiles(response.data.eduFiles);
+        // console.log(response.data);
+        setUploadedFiles(response.data.eduFiles);
         setEduData({ ...response.data, eduFiles: response.data.eduFiles });
+
         console.log("파일이름 찾기");
-        console.log(eduData);
-        // console.log(response.data); // 확인용 로그
-        console.log(eduData);
+        console.log(eduData.eduFiles);
+
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -127,7 +96,7 @@ export default function SafetyEduDetails() {
       {
         분류: `${eduData.eduCategory}`,
         제목: `${eduData.eduTitle}`,
-        교육시작시간: `${eduData.eduStartTime}`,
+        교육시작시간:  `${eduData.eduStartTime}`,
         교육시간: `${eduData.eduSumTime} 분`,
         교육내용: eduData.eduContent,
         강사: `${eduData.eduInstructor}`,
@@ -183,6 +152,26 @@ export default function SafetyEduDetails() {
     }
   };
 
+  // 교육 삭제
+  const handleDelete = async () => {
+    try {
+      const response = await axios.delete(
+          `http://172.20.20.252:8081/edudetails/${eduId}`
+      );
+
+      if (response.status === 200) {
+        console.log('교육 삭제됨');
+        toast.success("교육이 삭제되었습니다.", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: true,
+        });
+        navigate('/eduMain');
+      }
+    } catch (error) {
+      console.error('교육 삭제 에라 에러', error);
+    }
+  };
 
 
   const handleEditClick = () => {
@@ -191,16 +180,16 @@ export default function SafetyEduDetails() {
   };
 
   return (
-      <div>
-        <Header />
-        {eduData ? (
-            <div className="mx-auto max-w-2xl">
-              <div className="px-4 sm:px-0 mt-16 flex justify-between items-center">
-                <div>
-                  <h3 className="text-base font-semibold leading-7 text-gray-900">
-                    {eduData.eduTitle}
-                  </h3>
-                  {/* <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
+    <div>
+      <Header />
+      {eduData ? (
+        <div className="mx-auto max-w-2xl">
+          <div className="px-4 sm:px-0 mt-16 flex justify-between items-center">
+            <div>
+              <h3 className="text-base font-semibold leading-7 text-gray-900">
+                {eduData.eduTitle}
+              </h3>
+              {/* <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
               {eduData.eduStartTime}
             </p>
             <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
@@ -218,8 +207,9 @@ export default function SafetyEduDetails() {
                   <button
                       type="submit"
                       className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                  onClick={handleDelete}
                   >
-                    저장하기
+                    삭제하기
                   </button>
                 </div>
               </div>
@@ -231,13 +221,22 @@ export default function SafetyEduDetails() {
                       교육시간
                     </dt>
                     <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                      {eduData.eduStartTime} ~ {eduData.eduEndTime}
+                      {eduData.eduStartTime}
                     </dd>
                     <dt className="text-base font-bold leading-6 text-gray-900">
                       총 교육시간
                     </dt>
                     <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                       {eduData.eduSumTime} 분
+                    </dd>
+                  </div>
+
+                  <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                    <dt className="text-base font-bold leading-6 text-gray-900">
+                      교육장소
+                    </dt>
+                    <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0 whitespace-pre-wrap ">
+                      {eduData.eduPlace}
                     </dd>
                   </div>
 
@@ -274,42 +273,34 @@ export default function SafetyEduDetails() {
                     </dd>
                   </div>
                   <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                    <dt className="text-base font-bold leading-6 text-gray-900">
-                      첨부파일
-                    </dt>
-                    <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                      {eduData.eduFiles && eduData.eduFiles.length > 0 ? (
-                          <ul
-                              role="list"
-                              className="divide-y divide-gray-100 rounded-md border border-gray-200"
-                          >
-                            {eduData.eduFiles.map((eduFiles, index) => (
-                                <li
-                                    key={index}
-                                    className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6"
-                                >
-                                  <div className="flex w-0 flex-1 items-center">
-                                    <PaperClipIcon
-                                        className="h-5 w-5 flex-shrink-0 text-gray-400"
-                                        aria-hidden="true"
-                                    />
-                                    <div className="ml-4 flex min-w-0 flex-1 gap-2">
+                  <dt className="text-base font-bold leading-6 text-gray-900">
+                  첨부파일
+                </dt>
+                <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                  {eduData.eduFiles && eduData.eduFiles.length > 0 ? (
+                    <ul
+                      role="list"
+                      className="divide-y divide-gray-100 rounded-md border border-gray-200"
+                    >
+                      {eduData.eduFiles.map((eduFiles, index) => (
+                        <li
+                          key={index}
+                          className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6"
+                        >
+                          <div className="flex w-0 flex-1 items-center">
+                            <PaperClipIcon
+                              className="h-5 w-5 flex-shrink-0 text-gray-400"
+                              aria-hidden="true"
+                            />
+                            <div className="ml-4 flex min-w-0 flex-1 gap-2">
                               <span className="truncate font-medium">
-                                {eduFiles.eduFileName}
+                                {eduFiles}
                               </span>
-                                      <span className="flex-shrink-0 text-gray-400">
+                              <span className="flex-shrink-0 text-gray-400">
                                 {eduFiles.size}
                               </span>
-                                    </div>
-                                  </div>
-                                  {/* <div className="ml-4 flex-shrink-0">
-                            <a
-                              href="#"
-                              className="font-medium text-seahColor hover:text-seahDeep"
-                            >
-                              파일저장
-                            </a>
-                          </div> */}
+                            </div>
+                          </div>
                                 </li>
                             ))}
                           </ul>
@@ -320,55 +311,55 @@ export default function SafetyEduDetails() {
                   </div>
                 </dl>
               </div>
-              <div className="mt-6 pr-3 pb-3 flex items-center justify-center gap-x-6 ">
-                <div>
-                  {isCompleted ? (
-                      <div className="mt-4">
-                        {/* <QRCode value={JSON.stringify(formData)} /> */}
+          <div className="mt-6 pr-3 pb-3 flex items-center justify-center gap-x-6 ">
+            <div>
+              {isCompleted ? (
+                <div className="mt-4">
+                  {/* <QRCode value={JSON.stringify(formData)} /> */}
 
-                        <Link to={`/userattendance/register/${eduData.eduId}`}>
-                          <QRCode
-                              // value={`http://172.20.20.252:3000/userattendance/register/${eduData.eduId}`}
-                              value={`http://localhost:8081/userattendance/register/${eduData.eduId}`}
-                              // value={`http://192.168.202.1:8081/userattendance/register/${eduData.eduId}`}
-                          />
-                        </Link>
+                  <Link to={`/userattendance/register/${eduData.eduId}`}>
+                    <QRCode
+                      value={`http://172.20.20.252:3000/userattendance/register/${eduData.eduId}`}
+//                       value={`http://localhost:3000/userattendance/register/${eduData.eduId}`}
+                    />
+                  </Link>
 
-                        <div className="flex items-center mt-2">
-                          <CheckCircleIcon className="h-5 w-5 text-green-500" />
-                          <span className="ml-1">생성완료</span>
-                        </div>
-                      </div>
-                  ) : (
-                      <button
-                          type="submit"
-                          className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mr-1"
-                          onClick={handleCreate}
-                      >
-                        QR CODE
-                      </button>
-                  )}
-
-
-                  <button
-                      type="submit"
-                      className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mr-1"
-                  >
-                    출석현황
-                  </button>
-                  <button
-                      type="button"
-                      className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-                      onClick={handleExport}
-                  >
-                    엑셀 저장
-                  </button>
+                  <div className="flex items-center mt-2">
+                    <CheckCircleIcon className="h-5 w-5 text-green-500" />
+                    <span className="ml-1">생성완료</span>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <button
+                  type="submit"
+                  className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mr-1"
+                  onClick={handleCreate}
+                >
+                  QR CODE
+                </button>
+              )}
+              <Link to={`/attenstatus/${eduId}`}>
+                <button
+                  type="submit"
+                  className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mr-1"
+                >
+                  출석현황
+                </button>
+              </Link>
+
+              <button
+                type="button"
+                className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                onClick={handleExport}
+              >
+                엑셀 저장
+              </button>
             </div>
-        ) : (
-            <div>Loading...</div> // eduData가 유효하지 않은 경우 로딩 상태를 나타내는 메시지 또는 스피너를 렌더링
-        )}
-      </div>
+          </div>
+        </div>
+      ) : (
+        <div>Loading...</div> // eduData가 유효하지 않은 경우 로딩 상태를 나타내는 메시지 또는 스피너를 렌더링
+      )}
+    </div>
   );
 }

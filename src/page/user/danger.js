@@ -21,9 +21,8 @@ export default function Danger({onFormDataChange}){
   useEffect(() => {
     function specialDangerFetchDataWithAxios(masterdataPart, masterdataFacility) {
       axios
-          // .get(`http://172.20.20.252:8081/special/new/${masterdataPart}/${masterdataFacility}`)   // 세아
-          .get(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`)
-          // .get(`http://192.168.202.1:8081/special/new/${masterdataPart}/${masterdataFacility}`)
+          .get(`http://172.20.20.252:8081/special/new/${masterdataPart}/${masterdataFacility}`)   // 세아
+          //  .get(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`)
           .then((response) => {
             const speDangerListFromBack = response.data.specialDangerList;
             const speDangerData = speDangerListFromBack.map((item) => {

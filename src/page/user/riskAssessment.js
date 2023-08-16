@@ -7,7 +7,7 @@ import {id} from "date-fns/locale";
 const riskAssessment = [
   { id: 1, name: "[선택]", value: "" },
   { id: 2, name: "[고 위험(6~9): 즉시개선]", value: "HIGH"},
-  { id: 3, name: "[중 위험(4~4): 개선필요]", value: "MEDIUM"},
+  { id: 3, name: "[중 위험(3~4): 개선필요]", value: "MEDIUM"},
   { id: 4, name: "[저 위험(1~2): 수용가능]", value: "LOW" },
 ];
 

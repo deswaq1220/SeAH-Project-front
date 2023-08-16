@@ -13,14 +13,17 @@ import {
 } from "@heroicons/react/20/solid";
 import logo from "../img/logo.png";
 
+// 점검 메뉴
 const products = [
-  { name: '안전점검', description: '안전점검 등록 자리임', href: '/inspection', icon: ClipboardDocumentListIcon },
-  { name: '대시보드', description: '안전점검 통계를 조회할 수 있습니다', href: '#', icon: ChartPieIcon },
+  { name: '안전점검', description: '안전점검 등록 자', href: '/inspection', icon: ClipboardDocumentListIcon },
+  { name: '안전점검 통계', description: '안전점검 통계를 조회할 수 있습니다', href: '/inspection/statistics/yearimg', icon: ChartPieIcon },
 ]
 
+// 교육 메뉴
 const eduProducts = [
   { name: '안전교육', description: '안전교육 리스트 및 등록을 할 수 있습니다', href: '/eduMain', icon: BookOpenIcon },
-  { name: '대시보드', description: '안전교육 통계를 조회할 수 있습니다', href: '/edustatistics', icon: ChartPieIcon },
+  { name: '안전교육 시간 통계', description: '월별 안전교육 시간을 조회할 수 있습니다', href: '/edustatistics', icon: ChartPieIcon },
+  { name: '안전교육 출석 통계', description: '안전교육 참석자를 조회할 수 있습니다', href: '/edustatistics/atten', icon: ChartPieIcon },
 ]
 // const callsToAction = [
 //   { name: "Watch demo", href: "#", icon: PlayCircleIcon },
@@ -183,7 +186,7 @@ export default function Header() {
           
           
           <Link
-            to="/reinfo"
+            to="/reginfo"
             className="text-lg font-semibold leading-6 text-gray-900 hover:text-seahColor"
           >
             기준정보관리

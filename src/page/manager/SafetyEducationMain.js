@@ -24,27 +24,10 @@ function SafetyEducationMain() {
     return eduList.slice(startIndex, endIndex);
   };
 
-
   const getDisplayedId = (eduId) => {
     const index = eduList.findIndex((edu) => edu.eduId === eduId);
     return index !== -1 ? index + 1 : ""; // 인덱스를 1부터 시작하도록 +1 해줍니다.
   };
-
-  // useEffect(() => {
-  //   // 서버로부터 안전교육 데이터를 가져오는 함수
-  //   const fetchEduList = async () => {
-  //     try {
-  //       const response = await axios.get(`http://localhost:8081/edumain`); // 서버의 API 엔드포인트에 맞게 경로를 수정해야 합니다.
-  //       // "http://172.20.10.5:3000/edumain"
-  //       setEduList(response.data); // 서버로부터 받은 데이터를 상태 변수에 저장
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-
-  //   fetchEduList(); // 데이터 가져오기 함수 호출
-  // }, []); // 빈 배열을 두 번째 인자로 넘겨주면 컴포넌트가 처음 마운트되었을 때만 데이터를 가져옵니다.
-
 
 
   useEffect(() => {
@@ -52,9 +35,8 @@ function SafetyEducationMain() {
       try {
         const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
         const currentYear = getYear(currentDate);
-        // const response = await axios.get("http://172.20.20.252:8081/edumain", {   // 세아
-        const response = await axios.get("http://localhost:8081/edumain", {
-        // const response = await axios.get("http://192.168.202.1:8081/edumain", {
+        const response = await axios.get("http://172.20.20.252:8081/edumain", {   // 세아
+        // const response = await axios.get("http://localhost:8081/edumain", {
           params: {
             year: currentYear,
             month: currentMonth,
@@ -64,6 +46,7 @@ function SafetyEducationMain() {
           // eduStartTime을 기준으로 오름차순 정렬
           return new Date(a.eduStartTime) - new Date(b.eduStartTime);
         });
+        console.log(response.data[0].eduFiles[0]);
         setEduList(sortedEduList);
         setSelectedMonth(currentMonth);
       } catch (error) {
@@ -247,13 +230,18 @@ function SafetyEducationMain() {
                           </div>
                         </td>
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                          {edu.eduStartTime}
+                          {format(new Date(edu.eduStartTime), "yyyy-MM-dd HH시 mm분")}
                         </td>
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                          <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                            첨부
-                          </span>
+
+                          {edu.eduFiles.length > 0 ? (
+                            <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                             첨부
+                            </span>
+                          ) 
+                          : null}
                         </td>
+
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
                           {edu.eduWriter}
                         </td>
@@ -268,15 +256,14 @@ function SafetyEducationMain() {
       </div>
       <div className="flex justify-center">
         <div className="px-4 sm:px-6 lg:px-8 max-w-screen-xl w-full">
-          {eduList.length > 0 ?(
-
-          <Pagination
-            currentPage={currentPage}
-            itemsPerPage={itemsPerPage}
-            totalItems={eduList.length}
-            setCurrentPage={setCurrentPage}
-          />
-          ) :(null)}
+          {eduList.length > 0 ? (
+            <Pagination
+              currentPage={currentPage}
+              itemsPerPage={itemsPerPage}
+              totalItems={eduList.length}
+              setCurrentPage={setCurrentPage}
+            />
+          ) : (null)}
         </div>
       </div>
     </div>
