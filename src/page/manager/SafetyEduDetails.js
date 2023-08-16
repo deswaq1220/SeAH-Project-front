@@ -3,7 +3,7 @@ import Header from "../../components/Header";
 import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
 import { useEffect, useState } from "react";
-import { useParams, Link, useLocation,useNavigate } from "react-router-dom";
+import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import useSafetyEduForm from "../../useHook/useSafetyEduForm";
 import QRCode from "qrcode.react";
@@ -15,7 +15,7 @@ export default function SafetyEduDetails() {
   const { eduId } = useParams(); // useParams 훅을 사용하여 URL 파라미터에서 eduId 가져오기
   const [eduData, setEduData] = useState([]);
   const { isCompleted, handleCreate, qrValue, formData, setFormData } =
-      useSafetyEduForm(eduData);
+    useSafetyEduForm(eduData);
   const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
   const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -44,7 +44,6 @@ export default function SafetyEduDetails() {
       eduId: "",
     },
   });
-
 
 
   useEffect(() => {
@@ -181,16 +180,16 @@ export default function SafetyEduDetails() {
   };
 
   return (
-      <div>
-        <Header />
-        {eduData ? (
-            <div className="mx-auto max-w-2xl">
-              <div className="px-4 sm:px-0 mt-16 flex justify-between items-center">
-                <div>
-                  <h3 className="text-base font-semibold leading-7 text-gray-900">
-                    {eduData.eduTitle}
-                  </h3>
-                  {/* <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
+    <div>
+      <Header />
+      {eduData ? (
+        <div className="mx-auto max-w-2xl">
+          <div className="px-4 sm:px-0 mt-16 flex justify-between items-center">
+            <div>
+              <h3 className="text-base font-semibold leading-7 text-gray-900">
+                {eduData.eduTitle}
+              </h3>
+              {/* <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
               {eduData.eduStartTime}
             </p>
             <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
@@ -293,14 +292,6 @@ export default function SafetyEduDetails() {
                               </span>
                             </div>
                           </div>
-                                  {/* <div className="ml-4 flex-shrink-0">
-                            <a
-                              href="#"
-                              className="font-medium text-seahColor hover:text-seahDeep"
-                            >
-                              파일저장
-                            </a>
-                          </div> */}
                                 </li>
                             ))}
                           </ul>
@@ -311,54 +302,55 @@ export default function SafetyEduDetails() {
                   </div>
                 </dl>
               </div>
-              <div className="mt-6 pr-3 pb-3 flex items-center justify-center gap-x-6 ">
-                <div>
-                  {isCompleted ? (
-                      <div className="mt-4">
-                        {/* <QRCode value={JSON.stringify(formData)} /> */}
+          <div className="mt-6 pr-3 pb-3 flex items-center justify-center gap-x-6 ">
+            <div>
+              {isCompleted ? (
+                <div className="mt-4">
+                  {/* <QRCode value={JSON.stringify(formData)} /> */}
 
-                        <Link to={`/userattendance/register/${eduData.eduId}`}>
-                          <QRCode
-                              // value={`http://172.20.20.252:3000/userattendance/register/${eduData.eduId}`}
-                              value={`http://localhost:8081/userattendance/register/${eduData.eduId}`}
-                          />
-                        </Link>
+                  <Link to={`/userattendance/register/${eduData.eduId}`}>
+                    <QRCode
+                      //value={`http://172.20.20.252:3000/userattendance/register/${eduData.eduId}`}
+                       value={`http://localhost:8081/userattendance/register/${eduData.eduId}`}
+                    />
+                  </Link>
 
-                        <div className="flex items-center mt-2">
-                          <CheckCircleIcon className="h-5 w-5 text-green-500" />
-                          <span className="ml-1">생성완료</span>
-                        </div>
-                      </div>
-                  ) : (
-                      <button
-                          type="submit"
-                          className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mr-1"
-                          onClick={handleCreate}
-                      >
-                        QR CODE
-                      </button>
-                  )}
-
-
-                  <button
-                      type="submit"
-                      className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mr-1"
-                  >
-                    출석현황
-                  </button>
-                  <button
-                      type="button"
-                      className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-                      onClick={handleExport}
-                  >
-                    엑셀 저장
-                  </button>
+                  <div className="flex items-center mt-2">
+                    <CheckCircleIcon className="h-5 w-5 text-green-500" />
+                    <span className="ml-1">생성완료</span>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <button
+                  type="submit"
+                  className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mr-1"
+                  onClick={handleCreate}
+                >
+                  QR CODE
+                </button>
+              )}
+              <Link to={`/attenstatus/${eduId}`}>
+                <button
+                  type="submit"
+                  className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mr-1"
+                >
+                  출석현황
+                </button>
+              </Link>
+
+              <button
+                type="button"
+                className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                onClick={handleExport}
+              >
+                엑셀 저장
+              </button>
             </div>
-        ) : (
-            <div>Loading...</div> // eduData가 유효하지 않은 경우 로딩 상태를 나타내는 메시지 또는 스피너를 렌더링
-        )}
-      </div>
+          </div>
+        </div>
+      ) : (
+        <div>Loading...</div> // eduData가 유효하지 않은 경우 로딩 상태를 나타내는 메시지 또는 스피너를 렌더링
+      )}
+    </div>
   );
 }

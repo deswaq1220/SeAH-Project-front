@@ -18,6 +18,8 @@ import Userfrequent from "./page/user/Userfrequent";
 import UserfrequentReg from "./page/user/UserfrequentReg";
 import EduStatics from "./page/manager/EduStatics"
 import EduAttenStatics from "./page/manager/EduAttenStatics"
+import FrequentIns from "./page/manager/SafetyFrequentInspection";
+import AttenStatus from "./page/manager/AttendanceStatus";
 
 //다인 씀
 import SafetyInspectionStatisticsYearImg from "./page/manager/SafetyInspectionStatisticsYearImg";
@@ -45,10 +47,18 @@ function App() {
         <Route path="/edureg" element={<SafetyEduReg/>}></Route>{/* 관리자 안전교육 등록페이지 */}
         <Route path="/edureg/:eduId" element={<SafetyEduReg/>}></Route>{/* 관리자 안전교육 등록페이지 */}
         <Route path="/inspection" element={<SafetyInspection/>}></Route>{/* 관리자 안점점검 페이지 */}
-        <Route path="/reinfo" element={<ReferenceInfo/>}></Route> {/* 관리자 기준정보페이지 */}
+        <Route path="/attenstatus/:eduId" element={<AttenStatus/>}></Route>{/* 관리자 출석현황 */}
+
+        <Route path="/reginfo" element={<ReferenceInfo/>}></Route> {/* 관리자 기준정보페이지 */}
+
+
         <Route path="/sendEmail" element={<EmailForm/>}></Route> {/* 이메일 */}
         <Route path="/edustatistics" element={<EduStatics/>}></Route>{/* 관리자 안전교육통계*/}
         <Route path="/edustatistics/atten" element={<EduAttenStatics/>}></Route>{/* 관리자 안전교육 참가자통계*/}
+        <Route path="/frequentinspection" element={<FrequentIns/>}></Route>{/* 관리자 수시점검 현황*/}
+
+        
+        
 
         {/*다인 추가함 */}
         <Route path="/inspection/statistics/yearimg" element={<SafetyInspectionStatisticsYearImg/>}></Route>{/* 관리자 수시점검 연도 상세 분석 통계 대시보드*/}

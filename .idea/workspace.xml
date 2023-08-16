@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c20fbe9c-9169-4241-9ec0-dff0f7b0e503" name="Changes" comment="" />
+    <list default="true" id="c20fbe9c-9169-4241-9ec0-dff0f7b0e503" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Email.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Email.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/EduStatics.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/EduStatics.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/SafetyEduDetails.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/SafetyEduDetails.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,15 +40,21 @@
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/SeAHAnDIT/Desktop/SeAH-Project-front&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/SeAHAnDIT/Desktop/SeAH_Project&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\IntelliJ IDEA 2023.1.2\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\user\Documents\GitHub\SeAH-Project-front\src\style" />
+    </key>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -53,7 +64,11 @@
       <option name="presentableId" value="Default" />
       <updated>1691461728933</updated>
       <workItem from="1691461777275" duration="540000" />
-      <workItem from="1691762376750" duration="2134000" />
+      <workItem from="1692076967426" duration="23674000" />
+      <workItem from="1691643310933" duration="9625000" />
+      <workItem from="1691713230968" duration="2404000" />
+      <workItem from="1691716036954" duration="5804000" />
+      <workItem from="1691740020168" duration="121000" />
     </task>
     <servers />
   </component>

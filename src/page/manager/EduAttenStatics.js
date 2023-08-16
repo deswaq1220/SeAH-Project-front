@@ -8,7 +8,7 @@ import { format, addMonths, subMonths, getMonth, getYear } from "date-fns";
 // 부서 드롭다운
 const department = [
   { id: null, name: "부서" },
-  { id: 1, name: "소형연압팀" },
+  { id: 1, name: "소형압연팀" },
   { id: 2, name: "압출팀" },
   { id: 3, name: "주조팀" },
 ];

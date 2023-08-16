@@ -18,11 +18,11 @@ const department = [
   },
   {
     id: 3,
-    name: "주조반",
+    name: "주조팀",
   },
   {
     id: 4,
-    name: "압출반",
+    name: "압출팀",
   },
 ];
 
@@ -52,21 +52,21 @@ function UserSafetyEduAttendance() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+  
+  
     // Form 데이터 가져오기
-    const attenDepartment = selected.name; // 사용자가 선택한 부서명
+    const attenDepartment = selected.name;
     const attenName = selected.attenName;
     const attenEmployeeNumber = selected.attenEmployeeNumber;
-
-    // 출석 등록을 위한 요청 데이터 생성
+  
     const requestData = {
       attenDepartment,
       attenName,
       attenEmployeeNumber,
       eduId,
     };
-
-    // 출석 등록 요청 보내기
+  
+    // 버튼이 비활성화되어 있더라도 클릭 이벤트가 발생하도록 수정
     axios
       .post(
         // `http://172.20.20.252:8081/usereduatten/register/${eduId}`,     // 세아
@@ -78,20 +78,19 @@ function UserSafetyEduAttendance() {
         },
       })
       .then((response) => {
-        // 성공적으로 응답을 받았을 때 처리
         console.log(response);
-
-        // 출석이 완료되었다는 알림 띄우기
+  
         toast.success("출석이 완료되었습니다.", {
           position: "top-center",
-          autoClose: 3000, // 알림이 3초 후에 자동으로 사라짐
+          autoClose: 3000,
           hideProgressBar: true,
+          style: {
+            marginTop: "5rem", // 원하는 세로 위치로 조정
+          },
         });
-        // 출석이 완료되었으므로 출석하기 버튼 비활성화
         setIsAttendanceCompleted(true);
       })
       .catch((error) => {
-        // 오류가 발생했을 때 처리
         console.error(error);
         alert("출석 등록에 실패했습니다. 다시 시도해주세요.");
       });

@@ -1,6 +1,6 @@
 import UserHeader from "../../components/UserHeader";
 import {Link, useNavigate} from "react-router-dom";
-// import { CheckCircleIcon } from "@heroicons/react/20/solid";
+//import { CheckCircleIcon } from "@heroicons/react/20/solid";
 
 import {CheckCircleIcon ,XCircleIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
@@ -20,8 +20,8 @@ export default function Userfrequent() {
 
     function fetchDataWithAxios(masterdataPart, masterdataFacility) {
       axios
-          .get(`http://172.20.20.252:8081/special/list/${masterdataPart}/${masterdataFacility}`) //세아
-          //.get(`http://localhost:8081/special/list/${masterdataPart}/${masterdataFacility}`)
+          // .get(`http://172.20.20.252:8081/special/list/${masterdataPart}/${masterdataFacility}`) //세아
+          .get(`http://localhost:8081/special/list/${masterdataPart}/${masterdataFacility}`)
           .then((response) => {
             const dataFromBackend = response.data.listOfFac;
 

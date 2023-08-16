@@ -1,15 +1,15 @@
 import UserHeader from "../../components/UserHeader";
-
 import {
   ClipboardDocumentListIcon,
   ClipboardDocumentCheckIcon,
-  CalendarIcon,
+  CalendarDaysIcon,
   ChartPieIcon,
   DocumentDuplicateIcon,
   FolderIcon,
   HomeIcon,
   UsersIcon,
   DocumentCheckIcon,
+  WrenchScrewdriverIcon,
   ShieldCheckIcon,
   ShieldExclamationIcon,
   XCircleIcon,
@@ -17,6 +17,7 @@ import {
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {useParams} from "react-router-dom";
+import { format, addMonths, subMonths } from "date-fns";
 
 
 
@@ -27,6 +28,8 @@ function classNames(...classes) {
 export default function UserSelectInspection() {
   const { masterdataPart } = useParams(); // url 영역 파라미터
   const { masterdataFacility } = useParams(); // url 설비 파라미터
+
+  const [currentDate, setCurrentDate] = useState(new Date()); // 년,월
 
 
   // function 위에 있던거 function으로 옮겼음
@@ -111,18 +114,18 @@ export default function UserSelectInspection() {
     {
       name: "점검실시",
       href: "#",
-      icon: ShieldCheckIcon,
+      icon: WrenchScrewdriverIcon,
       count: monthlyAll.toString(),
       current: true,
-      iconForeground: "text-green-600",
+      iconForeground: "text-blue-600",
     },
     {
       name: "조치완료",
       href: "#",
-      icon: ShieldExclamationIcon,
+      icon: ShieldCheckIcon,
       count: monthlyComplete.toString(),
       current: false,
-      iconForeground: "text-blue-600",
+      iconForeground: "text-green-600",
     },
     {
       name: "조치필요",
@@ -136,6 +139,23 @@ export default function UserSelectInspection() {
     // { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
     // { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
   ];
+
+  const goToPreviousMonth = () => {
+    const previousMonthDate = subMonths(currentDate, 1);
+    setCurrentDate(previousMonthDate);
+  };
+
+  const goToNextMonth = () => {
+    const nextMonthDate = addMonths(currentDate, 1);
+    setCurrentDate(nextMonthDate);
+  };
+
+  const getFormattedDate = () => {
+    const year = currentDate.getFullYear();
+    const month = format(currentDate, "M월");
+
+    return `${year}년 ${month}`;
+  };
 
 
 
@@ -157,7 +177,7 @@ export default function UserSelectInspection() {
               actionIdx === actions.length - 1
                 ? "rounded-bl-lg rounded-br-lg sm:rounded-bl-none"
                 : "",
-              "group relative bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500"
+              "group relative bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-seahColor"
             )}
           >
             <div>
@@ -196,9 +216,9 @@ export default function UserSelectInspection() {
       <div className="mt-4">
         <nav className="flex flex-1 flex-col" aria-label="Sidebar">
           <p className="flex justify-center font-semibold text-lg mb-2">
-            <DocumentCheckIcon className="w-6 h-6 mr-1" />
+            <CalendarDaysIcon className="w-6 h-6 mr-1" />
             {/*------------------------  수정 필요  -------------------------*/}
-            7월 점검현황
+            {getFormattedDate()} 점검현황
             {/*------------------------  수정 필요  -------------------------*/}
           </p>
           <p className=" text-lg font-semibold">정기점검</p>
@@ -246,7 +266,7 @@ export default function UserSelectInspection() {
                   href={item.href}
                   className={classNames(
                     item.current
-                      ? "bg-gray-50 text-green-600"
+                      ? "bg-gray-50 text-blue-600"
                       : "text-gray-700 hover:text-indigo-600 hover:bg-gray-50",
                     "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                   )}
@@ -260,7 +280,7 @@ export default function UserSelectInspection() {
                   >
                     <item.icon className="h-6 w-6" aria-hidden="true" />
                   </span>
-                  <span className={item.current ? "text-green-600" : "text-gray-700"}>
+                  <span className={item.current ? "text-blue-600" : "text-gray-700"}>
                     {item.name}
                   </span>
                   {item.count ? (
