@@ -30,7 +30,22 @@ const people = [
     time: 30,
   },
 ];
-
+function selectPeople(category) {
+  switch (category) {
+    case "선택":
+      return people[0];
+    case "CREW":
+      return people[1];
+    case "DM":
+      return people[2];
+    case "MANAGE":
+      return people[3];
+    case "ETC":
+      return people[5];
+    default:
+      return people[0];
+  }
+}
 // 한글 값 매핑 함수
 function mapEduCategoryName(category) {
   switch (category) {
@@ -67,25 +82,26 @@ const duty = [
     name: "F",
   },
 ];
-// 한글 값 매핑 함수
-function mapDutyName(duty) {
-  switch (duty) {
-    case "선택":
-      return "[선택]";
-    case "T":
-      return "[전체]";
-    case "O":
-      return "[사무직]";
-    case "F":
-      return "[현장직]";
-    default:
-      return "";
-  }
-}
+// // 한글 값 매핑 함수
+// function mapDutyName(duty) {
+//   switch (duty) {
+//     case "선택":
+//       return "[선택]";
+//     case "T":
+//       return "[전체]";
+//     case "O":
+//       return "[사무직]";
+//     case "F":
+//       return "[현장직]";
+//     default:
+//       return "[선택]";
+//   }
+// }
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
+
 
 const useSafetyEduForm = (eduData) => {
   const formDataWithFile = new FormData();
@@ -117,19 +133,24 @@ const useSafetyEduForm = (eduData) => {
 
   useEffect(() => {
     // 서버에서 교육 세부 정보 가져오기 (교육 아이디값 이용)
-    axios
-        .get(`http://172.20.10.5:8081/edudetails/${eduId}`)
-        // .get(`http://localhost:8081/edudetails/${eduId}`)
-        .then((response) => {
-          // 가져온 데이터로 상태 업데이트
-          console.log(response.data);
+    if (eduId) {
+      axios
+          // .get(`http://172.20.10.5:8081/edudetails/${eduId}`)
+          .get(`http://localhost:8081/edudetails/${eduId}`)
+          .then((response) => {
+            // 가져온 데이터로 상태 업데이트
+            console.log(response.data);
 
-          setFormData(response.data);
-        })
-        .catch((error) => {
-          // 에러 처리
-          console.error("교육 세부 정보를 가져오는 중 에러 발생:", error);
-        });
+            setFormData(response.data);
+
+          })
+          .catch((error) => {
+            // 에러 처리
+            console.error("교육 세부 정보를 가져오는 중 에러 발생:", error);
+          });
+    }else {
+      console.log(formData);
+    }
   }, [eduId]);
 
   const handleChange = (e) => {
@@ -245,21 +266,14 @@ const useSafetyEduForm = (eduData) => {
       setError("본문 내용 또는 강사를 입력하세요.");
       return;
     }
-    console.log("여긴가1?: " + formData.eduContent);
-    formDataWithFile.append("eduCategory", formData.eduCategory);
-    formDataWithFile.append("eduTitle", formData.eduTitle);
-    formDataWithFile.append("eduInstructor", formData.eduInstructor);
-    formDataWithFile.append("eduPlace", formData.eduPlace);
-    formDataWithFile.append("eduStartTime", formData.eduStartTime);
-    formDataWithFile.append("eduSumTime", formData.eduSumTime);
-    formDataWithFile.append("eduTarget", formData.eduTarget);
-    formDataWithFile.append("eduContent", formData.eduContent);
-    formDataWithFile.append("eduWriter", formData.eduWriter);
-
-    console.log("여긴가?: " + formDataWithFile.eduTitle);
+    formData.eduFileList = null;
     try {
       if (formData.eduId) {
         // 기존 교육 데이터를 수정하는 경우 (PUT 요청)
+        formData.eduStartTime = formData.eduStartTime.slice(0, 16);
+
+
+
         const response = await axios.post(
             `http://localhost:8081/edudetails/${formData.eduId}`,
             // `http://172.20.20.252:8081/edudetails/${formData.eduId}`, //세아
@@ -310,7 +324,7 @@ const useSafetyEduForm = (eduData) => {
       return `총 교육시간: ${selectedEtcTime}분`;
     } else {
       formData.eduSumTime = selected.time;
-      return `총 교육시간: ${selected.time || 0}분`;
+      return `총 교육시간: ${selectPeople(formData.eduCategory).time || 0}분`;
     }
   };
 

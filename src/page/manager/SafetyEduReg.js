@@ -60,7 +60,7 @@ function mapEduCategoryName(category) {
     case "ETC":
       return "[기타]";
     default:
-      return "";
+      return "[선택]";
   }
 }
 
@@ -95,7 +95,7 @@ function mapDutyName(duty) {
     case "F":
       return "[현장직]";
     default:
-      return "";
+      return "[선택]";
   }
 }
 
@@ -182,16 +182,16 @@ function SafetyEduReg() {
               <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
                 구분
               </span>
+
               <Listbox value={selected} onChange={handleListboxChange}>
                 {({ open }) => (
                   <>
                     <div className="relative mt-2">
                       <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-16 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
                         <span className="flex items-center">
+
                           <span className="ml-3 block truncate">
-                            {selected
-                              ? mapEduCategoryName(selected.name)
-                              : "선택"}
+                            {mapEduCategoryName(formData.eduCategory)}
                           </span>
                         </span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
@@ -271,34 +271,30 @@ function SafetyEduReg() {
               <span className="w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
                 교육 제목
               </span>
-              {selected.name === "ETC" ? (
-                <div className="sm:col-span-3 w-56">
-                  <div className="mt-2">
-                    <input
-                      type="text"
-                      name="eduTitle"
-                      id="eduTitle"
-                      value={formData.eduTitle}
-                      onChange={handleChange}
-                      autoComplete="off"
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
-                    />
-                  </div>
-                </div>
-              ) : (
+
+
                 <div className="sm:col-span-3">
                   <div className="mt-2">
-                    <input
-                      type="text"
-                      name="eduClass"
-                      id="eduClass"
-                      value={mapEduCategoryName(selected.name)}
-                      readOnly
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 bg-gray-100 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
-                    />
+                    {formData.eduCategory === "ETC" ? (<input
+                        type="text"
+                        name="eduTitle"
+                        id="eduTitle"
+                        value={formData.eduTitle}
+                        onChange={handleChange}
+                        autoComplete="off"
+                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
+                    />):( <input
+                        type="text"
+                        name="eduClass"
+                        id="eduClass"
+                        value={mapEduCategoryName(formData.eduCategory)}
+                        readOnly
+                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 bg-gray-100 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
+                    />)}
+
                   </div>
                 </div>
-              )}
+              {/*)}*/}
             </div>
             <div id="charge" className="flex items-baseline justify-start">
               <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
@@ -363,8 +359,11 @@ function SafetyEduReg() {
                   type="datetime-local"
                   id="starttimepicker"
                   className="block w-56 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
-                  value={selectedStartTime}
-                  onChange={handleStartTimeChange}
+                  value={
+                    formData.eduStartTime instanceof Date
+                        ? new Date(formData.eduStartTime.getTime() + (9 * 60 * 60 * 1000)).toISOString().slice(0, 16)
+                        : formData.eduStartTime
+                  }
                   min={new Date().toISOString().slice(0, 16)}
                 />
 
@@ -422,9 +421,7 @@ function SafetyEduReg() {
                       <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-16 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
                         <span className="flex items-center">
                           <span className="ml-3 block truncate">
-                            {selectedDuty
-                              ? mapDutyName(selectedDuty.name)
-                              : "선택"}
+                            {mapDutyName(formData.eduTarget)}
                           </span>
                         </span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
@@ -637,7 +634,7 @@ function SafetyEduReg() {
                 저장하기
               </button>
             </div>
-            <h1>파일 업로드</h1>
+            {/*<h1>파일 업로드</h1>*/}
             {/*<FilePond*/}
             {/*    allowMultiple={true}*/}
             {/*    maxFiles={5}*/}

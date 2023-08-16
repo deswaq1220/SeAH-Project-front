@@ -44,74 +44,43 @@ export default function SafetyEduDetails() {
     },
   });
 
-  // useEffect(() => {
-  //   // 서버에서 교육 세부 정보 가져오기 (교육 아이디값 이용)
-  //   axios
-  //     .get(`http://localhost:8081/edudetails/${eduId}`)
-  //     .then((response) => {
-  //       // 가져온 데이터로 상태 업데이트
-  //       setEducation((prevEducation) => ({
-  //         ...prevEducation,
-  //         formData: {
-  //           eduTitle: response.data.eduTitle,
-  //           eduInstructor: response.data.eduInstructor,
-  //           eduPlace: response.data.eduPlace,
-  //           eduCategory: response.data.eduCategory,
-  //           eduStartTime: response.data.eduStartTime,
-  //           eduSumTime: response.data.eduSumTime,
-  //           eduTarget: response.data.eduTarget,
-  //           eduContent: response.data.eduContent,
-  //           eduWriter: response.data.eduWriter,
-  //           eduId: response.data.eduId,
-  //           // 기타 필드들도 API 응답에 따라 추가
-  //         },
-  //       }));
-  //     })
-  //     .catch((error) => {
-  //       // 에러 처리
-  //       console.error("교육 세부 정보를 가져오는 중 에러 발생:", error);
-  //     });
-  // }, [eduId]);
-
   useEffect(() => {
     const fetchEduDetail = async () => {
       try {
         const response = await axios.get(
-          `http://172.20.20.252:8081/edudetails/${eduId}`,        // 세아
-          // `http://localhost:8081/edudetails/${eduId}`
+          // `http://172.20.20.252:8081/edudetails/${eduId}`,        // 세아
+          `http://localhost:8081/edudetails/${eduId}`
         );
         //        setUploadedFiles(response.data.eduFiles);
-        setEduData({ ...response.data, eduFiles: response.data.eduFiles });
-        console.log("파일이름 찾기");
-        console.log(eduData);
-        // console.log(response.data); // 확인용 로그
-        console.log(eduData);
+        setEduData({ ...response.data, eduFileList: response.data.eduFileList});
+
+
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-
     fetchEduDetail();
   }, [eduId]);
 
-  useEffect(() => {
-    if (eduData) {
-      // eduData가 유효한 경우, 해당 값을 formData에 설정합니다.
-      setFormData({
-        eduCategory: eduData.eduCategory,
-        eduTitle: eduData.eduTitle,
-        eduInstructor: eduData.eduInstructor,
-        eduPlace: eduData.eduPlace,
-        eduStartTime: new Date(eduData.eduStartTime),
-        eduSumTime: eduData.eduSumTime,
-        eduTarget: eduData.eduTarget,
-        eduContent: eduData.eduContent,
-        eduWriter: eduData.eduWriter,
-        files: null, // 파일 관련 데이터는 여기서 설정하지 않음
-        eduId: eduData.eduId,
-      });
-    }
-  }, [eduData, setFormData]);
+  // useEffect(() => {
+  //   if (eduData) {
+  //     // eduData가 유효한 경우, 해당 값을 formData에 설정합니다.
+  //     setFormData({
+  //       eduCategory: eduData.eduCategory,
+  //       eduTitle: eduData.eduTitle,
+  //       eduInstructor: eduData.eduInstructor,
+  //       eduPlace: eduData.eduPlace,
+  //       eduStartTime: new Date(eduData.eduStartTime),
+  //       eduSumTime: eduData.eduSumTime,
+  //       eduTarget: eduData.eduTarget,
+  //       eduContent: eduData.eduContent,
+  //       eduWriter: eduData.eduWriter,
+  //       files: null, // 파일 관련 데이터는 여기서 설정하지 않음
+  //       eduId: eduData.eduId,
+  //       eduFileList :
+  //     });
+  //   }
+  // }, [eduData, setFormData]);
 
   // 엑셀!!!!!!!!!!!
 
@@ -176,6 +145,7 @@ export default function SafetyEduDetails() {
         return duty;
     }
   };
+
 
   const handleEditClick = () => {
     // educationId는 해당 교육의 아이디 값입니다.
@@ -270,12 +240,15 @@ export default function SafetyEduDetails() {
                   첨부파일
                 </dt>
                 <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                  {eduData.eduFiles && eduData.eduFiles.length > 0 ? (
+                  {/*<div>{eduData.eduFileList[0].eduFileName}</div>*/}
+
+                  {eduData.eduFileList.length > 0 ? (
+
                     <ul
                       role="list"
                       className="divide-y divide-gray-100 rounded-md border border-gray-200"
                     >
-                      {eduData.eduFiles.map((eduFiles, index) => (
+                      {eduData.eduFileList.map((eduFile, index) => (
                         <li
                           key={index}
                           className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6"
@@ -287,10 +260,10 @@ export default function SafetyEduDetails() {
                             />
                             <div className="ml-4 flex min-w-0 flex-1 gap-2">
                               <span className="truncate font-medium">
-                                {eduFiles}
+                                {eduFile.eduFileOriName}
                               </span>
                               <span className="flex-shrink-0 text-gray-400">
-                                {eduFiles.size}
+                                {eduFile.size}
                               </span>
                             </div>
                           </div>

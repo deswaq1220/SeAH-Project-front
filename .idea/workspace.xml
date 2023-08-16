@@ -6,18 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="c20fbe9c-9169-4241-9ec0-dff0f7b0e503" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Email.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Email.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/page/manager/SafetyEduDetails.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/SafetyEduDetails.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/UserSafetyEduAttendance.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserSafetyEduAttendance.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/UserSelectInspection.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserSelectInspection.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/Userfrequent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/Userfrequent.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/UserfrequentReg.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserfrequentReg.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/actionrequest.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/actionrequest.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/danger.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/danger.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/falsetrap.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/falsetrap.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/injured.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/injured.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/sourceDanger.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/sourceDanger.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/setupProxy.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/setupProxy.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/SafetyEduReg.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/SafetyEduReg.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/SafetyEducationMain.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/SafetyEducationMain.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/useHook/useSafetyEduForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/useHook/useSafetyEduForm.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +41,7 @@
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/SeAHAnDIT/Desktop/SeAH_Project",
+    "last_opened_file_path": "C:/SpringBootWork/SeAH-Project-front",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -72,6 +64,7 @@
       <workItem from="1691713230968" duration="2404000" />
       <workItem from="1691716036954" duration="5804000" />
       <workItem from="1691740020168" duration="121000" />
+      <workItem from="1692150139672" duration="14946000" />
     </task>
     <servers />
   </component>
