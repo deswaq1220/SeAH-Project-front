@@ -1,10 +1,13 @@
 import { Fragment, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
-import axios from "axios"; // axios를 임포트
+import axios from "axios"; // axios를 임포트]
+
+
 const people = [
   { id: 1, name: "[선택]" },
   { id: 2, name: "[주조]" },
+  { id: 2, name: "[압출]" },
   { id: 3, name: "[가공]" },
   { id: 4, name: "[품질]" },
   { id: 5, name: "[생산기술]" },
@@ -15,30 +18,29 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function FacilityReg() {
+export default function FacilityReg({ fetchData, handleNewData }) {
   const [selected, setSelected] = useState(people[0]);
   const [facilityName, setFacilityName] = useState(""); // 설비명 관련 상태 추가
 
-
   const handleRegister = async () => {
-    // 버튼 클릭 시 호출되는 함수
-
     const requestData = {
       masterdataFacility: facilityName,
       masterdataPart: selected.name,
     };
 
     try {
-      const response = await axios.post("http://localhost:8081/master", requestData); // POST 요청 보내기
+      const response = await axios.post(
+        "http://localhost:8081/master",
+        requestData
+      );
       console.log("서버 응답:", response.data);
-      // 서버로부터 응답을 받아와 필요한 처리 수행
+      fetchData();
+      // Add this line to update FacilityTable's state directly
+      handleNewData(response.data); 
     } catch (error) {
       console.error("서버 요청 오류:", error);
     }
   };
-
-
- 
 
   return (
     <div className="px-8">

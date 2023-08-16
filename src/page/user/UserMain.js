@@ -19,7 +19,7 @@ function UserMain() {
     {
       id: 2,
       name: '안전점검',
-      href: '/userselectInspection',
+      href: '/404',
       imageSrc: worker,
       imageAlt: '안전점검',
     },
