@@ -50,8 +50,8 @@ function UserfrequentReg() {
  const [speComplete, setSpeComplete] = useState("");
  const [files, setFiles] = useState(null);
  // 이메일 세팅
-    const [yEmailNameStr, setYEmailNameStr] = useState("");
-    const [yEmailAddStr, setYEmailAddStr] = useState("");
+ const [yEmailNameStr, setYEmailNameStr] = useState("");
+ const [yEmailAddStr, setYEmailAddStr] = useState("");
 
  // Inspector 콜백 함수 : 점검자(이름, 이메일, 사원번호)
  const handleInspectorDataChange = (inspectorForm) => {
@@ -248,7 +248,6 @@ function UserfrequentReg() {
 
 
  return (
-
      <>
       <UserHeader />
       <p>수시점검</p>

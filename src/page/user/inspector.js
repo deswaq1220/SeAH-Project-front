@@ -26,7 +26,6 @@ export default function Inspector({onFormDataChange}) {
             inspectorname: updatedFormDate.inspectorname,
             inspectoremail : updatedFormDate.inspectoremail+seahDomain
         });
-
     };
 
     return (
