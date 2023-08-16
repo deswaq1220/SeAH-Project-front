@@ -29,7 +29,8 @@ export default function FacilityReg() {
     };
 
     try {
-      const response = await axios.post("http://localhost:8081/master", requestData); // POST 요청 보내기
+      const response = await axios.post("http://http://172.20.20.252:8081/master", requestData); //세아
+      // const response = await axios.post("http://localhost:8081/master", requestData); // POST 요청 보내기
       console.log("서버 응답:", response.data);
       // 서버로부터 응답을 받아와 필요한 처리 수행
     } catch (error) {
