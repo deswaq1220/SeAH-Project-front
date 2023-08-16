@@ -29,11 +29,6 @@ registerPlugin(FilePondPluginImagePreview);
 function classNames(...classes) {
  return classes.filter(Boolean).join(" ");
 }
-const handleFileUpload = (acceptedFiles) => {
-    // console.log(acceptedFiles);
-};
-
-
 
 
 function UserfrequentReg() {
@@ -115,52 +110,6 @@ function UserfrequentReg() {
 
  const navigate = useNavigate();
 
- // const handleFormSubmit = () => {
- //   const requestData = {
- //     speEmpNum,
- //     spePerson,
- //     speEmail,
- //     speDanger,
- //     speInjure,
- //     speCause,
- //     speTrap,
- //     speRiskAssess,
- //     speContent,
- //     speActPerson,
- //     speActEmail,
- //     speActContent,
- //     speComplete,
- //   }
-
-
-
-
-//   //파일업로드용
-//   const uppy = new Uppy({
-//     restrictions: {
-//       allowedFileTypes: [
-//         ".jpg",
-//         ".jpeg",
-//         ".png",
-//         ".pdf",
-//         ".doc",
-//         ".docx",
-//         "bmp",
-//         "HEIC",
-//       ],
-//       maxFileSize: 10485760,
-//       maxNumberOfFiles: 5,
-//     },
-//     autoProceed: true, // 파일 선택 후 업로드를 수동으로 시작하도록 설정
-//   });
-
-// //   uppy.use(XHRUpload, {
-// //     endpoint: "http://localhost:8081/edureg",
-// //     formData: true,
-// //     fieldName: "files", // 서버로 파일을 보낼 때 사용할 필드 이름
-// //   });
-
-
 
  const handleFormSubmit = () => {
   const formData = new FormData();        // 폼데이터 객체 생성
@@ -219,8 +168,8 @@ function UserfrequentReg() {
 
   // 수시점검 등록 요청
   axios
-      // .post(`http://172.20.20.252:8081/special/new/${masterdataPart}/${masterdataFacility}`, formData, {   // 세아
-      .post(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`, formData, {
+      .post(`http://172.20.20.252:8081/special/new/${masterdataPart}/${masterdataFacility}`, formData, {   // 세아
+      // .post(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`, formData, {
        //  .post(`http://192.168.202.1:8081/special/new/${masterdataPart}/${masterdataFacility}`, formData, {
        headers: {
         "Content-Type": "multipart/form-data",
@@ -233,7 +182,7 @@ function UserfrequentReg() {
         // 등록이 완료되었다는 알림 띄우기
         toast.success("등록이 완료되었습니다.", {
          position: "top-center",
-         autoClose: 3000, // 알림이 3초 후에 자동으로 사라짐
+         autoClose: 2000, // 알림이 3초 후에 자동으로 사라짐
          hideProgressBar: true,
         });
 
@@ -272,127 +221,19 @@ function UserfrequentReg() {
       <InspectionDetails onFormDataChange={handleInspectionDetailsDataChange} /> {/* 점검내용 */}
       {/* 개선대책 */}
       <div id="ReformMeasures" className="grid sm:flex items-baseline justify-start">
-
-//     const handleFormSubmit = () => {
-//         const formData = new FormData();        // 폼데이터 객체 생성
-//         // const requestData = {
-//         //     speEmpNum,
-//         //     spePerson,
-//         //     speEmail,
-//         //     speDanger,
-//         //     speInjure,
-//         //     speCause,
-//         //     speTrap,
-//         //     speRiskAssess,
-//         //     speContent,
-//         //     speActPerson,
-//         //     speActEmail,
-//         //     speActContent,
-//         //     speComplete,
-//         // };
-
-//         // 업로드 파일 배열 저장
-//         if(files !== null){
-//          for(let i=0; i<files.length; i++){
-//           formData.append('files', files[i]);
-//          }
-//         }
-//         formData.append('speEmpNum', speEmpNum);
-//         formData.append('spePerson', spePerson);
-//         formData.append('speEmail', speEmail);
-//         formData.append('speDanger', speDanger);
-//         formData.append('speInjure', speInjure);
-//         formData.append('speCause', speCause);
-//         formData.append('speTrap', speTrap);
-//         formData.append('speRiskAssess', speRiskAssess);
-//         formData.append('speContent', speContent);
-//         formData.append('speActPerson', speActPerson);
-//         formData.append('speActEmail', speActEmail);
-//         formData.append('speActContent', speActContent);
-//         formData.append('speComplete', speComplete);
-
-//         console.log(formData); // 요청 데이터 콘솔에 출력
-
-//         // 수시점검 등록 요청
-//         axios
-//         .post(`http://172.20.20.252:8081/special/new/${masterdataPart}/${masterdataFacility}`, formData, {   // 세아
-//             //  .post(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`, formData, {
-
-//                 headers: {
-//                     "Content-Type": "multipart/form-data",
-//                 },
-//             })
-//             .then((response) => {
-//                 console.log(response);
-
-//                 // 등록이 완료되었다는 알림 띄우기
-//                 toast.success("등록이 완료되었습니다.", {
-//                     position: "top-center",
-//                     autoClose: 1000, // 알림이 3초 후에 자동으로 사라짐
-//                     hideProgressBar: true,
-//                 });
-
-//                 // 저장성공시 해당설비의 리스트 페이지
-//                 navigate(`/special/list/${masterdataPart}/${masterdataFacility}`);
-//             })
-//             .catch((error) => {
-//                 // console.log(requestData);
-//                 console.log(formData);
-//                 console.error(error);
-//                 alert("수시점검 등록에 실패했습니다. 다시 시도해주세요.");
-//             });
-//     };
-
-
-//     return (
-
-//         <>
-//             <UserHeader />
-//             <p>수시점검</p>
-//             <p>수시점검 내용등록</p>
-//             <Inspector onFormDataChange={handleInspectorDataChange} /> {/* 점검자 */}
-//             <Inspectionarea /> {/* 점검영역 */}
-//             <Facilityname /> {/* 설비명 */}
-//             <Danger onFormDataChange={handleDangerDataChange} /> {/* 위험분류 */}
-//             <Injured onFormDataChange={handleInjuredDataChange} /> {/* 부상부위 */}
-//             <Dangersource onFormDataChange={handleCauseDataChange} /> {/* 위험원인 */}
-//             <Falsetrap onFormDataChange={handleFalsetrapDataChange} /> {/* 실수함정 */}
-//             <RiskAssessment onFormDataChange={handleRiskAssessmentDataChange} /> {/* 위험성평가 */}
-//             {/* 위험분류 표 */}
-//             <div className="flex flex-col justify-center items-center border border-gray-300 px-3 mx-3 ">
-//                 <p className=" font-semibold text-lg">평가표</p>
-//                 <img src={DangerImg} className=" p-3 w-100"></img>
-//             </div>
-//             <InspectionDetails onFormDataChange={handleInspectionDetailsDataChange} /> {/* 점검내용 */}
-//             {/* 개선대책 */}
-//             <div id="ReformMeasures" className="grid sm:flex items-baseline justify-start">
-
-                <span
-                    className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 my-4 ml-4 ">
-                    개선대책
-                </span>
+        <span
+            className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 my-4 ml-4 ">
+            개선대책
+        </span>
 
        <div className="mt-2 ">
           <textarea
-
               rows={4}
               name="comment"
               id="comment"
               className="block w-72 rounded-md border-0  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 border-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 p-2 mr-3 ml-4"
-              // defaultValue={""}
               value={speActContent}
               onChange={handleActContChange}
-
-//             rows={4}
-//             name="comment"
-//             id="comment"
-//             className="block w-72 rounded-md border-0  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 border-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 p-2 mr-3 ml-4"
-//             // defaultValue={""}
-//             value={speActContent}
-//             required
-//             placeholder={"내용을 입력하세요"}
-//             onChange={handleActContChange}
-
           />
        </div>
       </div>
@@ -401,20 +242,7 @@ function UserfrequentReg() {
       <IsCompelete onFormDataChange={handleIsCompeleteDataChange} />{" "}{/* 완료여부 */}
       {/* 경원추가 */}
       <h1>파일 업로드</h1>
-
-             {/* <FilePond */}
-            {/* //     allowMultiple={true}
-            //     maxFiles={5}
-            //     onupdatefiles={(fileItems) => {
-            //         const acceptedFiles = fileItems.map(
-            //             (fileItem) => fileItem.file
-            //         );
-            //         handleFileUpload(acceptedFiles);
-            //     }}
-            // /> */}
-
       <FilePond
-
           allowMultiple={true} // 다중 파일 업로드 허용
           maxFiles={5} // 최대 파일 수 설정
           // 엔드포인트는 백엔드 구현되면 연결요
@@ -423,17 +251,7 @@ function UserfrequentReg() {
            const selectedFiles = fileItems.map(fileItem => fileItem.file);
            setFiles(selectedFiles);
           }}
-
-//         allowMultiple={true} // 다중 파일 업로드 허용
-//         maxFiles={5} // 최대 파일 수 설정
-//         // 엔드포인트는 백엔드 구현되면 연결요
-//         onupdatefiles={(fileItems) => {
-//             // 파일 정보를 상태에 저장하거나 처리
-//             const selectedFiles = fileItems.map(fileItem => fileItem.file);
-//             setFiles(selectedFiles);
-//         }}
       />
-
 
       <div className="flex justify-center w-full mt-8 mb-10">
        <button
