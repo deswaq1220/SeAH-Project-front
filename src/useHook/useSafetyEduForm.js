@@ -275,8 +275,8 @@ const useSafetyEduForm = (eduData) => {
 
 
         const response = await axios.post(
-            `http://localhost:8081/edudetails/${formData.eduId}`,
-            // `http://172.20.20.252:8081/edudetails/${formData.eduId}`, //세아
+            //  `http://localhost:8081/edudetails/${formData.eduId}`,
+            `http://172.20.20.252:8081/edudetails/${formData.eduId}`, //세아
             formData,
             {
               headers: {
@@ -289,8 +289,8 @@ const useSafetyEduForm = (eduData) => {
       } else {
         // 새로운 교육 데이터를 등록하는 경우 (POST 요청)
         const response = await axios.post(
-            "http://localhost:8081/edureg",
-            // "http://172.20.20.252:8081/edureg", // 세아
+            //  "http://localhost:8081/edureg",
+            "http://172.20.20.252:8081/edureg", // 세아
             formData,
             {
               headers: {

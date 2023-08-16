@@ -10,6 +10,8 @@
       <change beforePath="$PROJECT_DIR$/src/page/manager/SafetyEduReg.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/SafetyEduReg.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/page/manager/SafetyEducationMain.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/SafetyEducationMain.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/useHook/useSafetyEduForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/useHook/useSafetyEduForm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/UserfrequentReg.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserfrequentReg.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/actionrequest.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/actionrequest.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +52,12 @@
     "ts.external.directory.path": "C:\\Program Files\\JetBrains\\IntelliJ IDEA 2023.1.2\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\user\Documents\GitHub\SeAH-Project-front\src\style" />
+    </key>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -60,11 +67,16 @@
       <option name="presentableId" value="Default" />
       <updated>1691461728933</updated>
       <workItem from="1691461777275" duration="540000" />
+      <workItem from="1692076967426" duration="23674000" />
       <workItem from="1691643310933" duration="9625000" />
       <workItem from="1691713230968" duration="2404000" />
       <workItem from="1691716036954" duration="5804000" />
       <workItem from="1691740020168" duration="121000" />
       <workItem from="1692150139672" duration="14946000" />
+      <workItem from="1691821231365" duration="96000" />
+      <workItem from="1692081827503" duration="8676000" />
+      <workItem from="1692113588397" duration="1337000" />
+      <workItem from="1692171423924" duration="7439000" />
     </task>
     <servers />
   </component>

@@ -37,8 +37,8 @@ function EduAttenStatics() {
         const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
         const currentYear = getYear(currentDate);
         const response = await axios.get(
-            "http://172.20.20.252:8081/edustatistics/getmonth",
-          //"http://localhost:8081/edustatistics/getmonth",
+           "http://172.20.20.252:8081/edustatistics/getmonth",
+          // "http://localhost:8081/edustatistics/getmonth",
           {
             params: {
               eduCategory: selectedCategory,
@@ -68,8 +68,8 @@ function EduAttenStatics() {
     try {
 
       const response = await axios.get(
-         "http://172.20.20.252:8081/edustatistics/getmonth", {   // 세아
-        //"http://localhost:8081/edustatistics/getmonth", {
+          "http://172.20.20.252:8081/edustatistics/getmonth", {   // 세아
+        // "http://localhost:8081/edustatistics/getmonth", {
 
         params: {
           year: currentDate.getFullYear(),
@@ -349,7 +349,7 @@ function EduAttenStatics() {
                           {item.eduTitle}
                         </td>
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
-                          {format(new Date(item.eduStartTime), "yyyy-MM-dd HH시 mm분")}
+                        {format(new Date(item.eduStartTime), "yyyy-MM-dd HH시 mm분")}
                         </td>
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           {item.eduSumTime} 분
