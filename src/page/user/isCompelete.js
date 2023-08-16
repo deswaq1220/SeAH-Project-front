@@ -64,13 +64,16 @@ export default function IsCompelete({ onFormDataChange }) {
                     {completionStatusOptions.map((option) => (
                       <Listbox.Option
                         key={option.id}
-                        className={({ active }) =>
-                          classNames(
-                            active
-                              ? "bg-seahColor text-white"
-                              : "text-gray-900",
-                            "relative cursor-default select-none py-2 pl-3 pr-9"
-                          )
+                        disabled={option.id === 2}
+                        className={({ active, disabled }) =>
+                            classNames(
+                                active
+                                    ? "bg-seahColor text-white"
+                                    : disabled // 비활성화된 옵션을 연하게 표시
+                                        ? "text-gray-400 cursor-not-allowed"
+                                        : "text-gray-900 cursor-pointer",
+                                "relative select-none py-2 pl-3 pr-9"
+                            )
                         }
                         value={option}
                       >
