@@ -20,7 +20,7 @@ export default function SafetyEduDetails() {
 
   const [uploadedFiles, setUploadedFiles] = useState([]);
 
-  const [updatedData, setUpdatedData] = useState({}); // Initialize with an empty object
+  const [updatedData, setUpdatedData] = useState({});
 
   const navigate = useNavigate();
 
@@ -42,7 +42,6 @@ export default function SafetyEduDetails() {
       eduContent: "", // 교육내용
       eduWriter: "",
       eduId: "",
-      // 기타 폼 필드들도 여기에 추가
     },
   });
 
@@ -57,12 +56,11 @@ export default function SafetyEduDetails() {
 
         );
         // console.log(response.data);
-        //  setUploadedFiles(response.data.eduFiles);
+        setUploadedFiles(response.data.eduFiles);
         setEduData({ ...response.data, eduFiles: response.data.eduFiles });
 
         console.log("파일이름 찾기");
         console.log(eduData.eduFiles);
-        // console.log(response.data); // 확인용 로그
 
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -267,32 +265,34 @@ export default function SafetyEduDetails() {
                     </dd>
                   </div>
                   <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                    <dt className="text-base font-bold leading-6 text-gray-900">
-                      첨부파일
-                    </dt>
-                    <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                      {eduData.eduFiles && eduData.eduFiles.length > 0 ? (
-                          <ul
-                              role="list"
-                              className="divide-y divide-gray-100 rounded-md border border-gray-200"
-                          >
-                            {eduData.eduFiles.map((eduFile, index) => (
-                                <li
-                                    key={index}
-                                    className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6"
-                                >
-                                  <div className="flex w-0 flex-1 items-center">
-                                    <PaperClipIcon
-                                        className="h-5 w-5 flex-shrink-0 text-gray-400"
-                                        aria-hidden="true"
-                                    />
-                                    <div className="ml-4 flex min-w-0 flex-1 gap-2">
+                  <dt className="text-base font-bold leading-6 text-gray-900">
+                  첨부파일
+                </dt>
+                <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                  {eduData.eduFiles && eduData.eduFiles.length > 0 ? (
+                    <ul
+                      role="list"
+                      className="divide-y divide-gray-100 rounded-md border border-gray-200"
+                    >
+                      {eduData.eduFiles.map((eduFiles, index) => (
+                        <li
+                          key={index}
+                          className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6"
+                        >
+                          <div className="flex w-0 flex-1 items-center">
+                            <PaperClipIcon
+                              className="h-5 w-5 flex-shrink-0 text-gray-400"
+                              aria-hidden="true"
+                            />
+                            <div className="ml-4 flex min-w-0 flex-1 gap-2">
                               <span className="truncate font-medium">
-                                {eduFile.eduFileName}
+                                {eduFiles}
                               </span>
-
-                                    </div>
-                                  </div>
+                              <span className="flex-shrink-0 text-gray-400">
+                                {eduFiles.size}
+                              </span>
+                            </div>
+                          </div>
                                   {/* <div className="ml-4 flex-shrink-0">
                             <a
                               href="#"
