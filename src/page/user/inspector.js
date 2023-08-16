@@ -8,17 +8,25 @@ export default function Inspector({onFormDataChange}) {
         inspectorname: "",
         inspectoremail: "",
     });
+    // 고정도메인(세아)
+    const [seahDomain : setSeahDomain] = useState("@seah.co.kr");
 
     // 입력란 변경 시 상태 업데이트 함수
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prevFormData) => ({
-            ...prevFormData,
+        // 새로운 상태 업데이트
+        const updatedFormDate = {
+            ...formData,
             [name]: value,
-        }));
-
+        }
+        setFormData(updatedFormDate);
         // 폼 데이터 업데이트 후에 콜백 호출
-        onFormDataChange(formData);
+        onFormDataChange({
+            employeenumber: updatedFormDate.employeenumber,
+            inspectorname: updatedFormDate.inspectorname,
+            inspectoremail : updatedFormDate.inspectoremail+seahDomain
+        });
+
     };
 
     return (
@@ -65,6 +73,14 @@ export default function Inspector({onFormDataChange}) {
                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
                         value={formData.inspectoremail}                   // 상태 value로 설정
                         onChange={handleInputChange}       // 입력란 변경 시 상태업데이트
+                    />
+                    <input
+                        type="text"
+                        name="emailDomain"
+                        id="emailDomain"
+                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
+                        value={seahDomain}
+                        readOnly
                     />
                 </div>
             </div>
