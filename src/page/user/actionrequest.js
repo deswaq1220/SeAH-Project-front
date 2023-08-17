@@ -19,7 +19,7 @@ export default function ActionRquest({ onFormDataChange }) {
     async function emailFetchDataWithAxios() {
       try {
         const response = await axios.get(
-            `http://172.20.20.252:8081/special/new/${masterdataPart}/${masterdataFacility}`
+            `${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataFacility}`
         );
 
         const emailListFromBack = response.data["emailList"];

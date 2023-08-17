@@ -69,7 +69,7 @@ function UserSafetyEduAttendance() {
     // 버튼이 비활성화되어 있더라도 클릭 이벤트가 발생하도록 수정
     axios
       .post(
-          `http://172.20.20.252:8081/usereduatten/register/${eduId}`,     // 세아
+          `${process.env.REACT_APP_API_BASE_URL}/usereduatten/register/${eduId}`,     // 세아
         //  `http://localhost:8081/usereduatten/register/${eduId}`,
         requestData, {
         //http://localhost:8081/usereduatten/register 이거는 진짜 사용할때

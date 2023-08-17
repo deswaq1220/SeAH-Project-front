@@ -90,7 +90,7 @@ export default function UserSelectInspection() {
     // Json값 가져와서 세팅
     function fetchDataWithAxios(masterdataPart, masterdataFacility) {
       axios
-          .get(`http://172.20.20.252:8081/special/${masterdataPart}/${masterdataFacility}`)   // 세아
+          .get(`${process.env.REACT_APP_API_BASE_URL}/special/${masterdataPart}/${masterdataFacility}`)   // 세아
           //  .get(`http://localhost:8081/special/${masterdataPart}/${masterdataFacility}`)
           .then((response) => {
             const data = response.data;

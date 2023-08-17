@@ -95,24 +95,24 @@ function SafetyInspectionStatisticsMonthImg() {
         try {
 
             //점검건수 값
-             await axios.get(`http://172.20.20.252:8081/special/statistics/count`, { params: { yearmonth: selectedYear } })  //세아
-            //  await axios.get(`http://localhost:8081/special/statistics/count`, { params: { yearmonth: selectedYear } })
+             await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/count`, { params: { yearmonth: selectedYear } })  //세아
+            //  await axios.get(`${process.env.REACT_APP_API_BASE_URL}/statistics/count`, { params: { yearmonth: selectedYear } })
                 .then(response => {
                     setSpcCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
                     console.log(response.data);
                 })
 
             //영역값(엑셀용)
-            await axios.get(`http://172.20.20.252:8081/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })  //세아
-           //await axios.get(`http://localhost:8081/special/statistics/partandmonthforexcel`, { params: { yearmonth: selectedYear } })
+            await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })  //세아
+           //await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/partandmonthforexcel`, { params: { yearmonth: selectedYear } })
                 .then(response => {
                     setPartCountForExcel(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
                     console.log("체크체크체크"+response.data);
                 })
 
             //영역값2
-            await axios.get(`http://172.20.20.252:8081/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })  //세아
-           //await axios.get(`http://localhost:8081/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })
+            await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })  //세아
+           //await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })
                 .then(response => {
                     setPartCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
                     console.log(response.data);
@@ -121,16 +121,16 @@ function SafetyInspectionStatisticsMonthImg() {
 
 
             //위험분류값
-            await axios.get(`http://172.20.20.252:8081/special/statistics/dangerandmonth`, { params: { yearmonth: selectedYear } })  //세아
-            //await axios.get(`http://localhost:8081/special/statistics/dangerandmonth`, { params: { yearmonth: selectedYear } })
+            await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/dangerandmonth`, { params: { yearmonth: selectedYear } })  //세아
+            //await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/dangerandmonth`, { params: { yearmonth: selectedYear } })
                 .then(response => {
                     setDangerCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
                     console.log(response.data);
                 })
 
             //위험원인값
-             await axios.get(`http://172.20.20.252:8081/special/statistics/causeandmonth`, { params: { yearmonth: selectedYear } })  //세아
-             //await axios.get(`http://localhost:8081/special/statistics/causeandmonth`, { params: { yearmonth: selectedYear } })
+             await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/causeandmonth`, { params: { yearmonth: selectedYear } })  //세아
+             //await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/causeandmonth`, { params: { yearmonth: selectedYear } })
                 .then(response => {
                     setCauseCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
                     console.log(response.data);

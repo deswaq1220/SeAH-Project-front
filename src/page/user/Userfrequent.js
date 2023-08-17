@@ -19,7 +19,7 @@ export default function Userfrequent() {
   useEffect(() => {
     function fetchDataWithAxios(masterdataPart, masterdataFacility) {
       axios
-          .get(`http://172.20.20.252:8081/special/list/${masterdataPart}/${masterdataFacility}`) //세아
+          .get(`${process.env.REACT_APP_API_BASE_URL}/special/list/${masterdataPart}/${masterdataFacility}`) //세아
           // .get(`http://localhost:8081/special/list/${masterdataPart}/${masterdataFacility}`)
           .then((response) => {
             const dataFromBackend = response.data.listOfFac;

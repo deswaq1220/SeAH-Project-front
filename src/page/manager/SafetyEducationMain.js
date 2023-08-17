@@ -36,8 +36,8 @@ function SafetyEducationMain() {
       try {
         const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
         const currentYear = getYear(currentDate);
-        const response = await axios.get("http://172.20.20.252:8081/edumain", {   // 세아
-        // const response = await axios.get("http://localhost:8081/edumain", {
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/edumain`, {   // 세아
+        // const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/edumain`, {
           params: {
             year: currentYear,
             month: currentMonth,
