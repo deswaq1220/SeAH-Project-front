@@ -20,6 +20,7 @@ import EduStatics from "./page/manager/EduStatics"
 import EduAttenStatics from "./page/manager/EduAttenStatics"
 import FrequentIns from "./page/manager/SafetyFrequentInspection";
 import AttenStatus from "./page/manager/AttendanceStatus";
+import UserFrequentDetails from "./page/user/UserFrequentDetails/UserFrequentDetails";
 
 //다인 씀
 import SafetyInspectionStatisticsYearImg from "./page/manager/SafetyInspectionStatisticsYearImg";
@@ -76,6 +77,9 @@ function App() {
         <Route path="/special/new/:masterdataPart/:masterdataFacility" element={<UserfrequentReg/>}></Route>{/* 사용자 수시점검등록페이지 */}
 
         <Route path="/userfrequentreg" element={<UserfrequentReg/>}></Route>{/* 수시점검 등록페이지 */}
+
+        <Route path="/userfrequentdetails/:speId" element={<UserFrequentDetails/>}></Route>{/* 수시점검 상세페이지 */}
+
 
         <Route path="/404" element={<Error/>}></Route> {/* 에러 */}
       </Routes>

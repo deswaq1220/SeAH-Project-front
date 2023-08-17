@@ -57,6 +57,7 @@ export default function AttenStatus() {
         '출석일자': attendance.attenTime
       };
     });
+    excelData.unshift({ '교육 제목': eduData.eduTitle });
 
     const worksheet = XLSX.utils.json_to_sheet(excelData);
     const workbook = XLSX.utils.book_new();
