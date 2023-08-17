@@ -11,7 +11,6 @@ function classNames(...classes) {
 export default function ActionRquest({ onFormDataChange }) {
   const { masterdataPart, masterdataFacility } = useParams();
   const [emailDataList, setEmailDataList] = useState([]);
-  const [yEmailList, setYEmailList] = useState([]);
   const [instances, setInstances] = useState([{ selectedEmail: null }]);
 
 
@@ -25,17 +24,6 @@ export default function ActionRquest({ onFormDataChange }) {
         const emailListFromBack = response.data["emailList"];
         setEmailDataList(emailListFromBack);
 
-        const filteredEmails = emailListFromBack.filter((item) => item.masterStatus === "Y");
-        const filteredEmailNames = filteredEmails.map((email) => email.emailName).join(", ");
-        const filteredEmailAddresses = filteredEmails.map((email) => email.emailAdd).join(", ");
-        setYEmailList({
-          yEmailName: filteredEmailNames,
-          yEmailAdd: filteredEmailAddresses,
-        });
-        onFormDataChange({
-          yEmailName: filteredEmailNames,
-          yEmailAdd: filteredEmailAddresses,
-        });
       } catch (error) {
         console.error("데이터 가져오기 오류: ", error);
       }
@@ -62,8 +50,6 @@ export default function ActionRquest({ onFormDataChange }) {
     onFormDataChange({
       speActPerson: selectedEmailNames,
       speActEmail: selectedEmailAddresses,
-      yEmailName: yEmailList.yEmailName,
-      yEmailAdd: yEmailList.yEmailAdd,
     });
   };
 
@@ -89,8 +75,6 @@ export default function ActionRquest({ onFormDataChange }) {
     onFormDataChange({
       speActPerson: selectedEmailNames,
       speActEmail: selectedEmailAddresses,
-      yEmailName: yEmailList.yEmailName,
-      yEmailAdd: yEmailList.yEmailAdd,
     });
   };
 
@@ -139,8 +123,7 @@ export default function ActionRquest({ onFormDataChange }) {
                               {emailDataList.map((emailListItem) => (
                                   <Listbox.Option
                                       key={emailListItem.emailId}
-                                      disabled={emailListItem.masterStatus === 'Y'}
-                                      className={({active}) => classNames(active ? "bg-seahColor text-white" : emailListItem.masterStatus === 'Y' ? "bg-gray-200 " : "text-gray-900", "relative cursor-default select-none py-2 pl-3 pr-9")}
+                                      className={({active}) => classNames(active ? "bg-seahColor text-white" : "text-gray-900", "relative cursor-default select-none py-2 pl-3 pr-9")}
                                       value={emailListItem}
                                   >
                                     {({ selected, active }) => (

@@ -142,7 +142,7 @@ export default function Userfrequent() {
                     className="hover:bg-gray-100 cursor-pointer"
                     onClick={() => {
                       // 해당 줄을 클릭하면 상세 페이지로 이동
-                      navigate(`/userfrequentdetails/${person.speId}`);
+                      navigate(`/special/detail/${person.speId}`);
                     }}
                   >
                     <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
