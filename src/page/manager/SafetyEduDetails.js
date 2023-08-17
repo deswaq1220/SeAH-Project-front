@@ -51,7 +51,7 @@ export default function SafetyEduDetails() {
       try {
         const response = await axios.get(
             `${process.env.REACT_APP_API_BASE_URL}/edudetails/${eduId}`,        // 세아
-            //  `${process.env.REACT_APP_API_BASE_URL}/edudetails/${eduId}`
+            //  `http://localhost:8081/edudetails/${eduId}`
 
         );
         // console.log(response.data);
@@ -156,7 +156,7 @@ export default function SafetyEduDetails() {
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-          `http://172.20.20.252:8081/edudetails/${eduId}`
+          `${process.env.REACT_APP_API_BASE_URL}/edudetails/${eduId}`
       );
 
       if (response.status === 200) {
