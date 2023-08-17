@@ -199,7 +199,6 @@ function UserfrequentReg() {
       });
  };
 
-
  return (
      <>
       <UserHeader />
@@ -217,6 +216,7 @@ function UserfrequentReg() {
       <div className="flex flex-col justify-center items-center border border-gray-300 px-3 mx-3 ">
        <p className=" font-semibold text-lg">평가표</p>
        <img src={DangerImg} className=" p-3 w-100"></img>
+
       </div>
       <InspectionDetails onFormDataChange={handleInspectionDetailsDataChange} /> {/* 점검내용 */}
       {/* 개선대책 */}
