@@ -25,6 +25,12 @@ export default function UserFrequentDetailsTable() {
     return <div>Loading...</div>;
   }
 
+
+  // 호ㅘㄱ인용
+  console.log("확인용 inspectionData.speDetailFindId:"+inspectionData["speDetailFindId"]);
+  console.log("확인용 inspectionData.imageUrl:"+inspectionData["imageUrl"]);
+
+
   const formatDate = (dateString) => {
     const options = {
       year: "numeric",
@@ -193,15 +199,17 @@ export default function UserFrequentDetailsTable() {
               사진
             </dt>
             <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0 flex flex-wrap">
-              {inspectionData && inspectionData.speFileDetailFindIds
-                ? inspectionData.speFileDetailFindIds.map((file, index) => (
-                    <img
-                      key={index}
-                      src={`/images/${file.speFileName}`}
-                      alt={`사진 ${index + 1}`}
-                    />
+              {inspectionData.urlList.length > 0 ? (
+                  inspectionData.urlList.map((imageUrl, index) => (
+                      <img
+                          key={index}
+                          src={`${process.env.REACT_APP_API_BASE_URL}/special/detail/images/${imageUrl}`}
+                          alt={`사진 ${index + 1}`}
+                      />
                   ))
-                : "첨부된 사진이 없습니다"}
+              ) : (
+                  "첨부된 사진이 없습니다"
+              )}
             </dd>
           </div>
         </dl>
