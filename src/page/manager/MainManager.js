@@ -26,7 +26,7 @@ function Mainmanager() {
     {
       id: 3,
       name: '기준정보관리',
-      href: '/reinfo',
+      href: '/reginfo',
       imageSrc: info,
       imageAlt: '준비중',
     },

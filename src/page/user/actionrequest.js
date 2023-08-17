@@ -11,35 +11,20 @@ function classNames(...classes) {
 export default function ActionRquest({ onFormDataChange }) {
   const { masterdataPart, masterdataFacility } = useParams();
   const [emailDataList, setEmailDataList] = useState([]);
-  const [yEmailList, setYEmailList] = useState([]);
   const [instances, setInstances] = useState([{ selectedEmail: null }]);
-
 
   useEffect(() => {
     async function emailFetchDataWithAxios() {
       try {
         const response = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataFacility}`
+          `${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataFacility}`
         );
 
         const emailListFromBack = response.data["emailList"];
         setEmailDataList(emailListFromBack);
-
-        const filteredEmails = emailListFromBack.filter((item) => item.masterStatus === "Y");
-        const filteredEmailNames = filteredEmails.map((email) => email.emailName).join(", ");
-        const filteredEmailAddresses = filteredEmails.map((email) => email.emailAdd).join(", ");
-        setYEmailList({
-          yEmailName: filteredEmailNames,
-          yEmailAdd: filteredEmailAddresses,
-        });
-        onFormDataChange({
-          yEmailName: filteredEmailNames,
-          yEmailAdd: filteredEmailAddresses,
-        });
       } catch (error) {
         console.error("데이터 가져오기 오류: ", error);
       }
-
     }
     emailFetchDataWithAxios();
   }, [masterdataPart, masterdataFacility]);
@@ -47,26 +32,26 @@ export default function ActionRquest({ onFormDataChange }) {
   // -----------------------------------
   const handleActionChange = (instanceIndex, selectedEmail) => {
     const updatedInstances = [...instances];
-    updatedInstances[instanceIndex] = { selectedEmail };
+    updatedInstances[instanceIndex] = { selectedEmail: selectedEmail || null };
     setInstances(updatedInstances);
 
     // ,로 구분된 문자열로 변환하여 넘기기
     const updatedEmails = updatedInstances
-        .map((instance) => instance.selectedEmail)
-        .filter((email) => email !== null);
+      .map((instance) => instance.selectedEmail)
+      .filter((email) => email !== null);
 
-
-    const selectedEmailNames = updatedEmails.map((email) => email.emailName).join(", ");
-    const selectedEmailAddresses = updatedEmails.map((email) => email.emailAdd).join(", ");
+    const selectedEmailNames = updatedEmails
+      .map((email) => email.emailName)
+      .join(", ");
+    const selectedEmailAddresses = updatedEmails
+      .map((email) => email.emailAdd)
+      .join(", ");
 
     onFormDataChange({
       speActPerson: selectedEmailNames,
       speActEmail: selectedEmailAddresses,
-      yEmailName: yEmailList.yEmailName,
-      yEmailAdd: yEmailList.yEmailAdd,
     });
   };
-
 
   // 이메일 정보 추가 : +버튼
   const handleAddInstance = () => {
@@ -77,11 +62,15 @@ export default function ActionRquest({ onFormDataChange }) {
   const handleDeleteInstance = (index) => {
     const updatedInstances = instances.filter((_, i) => i !== index);
     const updatedEmails = updatedInstances
-        .map((instance) => instance.selectedEmail)
-        .filter((email) => email !== null);
+      .map((instance) => instance.selectedEmail)
+      .filter((email) => email !== null);
 
-    const selectedEmailNames = updatedEmails.map((email) => email.emailName).join(", ");
-    const selectedEmailAddresses = updatedEmails.map((email) => email.emailAdd).join(", ");
+    const selectedEmailNames = updatedEmails
+      .map((email) => email.emailName)
+      .join(", ");
+    const selectedEmailAddresses = updatedEmails
+      .map((email) => email.emailAdd)
+      .join(", ");
 
     setInstances(updatedInstances);
 
@@ -89,133 +78,172 @@ export default function ActionRquest({ onFormDataChange }) {
     onFormDataChange({
       speActPerson: selectedEmailNames,
       speActEmail: selectedEmailAddresses,
-      yEmailName: yEmailList.yEmailName,
-      yEmailAdd: yEmailList.yEmailAdd,
     });
   };
 
+   // 이메일 보내기 로직
+const sendEmails = async (staticEmailList) => {
+  const selectedEmails = instances
+    .map((instance) => instance.selectedEmail)
+    .filter((email) => email !== null);
+
+  const emailAddresses = selectedEmails.map((email) => email.emailAdd || ""); // 가능한 null 값을 처리합니다.
+  const staticEmailAddresses = staticEmailList.map((email) => email.emailAdd);
+
+  const allEmailAddresses = [...emailAddresses, ...staticEmailAddresses];
+
+
+  try {
+    const response = await axios.post(
+      `${process.env.REACT_APP_API_BASE_URL}/api/send-email`,
+      {
+        to: allEmailAddresses,
+        subject: "수시점검 요청입니다",
+        message: "Your Email Message",
+      }
+    );
+
+    // 이메일 전송 성공 시 처리
+    console.log("이메일 전송 성공:", response.data);
+  } catch (error) {
+    // 이메일 전송 실패 시 처리
+    console.error("이메일 전송 오류:", error);
+  }
+};
+
+
   return (
-      <div
-          id="ActionRequest"
-          className="grid sm:flex items-baseline justify-start"
-      >
+    <div
+      id="ActionRequest"
+      className="grid sm:flex items-baseline justify-start"
+    >
       <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 my-4 ml-4 ">
         조치요청
       </span>
-        <div className="">
-          {/* 조치요청 */}
-          {instances.map((instance, index) => (
-              <div key={index} className="flex justify-between">
-                <Listbox
-                    value={instance.selectedEmail || null}
-                    onChange={(selectedEmail) =>
-                        handleActionChange(index, selectedEmail)
-                    }
-                >
-                  {({ open }) => (
-                      <>
-                        <div className="relative mt-2 ml-4">
-                          <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-32 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6 ml-2">
+      <div className="">
+        {/* 조치요청 */}
+        {instances.map((instance, index) => (
+          <div key={index} className="flex justify-between">
+            <Listbox
+              value={instance.selectedEmail || null}
+              onChange={(selectedEmail) =>
+                handleActionChange(index, selectedEmail)
+              }
+            >
+              {({ open }) => (
+                <>
+                  <div className="relative mt-2 ml-4">
+                    <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-32 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6 ml-2">
                       <span className="block truncate">
-                         {instance.selectedEmail ? instance.selectedEmail.emailName : "[선택]"}
+                        {instance.selectedEmail
+                          ? instance.selectedEmail.emailName
+                          : "[선택]"}
                         {/* {peopleSelected.name} */}
                       </span>
-                            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                      <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                         <ChevronUpDownIcon
-                            className="h-5 w-5 text-gray-400"
-                            aria-hidden="true"
+                          className="h-5 w-5 text-gray-400"
+                          aria-hidden="true"
                         />
                       </span>
-                          </Listbox.Button>
+                    </Listbox.Button>
 
-                          <Transition
-                              show={open}
-                              as={Fragment}
-                              leave="transition ease-in duration-100"
-                              leaveFrom="opacity-100"
-                              leaveTo="opacity-0"
+                    <Transition
+                      show={open}
+                      as={Fragment}
+                      leave="transition ease-in duration-100"
+                      leaveFrom="opacity-100"
+                      leaveTo="opacity-0"
+                    >
+                      <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                        {emailDataList.map((emailListItem) => (
+                          <Listbox.Option
+                            key={emailListItem.emailId}
+                            className={({ active }) =>
+                              classNames(
+                                active
+                                  ? "bg-seahColor text-white"
+                                  : "text-gray-900",
+                                "relative cursor-default select-none py-2 pl-3 pr-9"
+                              )
+                            }
+                            value={emailListItem}
                           >
-                            <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                              {emailDataList.map((emailListItem) => (
-                                  <Listbox.Option
-                                      key={emailListItem.emailId}
-                                      disabled={emailListItem.masterStatus === 'Y'}
-                                      className={({active}) => classNames(active ? "bg-seahColor text-white" : emailListItem.masterStatus === 'Y' ? "bg-gray-200 " : "text-gray-900", "relative cursor-default select-none py-2 pl-3 pr-9")}
-                                      value={emailListItem}
-                                  >
-                                    {({ selected, active }) => (
-                                        <>
+                            {({ selected, active }) => (
+                              <>
                                 <span
-                                    className={classNames(
-                                        selected ? "font-semibold" : "font-normal",
-                                        "block truncate"
-                                    )}
+                                  className={classNames(
+                                    selected ? "font-semibold" : "font-normal",
+                                    "block truncate"
+                                  )}
                                 >
                                   {emailListItem.emailName}
                                 </span>
 
-                                          {selected ? (
-                                              <span
-                                                  className={classNames(
-                                                      active ? "text-white" : "text-seahColor",
-                                                      "absolute inset-y-0 right-0 flex items-center pr-4"
-                                                  )}
-                                              >
+                                {selected ? (
+                                  <span
+                                    className={classNames(
+                                      active ? "text-white" : "text-seahColor",
+                                      "absolute inset-y-0 right-0 flex items-center pr-4"
+                                    )}
+                                  >
                                     <CheckIcon
-                                        className="h-5 w-5"
-                                        aria-hidden="true"
+                                      className="h-5 w-5"
+                                      aria-hidden="true"
                                     />
                                   </span>
-                                          ) : null}
-                                        </>
-                                    )}
-                                  </Listbox.Option>
-                              ))}
-                            </Listbox.Options>
-                          </Transition>
-                        </div>
-                      </>
-                  )}
-                </Listbox>
+                                ) : null}
+                              </>
+                            )}
+                          </Listbox.Option>
+                        ))}
+                      </Listbox.Options>
+                    </Transition>
+                  </div>
+                </>
+              )}
+            </Listbox>
 
-                <div className="mt-2 ml-1 flex">
-                  <input
-                      type="text"
-                      name="Inspectionarea"
-                      id="Inspectionarea"
-                      placeholder="E-Mail"
-                      autoComplete=""
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5 ml-1"
-                      value={instance.selectedEmail ? instance.selectedEmail.emailAdd : ""}
-                      readOnly
-                      onChange={(e) => {
-                        const updatedInstances = [...instances];
-                        updatedInstances[index].selectedEmail = {
-                          ...instance.selectedEmail,
-                          emailAdd: e.target.value,
-                        };
-                        setInstances(updatedInstances);
-                      }}
-                  />
-                  {index === 0 ? (
-                      <button
-                          className="px-4 py-2 text-black border rounded-full hover:bg-seahColor hover:text-white ml-1"
-                          onClick={handleAddInstance}
-                      >
-                        +
-                      </button>
-                  ) : (
-                      <button
-                          className="px-4 py-2 text-black border rounded-full hover:bg-seahColor hover:text-white ml-1"
-                          onClick={() => handleDeleteInstance(index)}
-                      >
-                        -
-                      </button>
-                  )}
-                </div>
-              </div>
-          ))}
-        </div>
+            <div className="mt-2 ml-1 flex">
+              <input
+                type="text"
+                name="Inspectionarea"
+                id="Inspectionarea"
+                placeholder="E-Mail"
+                autoComplete=""
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5 ml-1"
+                value={
+                  instance.selectedEmail ? instance.selectedEmail.emailAdd : ""
+                }
+                readOnly
+                onChange={(e) => {
+                  const updatedInstances = [...instances];
+                  updatedInstances[index].selectedEmail = {
+                    ...instance.selectedEmail,
+                    emailAdd: e.target.value,
+                  };
+                  setInstances(updatedInstances);
+                }}
+              />
+              {index === 0 ? (
+                <button
+                  className="px-4 py-2 text-black border rounded-full hover:bg-seahColor hover:text-white ml-1"
+                  onClick={handleAddInstance}
+                >
+                  +
+                </button>
+              ) : (
+                <button
+                  className="px-4 py-2 text-black border rounded-full hover:bg-seahColor hover:text-white ml-1"
+                  onClick={() => handleDeleteInstance(index)}
+                >
+                  -
+                </button>
+              )}
+            </div>
+          </div>
+        ))}
       </div>
+    </div>
   );
 }
