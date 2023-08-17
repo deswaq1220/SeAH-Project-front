@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 
 export default function SafetyEduDetails() {
   const { eduId } = useParams(); // useParams 훅을 사용하여 URL 파라미터에서 eduId 가져오기
-  const [eduData, setEduData] = useState([]);
+  const [eduData, setEduData] = useState([ ]);
   const { isCompleted, handleCreate, qrValue, formData, setFormData } =
     useSafetyEduForm(eduData);
   const apiUrl = process.env.REACT_APP_API_BASE_URL;
@@ -46,21 +46,24 @@ export default function SafetyEduDetails() {
   });
 
   useEffect(() => {
-    const fetchEduDetail = async () => {
-      try {
-        const response = await axios.get(
-          // `http://172.20.20.252:8081/edudetails/${eduId}`,        // 세아
-          `http://localhost:8081/edudetails/${eduId}`
-        );
-        //        setUploadedFiles(response.data.eduFiles);
-        setEduData({ ...response.data, eduFileList: response.data.eduFileList});
+    if(eduId){
+      const fetchEduDetail = async () => {
+        try {
+          const response = await axios.get(
+              // `http://172.20.20.252:8081/edudetails/${eduId}`,        // 세아
+              `http://localhost:8081/edudetails/${eduId}`
+          );
+          //        setUploadedFiles(response.data.eduFiles);
+          setEduData({ ...response.data, eduFileList: response.data.eduFileList});
+          console.log(eduData.eduFileList[0]);
 
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+      fetchEduDetail();
+    }
 
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchEduDetail();
   }, [eduId]);
 
   // useEffect(() => {
@@ -78,7 +81,7 @@ export default function SafetyEduDetails() {
   //       eduWriter: eduData.eduWriter,
   //       files: null, // 파일 관련 데이터는 여기서 설정하지 않음
   //       eduId: eduData.eduId,
-  //       eduFileList :
+  //       eduFileList : ""
   //     });
   //   }
   // }, [eduData, setFormData]);
@@ -151,7 +154,8 @@ export default function SafetyEduDetails() {
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-          `http://172.20.20.252:8081/edudetails/${eduId}`
+      //     `http://172.20.20.252:8081/edudetails/${eduId}`
+      'http://localhost/edudetails/${eduId}'
       );
 
       if (response.status === 200) {
@@ -172,6 +176,9 @@ export default function SafetyEduDetails() {
   const handleEditClick = () => {
     // educationId는 해당 교육의 아이디 값입니다.
     navigate(`/edureg/${eduId}`);
+  };
+  return {
+    eduData
   };
 
   return (
@@ -274,8 +281,7 @@ export default function SafetyEduDetails() {
                 <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                   {/*<div>{eduData.eduFileList[0].eduFileName}</div>*/}
 
-                  {eduData.eduFileList.length > 0 ? (
-
+                  {eduData.eduFileList? (
                     <ul
                       role="list"
                       className="divide-y divide-gray-100 rounded-md border border-gray-200"

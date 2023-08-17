@@ -14,6 +14,7 @@ import { useDropzone } from "react-dropzone";
 import QRCode from "qrcode.react";
 import axios from "axios";
 import useSafetyEduForm from "../../useHook/useSafetyEduForm";
+import SafetyEduDetails from "./SafetyEduDetails";
 import { FilePond, registerPlugin } from "react-filepond";
 import "filepond/dist/filepond.min.css"; // 스타일링을 위한 CSS
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
@@ -159,7 +160,9 @@ function SafetyEduReg() {
     resetForm,
     showNotification,
     // handleEdit,
+
   } = useSafetyEduForm();
+
 
   // const handleClick = () => {
   //   handleEdit(); // 수정 핸들러 호출
@@ -578,7 +581,22 @@ function SafetyEduReg() {
                     </div>
                   </div>
                 </div>
-
+                <div>
+                  {/*{formData.eduFileList.map((eduFile, index) => (*/}
+                  {/*    <div key={index} className="flex items-start mt-2">*/}
+                        <div className="text-left">
+                          <TruncatedFileName fileName={formData.eduFileList[0].eduFileOriName} />
+                        </div>
+                        {/*<button*/}
+                        {/*    onClick={() => deleteFile(file.name)}*/}
+                        {/*    className="ml-2 text-red-600"*/}
+                        {/*    type="button"*/}
+                        {/*>*/}
+                        {/*  삭제*/}
+                        {/*</button>*/}
+                      {/*</div>*/}
+                  {/*))}*/}
+                </div>
                 <div>
                   {uploadedFiles.map((file, index) => (
                     <div key={file.name} className="flex items-start mt-2">

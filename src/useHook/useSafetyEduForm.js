@@ -271,12 +271,12 @@ const useSafetyEduForm = (eduData) => {
       if (formData.eduId) {
         // 기존 교육 데이터를 수정하는 경우 (PUT 요청)
         formData.eduStartTime = formData.eduStartTime.slice(0, 16);
-
+        formData.eduSumTime = selectPeople(formData.eduCategory).time;
 
 
         const response = await axios.post(
-            //  `http://localhost:8081/edudetails/${formData.eduId}`,
-            `http://172.20.20.252:8081/edudetails/${formData.eduId}`, //세아
+             `http://localhost:8081/edudetails/${formData.eduId}`,
+            // `http://172.20.20.252:8081/edudetails/${formData.eduId}`, //세아
             formData,
             {
               headers: {
@@ -289,8 +289,8 @@ const useSafetyEduForm = (eduData) => {
       } else {
         // 새로운 교육 데이터를 등록하는 경우 (POST 요청)
         const response = await axios.post(
-            //  "http://localhost:8081/edureg",
-            "http://172.20.20.252:8081/edureg", // 세아
+             "http://localhost:8081/edureg",
+            // "http://172.20.20.252:8081/edureg", // 세아
             formData,
             {
               headers: {
