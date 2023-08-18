@@ -32,7 +32,7 @@ export default function ActionRquest({ onFormDataChange }) {
   // -----------------------------------
   const handleActionChange = (instanceIndex, selectedEmail) => {
     const updatedInstances = [...instances];
-    updatedInstances[instanceIndex] = { selectedEmail: selectedEmail || null };
+    updatedInstances[instanceIndex] = { selectedEmail };
     setInstances(updatedInstances);
 
     // ,로 구분된 문자열로 변환하여 넘기기
@@ -80,37 +80,6 @@ export default function ActionRquest({ onFormDataChange }) {
       speActEmail: selectedEmailAddresses,
     });
   };
-
-   // 이메일 보내기 로직
-const sendEmails = async (staticEmailList) => {
-  const selectedEmails = instances
-    .map((instance) => instance.selectedEmail)
-    .filter((email) => email !== null);
-
-  const emailAddresses = selectedEmails.map((email) => email.emailAdd || ""); // 가능한 null 값을 처리합니다.
-  const staticEmailAddresses = staticEmailList.map((email) => email.emailAdd);
-
-  const allEmailAddresses = [...emailAddresses, ...staticEmailAddresses];
-
-
-  try {
-    const response = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/api/send-email`,
-      {
-        to: allEmailAddresses,
-        subject: "수시점검 요청입니다",
-        message: "Your Email Message",
-      }
-    );
-
-    // 이메일 전송 성공 시 처리
-    console.log("이메일 전송 성공:", response.data);
-  } catch (error) {
-    // 이메일 전송 실패 시 처리
-    console.error("이메일 전송 오류:", error);
-  }
-};
-
 
   return (
     <div

@@ -22,7 +22,7 @@ import { FilePond, registerPlugin } from 'react-filepond';
 import 'filepond/dist/filepond.min.css'; // 스타일링을 위한 CSS
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
-import sendEmails from "./actionrequest"
+
 
 // 추가 플러그인을 라이브러리에 등록
 registerPlugin(FilePondPluginImagePreview);
@@ -169,8 +169,8 @@ function UserfrequentReg() {
 
   // 수시점검 등록 요청
   axios
-      .post(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataFacility}`, formData, {   // 세아
-      // .post(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`, formData, {
+    //   .post(`http://172.20.20.252:8081/special/new/${masterdataPart}/${masterdataFacility}`, formData, {   // 세아
+      .post(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataFacility}`, formData, {
        //  .post(`http://192.168.202.1:8081/special/new/${masterdataPart}/${masterdataFacility}`, formData, {
        headers: {
         "Content-Type": "multipart/form-data",
@@ -189,7 +189,6 @@ function UserfrequentReg() {
 
         // 저장성공시 해당설비의 리스트 페이지
         navigate(`/special/list/${masterdataPart}/${masterdataFacility}`);
-        sendEmails();
        }
 
       })
@@ -204,7 +203,8 @@ function UserfrequentReg() {
  return (
      <>
       <UserHeader />
-      <p className="text-lg font-bold ml-4">수시점검</p>
+      <p>수시점검</p>
+      <p>수시점검 내용등록</p>
       <Inspector onFormDataChange={handleInspectorDataChange} /> {/* 점검자 */}
       <Inspectionarea /> {/* 점검영역 */}
       <Facilityname /> {/* 설비명 */}
@@ -239,7 +239,7 @@ function UserfrequentReg() {
           />
        </div>
       </div>
-         <ActionRquest onFormDataChange={handleActionRequestDetailsDataChange} sendEmails={sendEmails} />{" "}{/* 조치요청 */}
+         <ActionRquest onFormDataChange={handleActionRequestDetailsDataChange} />{" "}{/* 조치요청 */}
       {/* 혜영추가-완료여부 */}
       <IsCompelete onFormDataChange={handleIsCompeleteDataChange} />{" "}{/* 완료여부 */}
       {/* 경원추가 */}
