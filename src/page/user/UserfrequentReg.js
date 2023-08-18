@@ -23,6 +23,7 @@ import 'filepond/dist/filepond.min.css'; // 스타일링을 위한 CSS
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 
+
 // 추가 플러그인을 라이브러리에 등록
 registerPlugin(FilePondPluginImagePreview);
 
@@ -135,8 +136,8 @@ function UserfrequentReg() {
 
   // 수시점검 등록 요청
   axios
-      .post(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataFacility}`, formData, {   // 세아
-      // .post(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`, formData, {
+    //   .post(`http://172.20.20.252:8081/special/new/${masterdataPart}/${masterdataFacility}`, formData, {   // 세아
+      .post(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataFacility}`, formData, {
        //  .post(`http://192.168.202.1:8081/special/new/${masterdataPart}/${masterdataFacility}`, formData, {
        headers: {
         "Content-Type": "multipart/form-data",
