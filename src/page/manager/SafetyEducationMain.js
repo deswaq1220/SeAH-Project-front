@@ -30,19 +30,20 @@ function SafetyEducationMain() {
   };
 
   // useEffect(() => {
-  //   // 서버로부터 안전교육 데이터를 가져오는 함수
   //   const fetchEduList = async () => {
   //     try {
-  //       const response = await axios.get(`http://localhost:8081/edumain`); // 서버의 API 엔드포인트에 맞게 경로를 수정해야 합니다.
-  //       // "http://172.20.10.5:3000/edumain"
-  //       setEduList(response.data); // 서버로부터 받은 데이터를 상태 변수에 저장
+  //       const response = await axios.get(
+  //         `http://localhost:8081/edumain`); 
+  //         // `http://172.20.20.252:8081/edumain`); 
+  //       setEduList(response.data);
   //     } catch (error) {
   //       console.error("Error fetching data:", error);
   //     }
   //   };
 
-  //   fetchEduList(); // 데이터 가져오기 함수 호출
-  // }, []); // 빈 배열을 두 번째 인자로 넘겨주면 컴포넌트가 처음 마운트되었을 때만 데이터를 가져옵니다.
+  //   fetchEduList();
+  // }, []);
+
 
   useEffect(() => {
     const getLogsForCurrentMonth = async () => {
@@ -60,7 +61,6 @@ function SafetyEducationMain() {
           // eduStartTime을 기준으로 오름차순 정렬
           return new Date(a.eduStartTime) - new Date(b.eduStartTime);
         });
-        console.log(response.data[0].eduFiles[0]);
         setEduList(sortedEduList);
         setSelectedMonth(currentMonth);
       } catch (error) {
@@ -213,7 +213,7 @@ function SafetyEducationMain() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
-                    {getCurrentPageItems().map((edu) => (
+                    {getCurrentPageItems().map((edu, index) => (
                       <tr key={edu.eduId}>
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           <div className="flex items-center">
@@ -277,7 +277,7 @@ function SafetyEducationMain() {
               totalItems={eduList.length}
               setCurrentPage={setCurrentPage}
             />
-          ) : (null)}
+          ) : ( <p className="flex justify-center">해당 월의 교육은 없습니다.</p>)}
         </div>
       </div>
     </div>
