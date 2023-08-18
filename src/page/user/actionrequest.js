@@ -22,6 +22,7 @@ export default function ActionRquest({ onFormDataChange }) {
 
         const emailListFromBack = response.data["emailList"];
         setEmailDataList(emailListFromBack);
+
       } catch (error) {
         console.error("데이터 가져오기 오류: ", error);
       }
@@ -138,8 +139,17 @@ export default function ActionRquest({ onFormDataChange }) {
                             }
                             value={emailListItem}
                           >
-                            {({ selected, active }) => (
-                              <>
+
+                            <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                              {emailDataList.map((emailListItem) => (
+                                  <Listbox.Option
+                                      key={emailListItem.emailId}
+                                      className={({active}) => classNames(active ? "bg-seahColor text-white" : "text-gray-900", "relative cursor-default select-none py-2 pl-3 pr-9")}
+                                      value={emailListItem}
+                                  >
+                                    {({ selected, active }) => (
+                                        <>
+
                                 <span
                                   className={classNames(
                                     selected ? "font-semibold" : "font-normal",

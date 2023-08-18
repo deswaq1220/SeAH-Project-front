@@ -78,7 +78,7 @@ function App() {
 
         <Route path="/userfrequentreg" element={<UserfrequentReg/>}></Route>{/* 수시점검 등록페이지 */}
 
-        <Route path="/userfrequentdetails/:speId" element={<UserFrequentDetails/>}></Route>{/* 수시점검 상세페이지 */}
+        <Route path="/special/detail/:speId" element={<UserFrequentDetails/>}></Route>{/* 수시점검 상세페이지 */}
 
 
         <Route path="/404" element={<Error/>}></Route> {/* 에러 */}
