@@ -86,8 +86,8 @@ function EduAttenStatics() {
     //검색
     const handleSearch = async () => {
       try {
-
         const response = await axios.get(
+          // "http://172.20.20.252:8081/edustatistics/atten",
           "http://localhost:8081/edustatistics/atten",
           {
             params: {

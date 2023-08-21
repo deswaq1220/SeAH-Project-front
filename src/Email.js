@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const EmailForm = () => {
   const [emailData, setEmailData] = useState({
@@ -19,24 +20,15 @@ const EmailForm = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+  
     const emailDataWithMultipleRecipients = {
       ...emailData,
       recipients: emailData.recipients.split(',').map(recipient => recipient.trim())
     };
-
-    //fetch('http://172.20.20.252:8081/api/send-email', { //세아
-     fetch('http://localhost:8081/api/send-email', {
-    // fetch('http://192.168.202.1:8081/api/send-email', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(emailDataWithMultipleRecipients)
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Email sent:', data);
+  
+    axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/send-email`, emailDataWithMultipleRecipients) // 세아
+      .then(response => {
+        console.log('Email sent:', response.data);
         // 이메일 전송 성공 시 처리 로직 추가
       })
       .catch(error => {

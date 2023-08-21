@@ -69,8 +69,8 @@ function UserSafetyEduAttendance() {
     // 버튼이 비활성화되어 있더라도 클릭 이벤트가 발생하도록 수정
     axios
       .post(
-        // `http://172.20.20.252:8081/usereduatten/register/${eduId}`,     // 세아
-        `http://localhost:8081/usereduatten/register/${eduId}`,
+          `${process.env.REACT_APP_API_BASE_URL}/usereduatten/register/${eduId}`,     // 세아
+        //  `http://localhost:8081/usereduatten/register/${eduId}`,
         requestData, {
         //http://localhost:8081/usereduatten/register 이거는 진짜 사용할때
         headers: {
@@ -116,8 +116,8 @@ function UserSafetyEduAttendance() {
     const fetchEduList = async () => {
       try {
         const response = await axios.get(
-          // `http://172.20.20.252:8081/edudetails/${eduId}`    // 세아
-          `http://localhost:8081/edudetails/${eduId}`
+            `http://172.20.20.252:8081/edudetails/${eduId}`    // 세아
+          //  `http://localhost:8081/edudetails/${eduId}`
         );
         console.log(response.data); // 서버로부터 받은 데이터 확인
         setEduList(response.data); // 해당 아이디에 해당하는 데이터를 상태 변수에 저장
@@ -127,8 +127,8 @@ function UserSafetyEduAttendance() {
     };
     // GET 요청을 통해 eduTitle 가져오기
     axios.get(
-      // `http://172.20.20.252:8081/usereduatten/register/${eduId}`)   // 세아
-      `http://localhost:8081/usereduatten/register/${eduId}`)
+        `http://172.20.20.252:8081/usereduatten/register/${eduId}`)   // 세아
+      // `http://localhost:8081/usereduatten/register/${eduId}`)
       .then((response) => {
         // 응답 데이터에서 eduTitle 값을 추출하여 상태 업데이트
         setEduTitle(response.data.eduTitle);
@@ -249,7 +249,7 @@ function UserSafetyEduAttendance() {
               </Listbox>
             </div>
             <div id="name" className="flex items-baseline justify-start">
-              <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 border border-gray-200">
+              <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
                 이름
               </span>
               <div className="sm:col-span-3">
@@ -261,8 +261,9 @@ function UserSafetyEduAttendance() {
                     autoComplete="family-name"
                     value={selected.attenName}
                     onChange={handleNameChange}
+                    placeholder="이름"
                     required
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5  "
                   />
                 </div>
               </div>
@@ -271,7 +272,7 @@ function UserSafetyEduAttendance() {
               id="Employee_number"
               className="flex items-baseline justify-start"
             >
-              <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 border border-gray-200 ">
+              <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4  ">
                 사원번호
               </span>
               <div className="sm:col-span-3">
@@ -283,8 +284,9 @@ function UserSafetyEduAttendance() {
                     value={selected.attenEmployeeNumber}
                     onChange={handleNumberChange}
                     required
+                    placeholder="사원번호"
                     autoComplete="family-name"
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5 "
                   />
                 </div>
               </div>

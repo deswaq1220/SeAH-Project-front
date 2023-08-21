@@ -6,6 +6,7 @@ import QRCode from "qrcode.react"; // QR 코드 라이브러리 추가
 const people = [
   { id: 1, name: "[선택]" },
   { id: 2, name: "[주조]" },
+  { id: 2, name: "[압출]" },
   { id: 3, name: "[가공]" },
   { id: 4, name: "[품질]" },
   { id: 5, name: "[생산기술]" },

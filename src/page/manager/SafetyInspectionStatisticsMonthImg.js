@@ -9,6 +9,9 @@ import {Bars3Icon, BellIcon, CheckCircleIcon, XMarkIcon} from '@heroicons/react/
 import {MagnifyingGlassIcon} from "@heroicons/react/20/solid";
 import axios from "axios";
 
+//그래프
+import { ResponsiveRadar } from '@nivo/radar'
+
 //엑셀
 import * as XLSX from "xlsx";
 import { saveAs } from 'file-saver';
@@ -24,9 +27,8 @@ function SafetyInspectionStatisticsMonthImg() {
     const seoulTime = new Intl.DateTimeFormat('en-US', options).format(currentDate);
     const [month, year] = seoulTime.split('/'); // "08/2023" -> ["08", "2023"]
     const currentYearMonth = `${year}-${month}`;
-
     const [selectedYear, setSelectedYear] = useState(currentYearMonth);
-    //console.log(currentYearMonth);
+
 
     //이벤트1: 연도 검색이벤트
     const handleYearChange = (event) => {
@@ -46,7 +48,7 @@ function SafetyInspectionStatisticsMonthImg() {
     const handleExport = () => {
         const data = [
             { sheetName: '이번달 수시점검 건수', data: [{ "수시점검 건수": spcCount }] },
-            { sheetName: '점검영역 분석', data: partCount.map(item => ({ "점검영역": item[0], "건수": item[1] })) },
+            { sheetName: '점검영역 분석', data: partCountForExcel.map(item => ({ "점검영역": item[0], "건수": item[1] })) },
             { sheetName: '위험분류 분석', data: dangerCount.map(item => ({ "위험분류": item[0], "건수": item[1] })) },
             { sheetName: '위험원인 분석', data: causeCount.map(item => ({ "위험원인": item[0], "건수": item[1] })) },
         ];
@@ -72,11 +74,14 @@ function SafetyInspectionStatisticsMonthImg() {
 
 
 
-
+//그 외 변수
     const [spcCount, setSpcCount] = useState([]);
     const [partCount, setPartCount] = useState([]);
+    const [partCountForExcel, setPartCountForExcel] = useState([]);
     const [dangerCount, setDangerCount] = useState([]);
     const [causeCount, setCauseCount] = useState([]);
+
+
 
     useEffect(() => {
 
@@ -90,32 +95,42 @@ function SafetyInspectionStatisticsMonthImg() {
         try {
 
             //점검건수 값
-            //await axios.get(`http://172.20.20.252:8081/special/statistics/count`, { params: { yearmonth: selectedYear } })  //세아
-            await axios.get(`http://localhost:8081/special/statistics/count`, { params: { yearmonth: selectedYear } })
+             await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/count`, { params: { yearmonth: selectedYear } })  //세아
+            //  await axios.get(`${process.env.REACT_APP_API_BASE_URL}/statistics/count`, { params: { yearmonth: selectedYear } })
                 .then(response => {
                     setSpcCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
                     console.log(response.data);
                 })
 
-            //영역값
-            // await axios.get(`http://172.20.20.252:8081/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })  //세아
-            await axios.get(`http://localhost:8081/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })
+            //영역값(엑셀용)
+            await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })  //세아
+           //await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/partandmonthforexcel`, { params: { yearmonth: selectedYear } })
+                .then(response => {
+                    setPartCountForExcel(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
+                    console.log("체크체크체크"+response.data);
+                })
+
+            //영역값2
+            await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })  //세아
+           //await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })
                 .then(response => {
                     setPartCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
                     console.log(response.data);
                 })
 
+
+
             //위험분류값
-            //await axios.get(`http://172.20.20.252:8081/special/statistics/dangerandmonth`, { params: { yearmonth: selectedYear } })  //세아
-            await axios.get(`http://localhost:8081/special/statistics/dangerandmonth`, { params: { yearmonth: selectedYear } })
+            await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/dangerandmonth`, { params: { yearmonth: selectedYear } })  //세아
+            //await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/dangerandmonth`, { params: { yearmonth: selectedYear } })
                 .then(response => {
                     setDangerCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
                     console.log(response.data);
                 })
 
             //위험원인값
-                // await axios.get(`http://172.20.20.252:8081/special/statistics/causeandmonth`, { params: { yearmonth: selectedYear } })  //세아
-            await axios.get(`http://localhost:8081/special/statistics/causeandmonth`, { params: { yearmonth: selectedYear } })
+             await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/causeandmonth`, { params: { yearmonth: selectedYear } })  //세아
+             //await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/causeandmonth`, { params: { yearmonth: selectedYear } })
                 .then(response => {
                     setCauseCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
                     console.log(response.data);
@@ -207,22 +222,22 @@ function SafetyInspectionStatisticsMonthImg() {
                   {/* 위쪽 영역 */}
                   <div className="grid grid-cols-4 gap-6">
                       {/*아래쪽 영역 1번*/}
-                          <div>
-                              <div className="flex justify-between items-baseline">
-                                  <h5 className="text-xl font-semibold leading-2 text-gray-900">정기점검 건수</h5>
-                                  <button
-                                      className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-                                      onClick={handleExport}
-                                  >
-                                      월간 분석 엑셀 저장
-                                  </button>
-                              </div>
-                              <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-1">
-                                  <div className="overflow-hidden rounded-lg bg-amber-100 px-3 py-5 shadow sm:p-40 max-w-screen-xl flex items-center justify-center">
-                                      <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{spcCount}건</dd>
-                                  </div>
-                              </dl>
+                      <div>
+                          <div className="flex justify-between items-baseline">
+                              <h5 className="text-xl font-semibold leading-2 text-gray-900">정기점검 건수</h5>
+                              <button
+                                  className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                                  onClick={handleExport}
+                              >
+                                  월간 분석 엑셀 저장
+                              </button>
                           </div>
+                          <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-1">
+                              <div className="overflow-hidden rounded-lg bg-amber-100 px-3 py-5 shadow sm:p-40 max-w-screen-xl flex items-center justify-center">
+                                  <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{spcCount}건</dd>
+                              </div>
+                          </dl>
+                      </div>
                       {/*위쪽 영역 2번 - 영역별(완료)*/}
                       <div>
                           <h3 className="text-xl font-semibold leading-2 text-gray-900">점검영역 분석</h3>
@@ -237,7 +252,6 @@ function SafetyInspectionStatisticsMonthImg() {
                                   ))}
                           </dl>
                       </div>
-
                   </div>
 
                   <hr className="border-t  my-6" style={{ borderColor: 'InactiveBorder' }}/>
@@ -264,16 +278,60 @@ function SafetyInspectionStatisticsMonthImg() {
                       {/*아래쪽 영역 2번 - 영역별(완료)*/}
                       <div>
                           <h3 className="text-xl font-semibold leading-2 text-gray-900">점검영역 분석</h3>
-                          <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-3">
-                              {partCount
-                                  .sort((a, b) => b[1] - a[1]) // 배열을 내림차순으로 정렬
-                                  .map((item, index) => (
-                                      <div key={index} className="overflow-hidden rounded-lg bg-white px-4 py-10 shadow sm:max-w-screen-xl">
-                                          <dt className="truncate text-sm font-medium text-gray-900">{item[0]}파트</dt>
-                                          <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">{item[1]}건</dd>
-                                      </div>
-                                  ))}
-                          </dl>
+
+                        {/*영역별 건수 숫자로 보여주는 메소드*/}
+                        {/*                          <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-3">
+                                                      {partCount
+                                                          .sort((a, b) => b[1] - a[1]) // 배열을 내림차순으로 정렬
+                                                          .map((item, index) => (
+                                                              <div key={index} className="overflow-hidden rounded-lg bg-white px-4 py-10 shadow sm:max-w-screen-xl">
+                                                                  <dt className="truncate text-sm font-medium text-gray-900">{item[0]}파트</dt>
+                                                                  <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">{item[1]}건</dd>
+                                                              </div>
+                                                          ))}
+                                                  </dl>*/}
+
+                          <div style={{ height: '360px' }}>
+                              <ResponsiveRadar
+                                  data={partCount}
+                                  keys={['수시점검']}
+                                  indexBy="sort"
+                                  margin={{ top: 40, right: 80, bottom: 50, left: 80 }}
+                                  borderWidth={0.5}
+                                  borderColor={{ from: 'color' }}
+                                  gridLabelOffset={36}
+                                  dotSize={10}
+                                  dotColor={'#f4f4f6'}
+                                  dotBorderWidth={2}
+                                  enableDotLabel={true}
+                                  dotLabelYOffset={-8}
+                                  colors={'rgba(11,107,8,0.54)'}
+                                  blendMode="multiply"
+                                  motionConfig="wobbly"
+                                  legends={[
+                                      {
+                                          anchor: 'top-left',
+                                          direction: 'column',
+                                          translateX: -50,
+                                          translateY: -40,
+                                          itemWidth: 80,
+                                          itemHeight: 20,
+                                          itemTextColor: '#999',
+                                          symbolSize: 12,
+                                          symbolShape: 'circle',
+                                          effects: [
+                                              {
+                                                  on: 'hover',
+                                                  style: {
+                                                      itemTextColor: '#000'
+                                                  }
+                                              }
+                                          ]
+                                      }
+                                  ]}
+                              />
+                          </div>
+
                       </div>
                       {/*아래쪽 영역 3번 - 위험분류별(완료)*/}
                       <div>
@@ -306,88 +364,6 @@ function SafetyInspectionStatisticsMonthImg() {
                   </div>
               </div>
           </div>
-
-
-
-
-{/*          점검 총계
-      <div className="mt-4 mx-4 grid grid-cols-1 gap-6 sm:grid-cols-2">
-      <div className="mt-4 mx-4 grid grid-cols-2 gap-6 sm:grid-cols-4 md:grid-cols-8">
-          <div>
-              <div className="flex justify-between items-baseline">
-                  <h5 className="text-xl font-semibold leading-2 text-gray-900">이번달 수시점검 건수</h5>
-                  <button
-                      className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-                      onClick={handleExport}
-                  >
-                      월간 분석 엑셀 저장
-                  </button>
-              </div>
-              <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-1">
-                  <div className="overflow-hidden rounded-lg bg-amber-100 px-3 py-5 shadow sm:p-40 max-w-screen-xl flex items-center justify-center">
-                      <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{spcCount}건</dd>
-                  </div>
-              </dl>
-          </div>
-
-          영역별(완료)
-          <div>
-              <h3 className="text-xl font-semibold leading-2 text-gray-900">점검영역 분석</h3>
-              <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-4">
-                  {partCount
-                      .sort((a, b) => b[1] - a[1]) // 배열을 내림차순으로 정렬
-                      .map((item, index) => (
-                      <div key={index} className="overflow-hidden rounded-lg bg-white px-4 py-10 shadow sm:max-w-screen-xl">
-                          <dt className="truncate text-sm font-medium text-gray-900">{item[0]}파트</dt>
-                          <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{item[1]}건</dd>
-                      </div>
-                  ))}
-              </dl>
-          </div>
-
-          위험분류별(완료)
-          <div>
-              <h3 className="text-xl font-semibold leading-2 text-gray-900">위험분류 분석</h3>
-              <dl className="mt-1 grid grid-cols-2 gap-5 sm:grid-cols-5">
-                  {dangerCount
-                      .sort((a, b) => b[1] - a[1]) // 배열을 내림차순으로 정렬
-                      .map((item, index) => (
-                          <div key={index} className="overflow-hidden rounded-lg bg-indigo-100 px-4 py-5 shadow sm:p-6">
-                              <dt className="truncate text-sm font-medium text-gray-900">분류: {item[0]}</dt>
-                              <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{item[1]}건</dd>
-                          </div>
-                      ))}
-              </dl>
-          </div>
-
-         위험원인별(완료)
-          <div>
-              <h3 className="text-xl font-semibold leading-2 text-gray-900">위험원인 분석</h3>
-              <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-4">
-                  {causeCount
-                      .sort((a, b) => b[1] - a[1]) // 배열을 내림차순으로 정렬
-                      .map((item, index) => (
-                      <div key={index} className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:max-w-screen-xl">
-                          <dt className="truncate text-sm font-medium text-gray-900">원인: {item[0]}</dt>
-                          <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{item[1]}건</dd>
-                      </div>
-                  ))}
-              </dl>
-          </div>
-      </div>*/}
-{/*
-          위험성 평가별
-          <div>
-              <h3 className="text-base font-semibold leading-2 text-gray-900">위험정도 분석</h3>
-              <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-10">
-                  {count.map((item, index) => (
-                      <div key={index} className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-                          <dt className="truncate text-sm font-medium text-gray-500">{item[0]}</dt>
-                          <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{item[1]}</dd>
-                      </div>
-                  ))}
-              </dl>
-          </div>*/}
       </div>
 
   );
