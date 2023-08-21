@@ -194,11 +194,28 @@ export default function UserFrequentDetailsTable() {
             </div>
             <div className="bg-white px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
               <dt className="text-base font-bold leading-6 text-gray-900">
-                사진
+                조치요청 사진
               </dt>
               <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0 flex flex-wrap">
-                {inspectionData && inspectionData.imageUrls
-                    ? inspectionData.imageUrls.map((file, index) => (
+                {inspectionData && inspectionData.noCompImageUrls
+                    ? inspectionData.noCompImageUrls.map((file, index) => (
+                        <img
+                            key={index}
+                            src={process.env.REACT_APP_API_BASE_URL + file}
+                            alt={`사진 ${index + 1}`}
+                        />
+                    ))
+                    : "첨부된 사진이 없습니다"}
+              </dd>
+            </div>
+
+            <div className="bg-white px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
+              <dt className="text-base font-bold leading-6 text-gray-900">
+                조치완료 사진
+              </dt>
+              <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0 flex flex-wrap">
+                {inspectionData && inspectionData.compImageUrls
+                    ? inspectionData.compImageUrls.map((file, index) => (
                         <img
                             key={index}
                             src={process.env.REACT_APP_API_BASE_URL + file}
