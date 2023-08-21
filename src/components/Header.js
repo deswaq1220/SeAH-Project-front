@@ -15,7 +15,7 @@ import logo from "../img/logo.png";
 
 // 점검 메뉴
 const products = [
-  { name: '안전점검', description: '안전점검 등록 자', href: '/inspection', icon: ClipboardDocumentListIcon },
+  { name: '안전점검', description: '수시점검 및 정기점검을 할 수 있습니다. ', href: '/inspection', icon: ClipboardDocumentListIcon },
   { name: '안전점검 통계', description: '안전점검 통계를 조회할 수 있습니다', href: '/inspection/statistics/yearimg', icon: ChartPieIcon },
 ]
 

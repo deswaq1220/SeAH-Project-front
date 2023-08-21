@@ -30,6 +30,21 @@ function SafetyEducationMain() {
     return index !== -1 ? index + 1 : ""; // 인덱스를 1부터 시작하도록 +1 해줍니다.
   };
 
+  // useEffect(() => {
+  //   const fetchEduList = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `http://localhost:8081/edumain`); 
+  //         // `http://172.20.20.252:8081/edumain`); 
+  //       setEduList(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+
+  //   fetchEduList();
+  // }, []);
+
 
   useEffect(() => {
     const getLogsForCurrentMonth = async () => {
@@ -199,7 +214,7 @@ function SafetyEducationMain() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
-                    {getCurrentPageItems().map((edu) => (
+                    {getCurrentPageItems().map((edu, index) => (
                       <tr key={edu.eduId}>
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           <div className="flex items-center">
@@ -263,7 +278,7 @@ function SafetyEducationMain() {
               totalItems={eduList.length}
               setCurrentPage={setCurrentPage}
             />
-          ) : (null)}
+          ) : ( <p className="flex justify-center">해당 월의 교육은 없습니다.</p>)}
         </div>
       </div>
     </div>
