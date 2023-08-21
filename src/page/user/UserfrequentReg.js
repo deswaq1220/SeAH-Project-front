@@ -49,9 +49,7 @@ function UserfrequentReg() {
  const [speActEmail, setSpeActEmail] = useState("");
  const [speComplete, setSpeComplete] = useState("");
  const [files, setFiles] = useState(null);
- // 이메일 세팅
- const [yEmailNameStr, setYEmailNameStr] = useState("");
- const [yEmailAddStr, setYEmailAddStr] = useState("");
+
 
  // Inspector 콜백 함수 : 점검자(이름, 이메일, 사원번호)
  const handleInspectorDataChange = (inspectorForm) => {
@@ -95,8 +93,6 @@ function UserfrequentReg() {
  const handleActionRequestDetailsDataChange = (data) => {
   setSpeActPerson(data.speActPerson);
   setSpeActEmail(data.speActEmail);
-  setYEmailNameStr(data.yEmailName);
-  setYEmailAddStr(data.yEmailAdd);
  };
 
  // 개선대책
@@ -114,21 +110,6 @@ function UserfrequentReg() {
 
  const handleFormSubmit = () => {
   const formData = new FormData();        // 폼데이터 객체 생성
-  // const requestData = {
-  //     speEmpNum,
-  //     spePerson,
-  //     speEmail,
-  //     speDanger,
-  //     speInjure,
-  //     speCause,
-  //     speTrap,
-  //     speRiskAssess,
-  //     speContent,
-  //     speActPerson,
-  //     speActEmail,
-  //     speActContent,
-  //     speComplete,
-  // };
 
   // 업로드 파일 배열 저장
   if(files !== null){
@@ -146,24 +127,10 @@ function UserfrequentReg() {
   formData.append('speTrap', speTrap);
   formData.append('speRiskAssess', speRiskAssess);
   formData.append('speContent', speContent);
-
-  // 조치자 이름
-  if (speActPerson) { // speActPerson이 선택되었을 경우
-     formData.append('speActPerson', speActPerson + ', ' + yEmailNameStr);
-  } else { // speActPerson이 선택되지 않았을 경우
-     formData.append('speActPerson', yEmailNameStr);
-  }
-
-  // 조치자 이메일
-  if (speActPerson) { // speActEmail이 선택되었을 경우
-      formData.append('speActEmail', speActEmail+', '+yEmailAddStr);
-  } else { // speActEmail이 선택되지 않았을 경우
-     formData.append('speActEmail', yEmailAddStr);
-  }
-
+  formData.append('speActPerson', speActPerson);
+  formData.append('speActEmail', speActEmail);
   formData.append('speActContent', speActContent);
   formData.append('speComplete', speComplete);
-
 
   console.log(formData); // 요청 데이터 콘솔에 출력
 
