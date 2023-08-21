@@ -5,6 +5,7 @@ import Pagination from "../../components/Pagination";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { format, addMonths, subMonths, getMonth, getYear } from "date-fns";
+import { async } from "q";
 // 부서 드롭다운
 const department = [
   { id: null, name: "부서" },
@@ -19,8 +20,6 @@ function EduAttenStatics() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedMonth, setSelectedMonth] = useState("");
   const [attenList, setAttenList] = useState([]);
-  const [sortedAttendeesList, setSortedAttendeesList] = useState([]);
-  const categories = ["CREW", "MANAGE", "DM", "ETC"];
 
   const [selectedCategory, setSelectedCategory] = useState("");
 
@@ -49,18 +48,17 @@ function EduAttenStatics() {
     const getLogsForCurrentMonth = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8081/edustatistics/atten",
-          {
-            params: {
-              year: getYear(currentDate),
-              eduCategory: selectedCategory,
-              month: getMonth(currentDate)+1,
-              department: searchDepartment,
-              name: searchName,
-            },
-          }
+          `${process.env.REACT_APP_API_BASE_URL}/edustatistics/atten`, {
+          params: {
+            year: getYear(currentDate),
+            eduCategory: selectedCategory,
+            month: getMonth(currentDate) + 1,
+            department: searchDepartment,
+            name: searchName,
+          },
+        }
         );
-  
+
         const data = response.data;
         if (selectedCategory === "") {
           const { attenNameSumEduTimeList } = data;
@@ -83,83 +81,92 @@ function EduAttenStatics() {
   }, [selectedCategory, currentDate]);
 
 
-    //검색
-    const handleSearch = async () => {
-      try {
-        const response = await axios.get(
-          // "http://172.20.20.252:8081/edustatistics/atten",
-          "http://localhost:8081/edustatistics/atten",
-          {
-            params: {
-              year: getYear(currentDate),
-              eduCategory: selectedCategory,
-              month: getMonth(currentDate)+1,
-              department: searchDepartment,
-              name: searchName,
-            },
-          }
-        );
-  
-        const data = response.data;
-        setAttenList(data.eduStatisticsDTO);
-      } catch (error) {
-        console.error("데이터 가져오기 오류:", error);
+  //검색
+  const handleSearch = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_BASE_URL}/edustatistics/atten`, {
+        params: {
+          year: getYear(currentDate),
+          eduCategory: selectedCategory,
+          month: getMonth(currentDate) + 1,
+          department: searchDepartment,
+          name: searchName,
+        },
       }
+      );
 
-      try {
-
-        const response = await axios.get(
-          "http://localhost:8081/edustatistics/atten",
-          {
-            params: {
-              year: getYear(currentDate),
-              eduCategory: null,
-              month: getMonth(currentDate)+1,
-              department: searchDepartment,
-              name: searchName,
-            },
-          }
-        );
-  
-        const data = response.data;
-        const { attenNameSumEduTimeList } = data;
-        setMonthlyEduTime({
-          total: attenNameSumEduTimeList[0],
-          CREW: attenNameSumEduTimeList[1],
-          DM: attenNameSumEduTimeList[2],
-          MANAGE: attenNameSumEduTimeList[3],
-          ETC: attenNameSumEduTimeList[4],
-        });
-    
-      } catch (error) {
-        console.error("데이터 가져오기 오류:", error);
+      const data = response.data;
+      setAttenList(data.eduStatisticsDTO);
+    } catch (error) {
+      console.error("데이터 가져오기 오류:", error);
+    }
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_BASE_URL}/edustatistics/atten`, {
+        params: {
+          year: getYear(currentDate),
+          eduCategory: null,
+          month: getMonth(currentDate) + 1,
+          department: searchDepartment,
+          name: searchName,
+        },
       }
-    };
-    
+      );
+
+      const data = response.data;
+      setAttenList(data.eduStatisticsDTO);
+      const { attenNameSumEduTimeList } = data;
+      setMonthlyEduTime({
+        total: attenNameSumEduTimeList[0],
+        CREW: attenNameSumEduTimeList[1],
+        DM: attenNameSumEduTimeList[2],
+        MANAGE: attenNameSumEduTimeList[3],
+        ETC: attenNameSumEduTimeList[4],
+      });
+      return attenNameSumEduTimeList;
+    } catch (error) {
+      console.error("데이터 가져오기 오류:", error);
+    }
+  };
+
 
   // 엑셀!!!!!!!!!!!
-  const createExcelData = (sortedAttendeesList) => {
-
+  const createExcelData = (attenList, attenNameSumEduTimeList) => {
+    const categoryHeaders = {
+      전체_수강시간: attenNameSumEduTimeList[0]+"분",
+      크루미팅: attenNameSumEduTimeList[1]+"분",
+      DM미팅: attenNameSumEduTimeList[2]+"분",
+      관리감독: attenNameSumEduTimeList[3]+"분",
+      기타: attenNameSumEduTimeList[4]+"분",
+    };
+  
     // 교육 정보를 바탕으로 엑셀 데이터를 생성하는 로직 작성
-    const data = sortedAttendeesList.map((item) => ({
-      제목: `${item.eduTitle}`,
-      교육일정: `${item.eduStartTime}`,
-      교육시간: `${item.eduSumTime} 분`,
-      부서: item.attenDepartment,
-      사원번호: `${item.attenEmployeeNumber}`,
-      이름: item.attenName,
-    }));
-
+    const data = [
+      categoryHeaders, // 카테고리 별 합계 시간 행
+      ...attenList.map((item) => ({
+        제목: `${item.eduTitle}`,
+        교육일정: `${item.eduStartTime}`,
+        교육시간: `${item.eduSumTime} 분`,
+        부서: item.attenDepartment,
+        사원번호: `${item.attenEmployeeNumber}`,
+        이름: item.attenName,
+      })),
+    ];
+  
     return data;
   };
 
-  const handleExport = () => {
-    if (!sortedAttendeesList || sortedAttendeesList.length === 0) {
+  const handleExport = async () => {
+    if (!attenList || attenList.length === 0) {
       console.log("데이터가 없습니다.");
       return;
     }
+
+    const attenNameSumEduTimeList = await handleSearch();
+
     // 엑셀 데이터 생성
-    const data = createExcelData(sortedAttendeesList);
+    const data = createExcelData(attenList, attenNameSumEduTimeList);
 
     // 엑셀 시트 생성
     const worksheet = XLSX.utils.json_to_sheet(data);
@@ -176,25 +183,10 @@ function EduAttenStatics() {
     const excelFile = new Blob([excelBuffer], {
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     });
-    saveAs(excelFile, `안전교육출석명단.xlsx`);
+    saveAs(excelFile, `안전교육_출석_통계.xlsx`);
   };
 
 
-  //카테고리 라벨
-  const getCategoryLabel = (category) => {
-    switch (category) {
-      case "CREW":
-        return "크루미팅";
-      case "DM":
-        return "DM미팅";
-      case "MANAGE":
-        return "관리감독";
-      case "ETC":
-        return "기타";
-      default:
-        return category;
-    }
-  };
 
   //달력 넣기
   const goToPreviousMonth = () => {
@@ -268,8 +260,8 @@ function EduAttenStatics() {
       </div>
       {/* 여기까지가 달력 */}
 
-            {/* 드롭다운 메뉴 */}
-            <div className="flex justify-center mt-4">
+      {/* 드롭다운 메뉴 */}
+      <div className="flex justify-center mt-4">
         <div className="px-4">
           <label className="block text-sm font-medium text-gray-700"></label>
           <select
@@ -306,7 +298,6 @@ function EduAttenStatics() {
           검색
         </button>
       </div>
-      {/* 드롭다운 메뉴와 입력 필드 */}
 
       {/* 카테고리 선택 */}
       <dl className="mx-auto grid grid-cols-1 gap-px bg-gray-900/5 sm:grid-cols-2 lg:grid-cols-4">
