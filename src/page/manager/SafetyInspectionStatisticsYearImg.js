@@ -359,7 +359,7 @@ function SafetyInspectionStatisticsYearImg() {
                         엑셀 저장
                     </button>
             </div>
-            <div style={{ width: 'auto', height: '700px', margin: '0 auto' }}>
+            <div style={{ width: 'auto', height: '950px', margin: '0 auto' }}>
                 {lineChartData.length > 0 ? (
                     <ResponsiveLine
                         data={lineChartData}
@@ -443,59 +443,117 @@ function SafetyInspectionStatisticsYearImg() {
             </div>
         </div>
 
-        <div className="w-1/2 p-4">
-            <div className="flex justify-between items-center">
-                <h5 className="text-xl font-semibold leading-2 text-gray-900">연간 수시점검 위험분류 분석</h5>
-                <button
-                    type="button"
-                    className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-                    onClick={handleExport2}
-                >
-                    엑셀 저장
-                </button>
-            </div>
-
-                <div style={{ height: '700px' }}>
-                    {barChartData.length > 0 ? (
-                        <ResponsiveContainer width="100%" height="100%">
-                        <BarChart
-                            //width={500}
-                            height={300}
-                            data={barChartData}
-                            margin={{
-                                top: 20,
-                                right: 30,
-                                left: 20,
-                                bottom: 5,
-                            }}
-                            barSize={20}
+            <div className="w-1/2">
+                <div className="h-1/2 p-4">
+                    <div className="flex justify-between items-center">
+                        <h5 className="text-xl font-semibold leading-2 text-gray-900">연간 정기점검 종류 분석</h5>
+                        <button
+                            type="button"
+                            className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                            onClick={handleExport2}
                         >
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="month"
-                                   tickFormatter={(value) => {
-                                       const monthIndex = parseInt(value, 10) - 1;
-                                       if (months[monthIndex]) {
-                                           return months[monthIndex];
-                                       }
-                                       return '';
-                                   }} />
-                            <YAxis domain={[0, maxCount]}/>
-                            <Tooltip />
-                            <Legend />
+                            엑셀 저장
+                        </button>
+                    </div>
 
-                            {uniqueDangerKinds.map((dangerKind, index) => (
-                                <Bar
-                                    key={index}
-                                    dataKey={dangerKind}
-                                    stackId="a"
-                                    fill={colors[index % colors.length]}
-                                />
-                            ))}
-                        </BarChart>
-                        </ResponsiveContainer>
-                    ) : (
-                        <p>데이터를 불러오는 중에 오류가 생겼습니다</p>
+                    <div style={{ height: '500px' }}>
+                            {barChartData.length > 0 ? (
+                                <ResponsiveContainer width="100%" height="100%">
+                                <BarChart
+                                    //width={500}
+                                    height={300}
+                                    data={barChartData}
+                                    margin={{
+                                        top: 20,
+                                        right: 30,
+                                        left: 20,
+                                        bottom: 5,
+                                    }}
+                                    barSize={20}
+                                >
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="month"
+                                           tickFormatter={(value) => {
+                                               const monthIndex = parseInt(value, 10) - 1;
+                                               if (months[monthIndex]) {
+                                                   return months[monthIndex];
+                                               }
+                                               return '';
+                                           }} />
+                                    <YAxis domain={[0, maxCount]}/>
+                                    <Tooltip />
+                                    <Legend />
+
+                                    {uniqueDangerKinds.map((dangerKind, index) => (
+                                        <Bar
+                                            key={index}
+                                            dataKey={dangerKind}
+                                            stackId="a"
+                                            fill={colors[index % colors.length]}
+                                        />
+                                    ))}
+                                </BarChart>
+                                </ResponsiveContainer>
+                            ) : (
+                                <p>데이터를 불러오는 중에 오류가 생겼습니다</p>
+                                )}
+                    </div>
+                </div>
+
+                <div className="h-1/2 p-4">
+                    <div className="flex justify-between items-center">
+                        <h5 className="text-xl font-semibold leading-2 text-gray-900">연간 수시점검 위험분류 분석</h5>
+                        <button
+                            type="button"
+                            className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                            onClick={handleExport2}
+                        >
+                            엑셀 저장
+                        </button>
+                    </div>
+
+                    <div style={{ height: '500px' }}>
+                        {barChartData.length > 0 ? (
+                            <ResponsiveContainer width="100%" height="100%">
+                                <BarChart
+                                    //width={500}
+                                    height={300}
+                                    data={barChartData}
+                                    margin={{
+                                        top: 20,
+                                        right: 30,
+                                        left: 20,
+                                        bottom: 5,
+                                    }}
+                                    barSize={20}
+                                >
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="month"
+                                           tickFormatter={(value) => {
+                                               const monthIndex = parseInt(value, 10) - 1;
+                                               if (months[monthIndex]) {
+                                                   return months[monthIndex];
+                                               }
+                                               return '';
+                                           }} />
+                                    <YAxis domain={[0, maxCount]}/>
+                                    <Tooltip />
+                                    <Legend />
+
+                                    {uniqueDangerKinds.map((dangerKind, index) => (
+                                        <Bar
+                                            key={index}
+                                            dataKey={dangerKind}
+                                            stackId="a"
+                                            fill={colors[index % colors.length]}
+                                        />
+                                    ))}
+                                </BarChart>
+                            </ResponsiveContainer>
+                        ) : (
+                            <p>데이터를 불러오는 중에 오류가 생겼습니다</p>
                         )}
+                    </div>
                 </div>
             </div>
         </div>
