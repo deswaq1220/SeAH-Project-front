@@ -47,7 +47,6 @@ function SafetyEducationMain() {
           // eduStartTime을 기준으로 오름차순 정렬
           return new Date(a.eduStartTime) - new Date(b.eduStartTime);
         });
-        console.log(response.data[0].eduFiles[0]);
         setEduList(sortedEduList);
         setSelectedMonth(currentMonth);
       } catch (error) {

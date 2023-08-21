@@ -2,12 +2,33 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import QRCode from "qrcode.react";
 import FacilityReg from "../ReferebceInfoForm/FacilityReg";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function FacilityTable() {
   const [facilityList, setFacilityList] = useState([]);
   const [selectedFacility, setSelectedFacility] = useState(null);
   const [selectedFacilityData, setSelectedFacilityData] = useState(null);
   const [selectedPart, setSelectedPart] = useState("");
+
+
+
+  const handleDelete = async (masterdataId) => {
+    try {
+      await axios.delete(
+        `${process.env.REACT_APP_API_BASE_URL}/master/delete/${masterdataId}`
+      );
+      setFacilityList((prevList) =>
+        prevList.filter((facility) => facility.masterdataId !== masterdataId)
+      );
+      toast.success("등록하신 정보가 삭제되었습니다.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+      });
+    } catch (error) {
+      console.error("Error deleting data:", error);
+    }
+  };
 
   const handleButtonClick = (part) => {
     setSelectedPart(part);
@@ -42,6 +63,8 @@ export default function FacilityTable() {
   const handleNewData = (newData) => {
     setFacilityList((prevList) => [...prevList, newData]);
   };
+
+
 
   return (
     <div>
@@ -125,6 +148,12 @@ export default function FacilityTable() {
                     >
                       QR코드
                     </th>
+                    <th
+                      scope="col"
+                      className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    >
+                      설비삭제
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
@@ -160,6 +189,10 @@ export default function FacilityTable() {
                               보기
                             </button>
                           )}
+
+                        </td>
+                        <td className="whitespace-nowrap text-sm font-medium text-gray-900 sm:pl-4 px-4">
+                          <button onClick={() => handleDelete(facility.masterdataId)}>삭제</button>
                         </td>
                       </tr>
                     ))}
