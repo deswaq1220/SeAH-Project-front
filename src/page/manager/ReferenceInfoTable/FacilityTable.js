@@ -3,6 +3,7 @@ import axios from "axios";
 import QRCode from "qrcode.react";
 import FacilityReg from "../ReferebceInfoForm/FacilityReg";
 import { toast, ToastContainer } from "react-toastify";
+import { Link } from 'react-router-dom';
 
 export default function FacilityTable() {
   const [facilityList, setFacilityList] = useState([]);
@@ -176,9 +177,11 @@ export default function FacilityTable() {
                         </td>
                         <td className="whitespace-nowrap p-4 text-sm text-gray-500">
                           {selectedFacility === facility.masterdataId ? (
-                            <QRCode
-                              value={JSON.stringify(selectedFacilityData)}
-                            />
+                            <Link to={`/special/${facility.masterdataPart}/${facility.masterdataFacility}`}>
+                              <QRCode
+                                value={`http://172.20.20.252:3000/special/${facility.masterdataPart}/${facility.masterdataFacility}`}
+                              />
+                            </Link>
                           ) : (
                             <button
                               className="text-seahColor"
