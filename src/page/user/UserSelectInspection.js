@@ -36,7 +36,7 @@ export default function UserSelectInspection() {
   const actions = [
     {
       title: "정기점검",
-      sub: "공정별 어쩌구,, 뭐시기를 정기점검 데모텍스트",
+      sub: "안전점검 영역에 대한 정기점검을 할 수 있습니다.",
       href: "#",
       icon: ClipboardDocumentListIcon,
       iconForeground: "text-teal-700",
@@ -44,7 +44,7 @@ export default function UserSelectInspection() {
     },
     {
       title: "수시점검",
-      sub: "공정별 어쩌구,, 뭐시기를 수시점검 데모텍스트",
+      sub: "영역 및 설비에 따른 수시점검을 할 수 있습니다.",
       href: `/special/list/${masterdataPart}/${masterdataFacility}`,
       icon: ClipboardDocumentCheckIcon,
       iconForeground: "text-purple-700",

@@ -21,6 +21,7 @@ import EduAttenStatics from "./page/manager/EduAttenStatics"
 import FrequentIns from "./page/manager/SafetyFrequentInspection";
 import AttenStatus from "./page/manager/AttendanceStatus";
 import UserFrequentDetails from "./page/user/UserFrequentDetails/UserFrequentDetails";
+import UserRegularInspection from "./page/user/UserRegularInspection";
 
 //다인 씀
 import SafetyInspectionStatisticsYearImg from "./page/manager/SafetyInspectionStatisticsYearImg";
@@ -52,7 +53,6 @@ function App() {
 
         <Route path="/reginfo" element={<ReferenceInfo/>}></Route> {/* 관리자 기준정보페이지 */}
 
-
         <Route path="/sendEmail" element={<EmailForm/>}></Route> {/* 이메일 */}
         <Route path="/edustatistics" element={<EduStatics/>}></Route>{/* 관리자 안전교육통계*/}
         <Route path="/edustatistics/atten" element={<EduAttenStatics/>}></Route>{/* 관리자 안전교육 참가자통계*/}
@@ -75,10 +75,12 @@ function App() {
         <Route path="/special/:masterdataPart/:masterdataFacility" element={<UserSelectInspection/>}></Route>  {/* 사용자 점검선택페이지*/}
         <Route path="/special/list/:masterdataPart/:masterdataFacility" element={<Userfrequent/>}></Route>  {/* 사용자 수시점검 설비별 리스트페이지*/}
         <Route path="/special/new/:masterdataPart/:masterdataFacility" element={<UserfrequentReg/>}></Route>{/* 사용자 수시점검등록페이지 */}
-
         <Route path="/userfrequentreg" element={<UserfrequentReg/>}></Route>{/* 수시점검 등록페이지 */}
-
         <Route path="/special/detail/:speId" element={<UserFrequentDetails/>}></Route>{/* 수시점검 상세페이지 */}
+
+        {/* 정기점검 */}
+        <Route path="/regular/#" element={<UserRegularInspection/>}></Route>{/* 정기점검 등록 */}
+
 
 
         <Route path="/404" element={<Error/>}></Route> {/* 에러 */}
