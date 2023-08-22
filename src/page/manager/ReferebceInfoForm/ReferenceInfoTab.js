@@ -7,7 +7,7 @@ import EmailTable
  
 const tabs = [
   { name: '설비등록',  component: [ <FacilityTable />], current: true },
-  { name: '설비정보', component: [<FacilityInfo />, <EmailTable />], current: false },
+  { name: '조치담당자 등록', component: [<FacilityInfo />, <EmailTable />], current: false },
   { name: '안전점검리스트 관리', href: '#', current: false },
 
 ]

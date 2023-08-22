@@ -11,6 +11,7 @@ const riskAssessment = [
   { id: 4, name: "[저 위험(1~2): 수용가능]", value: "LOW" },
 ];
 
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
