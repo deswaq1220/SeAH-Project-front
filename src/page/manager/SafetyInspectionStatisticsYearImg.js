@@ -56,19 +56,20 @@ function SafetyInspectionStatisticsYearImg() {
     //정기점검
     const [regCountDataForLine, setRegCountDataForLine] = useState([]);
 
-
+    //(LineChart) 그래프 관련1
     class CustomizedLabel extends PureComponent {
         render() {
             const {x, y, stroke, value} = this.props;
 
             return (
-                <text x={x} y={y} dy={-4} fill={stroke} fontSize={15} textAnchor="middle">
+                <text x={x} y={y} dy={-4} fill={stroke} fontSize={20} textAnchor="top">
                     {value}
                 </text>
             );
         }
     }
 
+    //(LineChart) 그래프 관련2
     class CustomizedAxisTick extends PureComponent {
         render() {
             const {x, y, stroke, payload} = this.props;
@@ -105,47 +106,47 @@ function SafetyInspectionStatisticsYearImg() {
             //(LineChart) 특정년도의 수시점검과 정기점검 건수
 
             //점검데이터
-            const lineChartResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/statistics/inspectioncount`, { params: { year: selectedYear } });   // 세아
+            const lineChartResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/statistics/inspectioncount`, {params: {year: selectedYear}});   // 세아
             const specialCountData = lineChartResponse.data;
-            console.log("첫번째"+ JSON.stringify(lineChartResponse.data, null, 2));
+            console.log("첫번째" + JSON.stringify(lineChartResponse.data, null, 2));
 
             // x가 1부터 12까지 있는 배열 생성하고, 해당하는 y 값이 있으면 사용하고 없으면 0을 사용
-            const resultData = Array.from({ length: 12 }, (_, i) => {
+            const resultData = Array.from({length: 12}, (_, i) => {
                 const foundData = specialCountData.find(item => item.month === i + 1);
                 const regularCount = foundData ? foundData.정기점검 : 0;
                 const specialCount = foundData ? foundData.수시점검 : 0;
 
-                return { "month": i + 1, 정기점검: regularCount, 수시점검: specialCount };
+                return {"month": i + 1, 정기점검: regularCount, 수시점검: specialCount};
             });
             setLineChartData(resultData);
-            console.log("두번째"+ JSON.stringify(resultData));
+            console.log("두번째" + JSON.stringify(resultData));
 
-/*            const resultDataBySpe = Array.from({length: 12}, (_, i) => {
-                const foundData = specialCountData.find(data => data.id === "수시점검");
-                if (foundData) {
-                    const foundItem = foundData.data.find(item => item.x === i + 1);
-                    return {x: i + 1, y: foundItem ? foundItem.y : 0};
-                }
-                return {x: i + 1, y: 0};
-            });
+            /*            const resultDataBySpe = Array.from({length: 12}, (_, i) => {
+                            const foundData = specialCountData.find(data => data.id === "수시점검");
+                            if (foundData) {
+                                const foundItem = foundData.data.find(item => item.x === i + 1);
+                                return {x: i + 1, y: foundItem ? foundItem.y : 0};
+                            }
+                            return {x: i + 1, y: 0};
+                        });
 
-            const resultDataByReg = Array.from({length: 12}, (_, i) => {
-                const foundData = specialCountData.find(data => data.id === "정기점검");
-                if (foundData) {
-                    const foundItem = foundData.data.find(item => item.x === i + 1);
-                    return {x: i + 1, y: foundItem ? foundItem.y : 0};
-                }
-                return {x: i + 1, y: 0};
-            });
+                        const resultDataByReg = Array.from({length: 12}, (_, i) => {
+                            const foundData = specialCountData.find(data => data.id === "정기점검");
+                            if (foundData) {
+                                const foundItem = foundData.data.find(item => item.x === i + 1);
+                                return {x: i + 1, y: foundItem ? foundItem.y : 0};
+                            }
+                            return {x: i + 1, y: 0};
+                        });
 
-            const combinedData = [
-                {id: "수시점검", data: resultDataBySpe},
-                {id: "정기점검", data: resultDataByReg}
-            ];
+                        const combinedData = [
+                            {id: "수시점검", data: resultDataBySpe},
+                            {id: "정기점검", data: resultDataByReg}
+                        ];
 
-            setLineChartData(combinedData);
+                        setLineChartData(combinedData);
 
-            console.log("정기점검,수시점검 같이 " + JSON.stringify(combinedData));*/
+                        console.log("정기점검,수시점검 같이 " + JSON.stringify(combinedData));*/
 
 
             //(lineChart) 연간 수시점검/정기점검 건수 표시
@@ -212,22 +213,31 @@ function SafetyInspectionStatisticsYearImg() {
     const createInspectionCountExcelData = (lineChartData) => {
 
         // 차트 정보를 바탕으로 엑셀 데이터를 생성하는 로직 작성
-        const data = lineChartData[0].data.map(item => ({
+/*        const data = lineChartData[0].data.map(item => ({
             구분: lineChartData[0].id, // 수시점검 or 정기점검
             연도: selectedYear,
             월: item.x,
             점검건수: item.y
+        }));*/
+
+        const data = lineChartData.map(item => ({
+            연도: selectedYear,
+            월: item.month,
+            정기점검건수: item.정기점검,
+            수시점검건수: item.수시점검
         }));
 
         // 점검건수 총 합계 계산
-        const totalInspectionCount = data.reduce((sum, item) => sum + item.점검건수, 0);
+        const totalRegularCount = data.reduce((sum, item) => sum + item.정기점검건수, 0);
+        const totalSpecialCount = data.reduce((sum, item) => sum + item.수시점검건수, 0);
+
 
         // 점검건수 총 합계를 데이터에 추가
         data.push({
-            구분: '수시점검',
             연도: selectedYear,
-            월: '전체합계',
-            점검건수: totalInspectionCount
+            월: "점검합계",
+            정기점검건수: totalRegularCount,
+            수시점검건수: totalSpecialCount
         });
 
         return data;
@@ -255,7 +265,7 @@ function SafetyInspectionStatisticsYearImg() {
         const excelFile = new Blob([excelBuffer], {
             type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         });
-        saveAs(excelFile, `안전점검통계.xlsx`);
+        saveAs(excelFile, `연간 수시ㆍ정기점검 건수 분석.xlsx`);
     };
 
 
