@@ -32,6 +32,7 @@ function classNames(...classes) {
 }
 
 
+
 function UserfrequentReg() {
  const { masterdataPart } = useParams();           // url 영역 파라미터
  const { masterdataFacility } = useParams();       // url 설비 파라미터
@@ -214,13 +215,24 @@ function UserfrequentReg() {
       <FilePond
           allowMultiple={true} // 다중 파일 업로드 허용
           maxFiles={5} // 최대 파일 수 설정
+          acceptedFileTypes={['image/jpeg', 'image/jpg', 'image/png']}
           // 엔드포인트는 백엔드 구현되면 연결요
           onupdatefiles={fileItems => {
            // 파일 정보를 상태에 저장하거나 처리
            const selectedFiles = fileItems.map(fileItem => fileItem.file);
            setFiles(selectedFiles);
           }}
-      />
+          server={{
+           process: (fieldName, file, metadata, load, error, progress, abort) => {
+            // 확장자 검사
+            if (!file.type.includes('image/jpeg') && !file.type.includes('image/jpg') && !file.type.includes('image/png')) {
+             error('업로드할 수 없는 확장자입니다.');
+             alert("업로드할 수 없는 확장자입니다.");
+             return;
+            }
+            }
+           }}
+            />
 
       <div className="flex justify-center w-full mt-8 mb-10">
        <button

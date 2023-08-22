@@ -8,7 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/page/manager/ReferenceInfoTable/FacilityTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/ReferenceInfoTable/FacilityTable.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/UserSafetyEduAttendance.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserSafetyEduAttendance.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/UserfrequentReg.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserfrequentReg.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,6 +74,7 @@
       <workItem from="1692505925577" duration="3075000" />
       <workItem from="1692519825122" duration="2085000" />
       <workItem from="1692581271214" duration="3391000" />
+      <workItem from="1692662925742" duration="7180000" />
     </task>
     <servers />
   </component>
