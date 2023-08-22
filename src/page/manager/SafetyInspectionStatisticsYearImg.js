@@ -115,7 +115,7 @@ function SafetyInspectionStatisticsYearImg() {
                 const regularCount = foundData ? foundData.정기점검 : 0;
                 const specialCount = foundData ? foundData.수시점검 : 0;
 
-                return { x: i + 1, 정기점검: regularCount, 수시점검: specialCount };
+                return { "month": i + 1, 정기점검: regularCount, 수시점검: specialCount };
             });
             setLineChartData(resultData);
             console.log("두번째"+ JSON.stringify(resultData));
