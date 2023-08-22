@@ -6,9 +6,25 @@ import EquipmentName from "./FrequentinseptionForm/equipmentName";
 import Period from "./FrequentinseptionForm/Period";
 import Inspector from "./FrequentinseptionForm/inspector";
 import axios from "axios";
+import {useState} from "react";
 //수시점검 현황
 export default function FrequentIns() {
-  
+
+  const [spePart, setSpePart] = useState("");   // 영역
+  const [speFacility, setSpeFacility] = useState("");   // 설비명
+
+
+
+
+  // 영역 콜백
+  const handlePartDataChange = (selected) => {
+    setSpePart(selected.partMenu);
+  };
+
+  // 설비 콜백
+  const handleFacilityDataChange = (selected) => {
+    setSpeFacility(selected);
+  };
 
   return (
     <>
@@ -22,8 +38,9 @@ export default function FrequentIns() {
         <form className="flex">
           <div className="flex flex-wrap">
             <div className="flex flex-wrap">
-              <FrequentInsArea /> {/* 영역 */}
-              <EquipmentName /> {/* 설비명 */}
+              <FrequentInsArea onFormDataChange={handlePartDataChange}/> {/* 영역 */}
+              <EquipmentName onFormDataChange={handleFacilityDataChange}
+                             selectedPart={spePart}/> {/* 설비명 */}
               <Period /> {/* 기간 */}
             </div>
             <div className="flex items-center">

@@ -56,7 +56,6 @@ export default function Danger({ onFormDataChange }) {
       <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
         위험분류
       </span>
-      {/*<Listbox value={selected} onChange={setSelected}>*/}
       <Listbox value={selectedDanger} onChange={handleDangerChange}>
         {({ open }) => (
           <>
