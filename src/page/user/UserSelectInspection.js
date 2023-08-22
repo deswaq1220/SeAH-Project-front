@@ -14,11 +14,10 @@ import {
   ShieldExclamationIcon,
   XCircleIcon,
 } from "@heroicons/react/24/outline";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import {useParams} from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 import { format, addMonths, subMonths } from "date-fns";
-
 
 
 function classNames(...classes) {
@@ -30,13 +29,13 @@ export default function UserSelectInspection() {
   const { masterdataFacility } = useParams(); // url 설비 파라미터
 
   const [currentDate, setCurrentDate] = useState(new Date()); // 년,월
-
+  const navigate = useNavigate();
 
   // function 위에 있던거 function으로 옮겼음
   const actions = [
     {
       title: "정기점검",
-      sub: "공정별 어쩌구,, 뭐시기를 정기점검 데모텍스트",
+      sub: "안전점검 영역에 대한 정기점검을 할 수 있습니다.",
       href: "#",
       icon: ClipboardDocumentListIcon,
       iconForeground: "text-teal-700",
@@ -44,7 +43,7 @@ export default function UserSelectInspection() {
     },
     {
       title: "수시점검",
-      sub: "공정별 어쩌구,, 뭐시기를 수시점검 데모텍스트",
+      sub: "영역 및 설비에 따른 수시점검을 할 수 있습니다.",
       href: `/special/list/${masterdataPart}/${masterdataFacility}`,
       icon: ClipboardDocumentCheckIcon,
       iconForeground: "text-purple-700",
@@ -56,7 +55,6 @@ export default function UserSelectInspection() {
     // { name: '정기점검', href: '#', icon: UsersIcon, current: false },
     {
       name: "점검완료",
-      href: "#",
       icon: ShieldCheckIcon,
       count: "5",
       current: true,
@@ -64,7 +62,6 @@ export default function UserSelectInspection() {
     },
     {
       name: "미점검",
-      href: "#",
       icon: XCircleIcon,
       count: "12",
       current: false,
@@ -72,7 +69,6 @@ export default function UserSelectInspection() {
     },
     {
       name: "조치필요",
-      href: "#",
       icon: ShieldExclamationIcon,
       count: "20+",
       current: false,
@@ -80,40 +76,38 @@ export default function UserSelectInspection() {
     },
   ];
 
-
-
-  const [monthlyAll, setMonthlyAll] = useState(0);                // 월별 수시점검 실시 정보
-  const [monthlyComplete, setMonthlyComplete] = useState(0);      // 월별 수시점검 완료 정보
-  const [monthlyNoComplete, setMonthlyNoComplete] = useState(0);  // 이번달 deadline 중 조치필요 정보
+  const [monthlyAll, setMonthlyAll] = useState(0); // 월별 수시점검 실시 정보
+  const [monthlyComplete, setMonthlyComplete] = useState(0); // 월별 수시점검 완료 정보
+  const [monthlyNoComplete, setMonthlyNoComplete] = useState(0); // 이번달 deadline 중 조치필요 정보
 
   useEffect(() => {
     // Json값 가져와서 세팅
     function fetchDataWithAxios(masterdataPart, masterdataFacility) {
       axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/special/${masterdataPart}/${masterdataFacility}`)   // 세아
-          //  .get(`http://localhost:8081/special/${masterdataPart}/${masterdataFacility}`)
-          .then((response) => {
-            const data = response.data;
-            // 가져온 데이터로 상태 변수 업데이트
-            setMonthlyAll(data.monthlyAll);
-            setMonthlyComplete(data.monthlyComplete);
-            setMonthlyNoComplete(data.monthlyNoComplete);
-            console.log(data); // JSON 데이터가 출력됩니다.
-          })
-          .catch((error) => {
-            console.error("Error fetching data:", error);
-            console.error("에러가?:", error);
-          });
+        .get(
+          `${process.env.REACT_APP_API_BASE_URL}/special/${masterdataPart}/${masterdataFacility}`
+        ) // 세아
+        //  .get(`http://localhost:8081/special/${masterdataPart}/${masterdataFacility}`)
+        .then((response) => {
+          const data = response.data;
+          // 가져온 데이터로 상태 변수 업데이트
+          setMonthlyAll(data.monthlyAll);
+          setMonthlyComplete(data.monthlyComplete);
+          setMonthlyNoComplete(data.monthlyNoComplete);
+          console.log(data); // JSON 데이터가 출력됩니다.
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          console.error("에러가?:", error);
+        });
     }
 
     fetchDataWithAxios(masterdataPart, masterdataFacility);
   }, [masterdataPart, masterdataFacility]);
 
-
   const frequent = [
     {
       name: "점검실시",
-      href: "#",
       icon: WrenchScrewdriverIcon,
       count: monthlyAll.toString(),
       current: true,
@@ -121,7 +115,6 @@ export default function UserSelectInspection() {
     },
     {
       name: "조치완료",
-      href: "#",
       icon: ShieldCheckIcon,
       count: monthlyComplete.toString(),
       current: false,
@@ -129,7 +122,6 @@ export default function UserSelectInspection() {
     },
     {
       name: "조치필요",
-      href: "#",
       icon: ShieldExclamationIcon,
       count: monthlyNoComplete.toString(),
       current: false,
@@ -156,10 +148,6 @@ export default function UserSelectInspection() {
 
     return `${year}년 ${month}`;
   };
-
-
-
-
 
   return (
     <div className="container mx-auto sm:px-6 lg:px-8 px-4">
@@ -230,20 +218,21 @@ export default function UserSelectInspection() {
                   className={classNames(
                     item.current
                       ? "bg-gray-50 text-green-600"
-                      : "text-gray-700 hover:text-indigo-600 hover:bg-gray-50",
+                      : "text-gray-700 hover:text-indigo-600",
                     "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                   )}
                 >
                   <span
-                    className={classNames(
-                      item.iconForeground,
-                      "inline-flex"
-                    )}
+                    className={classNames(item.iconForeground, "inline-flex")}
                     style={{ backgroundColor: item.iconBackground }}
                   >
                     <item.icon className="h-6 w-6" aria-hidden="true" />
                   </span>
-                  <span className={item.current ? "text-green-600" : "text-gray-700"}>
+                  <span
+                    className={
+                      item.current ? "text-green-600" : "text-gray-700"
+                    }
+                  >
                     {item.name}
                   </span>
                   {item.count ? (
@@ -258,7 +247,13 @@ export default function UserSelectInspection() {
               </li>
             ))}
           </ul>
-          <p className="text-lg font-semibold" >수시점검</p>
+          <button
+            type="button"
+            className="rounded-md bg-seahColor px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor my-4"
+          >
+            정기점검 점검현황 보기
+          </button>
+          <p className="text-lg font-semibold">수시점검</p>
           <ul role="list" className="-mx-2 space-y-1">
             {frequent.map((item) => (
               <li key={item.name}>
@@ -267,20 +262,19 @@ export default function UserSelectInspection() {
                   className={classNames(
                     item.current
                       ? "bg-gray-50 text-blue-600"
-                      : "text-gray-700 hover:text-indigo-600 hover:bg-gray-50",
+                      : "text-gray-700 hover:text-indigo-600 ",
                     "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                   )}
                 >
                   <span
-                    className={classNames(
-                      item.iconForeground,
-                      "inline-flex"
-                    )}
+                    className={classNames(item.iconForeground, "inline-flex")}
                     style={{ backgroundColor: item.iconBackground }}
                   >
                     <item.icon className="h-6 w-6" aria-hidden="true" />
                   </span>
-                  <span className={item.current ? "text-blue-600" : "text-gray-700"}>
+                  <span
+                    className={item.current ? "text-blue-600" : "text-gray-700"}
+                  >
                     {item.name}
                   </span>
                   {item.count ? (
@@ -295,6 +289,13 @@ export default function UserSelectInspection() {
               </li>
             ))}
           </ul>
+          <button
+            type="button"
+            onClick={() => navigate("/frequentinspection")}
+            className="rounded-md bg-seahColor px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mt-4"
+          >
+            수시점검 점검현황 보기
+          </button>
         </nav>
       </div>
     </div>
