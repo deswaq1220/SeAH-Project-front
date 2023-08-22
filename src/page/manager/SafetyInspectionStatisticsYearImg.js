@@ -1,34 +1,35 @@
 import Header from "../../components/Header";
-import {useEffect, useState} from "react";
+
 import axios from 'axios';
-//import React, { PureComponent } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { ResponsiveLine } from '@nivo/line'
+import {BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LabelList} from 'recharts';
+import {ResponsiveLine} from '@nivo/line'
 import {ChartPieIcon} from "@heroicons/react/24/solid"; //아이콘
 
 //네비게이션
-import { Fragment } from 'react'
-import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import {Fragment} from 'react'
+import {Disclosure, Menu, Transition} from '@headlessui/react'
+import {MagnifyingGlassIcon} from '@heroicons/react/20/solid'
+import {Bars3Icon, BellIcon, XMarkIcon} from '@heroicons/react/24/outline'
 import * as XLSX from "xlsx";
 
 //엑셀저장
-import { saveAs } from "file-saver";
+import {saveAs} from "file-saver";
 
 //검색창
 import "../../style/YearPicker.css";
 
+//LineChart(recharts)
+import {PureComponent, useEffect, useState} from "react";
+import {LineChart, Line} from 'recharts';
+
 function SafetyInspectionStatisticsYearImg() {
 
     //공통: 년도입력, 기본값은 당해로 지정되어 있음
-    const seoulTime = new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" });
+    const seoulTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
     const currentYear = new Date(seoulTime).getFullYear();
     const [selectedYear, setSelectedYear] = useState(currentYear);
 
-    const years = Array.from({ length: 20 }, (_, index) => currentYear +index);
-
-
+    const years = Array.from({length: 20}, (_, index) => currentYear + index);
 
 
     //이벤트1: 연도 검색이벤트
@@ -45,11 +46,42 @@ function SafetyInspectionStatisticsYearImg() {
         }
     };
 
+
     //(LineChart) 특정년도의 수시점검과 정기점검 건수(월별로 표현된거 1월: 2건, 2월: 3건..)
     const [lineChartData, setLineChartData] = useState([]);
 
-    //(LineChart) 특정년도의 수시점검과 정기점검 건수(월
-    const [inspectionCountData, setInspectionCount] = useState([]);
+    //(LineChart) 특정년도의 수시점검과 정기점검 건수
+    //수시점검
+    const [speCountDataForLine, setSpeCountDataForLine] = useState([]);
+    //정기점검
+    const [regCountDataForLine, setRegCountDataForLine] = useState([]);
+
+
+    class CustomizedLabel extends PureComponent {
+        render() {
+            const {x, y, stroke, value} = this.props;
+
+            return (
+                <text x={x} y={y} dy={-4} fill={stroke} fontSize={15} textAnchor="middle">
+                    {value}
+                </text>
+            );
+        }
+    }
+
+    class CustomizedAxisTick extends PureComponent {
+        render() {
+            const {x, y, stroke, payload} = this.props;
+
+            return (
+                <g transform={`translate(${x},${y})`}>
+                    <text x={0} y={0} dy={16} textAnchor="end" fill="#666" transform="rotate(-35)">
+                        {payload.value}
+                    </text>
+                </g>
+            );
+        }
+    }
 
 
     //(BarChart) 특정년도의 월별 수시점검한 위험분류 건수
@@ -59,78 +91,105 @@ function SafetyInspectionStatisticsYearImg() {
     const [uniqueDangerKinds, setUniqueDangerKinds] = useState([]); //중복값 제거
 
 
+    useEffect(() => {
 
-        useEffect(() => {
-
-            if (selectedYear) {
-                fetchData();
-            }
-        }, [selectedYear]);
-
+        if (selectedYear) {
+            fetchData();
+        }
+    }, [selectedYear]);
 
 
-            const fetchData = async () => {
-                try {
+    const fetchData = async () => {
+        try {
 
-                    //(LineChart) 특정년도의 수시점검과 정기점검 건수
-                    const lineChartResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/statistics/inspectioncount`, { params: { year: selectedYear } });   // 세아
-                    // const lineChartResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}25n/statistics/inspectioncount`, { params: { year: selectedYear } });
+            //(LineChart) 특정년도의 수시점검과 정기점검 건수
 
-                    const specialCountData = lineChartResponse.data;
-                    console.log("첫번째"+ JSON.stringify(lineChartResponse.data, null, 2));
+            //점검데이터
+            const lineChartResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/statistics/inspectioncount`, { params: { year: selectedYear } });   // 세아
+            const specialCountData = lineChartResponse.data;
+            console.log("첫번째"+ JSON.stringify(lineChartResponse.data, null, 2));
 
-                    // x가 1부터 12까지 있는 배열 생성하고, 해당하는 y 값이 있으면 사용하고 없으면 0을 사용
-                    const resultData = Array.from({ length: 12 }, (_, i) => {
-                        const foundData = specialCountData.find(data => data.data.some(item => item.x === i + 1));
-                        return { x: i + 1, y: foundData ? foundData.data.find(item => item.x === i + 1).y : 0 };
-                    });
+            // x가 1부터 12까지 있는 배열 생성하고, 해당하는 y 값이 있으면 사용하고 없으면 0을 사용
+            const resultData = Array.from({ length: 12 }, (_, i) => {
+                const foundData = specialCountData.find(item => item.month === i + 1);
+                const regularCount = foundData ? foundData.정기점검 : 0;
+                const specialCount = foundData ? foundData.수시점검 : 0;
 
-                    setLineChartData([{ data: resultData, id: "수시점검" }]);
-                    console.log("세번째"+ JSON.stringify(resultData));
+                return { x: i + 1, 정기점검: regularCount, 수시점검: specialCount };
+            });
+            setLineChartData(resultData);
+            console.log("두번째"+ JSON.stringify(resultData));
 
-
-                    //(lineChart) 연간 수시점검 건수 표시
-                    const speCountByYearResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/yearcount`, { params: { year: selectedYear } });   // 세아
-                    // const speCountByYearResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/yearcount`, { params: { year: selectedYear } });
-                    const speCountByYear = speCountByYearResponse.data;
-                    setInspectionCount(speCountByYear);
-
-
-
-
-
-                    //(BarChart) 특정년도의 월별 수시점검한 위험분류 건수
-                    const barChartResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/detaildanger`, { params: {year: selectedYear} });   // 세아
-                    // const barChartResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/detaildanger`, { params: {year: selectedYear} });
-
-                    const specialDangerData = barChartResponse.data; //백엔드에서 받아온 데이터
-                    const dataByMonth = {};
-                    const allDangerKinds = specialDangerData.reduce((acc, data) => {
-                        return [...acc, ...Object.keys(data).filter((key) => key !== 'month')];
-                    }, []);
-                    setUniqueDangerKinds([...new Set(allDangerKinds)]);
-
-
-                    specialDangerData.forEach((data) => {
-                        const month = data.month;
-                        delete data.month;
-
-                        Object.entries(data).forEach(([dangerKind, count]) => {
-                            if (!dataByMonth.hasOwnProperty(month)) {
-                                dataByMonth[month] = { month: `${month}월` };
-                            }
-                            dataByMonth[month][dangerKind] = count;
-                        });
-                    });
-
-                    const barChartDataWithAllMonths = generateDataForAllMonths(dataByMonth, allDangerKinds);
-
-                    setBarChartData(barChartDataWithAllMonths);
-                    console.log("==================체크중" + JSON.stringify(barChartDataWithAllMonths));
-                } catch (error) {
-                    console.error("불러온 데이터에 에러가 발생했습니다:", error);
+/*            const resultDataBySpe = Array.from({length: 12}, (_, i) => {
+                const foundData = specialCountData.find(data => data.id === "수시점검");
+                if (foundData) {
+                    const foundItem = foundData.data.find(item => item.x === i + 1);
+                    return {x: i + 1, y: foundItem ? foundItem.y : 0};
                 }
-            };
+                return {x: i + 1, y: 0};
+            });
+
+            const resultDataByReg = Array.from({length: 12}, (_, i) => {
+                const foundData = specialCountData.find(data => data.id === "정기점검");
+                if (foundData) {
+                    const foundItem = foundData.data.find(item => item.x === i + 1);
+                    return {x: i + 1, y: foundItem ? foundItem.y : 0};
+                }
+                return {x: i + 1, y: 0};
+            });
+
+            const combinedData = [
+                {id: "수시점검", data: resultDataBySpe},
+                {id: "정기점검", data: resultDataByReg}
+            ];
+
+            setLineChartData(combinedData);
+
+            console.log("정기점검,수시점검 같이 " + JSON.stringify(combinedData));*/
+
+
+            //(lineChart) 연간 수시점검/정기점검 건수 표시
+            //수시점검
+            const speSpeCountByYearResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/yearcount`, {params: {year: selectedYear}});   // 세아
+            const speSpeCountByYear = speSpeCountByYearResponse.data;
+            setSpeCountDataForLine(speSpeCountByYear);
+            //정기점검
+            const regCountByYearResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/regular/statistics/yearcount`, {params: {year: selectedYear}});   // 세아
+            const regCountByYear = regCountByYearResponse.data;
+            setRegCountDataForLine(regCountByYear);
+
+
+            //(BarChart) 특정년도의 월별 수시점검한 위험분류 건수
+            const barChartResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/detaildanger`, {params: {year: selectedYear}});   // 세아
+
+            const specialDangerData = barChartResponse.data; //백엔드에서 받아온 데이터
+            const dataByMonth = {};
+            const allDangerKinds = specialDangerData.reduce((acc, data) => {
+                return [...acc, ...Object.keys(data).filter((key) => key !== 'month')];
+            }, []);
+            setUniqueDangerKinds([...new Set(allDangerKinds)]);
+
+
+            specialDangerData.forEach((data) => {
+                const month = data.month;
+                delete data.month;
+
+                Object.entries(data).forEach(([dangerKind, count]) => {
+                    if (!dataByMonth.hasOwnProperty(month)) {
+                        dataByMonth[month] = {month: `${month}월`};
+                    }
+                    dataByMonth[month][dangerKind] = count;
+                });
+            });
+
+            const barChartDataWithAllMonths = generateDataForAllMonths(dataByMonth, allDangerKinds);
+
+            setBarChartData(barChartDataWithAllMonths);
+            console.log("==================체크중" + JSON.stringify(barChartDataWithAllMonths));
+        } catch (error) {
+            console.error("불러온 데이터에 에러가 발생했습니다:", error);
+        }
+    };
 
 
     const generateDataForAllMonths = (dataByMonth, uniqueDangerKinds) => {
@@ -139,16 +198,14 @@ function SafetyInspectionStatisticsYearImg() {
             const month2 = i;
             if (!dataByMonth[month2]) {
                 // 해당 월에 데이터가 없으면 0으로 초기화하여 추가
-                dataForAllMonths.push({ month: `${month2}월`, ...Object.fromEntries(uniqueDangerKinds.map((kind) => [kind, 0])) });
+                dataForAllMonths.push({month: `${month2}월`, ...Object.fromEntries(uniqueDangerKinds.map((kind) => [kind, 0]))});
             } else {
                 dataForAllMonths.push(dataByMonth[month2]);
             }
         }
         return dataForAllMonths;
-        
+
     };
-
-
 
 
     //이벤트2: 수시/정기점검 건수 엑셀저장폼
@@ -203,45 +260,45 @@ function SafetyInspectionStatisticsYearImg() {
 
 
     //이벤트3: 수시점검 위험분류 엑셀저장폼
-      //수시점검 위험분류 분석 엑셀시트만들 때 월별 데이터 생성 메소드
-        const generateDataForAllMonthsForExcel = (dataByMonth, uniqueDangerKinds) => {
-            const dataForAllMonths = [];
-            for (let i = 0; i <= 11; i++) {
-                const month2 = i;
-                if (!dataByMonth[month2]) {
-                    // 해당 월에 데이터가 없으면 0으로 초기화하여 추가
-                    dataForAllMonths.push({ month: `${month2}월`, ...Object.fromEntries(uniqueDangerKinds.map((kind) => [kind, 0])) });
-                } else {
-                    dataForAllMonths.push(dataByMonth[month2]);
-                }
+    //수시점검 위험분류 분석 엑셀시트만들 때 월별 데이터 생성 메소드
+    const generateDataForAllMonthsForExcel = (dataByMonth, uniqueDangerKinds) => {
+        const dataForAllMonths = [];
+        for (let i = 0; i <= 11; i++) {
+            const month2 = i;
+            if (!dataByMonth[month2]) {
+                // 해당 월에 데이터가 없으면 0으로 초기화하여 추가
+                dataForAllMonths.push({month: `${month2}월`, ...Object.fromEntries(uniqueDangerKinds.map((kind) => [kind, 0]))});
+            } else {
+                dataForAllMonths.push(dataByMonth[month2]);
             }
-            return dataForAllMonths;
+        }
+        return dataForAllMonths;
 
-        };
-        const createDangerExcelData = (dataByMonth, uniqueDangerKinds) => {
+    };
+    const createDangerExcelData = (dataByMonth, uniqueDangerKinds) => {
 
-            // 차트 정보를 바탕으로 엑셀 데이터를 생성하는 로직 작성
-            const data = [];
-            const generatedData = generateDataForAllMonthsForExcel(dataByMonth, uniqueDangerKinds); // 월별 데이터 생성
-            console.log("지금"+generatedData);
+        // 차트 정보를 바탕으로 엑셀 데이터를 생성하는 로직 작성
+        const data = [];
+        const generatedData = generateDataForAllMonthsForExcel(dataByMonth, uniqueDangerKinds); // 월별 데이터 생성
+        console.log("지금" + generatedData);
 
-            for(const monthData of generatedData) {
-                const rowData = {
-                    월: parseInt(monthData.month),
-                };
+        for (const monthData of generatedData) {
+            const rowData = {
+                월: parseInt(monthData.month),
+            };
 
-                let monthlyTotal = 0; // 각 월별 합계를 저장할 변수
+            let monthlyTotal = 0; // 각 월별 합계를 저장할 변수
 
-                for(const dangerValue of uniqueDangerKinds) {
-                    rowData[dangerValue] = monthData[dangerValue] || 0; // 해당 위험분류 값이 없으면 0으로 설정
-                    monthlyTotal += rowData[dangerValue]; // 해당 월의 위험분류 값 누적
-                }
-
-                rowData['월별 합계'] = monthlyTotal; // 합계 추가
-                data.push(rowData);
+            for (const dangerValue of uniqueDangerKinds) {
+                rowData[dangerValue] = monthData[dangerValue] || 0; // 해당 위험분류 값이 없으면 0으로 설정
+                monthlyTotal += rowData[dangerValue]; // 해당 월의 위험분류 값 누적
             }
-            return data;
-        };
+
+            rowData['월별 합계'] = monthlyTotal; // 합계 추가
+            data.push(rowData);
+        }
+        return data;
+    };
 
 
     //이벤트4: 수시점검 위험분류 엑셀저장로직
@@ -270,36 +327,35 @@ function SafetyInspectionStatisticsYearImg() {
 
     const maxCount = Math.max(barChartData.map((data) => Math.max(Object.values(data).filter((val) => typeof val === 'number'))));
     const colors = ['rgba(130,205,255,0.8)', 'rgba(230,12,239,0.85)', 'rgba(130,202,157,0.89)', 'rgba(156,132,216,0.9)',
-                            'rgba(255,159,180,0.94)', 'rgba(50,44,140,0.88)', '#84bbd8', 'rgba(237,138,76,0.87)',
-                            '#f55e5e', 'rgba(150,77,238,0.91)', '#d7549d', 'rgba(121,183,101,0.95)',
-                            'rgba(88,192,182,0.82)', 'rgba(150,52,52,0.76)', '#07796c', 'rgba(239,204,110,0.83)',
-                            'rgba(7,7,4,0.83)'];
-
-
-
+        'rgba(255,159,180,0.94)', 'rgba(50,44,140,0.88)', '#84bbd8', 'rgba(237,138,76,0.87)',
+        '#f55e5e', 'rgba(150,77,238,0.91)', '#d7549d', 'rgba(121,183,101,0.95)',
+        'rgba(88,192,182,0.82)', 'rgba(150,52,52,0.76)', '#07796c', 'rgba(239,204,110,0.83)',
+        'rgba(7,7,4,0.83)'];
 
 
     return (
 
         <div>
-            <Header />
+            <Header/>
             <Disclosure as="nav" className="bg-gray-800">
-                {({ open }) => (
+                {({open}) => (
                     <>
                         <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
                             <div className="relative flex h-16 items-center justify-between">
                                 <div className="flex items-center px-2 lg:px-0">
                                     <div className="flex-shrink-0">
-                                        <ChartPieIcon className="h-8 w-8 text-cyan-500" aria-hidden="true" />
+                                        <ChartPieIcon className="h-8 w-8 text-cyan-500" aria-hidden="true"/>
                                     </div>
                                     <div className="hidden lg:ml-6 lg:block">
                                         <div className="flex space-x-4">
                                             {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
-                                            <a href="http://172.20.20.252:3000/inspection/statistics/yearimg" className="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white">
+                                            <a href="http://172.20.20.252:3000/inspection/statistics/yearimg"
+                                               className="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white">
                                                 연간 분석
                                             </a>
                                             <a
-                                                href="http://172.20.20.252:3000/inspection/statistics/monthimg" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                                                href="http://172.20.20.252:3000/inspection/statistics/monthimg"
+                                                className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                                             >
                                                 월간 분석
                                             </a>
@@ -312,11 +368,15 @@ function SafetyInspectionStatisticsYearImg() {
                                             Search
                                         </label>
                                         <div className="relative">
-                                            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 " style={{ backgroundColor: 'rgba(57, 65, 80, 1)' }}>
-                                                <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                                            <div
+                                                className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 "
+                                                style={{backgroundColor: 'rgba(57, 65, 80, 1)'}}>
+                                                <MagnifyingGlassIcon className="h-5 w-5 text-gray-400"
+                                                                     aria-hidden="true"/>
                                             </div>
                                             <div className="year-picker ml-8">
-                                                <select id="yearSelect" value={selectedYear} onChange={handleYearChange} className="year-picker-select">
+                                                <select id="yearSelect" value={selectedYear} onChange={handleYearChange}
+                                                        className="year-picker-select">
                                                     {years.map((year) => (
                                                         <option key={year} value={year}>
                                                             {year}년
@@ -329,13 +389,14 @@ function SafetyInspectionStatisticsYearImg() {
                                 </div>
                                 <div className="flex lg:hidden">
                                     {/* Mobile menu button */}
-                                    <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                                        <span className="absolute -inset-0.5" />
+                                    <Disclosure.Button
+                                        className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                                        <span className="absolute -inset-0.5"/>
                                         <span className="sr-only">Open main menu</span>
                                         {open ? (
-                                            <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
+                                            <XMarkIcon className="block h-6 w-6" aria-hidden="true"/>
                                         ) : (
-                                            <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
+                                            <Bars3Icon className="block h-6 w-6" aria-hidden="true"/>
                                         )}
                                     </Disclosure.Button>
                                 </div>
@@ -347,19 +408,21 @@ function SafetyInspectionStatisticsYearImg() {
             </Disclosure>
 
 
-    <div className="flex">
-        <div className="w-1/2 p-4">
-            <div className="flex justify-between items-center">
-                <h5 className="text-xl font-semibold leading-2 text-gray-900">연간 수시ㆍ정기점검 건수 분석</h5>
-                    <button
-                        type="button"
-                        className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-                        onClick={handleExport}
-                    >
-                        엑셀 저장
-                    </button>
-            </div>
-            <div style={{ width: 'auto', height: '950px', margin: '0 auto' }}>
+            <div className="flex">
+                <div className="w-1/2 p-4">
+                    <div className="flex justify-between items-center">
+                        <h5 className="text-xl font-semibold leading-2 text-gray-900">연간 수시ㆍ정기점검 건수 분석</h5>
+                        <button
+                            type="button"
+                            className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                            onClick={handleExport}
+                        >
+                            엑셀 저장
+                        </button>
+                    </div>
+
+
+                    {/*            <div style={{ width: 'auto', height: '950px', margin: '0 auto' }}>
                 {lineChartData.length > 0 ? (
                     <ResponsiveLine
                         data={lineChartData}
@@ -430,134 +493,170 @@ function SafetyInspectionStatisticsYearImg() {
                         ]}
                     />
                 ) : null}
-            </div>
-            <div>
-                <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-2">
-                    <div className="overflow-hidden rounded-lg bg-light px-3 py-5 shadow sm:p-2 max-w-screen-sm flex items-center justify-center">
-                        <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">수시점검: {inspectionCountData}건</dd>
-                    </div>
-                    <div className="overflow-hidden rounded-lg bg-light px-3 py-5 shadow sm:p-2 max-w-screen-sm flex items-center justify-center">
-                        <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">정기점검: y건</dd>
-                    </div>
-                </dl>
-            </div>
-        </div>
+            </div>*/}
 
-            <div className="w-1/2">
-                <div className="h-1/2 p-4">
-                    <div className="flex justify-between items-center">
-                        <h5 className="text-xl font-semibold leading-2 text-gray-900">연간 정기점검 종류 분석</h5>
-                        <button
-                            type="button"
-                            className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-                            onClick={handleExport2}
+                    <ResponsiveContainer width="100%" height="70%">
+                        <LineChart
+                            width={700}
+                            height={200}
+                            data={lineChartData}
+                            margin={{
+                                top: 20,
+                                right: 30,
+                                left: 20,
+                                bottom: 10,
+                            }}
                         >
-                            엑셀 저장
-                        </button>
+                            <CartesianGrid strokeDasharray="3 3"/>
+                            <XAxis dataKey="month" height={60} tick={<CustomizedAxisTick/>}/>
+                            <YAxis/>
+                            <Tooltip/>
+                            <Legend/>
+                            <Line
+                                type="monotone"
+                                dataKey="수시점검"
+                                stroke="#8884d8"
+                                strokeWidth={2.5}
+                                label={<CustomizedLabel key="custom-label-수시점검"/>}
+                            />
+                            <Line
+                                type="monotone"
+                                dataKey="정기점검"
+                                stroke="#82ca9d"
+                                strokeWidth={2.5}
+                                label={<CustomizedLabel key="custom-label-정기점검"/>}
+                            />
+                        </LineChart>
+                    </ResponsiveContainer>
+                    <div>
+                        <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-2">
+                            <div
+                                className="overflow-hidden rounded-lg bg-light px-3 py-5 shadow sm:p-2 max-w-screen-sm flex items-center justify-center">
+                                <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">수시점검: {speCountDataForLine}건</dd>
+                            </div>
+                            <div
+                                className="overflow-hidden rounded-lg bg-light px-3 py-5 shadow sm:p-2 max-w-screen-sm flex items-center justify-center">
+                                <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">정기점검: {regCountDataForLine}건</dd>
+                            </div>
+                        </dl>
                     </div>
+                </div>
 
-                    <div style={{ height: '500px' }}>
+                <div className="w-1/2">
+                    <div className="h-1/2 p-4">
+                        <div className="flex justify-between items-center">
+                            <h5 className="text-xl font-semibold leading-2 text-gray-900">연간 정기점검 종류 분석</h5>
+                            <button
+                                type="button"
+                                className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                                onClick={handleExport2}
+                            >
+                                엑셀 저장
+                            </button>
+                        </div>
+
+                        <div style={{height: '500px'}}>
                             {barChartData.length > 0 ? (
                                 <ResponsiveContainer width="100%" height="100%">
-                                <BarChart
-                                    //width={500}
-                                    height={300}
-                                    data={barChartData}
-                                    margin={{
-                                        top: 20,
-                                        right: 30,
-                                        left: 20,
-                                        bottom: 5,
-                                    }}
-                                    barSize={20}
-                                >
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="month"
-                                           tickFormatter={(value) => {
-                                               const monthIndex = parseInt(value, 10) - 1;
-                                               if (months[monthIndex]) {
-                                                   return months[monthIndex];
-                                               }
-                                               return '';
-                                           }} />
-                                    <YAxis domain={[0, maxCount]}/>
-                                    <Tooltip />
-                                    <Legend />
+                                    <BarChart
+                                        //width={500}
+                                        height={300}
+                                        data={barChartData}
+                                        margin={{
+                                            top: 20,
+                                            right: 30,
+                                            left: 20,
+                                            bottom: 5,
+                                        }}
+                                        barSize={20}
+                                    >
+                                        <CartesianGrid strokeDasharray="3 3"/>
+                                        <XAxis dataKey="month"
+                                               tickFormatter={(value) => {
+                                                   const monthIndex = parseInt(value, 10) - 1;
+                                                   if (months[monthIndex]) {
+                                                       return months[monthIndex];
+                                                   }
+                                                   return '';
+                                               }}/>
+                                        <YAxis domain={[0, maxCount]}/>
+                                        <Tooltip/>
+                                        <Legend/>
 
-                                    {uniqueDangerKinds.map((dangerKind, index) => (
-                                        <Bar
-                                            key={index}
-                                            dataKey={dangerKind}
-                                            stackId="a"
-                                            fill={colors[index % colors.length]}
-                                        />
-                                    ))}
-                                </BarChart>
+                                        {uniqueDangerKinds.map((dangerKind, index) => (
+                                            <Bar
+                                                key={index}
+                                                dataKey={dangerKind}
+                                                stackId="a"
+                                                fill={colors[index % colors.length]}
+                                            />
+                                        ))}
+                                    </BarChart>
                                 </ResponsiveContainer>
                             ) : (
                                 <p>데이터를 불러오는 중에 오류가 생겼습니다</p>
-                                )}
-                    </div>
-                </div>
-
-                <div className="h-1/2 p-4">
-                    <div className="flex justify-between items-center">
-                        <h5 className="text-xl font-semibold leading-2 text-gray-900">연간 수시점검 위험분류 분석</h5>
-                        <button
-                            type="button"
-                            className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-                            onClick={handleExport2}
-                        >
-                            엑셀 저장
-                        </button>
+                            )}
+                        </div>
                     </div>
 
-                    <div style={{ height: '500px' }}>
-                        {barChartData.length > 0 ? (
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart
-                                    //width={500}
-                                    height={300}
-                                    data={barChartData}
-                                    margin={{
-                                        top: 20,
-                                        right: 30,
-                                        left: 20,
-                                        bottom: 5,
-                                    }}
-                                    barSize={20}
-                                >
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="month"
-                                           tickFormatter={(value) => {
-                                               const monthIndex = parseInt(value, 10) - 1;
-                                               if (months[monthIndex]) {
-                                                   return months[monthIndex];
-                                               }
-                                               return '';
-                                           }} />
-                                    <YAxis domain={[0, maxCount]}/>
-                                    <Tooltip />
-                                    <Legend />
+                    <div className="h-1/2 p-4">
+                        <div className="flex justify-between items-center">
+                            <h5 className="text-xl font-semibold leading-2 text-gray-900">연간 수시점검 위험분류 분석</h5>
+                            <button
+                                type="button"
+                                className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                                onClick={handleExport2}
+                            >
+                                엑셀 저장
+                            </button>
+                        </div>
 
-                                    {uniqueDangerKinds.map((dangerKind, index) => (
-                                        <Bar
-                                            key={index}
-                                            dataKey={dangerKind}
-                                            stackId="a"
-                                            fill={colors[index % colors.length]}
-                                        />
-                                    ))}
-                                </BarChart>
-                            </ResponsiveContainer>
-                        ) : (
-                            <p>데이터를 불러오는 중에 오류가 생겼습니다</p>
-                        )}
+                        <div style={{height: '500px'}}>
+                            {barChartData.length > 0 ? (
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart
+                                        //width={500}
+                                        height={300}
+                                        data={barChartData}
+                                        margin={{
+                                            top: 20,
+                                            right: 30,
+                                            left: 20,
+                                            bottom: 5,
+                                        }}
+                                        barSize={20}
+                                    >
+                                        <CartesianGrid strokeDasharray="3 3"/>
+                                        <XAxis dataKey="month"
+                                               tickFormatter={(value) => {
+                                                   const monthIndex = parseInt(value, 10) - 1;
+                                                   if (months[monthIndex]) {
+                                                       return months[monthIndex];
+                                                   }
+                                                   return '';
+                                               }}/>
+                                        <YAxis domain={[0, maxCount]}/>
+                                        <Tooltip/>
+                                        <Legend/>
+
+                                        {uniqueDangerKinds.map((dangerKind, index) => (
+                                            <Bar
+                                                key={index}
+                                                dataKey={dangerKind}
+                                                stackId="a"
+                                                fill={colors[index % colors.length]}
+                                            />
+                                        ))}
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            ) : (
+                                <p>데이터를 불러오는 중에 오류가 생겼습니다</p>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     );
 }
 
