@@ -211,6 +211,7 @@ function UserfrequentReg() {
           </tr>
           </table>
             <p style="font-size:16px;">링크 : <a href="http://10.200.18.185:3000/special/detail/${response.data.speId}">상세보기</a></p>
+
     `;
 
           const emailData = {
