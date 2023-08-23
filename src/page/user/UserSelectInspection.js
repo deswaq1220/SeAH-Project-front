@@ -150,7 +150,7 @@ export default function UserSelectInspection() {
   };
 
   return (
-    <div className="container mx-auto sm:px-6 lg:px-8 px-4">
+    <div className="container mx-auto sm:px-6 lg:px-8 px-4 mb-6">
       <UserHeader />
       <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-gray-200 shadow sm:grid sm:grid-cols-2 sm:gap-px sm:divide-y-0">
         {actions.map((action, actionIdx) => (
