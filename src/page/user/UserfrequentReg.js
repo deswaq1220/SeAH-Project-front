@@ -156,7 +156,7 @@ function UserfrequentReg() {
         });
 
         // 저장성공시 해당설비의 리스트 페이지
-        navigate(`/special/list/${masterdataPart}/${masterdataFacility}`);
+        // navigate(`/special/list/${masterdataPart}/${masterdataFacility}`);
        }
 
       })
@@ -232,7 +232,7 @@ function UserfrequentReg() {
             }
             }
            }}
-            />
+      />
 
       <div className="flex justify-center w-full mt-8 mb-10">
        <button

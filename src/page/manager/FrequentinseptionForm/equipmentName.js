@@ -17,29 +17,29 @@ export default function EquipmentName({onFormDataChange, selectedPart}) {
   axios
       .get(`${process.env.REACT_APP_API_BASE_URL}/frequentinspection`)  // 세아
       .then((response) => {
-         const speFacListFromBack = response.data.facilityList;
+       const speFacListFromBack = response.data.facilityList;
 
-         if (part === "선택") {
-          setSelectedFacility("");
-         } else {
-          // 선택한 영역에 해당하는 설비가 등록되어있을때
-          const filteredFacilityData = speFacListFromBack.filter(
-              (item) => item.masterdataPart === part
-          );
+       if (part === "선택") {
+        setSelectedFacility("");
+       } else {
+        // 선택한 영역에 해당하는 설비가 등록되어있을때
+        const filteredFacilityData = speFacListFromBack.filter(
+            (item) => item.masterdataPart === part
+        );
 
-          if (filteredFacilityData.length > 0) {
-           setSpeFacilityList(filteredFacilityData);
-           setSelectedFacility(filteredFacilityData[0]);
-           onFormDataChange(filteredFacilityData[0]);
-          } else {
-           // 선택한 영역에 해당하는 설비가 등록되지 않았을 때
-           setSpeFacilityList([]);
-           setSelectedFacility("선택한 영역에 해당하는 설비가 없습니다.");
-           onFormDataChange("");
-           alert("선택한 영역에 해당하는 설비가 없습니다.");
-          }
-         }
-        })
+        if (filteredFacilityData.length > 0) {
+         setSpeFacilityList(filteredFacilityData);
+         setSelectedFacility(filteredFacilityData[0]);
+         onFormDataChange(filteredFacilityData[0]);
+        } else {
+         // 선택한 영역에 해당하는 설비가 등록되지 않았을 때
+         setSpeFacilityList([]);
+         setSelectedFacility("");
+         onFormDataChange("");
+         alert("선택한 영역에 해당하는 설비가 없습니다.");
+        }
+       }
+      })
       .catch((error) => {
        console.error("Error fetching data: ", error);
       });
