@@ -62,7 +62,7 @@ function SafetyInspectionStatisticsYearImg() {
             const {x, y, stroke, value} = this.props;
 
             return (
-                <text x={x} y={y} dy={-4} fill={stroke} fontSize={20} textAnchor="top">
+                <text x={x} y={y} dy={-4} fill={stroke} fontSize={17} textAnchor="top">
                     {value}
                 </text>
             );
@@ -76,7 +76,7 @@ function SafetyInspectionStatisticsYearImg() {
 
             return (
                 <g transform={`translate(${x},${y})`}>
-                    <text x={0} y={0} dy={16} textAnchor="end" fill="#666" transform="rotate(-35)">
+                    <text x={0} y={0} dy={16} textAnchor="end" fill="#666">
                         {payload.value}
                     </text>
                 </g>
@@ -116,7 +116,7 @@ function SafetyInspectionStatisticsYearImg() {
                 const regularCount = foundData ? foundData.정기점검 : 0;
                 const specialCount = foundData ? foundData.수시점검 : 0;
 
-                return {"month": i + 1, 정기점검: regularCount, 수시점검: specialCount};
+                return {"month": i + 1 + "월", 정기점검: regularCount, 수시점검: specialCount};
             });
             setLineChartData(resultData);
             console.log("두번째" + JSON.stringify(resultData));
@@ -508,7 +508,7 @@ function SafetyInspectionStatisticsYearImg() {
                     <ResponsiveContainer width="100%" height="70%">
                         <LineChart
                             width={700}
-                            height={200}
+                            height={900}
                             data={lineChartData}
                             margin={{
                                 top: 20,
@@ -519,22 +519,25 @@ function SafetyInspectionStatisticsYearImg() {
                         >
                             <CartesianGrid strokeDasharray="3 3"/>
                             <XAxis dataKey="month" height={60} tick={<CustomizedAxisTick/>}/>
-                            <YAxis/>
+                            <YAxis
+                                tickFormatter={(value) => `${value} 건`}
+                            />
                             <Tooltip/>
                             <Legend/>
                             <Line
                                 type="monotone"
-                                dataKey="수시점검"
+                                dataKey="정기점검"
                                 stroke="#8884d8"
                                 strokeWidth={2.5}
-                                label={<CustomizedLabel key="custom-label-수시점검"/>}
+                                label={<CustomizedLabel key="custom-label-정기점검"/>}
                             />
                             <Line
                                 type="monotone"
-                                dataKey="정기점검"
-                                stroke="#82ca9d"
+                                dataKey="수시점검"
+                                stroke="#E54E2B"
                                 strokeWidth={2.5}
-                                label={<CustomizedLabel key="custom-label-정기점검"/>}
+                                label={<CustomizedLabel key="custom-label-수시점검"/>}
+
                             />
                         </LineChart>
                     </ResponsiveContainer>
@@ -542,11 +545,11 @@ function SafetyInspectionStatisticsYearImg() {
                         <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-2">
                             <div
                                 className="overflow-hidden rounded-lg bg-light px-3 py-5 shadow sm:p-2 max-w-screen-sm flex items-center justify-center">
-                                <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">수시점검: {speCountDataForLine}건</dd>
+                                <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">정기점검: {regCountDataForLine}건</dd>
                             </div>
                             <div
                                 className="overflow-hidden rounded-lg bg-light px-3 py-5 shadow sm:p-2 max-w-screen-sm flex items-center justify-center">
-                                <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">정기점검: {regCountDataForLine}건</dd>
+                                <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">수시점검: {speCountDataForLine}건</dd>
                             </div>
                         </dl>
                     </div>
@@ -589,7 +592,9 @@ function SafetyInspectionStatisticsYearImg() {
                                                    }
                                                    return '';
                                                }}/>
-                                        <YAxis domain={[0, maxCount]}/>
+                                        <YAxis domain={[0, maxCount]}
+                                        tickFormatter={(value) => `${value} 건`} // 여기에 건 추가
+                                        />
                                         <Tooltip/>
                                         <Legend/>
 
@@ -645,7 +650,9 @@ function SafetyInspectionStatisticsYearImg() {
                                                    }
                                                    return '';
                                                }}/>
-                                        <YAxis domain={[0, maxCount]}/>
+                                        <YAxis domain={[0, maxCount]}
+                                               tickFormatter={(value) => `${value} 건`} // 여기에 건 추가
+                                        />
                                         <Tooltip/>
                                         <Legend/>
 
