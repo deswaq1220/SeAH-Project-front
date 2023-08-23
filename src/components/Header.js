@@ -15,7 +15,7 @@ import logo from "../img/logo.png";
 
 // 점검 메뉴
 const products = [
-  { name: '안전점검', description: '수시점검 및 정기점검을 할 수 있습니다. ', href: '/inspection', icon: ClipboardDocumentListIcon },
+  { name: '안전점검', description: '수시점검 및 정기점검을 할 수 있습니다. ', href: '/managerinspection', icon: ClipboardDocumentListIcon },
   { name: '안전점검 통계', description: '안전점검 통계를 조회할 수 있습니다', href: '/inspection/statistics/yearimg', icon: ChartPieIcon },
 ]
 
@@ -97,7 +97,7 @@ export default function Header() {
               leaveFrom="opacity-100 translate-y-0"
               leaveTo="opacity-0 translate-y-1"
             >
-              <Popover.Panel className="absolute -left-8 top-full z-auto mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
+              <Popover.Panel className="absolute -left-8 top-full z-50 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
                 <div className="p-4">
                   {products.map((item) => (
                     <div
@@ -147,7 +147,7 @@ export default function Header() {
               leaveFrom="opacity-100 translate-y-0"
               leaveTo="opacity-0 translate-y-1"
             >
-              <Popover.Panel className="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
+              <Popover.Panel className="absolute -left-8 top-full z-50 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
                 <div className="p-4">
                   {eduProducts.map((item) => (
                     <div

@@ -59,6 +59,8 @@ export default function FacilityReg({ fetchData, handleNewData }) {
     }
   };
 
+  
+
 
 
   return (
