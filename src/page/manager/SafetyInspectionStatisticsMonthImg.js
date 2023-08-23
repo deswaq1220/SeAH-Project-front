@@ -358,7 +358,7 @@ function SafetyInspectionStatisticsMonthImg() {
                                           .map((item, index) => (
                                               <div key={index} className="overflow-hidden rounded-lg bg-indigo-100 bg-opacity-90 px-4 py-6 shadow sm:p-10" style={{ padding: 'calc(6% - 0.5rem)' }} >
                                                       <dt className=" text-lg font-medium text-gray-900">{item[0]}</dt>
-                                                      <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">{item[1]}</dd>
+                                                      <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">{item[1] !== 0 ? item[1] : '-'}</dd>
                                               </div>
                                           ))}
                                   </dl>
@@ -372,7 +372,7 @@ function SafetyInspectionStatisticsMonthImg() {
                                           .map((item, index) => (
                                               <div key={index} className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:max-w-screen-xl">
                                                   <dt className="truncate text-lg font-medium text-gray-900">{item[0]}</dt>
-                                                  <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">{item[1]}</dd>
+                                                  <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">{item[1] !== 0 ? item[1] : '-'}</dd>
                                               </div>
                                           ))}
                                   </dl>
