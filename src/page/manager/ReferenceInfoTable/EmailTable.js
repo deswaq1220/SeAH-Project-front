@@ -76,7 +76,7 @@ export default function EmailTable() {
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-base font-semibold leading-6 text-gray-900">
-            설비정보
+            조치담당자
           </h1>
           <p className="mt-2 text-sm text-gray-700">
             이메일 수신여부 설정 및 수정이 가능합니다
@@ -212,7 +212,7 @@ export default function EmailTable() {
                         </>
                       ) : (
                         <button
-                          className="text-green-600 hover:text-green-900"
+                          className="text-green-700 hover:text-green-900"
                           onClick={() => {
                             setEditingRow(person.emailId);
                             setEditedValues({

@@ -196,7 +196,7 @@ function EduStatics() {
 
 
   return (
-    <div>
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <Header />
 
       {/* 달력  */}
@@ -243,7 +243,7 @@ function EduStatics() {
 
       {/* 여기까지가 달력 */}
 
-      <dl className="mx-auto grid grid-cols-1 gap-px bg-gray-900/5 sm:grid-cols-2 lg:grid-cols-4">
+      <dl className="mx-auto grid grid-cols-1 gap-px bg-gray-900/5 sm:grid-cols-1 lg:grid-cols-5">
         {stats.map((stat) => (
           <div
             key={stat.name}
@@ -263,7 +263,7 @@ function EduStatics() {
       <div className="flex justify-center">
         <div className="px-4 sm:px-6 lg:px-8 max-w-screen-xl w-full">
           <div className="sm:flex sm:items-center">
-            <div className="sm:flex-auto">
+            <div className="sm:flex-auto flex justify-between">
               <h1 className="mt-2 text-sm text-gray-700">
                 {getFormattedDate()} 안전교육 목록입니다
               </h1>

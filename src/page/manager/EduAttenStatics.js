@@ -215,7 +215,7 @@ function EduAttenStatics() {
   }
 
   return (
-    <div>
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <Header />
 
       {/* 달력  */}
@@ -262,7 +262,7 @@ function EduAttenStatics() {
 
       {/* 드롭다운 메뉴 */}
       <div className="flex justify-center mt-4">
-        <div className="px-4">
+        <div className="mx-2">
           <label className="block text-sm font-medium text-gray-700"></label>
           <select
             onChange={(e) => setSearchDepartment(e.target.value)}
@@ -277,8 +277,8 @@ function EduAttenStatics() {
             ))}
           </select>
         </div>
-        <div className="px-4">
-          <label className="block text-sm font-medium text-gray-700">이름</label>
+        <div className=" flex">
+          <label className="block text-sm font-medium text-gray-700 mr-2">이름</label>
           <input
             type="text"
             onChange={(e) => setSearchName(e.target.value)}
@@ -288,19 +288,20 @@ function EduAttenStatics() {
               }
             }}
             value={searchName}
-            className="mt-1 block w-full border-gray-300 shadow-sm focus:ring-seahColor focus:border-seahColor sm:text-sm rounded-md"
+            placeholder="이름"
+            className="block w-auto rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
           />
         </div>
         <button
           onClick={handleSearch}
-          className="ml-4 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-seahColor hover:bg-seahDeep focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-seahColor"
+          className="ml-2 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-seahColor hover:bg-seahDeep focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-seahColor"
         >
           검색
         </button>
       </div>
 
       {/* 카테고리 선택 */}
-      <dl className="mx-auto grid grid-cols-1 gap-px bg-gray-900/5 sm:grid-cols-2 lg:grid-cols-4">
+      <dl className="mx-auto grid grid-cols-1 gap-px bg-gray-900/5 sm:grid-cols-1 lg:grid-cols-5">
         {stats.map((stat) => (
           <div
             key={stat.name}
