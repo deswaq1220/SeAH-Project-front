@@ -159,8 +159,7 @@ function UserfrequentReg() {
           <table style="width: 100%; border-collapse: collapse; border: 1px solid #ccc;">
           <tr>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">항목</td>
-            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speContent
-          }</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">내용</td>
           </tr>
           <tr>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검일시</td>
@@ -173,6 +172,10 @@ function UserfrequentReg() {
           <tr>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검영역</td>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.spePart}</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검설비</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speFacility}</td>
           </tr>
           <tr>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">위험분류</td>
@@ -207,7 +210,7 @@ function UserfrequentReg() {
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${formattedSpeDeadline}</td>
           </tr>
           </table>
-            <p style="font-size:16px;">링크 : <a href="http://172.20.20.252:3000/special/detail/${response.data.speId}">상세보기</a></p>
+            <p style="font-size:16px;">링크 : <a href="http://10.200.18.185:3000/special/detail/${response.data.speId}">상세보기</a></p>
     `;
 
           const emailData = {
