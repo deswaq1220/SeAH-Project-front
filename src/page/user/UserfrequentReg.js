@@ -138,7 +138,7 @@ function UserfrequentReg() {
   // 수시점검 등록 요청
   axios
     //   .post(`http://172.20.20.252:8081/special/new/${masterdataPart}/${masterdataFacility}`, formData, {   // 세아
-      .post(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataFacility}`, formData, {
+      .post(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${encodeURIComponent(masterdataFacility)}`, formData, {
        //  .post(`http://192.168.202.1:8081/special/new/${masterdataPart}/${masterdataFacility}`, formData, {
        headers: {
         "Content-Type": "multipart/form-data",
@@ -156,7 +156,7 @@ function UserfrequentReg() {
         });
 
         // 저장성공시 해당설비의 리스트 페이지
-        // navigate(`/special/list/${masterdataPart}/${masterdataFacility}`);
+        navigate(`/special/list/${masterdataPart}/${encodeURIComponent(masterdataFacility)}`);
        }
 
       })

@@ -45,7 +45,7 @@ export default function UserSelectInspection() {
     {
       title: "수시점검",
       sub: "영역 및 설비에 따른 수시점검을 할 수 있습니다.",
-      href: `/special/list/${masterdataPart}/${masterdataFacility}`,
+      href: `/special/list/${masterdataPart}/${encodeURIComponent(masterdataFacility)}`,
       icon: ClipboardDocumentCheckIcon,
       iconForeground: "text-purple-700",
       iconBackground: "bg-purple-50",

@@ -20,7 +20,7 @@ export default function Falsetrap({onFormDataChange}){
   useEffect(() => {
     function specialTrapFetchDataWithAxios(masterdataPart, masterdataFacility) {
       axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataFacility}`)   // 세아
+          .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${encodeURIComponent(masterdataFacility)}`)   // 세아
           //  .get(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`)
           .then((response) => {
             const speTrapListFromBack = response.data.specialTrapList;

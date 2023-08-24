@@ -19,8 +19,7 @@ export default function Userfrequent() {
   useEffect(() => {
     function fetchDataWithAxios(masterdataPart, masterdataFacility) {
       axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/special/list/${masterdataPart}/${masterdataFacility}`) //세아
-          // .get(`http://localhost:8081/special/list/${masterdataPart}/${masterdataFacility}`)
+          .get(`${process.env.REACT_APP_API_BASE_URL}/special/list/${masterdataPart}/${encodeURIComponent(masterdataFacility)}`) //세아
           .then((response) => {
             const dataFromBackend = response.data.listOfFac;
 
@@ -92,12 +91,12 @@ export default function Userfrequent() {
                 name="output"
                 id="output"
                 className="block w-auto rounded-md border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-4 mr-2"
-                value={`${masterdataPart} / ${masterdataFacility}`}
+                value={`${masterdataPart}/${decodeURIComponent(masterdataFacility)}`}
                 readOnly
             />
 
             {/*수시점검 등록하기 클릭 시 등록페이지 이동*/}
-            <Link to={`/special/new/${masterdataPart}/${masterdataFacility}`}>
+            <Link to={`/special/new/${masterdataPart}/${encodeURIComponent(masterdataFacility)}`}>
               <button
                   type="button"
                   className="inline-flex items-center gap-x-2 rounded-md bg-seahColor px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"

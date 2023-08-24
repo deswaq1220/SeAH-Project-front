@@ -24,7 +24,7 @@ export default function Injured({ onFormDataChange }) {
       masterdataFacility
     ) {
       axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataFacility}`)   // 세아
+          .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${encodeURIComponent(masterdataFacility)}`)   // 세아
           //  .get(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`)
           .then((response) => {
             // 백에서 보내주는 부상부위 리스트

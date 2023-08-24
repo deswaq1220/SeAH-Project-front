@@ -21,11 +21,7 @@ export default function Danger({ onFormDataChange }) {
       masterdataFacility
     ) {
       axios
-        .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataFacility}`)   // 세아
-        // .get(
-        //   `http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`
-        // )
-        // .get(`http://192.168.202.1:8081/special/new/${masterdataPart}/${masterdataFacility}`)
+        .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${encodeURIComponent(masterdataFacility)}`)   // 세아
         .then((response) => {
           const speDangerListFromBack = response.data.specialDangerList;
           const speDangerData = speDangerListFromBack.map((item) => {
