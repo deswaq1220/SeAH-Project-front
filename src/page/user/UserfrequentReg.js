@@ -210,7 +210,7 @@ function UserfrequentReg() {
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${formattedSpeDeadline}</td>
           </tr>
           </table>
-            <p style="font-size:16px;">링크 : <a href="http://10.200.18.185:3000/special/detail/${response.data.speId}">상세보기</a></p>
+            <p style="font-size:16px;">링크 : <a href="http://172.20.20.252:3000/special/detail/${response.data.speId}">상세보기</a></p>
     `;
 
           const emailData = {
