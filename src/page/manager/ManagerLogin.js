@@ -22,6 +22,7 @@ function ManagerLogin() {
       );
 
       navigate('/manager')
+      console.log('로그인완료')
       // Handle successful login, e.g., store tokens, navigate to a new page
     } catch (error) {
       // Handle login error, e.g., show an error message

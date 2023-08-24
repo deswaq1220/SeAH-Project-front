@@ -23,7 +23,8 @@ import AttenStatus from "./page/manager/AttendanceStatus";
 import UserFrequentDetails from "./page/user/UserFrequentDetails/UserFrequentDetails";
 import TrainingReport from "./components/TrainingReport";
 import SafetyManagerInspection from "./page/manager/SafetyManagerInspection";
-
+import UserRegularReg from "./page/user/UserRegularReg/UserRegularReg";
+import FaultyModal from "./page/user/UserRegularReg/FaultyModal";
 //다인 씀
 import SafetyInspectionStatisticsYearImg from "./page/manager/SafetyInspectionStatisticsYearImg";
 import SafetyInspectionStatisticsMonthImg from "./page/manager/SafetyInspectionStatisticsMonthImg";
@@ -83,6 +84,11 @@ function App() {
         <Route path="/userfrequentreg" element={<UserfrequentReg/>}></Route>{/* 수시점검 등록페이지 */}
 
         <Route path="/special/detail/:speId" element={<UserFrequentDetails/>}></Route>{/* 수시점검 상세페이지 */}
+
+        {/* 사용자 정기점검 */}
+
+        <Route path="/regularreg/:masterdataPart" element={<UserRegularReg/>}></Route>{/* 수시점검 상세페이지 */}
+        <Route path="/faultymodal" element={<FaultyModal/>}></Route>{/* 수시점검 상세페이지 */}
 
 
         <Route path="/404" element={<Error/>}></Route> {/* 에러 */}

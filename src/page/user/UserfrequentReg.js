@@ -303,13 +303,24 @@ function UserfrequentReg() {
           />
         </div>
       </div>
+      <div
+      id="ActionRequest"
+      className="grid sm:flex items-baseline justify-start"
+    >
+      <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 my-4 ml-4 ">
+        조치요청
+      </span>
+
       <ActionRquest onFormDataChange={handleActionRequestDetailsDataChange} />{" "}
+      </div>
       {/* 조치요청 */}
       {/* 혜영추가-완료여부 */}
       <IsCompelete onFormDataChange={handleIsCompeleteDataChange} />{" "}
       {/* 완료여부 */}
       {/* 경원추가 */}
-      <h1>파일 업로드</h1>
+      <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 my-4 ml-4 ">
+        사진첨부
+      </span>
       <FilePond
         allowMultiple={true} // 다중 파일 업로드 허용
         maxFiles={5} // 최대 파일 수 설정

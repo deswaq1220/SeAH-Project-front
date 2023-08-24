@@ -36,25 +36,15 @@
 
 
 input {
-  width: 32%;
-  height: 35px;
-  font-size: 16px; /* 원하는 폰트 크기로 조정 */
+ 
   font-family: NanumSquare;
-  border: none;
-  border-bottom: 1px solid #bbbbbb;
+
 }
 
 /* 선택적으로 다른 상태에 대한 스타일링을 추가할 수 있습니다 */
 
-input:focus {
-  outline: none; /* 포커스 시 기본 아웃라인 제거 */
-  border-color: #e64d2c; /* 원하는 포커스 시 테두리 색상으로 조정 */
-  box-shadow: 0 0 3px #e64d2c; /* 원하는 포커스 시 그림자 효과 추가 */
-}
 
-input::placeholder {
-  color: #999; /* 원하는 플레이스홀더 텍스트 색상으로 조정 */
-}
+
 #pw{
   margin: 15px 0;
 }
@@ -110,15 +100,6 @@ input::placeholder {
    
   }
 
-  input {
-    width: 45%;
-    height: 35px;
-    padding: 0.5rem 0.75rem; /* 원하는 패딩 값으로 조정 */
-    font-size: 16px; /* 원하는 폰트 크기로 조정 */
-    font-family: NanumSquare;
-    border: none;
-    border-bottom: 1px solid #bbbbbb;
-  }
 
   #login{
     width: 47%;
@@ -139,16 +120,7 @@ input::placeholder {
    
   }
 
-  input {
-    width: 75%;
-    height: 35px;
-    padding: 0.5rem 0.75rem; /* 원하는 패딩 값으로 조정 */
-    font-size: 16px; /* 원하는 폰트 크기로 조정 */
-    font-family: NanumSquare;
-    border: none;
-    border-bottom: 1px solid #bbbbbb;
-  }
-
+ 
   #login{
     width: 80%;
     height: 50px;
