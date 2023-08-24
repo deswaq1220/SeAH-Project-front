@@ -4,14 +4,14 @@ import {PureComponent, useEffect, useState } from "react";
 import axios from "axios";
 //import React, { PureComponent } from 'react';
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    Legend,
+    ResponsiveContainer,
 } from "recharts";
 import { ResponsiveLine } from "@nivo/line";
 
@@ -46,19 +46,19 @@ function SafetyInspectionStatisticsYearImg() {
 
     const years = Array.from({length: 20}, (_, index) => currentYear + index);
 
-  //이벤트1: 연도 검색이벤트
-  const handleYearChange = (event) => {
-    const inputValue = event.target.value;
-    const collectFormat = /^\d{4}$/.test(inputValue);
+    //이벤트1: 연도 검색이벤트
+    const handleYearChange = (event) => {
+        const inputValue = event.target.value;
+        const collectFormat = /^\d{4}$/.test(inputValue);
 
-    if (inputValue.length >= 4) {
-      if (collectFormat) {
-        setSelectedYear(parseInt(inputValue));
-      } else {
-        alert("올바른 검색 형식으로 입력해주세요. ex: 2023");
-      }
-    }
-  };
+        if (inputValue.length >= 4) {
+            if (collectFormat) {
+                setSelectedYear(parseInt(inputValue));
+            } else {
+                alert("올바른 검색 형식으로 입력해주세요. ex: 2023");
+            }
+        }
+    };
 
     //(LineChart) 특정년도의 수시점검과 정기점검 건수(월별로 표현된거 1월: 2건, 2월: 3건..)
     const [lineChartData, setLineChartData] = useState([]);
@@ -357,83 +357,83 @@ function SafetyInspectionStatisticsYearImg() {
         'rgba(7,7,4,0.83)'];
 
 
-  return (
-    <div>
-      <Header />
-      <Disclosure as="nav" className="bg-white shadow">
-        {({ open }) => (
-          <>
-            <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
-              <div className="flex h-16 justify-between">
-                <div className="flex px-2 lg:px-0">
-                  <div className="flex flex-shrink-0 items-center">
-                    <PresentationChartBarIcon
-                      className="h-8 w-auto text-seahColor"/>
-                  </div>
-                  <div className="hidden lg:ml-6 lg:flex lg:space-x-8">
-                    {/* Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
-                    <a
-                       href="http://localhost:3000/inspection/statistics/yearimg"
-                      className="inline-flex items-center border-b-2 border-seahColor px-1 pt-1 text-sm font-medium text-gray-900"
-                    >
-                      연간분석
-                    </a>
-                    <a
-                      href="http://localhost:3000/inspection/statistics/monthimg"
-                      className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                    >
-                      월간분석
-                    </a>
-                  </div>
-                </div>
-                <div className="flex flex-1 items-center justify-center px-2 lg:ml-6 lg:justify-end">
-                  <div className="w-full max-w-lg lg:max-w-xs">
-                    <label htmlFor="search" className="sr-only">
-                      Search
-                    </label>
-                    <div className="relative">
-                      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                        <MagnifyingGlassIcon
-                          className="h-5 w-5 text-gray-400"
-                          aria-hidden="true"
-                        />
-                      </div>
-                      <select
-                          id="yearSelect"
-                          value={selectedYear}
-                          onChange={handleYearChange}
-                          className="block w-full rounded-md border-0 bg-white py-1.5 pl-10 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6"
+    return (
+        <div>
+            <Header />
+            <Disclosure as="nav" className="bg-white shadow">
+                {({ open }) => (
+                    <>
+                        <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
+                            <div className="flex h-16 justify-between">
+                                <div className="flex px-2 lg:px-0">
+                                    <div className="flex flex-shrink-0 items-center">
+                                        <PresentationChartBarIcon
+                                            className="h-8 w-auto text-seahColor"/>
+                                    </div>
+                                    <div className="hidden lg:ml-6 lg:flex lg:space-x-8">
+                                        {/* Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
+                                        <a
+                                            href="http://10.200.18.185:3000/inspection/statistics/yearimg"
+                                            className="inline-flex items-center border-b-2 border-seahColor px-1 pt-1 text-sm font-medium text-gray-900"
+                                        >
+                                            연간분석
+                                        </a>
+                                        <a
+                                            href="http://10.200.18.185:3000/inspection/statistics/monthimg"
+                                            className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                                        >
+                                            월간분석
+                                        </a>
+                                    </div>
+                                </div>
+                                <div className="flex flex-1 items-center justify-center px-2 lg:ml-6 lg:justify-end">
+                                    <div className="w-full max-w-lg lg:max-w-xs">
+                                        <label htmlFor="search" className="sr-only">
+                                            Search
+                                        </label>
+                                        <div className="relative">
+                                            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                                <MagnifyingGlassIcon
+                                                    className="h-5 w-5 text-gray-400"
+                                                    aria-hidden="true"
+                                                />
+                                            </div>
+                                            <select
+                                                id="yearSelect"
+                                                value={selectedYear}
+                                                onChange={handleYearChange}
+                                                className="block w-full rounded-md border-0 bg-white py-1.5 pl-10 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6"
+                                            >
+                                                {years.map((year) => (
+                                                    <option key={year} value={year}>
+                                                        {year}년
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                )}
+            </Disclosure>
+
+            <div className="flex">
+                <div className="w-1/2 p-4">
+                    <div className="flex justify-between items-center">
+                        <h5 className="text-xl font-semibold leading-2 text-gray-900">연간 수시ㆍ정기점검 건수 분석</h5>
+                        <button
+                            type="button"
+                            className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                            onClick={handleExport}
                         >
-                          {years.map((year) => (
-                            <option key={year} value={year}>
-                              {year}년
-                            </option>
-                          ))}
-                        </select>
+                            엑셀 저장
+                        </button>
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-      </Disclosure>
-
-        <div className="flex">
-            <div className="w-1/2 p-4">
-                <div className="flex justify-between items-center">
-                    <h5 className="text-xl font-semibold leading-2 text-gray-900">연간 수시ㆍ정기점검 건수 분석</h5>
-                    <button
-                        type="button"
-                        className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-                        onClick={handleExport}
-                    >
-                        엑셀 저장
-                    </button>
-                </div>
 
 
-                {/*            <div style={{ width: 'auto', height: '950px', margin: '0 auto' }}>
+                    {/*            <div style={{ width: 'auto', height: '950px', margin: '0 auto' }}>
                 {lineChartData.length > 0 ? (
                     <ResponsiveLine
                         data={lineChartData}
@@ -506,176 +506,176 @@ function SafetyInspectionStatisticsYearImg() {
                 ) : null}
             </div>*/}
 
-                <ResponsiveContainer width="100%" height="70%">
-                    <LineChart
-                        width={700}
-                        height={900}
-                        data={lineChartData}
-                        margin={{
-                            top: 20,
-                            right: 30,
-                            left: 20,
-                            bottom: 10,
-                        }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3"/>
-                        <XAxis dataKey="month" height={60} tick={<CustomizedAxisTick/>}/>
-                        <YAxis
-                            tickFormatter={(value) => `${value} 건`}
-                        />
-                        <Tooltip/>
-                        <Legend/>
-                        <Line
-                            type="monotone"
-                            dataKey="정기점검"
-                            stroke="#8884d8"
-                            strokeWidth={2.5}
-                            label={<CustomizedLabel key="custom-label-정기점검"/>}
-                        />
-                        <Line
-                            type="monotone"
-                            dataKey="수시점검"
-                            stroke="#E54E2B"
-                            strokeWidth={2.5}
-                            label={<CustomizedLabel key="custom-label-수시점검"/>}
-
-                        />
-                    </LineChart>
-                </ResponsiveContainer>
-                <div>
-                    <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-2">
-                        <div
-                            className="overflow-hidden rounded-lg bg-light px-3 py-5 shadow sm:p-2 max-w-screen-sm flex items-center justify-center">
-                            <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">정기점검: {regCountDataForLine}건</dd>
-                        </div>
-                        <div
-                            className="overflow-hidden rounded-lg bg-light px-3 py-5 shadow sm:p-2 max-w-screen-sm flex items-center justify-center">
-                            <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">수시점검: {speCountDataForLine}건</dd>
-                        </div>
-                    </dl>
-                </div>
-            </div>
-
-            <div className="w-1/2">
-                <div className="h-1/2 p-4">
-                    <div className="flex justify-between items-center">
-                        <h5 className="text-xl font-semibold leading-2 text-gray-900">연간 정기점검 종류 분석</h5>
-                        <button
-                            type="button"
-                            className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-                            onClick={handleExport2}
+                    <ResponsiveContainer width="100%" height="70%">
+                        <LineChart
+                            width={700}
+                            height={900}
+                            data={lineChartData}
+                            margin={{
+                                top: 20,
+                                right: 30,
+                                left: 20,
+                                bottom: 10,
+                            }}
                         >
-                            엑셀 저장
-                        </button>
-                    </div>
+                            <CartesianGrid strokeDasharray="3 3"/>
+                            <XAxis dataKey="month" height={60} tick={<CustomizedAxisTick/>}/>
+                            <YAxis
+                                tickFormatter={(value) => `${value} 건`}
+                            />
+                            <Tooltip/>
+                            <Legend/>
+                            <Line
+                                type="monotone"
+                                dataKey="정기점검"
+                                stroke="#8884d8"
+                                strokeWidth={2.5}
+                                label={<CustomizedLabel key="custom-label-정기점검"/>}
+                            />
+                            <Line
+                                type="monotone"
+                                dataKey="수시점검"
+                                stroke="#E54E2B"
+                                strokeWidth={2.5}
+                                label={<CustomizedLabel key="custom-label-수시점검"/>}
 
-                    <div style={{height: '500px'}}>
-                        {barChartData.length > 0 ? (
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart
-                                    //width={500}
-                                    height={300}
-                                    data={barChartData}
-                                    margin={{
-                                        top: 20,
-                                        right: 30,
-                                        left: 20,
-                                        bottom: 5,
-                                    }}
-                                    barSize={20}
-                                >
-                                    <CartesianGrid strokeDasharray="3 3"/>
-                                    <XAxis dataKey="month"
-                                           tickFormatter={(value) => {
-                                               const monthIndex = parseInt(value, 10) - 1;
-                                               if (months[monthIndex]) {
-                                                   return months[monthIndex];
-                                               }
-                                               return '';
-                                           }}/>
-                                    <YAxis domain={[0, maxCount]}
-                                           tickFormatter={(value) => `${value} 건`} // 여기에 건 추가
-                                    />
-                                    <Tooltip/>
-                                    <Legend/>
-
-                                    {uniqueDangerKinds.map((dangerKind, index) => (
-                                        <Bar
-                                            key={index}
-                                            dataKey={dangerKind}
-                                            stackId="a"
-                                            fill={colors[index % colors.length]}
-                                        />
-                                    ))}
-                                </BarChart>
-                            </ResponsiveContainer>
-                        ) : (
-                            <p>데이터를 불러오는 중에 오류가 생겼습니다</p>
-                        )}
+                            />
+                        </LineChart>
+                    </ResponsiveContainer>
+                    <div>
+                        <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-2">
+                            <div
+                                className="overflow-hidden rounded-lg bg-light px-3 py-5 shadow sm:p-2 max-w-screen-sm flex items-center justify-center">
+                                <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">정기점검: {regCountDataForLine}건</dd>
+                            </div>
+                            <div
+                                className="overflow-hidden rounded-lg bg-light px-3 py-5 shadow sm:p-2 max-w-screen-sm flex items-center justify-center">
+                                <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">수시점검: {speCountDataForLine}건</dd>
+                            </div>
+                        </dl>
                     </div>
                 </div>
 
-                <div className="h-1/2 p-4">
-                    <div className="flex justify-between items-center">
-                        <h5 className="text-xl font-semibold leading-2 text-gray-900">연간 수시점검 위험분류 분석</h5>
-                        <button
-                            type="button"
-                            className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-                            onClick={handleExport2}
-                        >
-                            엑셀 저장
-                        </button>
+                <div className="w-1/2">
+                    <div className="h-1/2 p-4">
+                        <div className="flex justify-between items-center">
+                            <h5 className="text-xl font-semibold leading-2 text-gray-900">연간 정기점검 종류 분석</h5>
+                            <button
+                                type="button"
+                                className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                                onClick={handleExport2}
+                            >
+                                엑셀 저장
+                            </button>
+                        </div>
+
+                        <div style={{height: '500px'}}>
+                            {barChartData.length > 0 ? (
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart
+                                        //width={500}
+                                        height={300}
+                                        data={barChartData}
+                                        margin={{
+                                            top: 20,
+                                            right: 30,
+                                            left: 20,
+                                            bottom: 5,
+                                        }}
+                                        barSize={20}
+                                    >
+                                        <CartesianGrid strokeDasharray="3 3"/>
+                                        <XAxis dataKey="month"
+                                               tickFormatter={(value) => {
+                                                   const monthIndex = parseInt(value, 10) - 1;
+                                                   if (months[monthIndex]) {
+                                                       return months[monthIndex];
+                                                   }
+                                                   return '';
+                                               }}/>
+                                        <YAxis domain={[0, maxCount]}
+                                               tickFormatter={(value) => `${value} 건`} // 여기에 건 추가
+                                        />
+                                        <Tooltip/>
+                                        <Legend/>
+
+                                        {uniqueDangerKinds.map((dangerKind, index) => (
+                                            <Bar
+                                                key={index}
+                                                dataKey={dangerKind}
+                                                stackId="a"
+                                                fill={colors[index % colors.length]}
+                                            />
+                                        ))}
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            ) : (
+                                <p>데이터를 불러오는 중에 오류가 생겼습니다</p>
+                            )}
+                        </div>
                     </div>
 
-                    <div style={{height: '500px'}}>
-                        {barChartData.length > 0 ? (
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart
-                                    //width={500}
-                                    height={300}
-                                    data={barChartData}
-                                    margin={{
-                                        top: 20,
-                                        right: 30,
-                                        left: 20,
-                                        bottom: 5,
-                                    }}
-                                    barSize={20}
-                                >
-                                    <CartesianGrid strokeDasharray="3 3"/>
-                                    <XAxis dataKey="month"
-                                           tickFormatter={(value) => {
-                                               const monthIndex = parseInt(value, 10) - 1;
-                                               if (months[monthIndex]) {
-                                                   return months[monthIndex];
-                                               }
-                                               return '';
-                                           }}/>
-                                    <YAxis domain={[0, maxCount]}
-                                           tickFormatter={(value) => `${value} 건`} // 여기에 건 추가
-                                    />
-                                    <Tooltip/>
-                                    <Legend/>
+                    <div className="h-1/2 p-4">
+                        <div className="flex justify-between items-center">
+                            <h5 className="text-xl font-semibold leading-2 text-gray-900">연간 수시점검 위험분류 분석</h5>
+                            <button
+                                type="button"
+                                className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                                onClick={handleExport2}
+                            >
+                                엑셀 저장
+                            </button>
+                        </div>
 
-                                    {uniqueDangerKinds.map((dangerKind, index) => (
-                                        <Bar
-                                            key={index}
-                                            dataKey={dangerKind}
-                                            stackId="a"
-                                            fill={colors[index % colors.length]}
+                        <div style={{height: '500px'}}>
+                            {barChartData.length > 0 ? (
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart
+                                        //width={500}
+                                        height={300}
+                                        data={barChartData}
+                                        margin={{
+                                            top: 20,
+                                            right: 30,
+                                            left: 20,
+                                            bottom: 5,
+                                        }}
+                                        barSize={20}
+                                    >
+                                        <CartesianGrid strokeDasharray="3 3"/>
+                                        <XAxis dataKey="month"
+                                               tickFormatter={(value) => {
+                                                   const monthIndex = parseInt(value, 10) - 1;
+                                                   if (months[monthIndex]) {
+                                                       return months[monthIndex];
+                                                   }
+                                                   return '';
+                                               }}/>
+                                        <YAxis domain={[0, maxCount]}
+                                               tickFormatter={(value) => `${value} 건`} // 여기에 건 추가
                                         />
-                                    ))}
-                                </BarChart>
-                            </ResponsiveContainer>
-                        ) : (
-                            <p>데이터를 불러오는 중에 오류가 생겼습니다</p>
-                        )}
+                                        <Tooltip/>
+                                        <Legend/>
+
+                                        {uniqueDangerKinds.map((dangerKind, index) => (
+                                            <Bar
+                                                key={index}
+                                                dataKey={dangerKind}
+                                                stackId="a"
+                                                fill={colors[index % colors.length]}
+                                            />
+                                        ))}
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            ) : (
+                                <p>데이터를 불러오는 중에 오류가 생겼습니다</p>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-  );
+    );
 }
 
 export default SafetyInspectionStatisticsYearImg;
