@@ -1,24 +1,36 @@
-const people = [
-  {
-    name: "Lindsay Walton",
-    title: "Front-end Developer",
-    email: "lindsay.walton@example.com",
-    role: "Member",
-  },
-  // More people...
-];
+import React from "react";
+import axios from "axios";
 
-export default function FrequentInseptionTable() {
+// const people = [
+//   {
+//     name: "Lindsay Walton",
+//     title: "Front-end Developer",
+//     email: "lindsay.walton@example.com",
+//     role: "Member",
+//   },
+//   // More people...
+// ];
+
+
+
+
+export default function FrequentInseptionTable({ searchResults }) {
   /// 수시점검현황
   return (
-    <div className="mx-4 mt-4">
-      <div className="flex">
-        <p className="text-blue-700">
-          <span className=" font-semibold mr-1">점검일자</span>230801
-        </p>
-        <p className="text-blue-700">
-          <span className=" font-semibold mr-1">점검자</span>세바스찬
-        </p>
+      <div className="mx-4 mt-4">
+        <div className="flex">
+          {searchResults.map((result, index) => (
+              <React.Fragment key={index}>
+                <p className="text-blue-700">
+                  <span className=" font-semibold mr-1">점검일자</span>
+                  {result.speDate}
+                </p>
+                <p className="text-blue-700">
+                  <span className=" font-semibold mr-1">점검자</span>
+                  {result.spePerson}
+                </p>
+              </React.Fragment>
+          ))}
       </div>
       <div className="-mx-4 mt-2 ring-1 ring-gray-300 sm:mx-0 sm:rounded-lg">
         <div className="mx-8 flow-root">
@@ -73,28 +85,28 @@ export default function FrequentInseptionTable() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {people.map((person) => (
-                    <tr key={person.email} className="divide-x divide-gray-200">
+                {searchResults.map((result, index) => (
+                    <tr key={index} className="divide-x divide-gray-200">
                       <td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-0">
-                        {person.name}
+                        {result.spePart}
                       </td>
                       <td className="whitespace-nowrap p-4 text-sm text-gray-500">
-                        {person.title}
+                        {result.speFacility}
                       </td>
                       <td className="whitespace-nowrap p-4 text-sm text-gray-500">
-                        {person.email}
+                        {result.speDanger}
                       </td>
                       <td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-0">
-                        {person.role}
+                        {result.speInjure}
                       </td>
                       <td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-0">
-                        {person.role}
+                        {result.speCause}
                       </td>
                       <td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-0">
-                        {person.role}
+                        {result.speTrap}
                       </td>
                       <td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-0">
-                        {person.role}
+                        {result.speRiskAssess}
                       </td>
                     </tr>
                   ))}
@@ -125,13 +137,13 @@ export default function FrequentInseptionTable() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {people.map((person) => (
-                    <tr key={person.email} className="divide-x divide-gray-200">
+                {searchResults.map((result, index) => (
+                    <tr key={index} className="divide-x divide-gray-200">
                       <td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-0">
-                        {person.name}
+                        {result.speContent}
                       </td>
                       <td className="whitespace-nowrap p-4 text-sm text-gray-500">
-                        {person.title}
+                        {result.speActContent}
                       </td>
                     </tr>
                   ))}
@@ -165,29 +177,29 @@ export default function FrequentInseptionTable() {
                     >
                       조치완료 여부
                     </th>
-                    <th
-                      scope="col"
-                      className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900"
-                    >
-                      조치내용
-                    </th>
+                    {/*<th*/}
+                    {/*  scope="col"*/}
+                    {/*  className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900"*/}
+                    {/*>*/}
+                    {/*  조치내용*/}
+                    {/*</th>*/}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {people.map((person) => (
-                    <tr key={person.email} className="divide-x divide-gray-200">
+                {searchResults.map((result, index) => (
+                    <tr key={index} className="divide-x divide-gray-200">
                       <td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-0">
-                        {person.name}
+                        {result.speActPerson} / {result.speActEmail}
                       </td>
                       <td className="whitespace-nowrap p-4 text-sm text-gray-500">
-                        {person.title}
+                        {result.speDeadline}
                       </td>
                       <td className="whitespace-nowrap p-4 text-sm text-gray-500">
-                        {person.title}
+                        {result.speComplete}
                       </td>
-                      <td className="whitespace-nowrap p-4 text-sm text-gray-500">
-                        {person.title}
-                      </td>
+                      {/*<td className="whitespace-nowrap p-4 text-sm text-gray-500">*/}
+                      {/*  {result.title}*/}
+                      {/*</td>*/}
                     </tr>
                   ))}
                 </tbody>

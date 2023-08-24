@@ -6,18 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="c20fbe9c-9169-4241-9ec0-dff0f7b0e503" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/manager/ReferenceInfoTable/FacilityTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/ReferenceInfoTable/FacilityTable.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/manager/SafetyEduDetails.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/SafetyEduDetails.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/UserSelectInspection.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserSelectInspection.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/Userfrequent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/Userfrequent.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/UserfrequentReg.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserfrequentReg.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/danger.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/danger.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/facilityname.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/facilityname.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/falsetrap.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/falsetrap.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/injured.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/injured.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/sourceDanger.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/sourceDanger.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/setupProxy.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/setupProxy.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/FrequentInseptionTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/FrequentInseptionTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/FrequentinseptionForm/Period.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/FrequentinseptionForm/Period.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/FrequentinseptionForm/area.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/FrequentinseptionForm/area.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/FrequentinseptionForm/inspector.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/FrequentinseptionForm/inspector.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/SafetyFrequentInspection.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/SafetyFrequentInspection.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,6 +79,7 @@
       <workItem from="1692581271214" duration="3391000" />
       <workItem from="1692662925742" duration="7180000" />
       <workItem from="1692704545169" duration="422000" />
+      <workItem from="1692854099272" duration="11861000" />
     </task>
     <servers />
   </component>
