@@ -59,8 +59,8 @@ function SafetyInspectionStatisticsMonthImg() {
       {
         sheetName: "점검영역 분석",
         data: partCountForExcel.map((item) => ({
-          점검영역: item[0],
-          건수: item[1],
+          점검영역: item.sort,
+          건수: item.수시점검,
         })),
       },
       {
@@ -89,7 +89,7 @@ function SafetyInspectionStatisticsMonthImg() {
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     });
 
-    saveAs(excelFile, "분석_결과.xlsx");
+    saveAs(excelFile, "수시점검_월간분석.xlsx");
   };
 
   //그 외 변수
@@ -109,62 +109,52 @@ function SafetyInspectionStatisticsMonthImg() {
     try {
       //점검건수 값
       await axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/count`, {
-            params: { yearmonth: selectedYear },
-          }) //세아
-          //  await axios.get(`${process.env.REACT_APP_API_BASE_URL}/statistics/count`, { params: { yearmonth: selectedYear } })
-          .then((response) => {
-            setSpcCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
-            console.log(response.data);
-          });
+        .get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/count`, {
+          params: { yearmonth: selectedYear },
+        }) //세아
+        .then((response) => {
+          setSpcCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
+        });
 
       //영역값(엑셀용)
       await axios
-          .get(
-              `${process.env.REACT_APP_API_BASE_URL}/special/statistics/partandmonth`,
-              { params: { yearmonth: selectedYear } }
-          ) //세아
-          //await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/partandmonthforexcel`, { params: { yearmonth: selectedYear } })
-          .then((response) => {
-            setPartCountForExcel(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
-            console.log("체크체크체크" + response.data);
-          });
+        .get(
+          `${process.env.REACT_APP_API_BASE_URL}/special/statistics/partandmonth`,
+          { params: { yearmonth: selectedYear } }
+        )
+        .then((response) => {
+          setPartCountForExcel(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
+        });
 
       //영역값2
       await axios
-          .get(
-              `${process.env.REACT_APP_API_BASE_URL}/special/statistics/partandmonth`,
-              { params: { yearmonth: selectedYear } }
-          ) //세아
-          //await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })
-          .then((response) => {
-            setPartCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
-            console.log(response.data);
-          });
+        .get(
+          `${process.env.REACT_APP_API_BASE_URL}/special/statistics/partandmonth`,
+          { params: { yearmonth: selectedYear } }
+        )
+        .then((response) => {
+          setPartCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
+        });
 
       //위험분류값
       await axios
-          .get(
-              `${process.env.REACT_APP_API_BASE_URL}/special/statistics/dangerandmonth`,
-              { params: { yearmonth: selectedYear } }
-          ) //세아
-          //await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/dangerandmonth`, { params: { yearmonth: selectedYear } })
-          .then((response) => {
-            setDangerCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
-            console.log(response.data);
-          });
+        .get(
+          `${process.env.REACT_APP_API_BASE_URL}/special/statistics/dangerandmonth`,
+          { params: { yearmonth: selectedYear } }
+        )
+        .then((response) => {
+          setDangerCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
+        });
 
       //위험원인값
       await axios
-          .get(
-              `${process.env.REACT_APP_API_BASE_URL}/special/statistics/causeandmonth`,
-              { params: { yearmonth: selectedYear } }
-          ) //세아
-          //await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/causeandmonth`, { params: { yearmonth: selectedYear } })
-          .then((response) => {
-            setCauseCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
-            console.log(response.data);
-          });
+        .get(
+          `${process.env.REACT_APP_API_BASE_URL}/special/statistics/causeandmonth`,
+          { params: { yearmonth: selectedYear } }
+        )
+        .then((response) => {
+          setCauseCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
+        });
     } catch (error) {
       console.error("불러온 데이터에 에러가 발생했습니다:", error);
     }
