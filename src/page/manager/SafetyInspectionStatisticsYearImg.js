@@ -354,7 +354,7 @@ function SafetyInspectionStatisticsYearImg() {
                                     <div className="hidden lg:ml-6 lg:flex lg:space-x-8 relative group">
                                         <div className="relative">
                                             <a
-                                                href="http://localhost:3000/inspection/statistics/yearimg"
+                                                href="http://172.20.20.252:3000/inspection/statistics/yearimg"
                                                 className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
                                             >
                                                 연간분석
@@ -384,7 +384,7 @@ function SafetyInspectionStatisticsYearImg() {
                                     <div className="hidden lg:ml-6 lg:flex lg:space-x-8 relative group">
                                         <div className="relative">
                                             <a
-                                                href="http://localhost:3000/inspection/statistics/monthimg"
+                                                href="http://172.20.20.252:3000/inspection/statistics/monthimg"
                                                 className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
                                             >
                                                 월간분석
