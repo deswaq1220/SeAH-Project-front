@@ -3,6 +3,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import logo from "../../img/logo.png"
+import instance from "../../api/fetcher";
+
+// const TK ="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0IiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY5MzAxMzE4OX0.D4CN3pj14vb4LEUo2pAUYF0RP-nNg5YqBmwFxUxBeBWopLq3b5UDL2PYxUgeIUJydcIB0m5-cwl7CU31UzTN4A"
 
 function ManagerLogin() {
   const [email, setEmail] = useState(""); // 말이 이메일이지 아이디임
@@ -13,14 +16,21 @@ function ManagerLogin() {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_BASE_URL}/auth/login`,
+      const response = await instance.post(
+        `/auth/login`,
         {
           email,
           password,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            // "Authorization" : `Bearer {ACCESS_TOKEN}`,
+          },
         }
-      );
 
+      );
+      console.log()
       navigate('/manager')
       console.log('로그인완료')
       // Handle successful login, e.g., store tokens, navigate to a new page

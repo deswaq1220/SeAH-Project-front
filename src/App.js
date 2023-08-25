@@ -28,7 +28,11 @@ import FaultyModal from "./page/user/UserRegularReg/FaultyModal";
 //다인 씀
 import SafetyInspectionStatisticsYearImg from "./page/manager/SafetyInspectionStatisticsYearImg";
 import SafetyInspectionStatisticsMonthImg from "./page/manager/SafetyInspectionStatisticsMonthImg";
+import axios from "axios";
+import TokenRefresher from "./api/fetcher";
 
+// axios.defaults.baseURL = "https://localhost:8081";
+// axios.defaults.withCredentials = true;
 
 function App() {
   console.log(`
