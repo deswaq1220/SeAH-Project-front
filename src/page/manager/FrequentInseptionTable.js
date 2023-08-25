@@ -15,6 +15,56 @@ import axios from "axios";
 
 
 export default function FrequentInseptionTable({ searchResults }) {
+
+  // const handleFormSubmit = () => {
+  //   const requestData = {
+  //     // 영역, 설비명, 기간_시작, 기간_끝, 점검자 이름, 점검자 사번, 완료유무
+  //     spePart: spePart,
+  //     speFacility: speFacility,
+  //     speStartDate: speStartDate,
+  //     speEndDate: speEndDate,
+  //     speComplete: speComplete,
+  //     spePerson: spePerson,
+  //     speEmpNum: speEmpNum,
+  //   }
+  //   console.log(requestData);
+
+  //   // 검색
+  //   axios
+  //       .get(`${process.env.REACT_APP_API_BASE_URL}/frequentinspection`, requestData, {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       })
+  //       .then((response) => {
+  //         setSearchResults(response.data.searchSpeList);
+  //
+  //         if(requestData !== null) {
+  //           // 등록이 완료되었다는 알림 띄우기
+  //           toast.success("등록이 완료되었습니다.", {
+  //             position: "top-center",
+  //             autoClose: 2000, // 알림이 2초 후에 자동으로 사라짐
+  //             hideProgressBar: true,
+  //           });
+  //
+  //           console.log(response);
+  //           console.log(requestData);
+  //
+  //           // // 저장성공시 해당설비의 리스트 페이지
+  //           // navigate(`/special/list/${masterdataPart}/${encodeURIComponent(masterdataFacility)}`);
+  //         }
+  //
+  //       })
+  //       .catch((error) => {
+  //         console.log(requestData);
+  //         console.error(error);
+  //         alert("검색에 실패했습니다. 다시 시도해주세요.");
+  //       });
+  // };
+
+
+
+
   /// 수시점검현황
   return (
       <div className="mx-4 mt-4">

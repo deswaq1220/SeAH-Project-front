@@ -11,7 +11,7 @@ function classNames(...classes) {
 
 export default function Injured({ onFormDataChange }) {
   const { masterdataPart } = useParams(); // url 영역 파라미터
-  const { masterdataFacility } = useParams(); // url 설비 파라미터
+  const { masterdataId } = useParams(); // url 설비코드 파라미터
   const [specialInjuredList, setSpecialInjuredList] = useState([]); // 부상부위List
   const [injuredSelected, setInjuredSelected] = useState(""); //  부상부위
   const [customInjured, setCustomInjured] = useState(""); // 기타[직접선택] 입력된 값
@@ -24,8 +24,7 @@ export default function Injured({ onFormDataChange }) {
       masterdataFacility
     ) {
       axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${encodeURIComponent(masterdataFacility)}`)   // 세아
-          //  .get(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`)
+          .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataId}`)   // 세아
           .then((response) => {
             // 백에서 보내주는 부상부위 리스트
             const speInjuredListFromBack = response.data.specialInjuredList;
@@ -43,8 +42,8 @@ export default function Injured({ onFormDataChange }) {
           });
     }
 
-    specialInjureFetchDataWithAxios(masterdataPart, masterdataFacility);
-  }, [masterdataPart, masterdataFacility]);
+    specialInjureFetchDataWithAxios(masterdataPart, masterdataId);
+  }, [masterdataPart, masterdataId]);
 
   // 기타(직접입력) 선택 시, customInjured 값 업데이트, onFOrmDataChange 호출
   const handleCustomInjuredChange = (e) => {
@@ -57,7 +56,7 @@ export default function Injured({ onFormDataChange }) {
     setInjuredSelected(value);
 
     // 기타(직접입력)을 제외한 경우 onFormDataChange에 value값 넘김
-    if (value.injuredMenu !== "[기타(직접입력)]") {
+    if (value.injuredMenu !== "기타(직접입력)") {
       onFormDataChange(value);
     } else {
       // 기타(직접입력)인 경우에는 customInjured 입력된 값을 넘김
@@ -150,7 +149,7 @@ export default function Injured({ onFormDataChange }) {
         </Listbox>
         {/* Custom Input */}
         {injuredSelected &&
-          injuredSelected.injuredMenu === "[기타(직접입력)]" && (
+          injuredSelected.injuredMenu === "기타(직접입력)" && (
             <input
               type="text"
               value={customInjured}

@@ -10,18 +10,15 @@ function classNames(...classes) {
 
 export default function Danger({ onFormDataChange }) {
   const { masterdataPart } = useParams(); // url 영역 파라미터
-  const { masterdataFacility } = useParams(); // url 설비 파라미터
+  const { masterdataId } = useParams(); // url 설비코드 파라미터
   const [specialDangerList, setSpecialDangerList] = useState([]); // 위험분류List
   const [selectedDanger, setSelectedDanger] = useState(""); // 위험분류
 
   // 위험분류 get
   useEffect(() => {
-    function specialDangerFetchDataWithAxios(
-      masterdataPart,
-      masterdataFacility
-    ) {
+    function specialDangerFetchDataWithAxios(masterdataPart, masterdataFacility) {
       axios
-        .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${encodeURIComponent(masterdataFacility)}`)   // 세아
+        .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataId}`)   // 세아
         .then((response) => {
           const speDangerListFromBack = response.data.specialDangerList;
           const speDangerData = speDangerListFromBack.map((item) => {
@@ -38,8 +35,8 @@ export default function Danger({ onFormDataChange }) {
         });
     }
 
-    specialDangerFetchDataWithAxios(masterdataPart, masterdataFacility);
-  }, [masterdataPart, masterdataFacility]);
+    specialDangerFetchDataWithAxios(masterdataPart, masterdataId);
+  }, [masterdataPart, masterdataId]);
 
   // 선택한 값 세팅
   const handleDangerChange = (value) => {

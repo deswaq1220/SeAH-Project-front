@@ -177,9 +177,9 @@ export default function FacilityTable() {
                         </td>
                         <td className="whitespace-nowrap p-4 text-sm text-gray-500">
                           {selectedFacility === facility.masterdataId ? (
-                            <Link to={`/special/${facility.masterdataPart}/${encodeURIComponent(facility.masterdataFacility)}`}>
+                            <Link to={`/special/${facility.masterdataPart}/${facility.masterdataId}`}>
                               <QRCode
-                                value={`http://localhost:3000/special/${facility.masterdataPart}/${encodeURIComponent(facility.masterdataFacility)}`}
+                                value={`http://localhost:3000/special/${facility.masterdataPart}/${facility.masterdataId}`}
                               />
                             </Link>
                           ) : (

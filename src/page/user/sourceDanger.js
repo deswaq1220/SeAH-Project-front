@@ -11,7 +11,7 @@ function classNames(...classes) {
 
 export default function Dangersource({onFormDataChange}) {
   const { masterdataPart } = useParams(); // url 영역 파라미터
-  const { masterdataFacility } = useParams(); // url 설비 파라미터
+  const { masterdataId } = useParams(); // url 설비코드 파라미터
   const [specialCauseList, setSpecialCauseList] = useState([]);       // 위험원인List
   const [sourceSelected, setSourceSelected] = useState("");
   const [customSource, setCustomSource] = useState("");
@@ -21,8 +21,7 @@ export default function Dangersource({onFormDataChange}) {
   useEffect(() => {
     function specialCauseFetchDataWithAxios(masterdataPart, masterdataFacility) {
       axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${encodeURIComponent(masterdataFacility)}`)  // 세아
-          //  .get(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`)
+          .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataId}`)  // 세아
           .then((response) => {
             const speCauseListFromBack = response.data.specialCauseList;
 
@@ -40,8 +39,8 @@ export default function Dangersource({onFormDataChange}) {
           });
     }
 
-    specialCauseFetchDataWithAxios(masterdataPart, masterdataFacility);
-  }, [masterdataPart, masterdataFacility]);
+    specialCauseFetchDataWithAxios(masterdataPart, masterdataId);
+  }, [masterdataPart, masterdataId]);
 
   // 기타(직접입력) 선택 시, customSource 값을 업데이트하고 onFormDataChange를 호출
   const handleCustomSourceChange = (e) => {
@@ -53,7 +52,7 @@ export default function Dangersource({onFormDataChange}) {
   const handleSelectedChange = (value) => {
     setSourceSelected(value);
     // 기타(직접입력)을 제외한 경우 onFormDataChange에 value값 넘김
-    if (value.causeMenu !== "[기타(직접입력)]") {
+    if (value.causeMenu !== "기타(직접입력)") {
       onFormDataChange(value);
     } else {
       // 기타(직접입력)인 경우에는 customSource에 입력된 값을 넘김
@@ -138,7 +137,7 @@ export default function Dangersource({onFormDataChange}) {
             </>
           )}
         </Listbox>
-        {sourceSelected && sourceSelected.causeMenu === "[기타(직접입력)]" && (
+        {sourceSelected && sourceSelected.causeMenu === "기타(직접입력)" && (
             <input
                 type="text"
                 value={customSource}

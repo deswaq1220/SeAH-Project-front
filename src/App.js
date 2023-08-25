@@ -76,9 +76,9 @@ function App() {
 
 
         {/* 사용자 수시점검 */}
-        <Route path="/special/:masterdataPart/:masterdataFacility" element={<UserSelectInspection/>}></Route>  {/* 사용자 점검선택페이지*/}
-        <Route path="/special/list/:masterdataPart/:masterdataFacility" element={<Userfrequent/>}></Route>  {/* 사용자 수시점검 설비별 리스트페이지*/}
-        <Route path="/special/new/:masterdataPart/:masterdataFacility" element={<UserfrequentReg/>}></Route>{/* 사용자 수시점검등록페이지 */}
+        <Route path="/special/:masterdataPart/:masterdataId" element={<UserSelectInspection/>}></Route>  {/* 사용자 점검선택페이지*/}
+        <Route path="/special/list/:masterdataPart/:masterdataId" element={<Userfrequent/>}></Route>  {/* 사용자 수시점검 설비별 리스트페이지*/}
+        <Route path="/special/new/:masterdataPart/:masterdataId" element={<UserfrequentReg/>}></Route>{/* 사용자 수시점검등록페이지 */}
 
         <Route path="/userfrequentreg" element={<UserfrequentReg/>}></Route>{/* 수시점검 등록페이지 */}
 

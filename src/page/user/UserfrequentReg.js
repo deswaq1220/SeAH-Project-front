@@ -35,10 +35,11 @@ function classNames(...classes) {
 
 function UserfrequentReg() {
  const { masterdataPart } = useParams();           // url 영역 파라미터
- const { masterdataFacility } = useParams();       // url 설비 파라미터
+ const { masterdataId } = useParams();       // url 설비 파라미터
  const [speEmpNum, setSpeEmpNum] = useState("");
  const [spePerson, setSpePerson] = useState("");
  const [speEmail, setSpeEmail] = useState("");
+ const [speFacility, setSpeFacility] = useState("");
  const [speDanger, setSpeDanger] = useState("");
  const [speInjure, setSpeInjure] = useState("");
  const [speCause, setSpeCause] = useState("");
@@ -59,6 +60,10 @@ function UserfrequentReg() {
   setSpeEmail(inspectorForm.inspectoremail);
  };
 
+ // Facilityname 콜백 : 완료여부
+ const handleFacilityDatae = (selected) => {
+  setSpeFacility(selected);
+ };
 
  // Danger 콜백함수 : 위험분류
  const handleDangerDataChange = (selected) => {
@@ -137,9 +142,7 @@ function UserfrequentReg() {
 
   // 수시점검 등록 요청
   axios
-    //   .post(`http://172.20.20.252:8081/special/new/${masterdataPart}/${masterdataFacility}`, formData, {   // 세아
-      .post(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${encodeURIComponent(masterdataFacility)}`, formData, {
-       //  .post(`http://192.168.202.1:8081/special/new/${masterdataPart}/${masterdataFacility}`, formData, {
+      .post(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataId}`, formData, {
        headers: {
         "Content-Type": "multipart/form-data",
        },
@@ -156,7 +159,7 @@ function UserfrequentReg() {
         });
 
         // 저장성공시 해당설비의 리스트 페이지
-        navigate(`/special/list/${masterdataPart}/${encodeURIComponent(masterdataFacility)}`);
+        navigate(`/special/list/${masterdataPart}/${masterdataId}`);
        }
 
       })
@@ -175,7 +178,7 @@ function UserfrequentReg() {
       <p>수시점검 내용등록</p>
       <Inspector onFormDataChange={handleInspectorDataChange} /> {/* 점검자 */}
       <Inspectionarea /> {/* 점검영역 */}
-      <Facilityname /> {/* 설비명 */}
+      <Facilityname onFormDataChange={handleDangerDataChange} /> {/* 설비명 */}
       <Danger onFormDataChange={handleDangerDataChange} /> {/* 위험분류 */}
       <Injured onFormDataChange={handleInjuredDataChange} /> {/* 부상부위 */}
       <Dangersource onFormDataChange={handleCauseDataChange} /> {/* 위험원인 */}
