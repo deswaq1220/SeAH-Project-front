@@ -24,38 +24,39 @@ export default function SafetyEduDetails() {
 
   const navigate = useNavigate();
 
-  const [education, setEducation] = useState({
-    selected: null,
-    selectedDuty: null,
-    isCompleted: false,
-    uploadedFiles: [],
-    error: null,
-    formData: {
-      eduTitle: "",
-      eduInstructor: "",
-      eduPlace: "",
-      eduCategory: "", // 교육
-      eduStartTime: new Date(), // 시작시간
-      // eduEndTime: new Date(), // 끝나는 시간
-      eduSumTime: "", // 총시간
-      eduTarget: "", // 대상자
-      eduContent: "", // 교육내용
-      eduWriter: "",
-      eduId: "",
-    },
-  });
+  // const [education, setEducation] = useState({
+  //   selected: null,
+  //   selectedDuty: null,
+  //   isCompleted: false,
+  //   uploadedFiles: [],
+  //   error: null,
+  //   formData: {
+  //     eduTitle: "",
+  //     eduInstructor: "",
+  //     eduPlace: "",
+  //     eduCategory: "", // 교육
+  //     eduStartTime: new Date(), // 시작시간
+  //     // eduEndTime: new Date(), // 끝나는 시간
+  //     eduSumTime: "", // 총시간
+  //     eduTarget: "", // 대상자
+  //     eduContent: "", // 교육내용
+  //     eduWriter: "",
+  //     eduId: "",
+  //   },
+  // });
 
   useEffect(() => {
     if(eduId){
       const fetchEduDetail = async () => {
         try {
           const response = await axios.get(
-              // `http://172.20.20.252:8081/edudetails/${eduId}`,        // 세아
+            `${process.env.REACT_APP_API_BASE_URL}/edudetails/${eduId}`,        // 세아
               `http://localhost:8081/edudetails/${eduId}`
           );
           //        setUploadedFiles(response.data.eduFiles);
           setEduData({ ...response.data, eduFileList: response.data.eduFileList});
           console.log(eduData.eduFileList[0]);
+7
 
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -154,8 +155,7 @@ export default function SafetyEduDetails() {
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-      //     `http://172.20.20.252:8081/edudetails/${eduId}`
-      'http://localhost/edudetails/${eduId}'
+          `${process.env.REACT_APP_API_BASE_URL}/edudetails/${eduId}`
       );
 
       if (response.status === 200) {
@@ -357,6 +357,13 @@ export default function SafetyEduDetails() {
                 onClick={handleExport}
               >
                 엑셀 저장
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate(`/training/${eduId}`)}
+                className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor ml-1"
+              >
+                파일출력
               </button>
             </div>
           </div>

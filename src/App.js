@@ -20,6 +20,9 @@ import EduStatics from "./page/manager/EduStatics"
 import EduAttenStatics from "./page/manager/EduAttenStatics"
 import FrequentIns from "./page/manager/SafetyFrequentInspection";
 import AttenStatus from "./page/manager/AttendanceStatus";
+import UserFrequentDetails from "./page/user/UserFrequentDetails/UserFrequentDetails";
+import TrainingReport from "./components/TrainingReport";
+import SafetyManagerInspection from "./page/manager/SafetyManagerInspection";
 
 //다인 씀
 import SafetyInspectionStatisticsYearImg from "./page/manager/SafetyInspectionStatisticsYearImg";
@@ -46,8 +49,10 @@ function App() {
         <Route path="/edudetails/:eduId" element={<SafetyEduDetails/>}></Route>{/* 관리자 안전교육상세*/}
         <Route path="/edureg" element={<SafetyEduReg/>}></Route>{/* 관리자 안전교육 등록페이지 */}
         <Route path="/edureg/:eduId" element={<SafetyEduReg/>}></Route>{/* 관리자 안전교육 등록페이지 */}
+        <Route path="/managerinspection" element={<SafetyManagerInspection/>}></Route>{/* 관리자 안점점검 페이지 */}
         <Route path="/inspection" element={<SafetyInspection/>}></Route>{/* 관리자 안점점검 페이지 */}
         <Route path="/attenstatus/:eduId" element={<AttenStatus/>}></Route>{/* 관리자 출석현황 */}
+        <Route path="/training/:eduId" element={<TrainingReport/>}></Route>{/* 관리자 출석현황 */}
 
         <Route path="/reginfo" element={<ReferenceInfo/>}></Route> {/* 관리자 기준정보페이지 */}
 
@@ -76,6 +81,9 @@ function App() {
         <Route path="/special/new/:masterdataPart/:masterdataFacility" element={<UserfrequentReg/>}></Route>{/* 사용자 수시점검등록페이지 */}
 
         <Route path="/userfrequentreg" element={<UserfrequentReg/>}></Route>{/* 수시점검 등록페이지 */}
+
+        <Route path="/special/detail/:speId" element={<UserFrequentDetails/>}></Route>{/* 수시점검 상세페이지 */}
+
 
         <Route path="/404" element={<Error/>}></Route> {/* 에러 */}
       </Routes>

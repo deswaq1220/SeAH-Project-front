@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 function SafetyEducationMain() {
   const [currentDate, setCurrentDate] = useState(new Date()); // 년,월
   const [eduList, setEduList] = useState([]); // 안전교육 데이터를 담을 상태 변수
+  
   const itemsPerPage = 10; // 한 페이지당 보여줄 항목 개수
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 번호
   const apiUrl = process.env.REACT_APP_API_BASE_URL;
@@ -29,14 +30,29 @@ function SafetyEducationMain() {
     return index !== -1 ? index + 1 : ""; // 인덱스를 1부터 시작하도록 +1 해줍니다.
   };
 
+  // useEffect(() => {
+  //   const fetchEduList = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `http://localhost:8081/edumain`); 
+  //         // `http://172.20.20.252:8081/edumain`); 
+  //       setEduList(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+
+  //   fetchEduList();
+  // }, []);
+
 
   useEffect(() => {
     const getLogsForCurrentMonth = async () => {
       try {
         const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
         const currentYear = getYear(currentDate);
-        // const response = await axios.get("http://172.20.20.252:8081/edumain", {   // 세아
-        const response = await axios.get("http://localhost:8081/edumain", {
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/edumain`, {   // 세아
+        // const response = await axios.get(`http://localhost:8081/edumain, {
           params: {
             year: currentYear,
             month: currentMonth,
@@ -199,7 +215,7 @@ function SafetyEducationMain() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
-                    {getCurrentPageItems().map((edu) => (
+                    {getCurrentPageItems().map((edu, index) => (
                       <tr key={edu.eduId}>
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           <div className="flex items-center">
@@ -263,7 +279,7 @@ function SafetyEducationMain() {
               totalItems={eduList.length}
               setCurrentPage={setCurrentPage}
             />
-          ) : (null)}
+          ) : ( <p className="flex justify-center">해당 월의 교육은 없습니다.</p>)}
         </div>
       </div>
     </div>

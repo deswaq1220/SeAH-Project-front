@@ -1,4 +1,4 @@
-import UserHeader from "../../components/UserHeader";
+import Header from "../../components/Header";
 import {
   ClipboardDocumentListIcon,
   ClipboardDocumentCheckIcon,
@@ -24,7 +24,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function UserSelectInspection() {
+export default function SafetyManagerInspection() {
   const { masterdataPart } = useParams(); // url 영역 파라미터
   const { masterdataFacility } = useParams(); // url 설비 파라미터
 
@@ -150,8 +150,8 @@ export default function UserSelectInspection() {
   };
 
   return (
-    <div className="container mx-auto sm:px-6 lg:px-8 px-4 mb-6">
-      <UserHeader />
+    <div className="container mx-auto sm:px-6 lg:px-8 px-4">
+      <Header />
       <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-gray-200 shadow sm:grid sm:grid-cols-2 sm:gap-px sm:divide-y-0">
         {actions.map((action, actionIdx) => (
           <div

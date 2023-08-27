@@ -16,7 +16,7 @@ export default function AttenStatus() {
 
   useEffect(() => {
     // 교육 아이디에 맞는 출석목록 데이터를 받아오는 API 호출
-    axios.get(`http://172.20.20.252:8081/usereduatten/list/${eduId}`) //세아
+    axios.get(`${process.env.REACT_APP_API_BASE_URL}/usereduatten/list/${eduId}`) //세아
     // axios.get(`http://localhost:8081/usereduatten/list/${eduId}`)
       .then(response => {
         // 받아온 출석목록 데이터를 attendanceList 상태에 저장
@@ -32,13 +32,12 @@ export default function AttenStatus() {
     const fetchEduDetail = async () => {
       try {
         const response = await axios.get(
-          `http://172.20.20.252:8081/edudetails/${eduId}`,        // 세아
+          `${process.env.REACT_APP_API_BASE_URL}/edudetails/${eduId}`,        // 세아
           // `http://localhost:8081/edudetails/${eduId}`
         );
         //        setUploadedFiles(response.data.eduFiles);
         setEduData({ ...response.data, eduFiles: response.data.eduFiles });
         setEduTitle(response.data.eduTitle); // eduTitle 설정
-        console.log(eduData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -57,6 +56,7 @@ export default function AttenStatus() {
         '출석일자': attendance.attenTime
       };
     });
+    excelData.unshift({ '교육 제목': eduData.eduTitle });
 
     const worksheet = XLSX.utils.json_to_sheet(excelData);
     const workbook = XLSX.utils.book_new();

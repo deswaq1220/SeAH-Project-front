@@ -4,11 +4,13 @@ import EmailTable
  from "../ReferenceInfoTable/EmailTable";
  import FacilityReg from "./FacilityReg";
  import FacilityTable from "../ReferenceInfoTable/FacilityTable";
+import DepartmentReg from "./DepartmentReg";
+import DepartmentTable from "../ReferenceInfoTable/DepartmentTable";
  
 const tabs = [
-  { name: '설비등록',  component: [<FacilityReg />, <FacilityTable />], current: true },
-  { name: '설비정보', component: [<FacilityInfo />, <EmailTable />], current: false },
-  { name: '안전점검리스트 관리', href: '#', current: false },
+  { name: '설비등록',  component: [ <FacilityTable />], current: true },
+  { name: '조치담당자 등록', component: [<FacilityInfo />, <EmailTable />], current: false },
+  { name: '부서 관리', component: [<DepartmentReg />,<DepartmentTable/>], current: false },
 
 ]
 
