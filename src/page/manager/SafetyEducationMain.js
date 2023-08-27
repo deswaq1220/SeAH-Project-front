@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Pagination from "../../components/Pagination";
 import { Link } from "react-router-dom";
-import fetcher from "../../api/fetcher";
+import instance from "../../api/fetcher";
 
   const TK ="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1IiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY5MzAyNjY1OX0.VVZoLMp3oVPQH-EjiYs_Rcr-ZiaA9WsT5YLf9QlaKnjdbhb1exwRodMJASj7g0jd_8R3Bad9YIvUi4SBe1m1-g"
 
@@ -63,7 +63,7 @@ function SafetyEducationMain() {
           },
           headers: {
               'Content-Type': 'application/json',
-              'Authorization' : `Bearer ${TK}`,
+              // 'Authorization' : `Bearer ${TK}`,
           },
           
           

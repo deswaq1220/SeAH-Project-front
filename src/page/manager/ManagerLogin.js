@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import logo from "../../img/logo.png"
-import instance from "../../api/fetcher";
+import fetcher from "../../api/fetcher";
 
 // const TK ="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0IiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY5MzAxMzE4OX0.D4CN3pj14vb4LEUo2pAUYF0RP-nNg5YqBmwFxUxBeBWopLq3b5UDL2PYxUgeIUJydcIB0m5-cwl7CU31UzTN4A"
 
@@ -16,7 +16,7 @@ function ManagerLogin() {
     e.preventDefault();
 
     try {
-      const response = await instance.post(
+      const response = await fetcher.post(
         `/auth/login`,
         {
           email,

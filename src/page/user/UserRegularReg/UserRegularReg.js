@@ -12,8 +12,8 @@ export default function UserRegularReg() {
         <h1 className="text-base font-semibold leading-6 text-gray-900 ml-4">
           정기점검 등록
         </h1>
-        <div id="ReformMeasures" className="flex items-center">
-          <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
+        <div id="ReformMeasures" className="flex items-centern flex-wrap">
+          <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 ml-4 my-4 ">
             점검항목
           </span>
           <InspectionItem />

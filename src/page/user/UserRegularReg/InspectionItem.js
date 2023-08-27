@@ -23,7 +23,7 @@ export default function InspectionItem() {
   const [selected, setSelected] = useState(people[0])
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center ml-4">
       <Listbox value={selected} onChange={setSelected}>
       {({ open }) => (
         <>

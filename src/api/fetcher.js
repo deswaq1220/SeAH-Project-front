@@ -1,71 +1,82 @@
-// 토큰 관리와 갱신
+import Cookies from "universal-cookie/es6";
 import axios from "axios";
-// 토큰 갱신 항수
-const tokenRefresh = async () => {
-  const refreshToken = localStorage.getItem('refresh_token');
-  try {
-    const response = await axios.post("http://localhost:8081/auth/refresh", {
-      headers: {
-        Authorization: `Bearer ${refreshToken}`,
-      },
-    });
-    const result = await response.json();
-    console.log("토큰 갱신 결과:", result);
+import Swal from "sweetalert2";
 
-    localStorage.setItem('access_token', result.accessToken);
-    console.log("새로운 액세스 토큰:", result.accessToken);
+const ACCESS_TOKEN_COOKIE ='at';
+const REFRESH_TOKEN_COOKIE ='rt';
 
-    localStorage.setItem('refresh_token', result.refreshToken);
-    console.log("새로운 리프레시 토큰:", result.refreshToken);
+const cookies = new Cookies();
 
-    localStorage.setItem('message', result.message);
-  } catch (error) {
-    console.error("토큰 갱신 오류:", error);
-    alert(error);
-  }
-};
-const instance = axios.create({
-  baseURL: "http://localhost:8081",
-});
-// 요청이 전달되기 전에 작업 수행 혹은 요청 오류가 있는 함수를 받음
-instance.interceptors.request.use(
-  //작업 수행
-  (config) => {
-    const accessToken = localStorage.getItem("access_token");
-    console.log(`기존 토큰 : ${accessToken}`);
-    config.headers["Content-Type"] = "application/json";
-    config.headers["Authorization"] = `Bearer ${accessToken}`;
-    return config;
-  },
-  // 요청 오류
-  (error) => {
-    console.log(error);
-    return Promise.reject(error);
-  }
-);
-instance.interceptors.response.use(
-  (response) => {
-    if (response.status === 404) {
-      console.log("404 페이지로 넘어가야 함!");
+const INSTANCE = () => {
+    const instance = {
+        baseURL: process.env.REACT_APP_API_BASE_URL,
+        timeout: 100000,
     }
-    return response;
-  },
-  async (error) => {
-    console.log(error.response.status); // 401
-    if (error.response?.status === 401) {
-      // 토큰 갱신 함수
-      await tokenRefresh();
-      const new_accessToken = localStorage.getItem("access_token");
-      console.log(`새로운 토큰 : ${new_accessToken}`);
-      error.config.headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${new_accessToken}`,
-      };
-      // 중단된 요청을(에러난 요청)을 토큰 갱신 후 재요청
-      const response = await axios.request(error.config);
-      return response;
+    const accessToken = cookies.get(ACCESS_TOKEN_COOKIE);
+
+    if(accessToken) {
+        const axiosWithAuthHeader = {...instance};
+        axiosWithAuthHeader.headers = {"Authorization" : `Bearer ${accessToken}`}
+        return axios.create(axiosWithAuthHeader)
+    } else {
+        return axios.create(instance);
     }
-    return Promise.reject(error);
-  }
-);
-export default instance;
+}
+
+function refreshRequest(originalRequest) {
+    return originalRequest
+        .then((res) => res) // 200
+        .catch((err) => { // 401, 500, 기타 등등
+            const config = err.config;
+            if (err?.response?.data === "EXPIRED") {
+                return INSTANCE().post('http://localhost:8081/auth/refresh', {
+                    accessToken: cookies.get(ACCESS_TOKEN_COOKIE),
+                    refreshToken: cookies.get(REFRESH_TOKEN_COOKIE)
+                })
+                    .then((res) => {
+                        if (res?.data?.accessToken && res?.data?.refreshToken) {
+                            cookies.set(ACCESS_TOKEN_COOKIE, res?.data?.accessToken);
+                            cookies.set(REFRESH_TOKEN_COOKIE, res?.data?.refreshToken);
+                            return axios({
+                                ...config,
+                                headers: {"Authorization": `Bearer ${cookies.get(ACCESS_TOKEN_COOKIE)}`}
+                            }).then((res) => res)
+                        } else {
+                            Swal.fire({
+                                title: "토큰이 만료되었습니다.",
+                                icon: 'warning',
+                            })
+                            window.location.href = '/'
+                            cookies.remove(ACCESS_TOKEN_COOKIE)
+                            cookies.remove(REFRESH_TOKEN_COOKIE)
+                        }
+                    }).catch(() => {
+                        alert("몰라용")
+                        window.location.href = '/404'
+                        cookies.remove(ACCESS_TOKEN_COOKIE)
+                        cookies.remove(REFRESH_TOKEN_COOKIE)
+                    })
+            } else {
+                throw err
+            }
+        })
+}
+
+export default {
+    get : (url, options)=>{
+        const originalRequest = INSTANCE().get(url,options);
+        return refreshRequest(originalRequest);
+    },
+    delete : (url, options)=>{
+        const originalRequest = INSTANCE().delete(url,options);
+        return refreshRequest(originalRequest);
+    },
+    post : (url,data, options)=>{
+        const originalRequest = INSTANCE().post(url,data,options);
+        return refreshRequest(originalRequest);
+    },
+    put : (url,data, options)=>{
+        const originalRequest = INSTANCE().put(url,data,options);
+        return refreshRequest(originalRequest);
+    }
+}
