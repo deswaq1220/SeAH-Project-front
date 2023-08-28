@@ -28,6 +28,7 @@ export default function FrequentInsArea({onFormDataChange}) {
               });
               setSpePartList(spePartData);
               setSelectedPart(spePartData[0]);
+              onFormDataChange(null);
           })
           .catch((error) => {
             console.error("Error fetching data: ", error);
@@ -42,6 +43,7 @@ export default function FrequentInsArea({onFormDataChange}) {
  const handleSelectedPart= (value) => {
    setSelectedPart(value);
    onFormDataChange(value);
+
  };
 
 

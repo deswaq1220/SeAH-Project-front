@@ -6,14 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="c20fbe9c-9169-4241-9ec0-dff0f7b0e503" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/manager/FrequentInseptionTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/FrequentInseptionTable.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/manager/FrequentinseptionForm/Period.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/FrequentinseptionForm/Period.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/page/manager/FrequentinseptionForm/area.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/FrequentinseptionForm/area.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/page/manager/FrequentinseptionForm/equipmentName.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/FrequentinseptionForm/equipmentName.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/manager/FrequentinseptionForm/inspector.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/FrequentinseptionForm/inspector.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/page/manager/SafetyFrequentInspection.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/SafetyFrequentInspection.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/danger.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/danger.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/injured.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/injured.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,23 +33,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/SeAHAnDIT/Desktop/SeAH_Project&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\IntelliJ IDEA 2023.1\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/SeAHAnDIT/Desktop/SeAH_Project",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.sourceCode.Markdown",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\IntelliJ IDEA 2023.1\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\user\Documents\GitHub\SeAH-Project-front\src\style" />
@@ -86,7 +82,7 @@
       <workItem from="1692927434768" duration="822000" />
       <workItem from="1692928711164" duration="10215000" />
       <workItem from="1693187530743" duration="1477000" />
-      <workItem from="1693189032511" duration="19086000" />
+      <workItem from="1693189032511" duration="21520000" />
     </task>
     <servers />
   </component>

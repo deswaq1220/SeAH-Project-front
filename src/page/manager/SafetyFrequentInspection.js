@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 //수시점검 현황
 export default function FrequentIns() {
   const [searchData, setSearchData] = useState([]); // 검색 결과 데이터 저장
-  const [spePart, setSpePart] = useState("");            // 영역
+  const [spePart, setSpePart] = useState(null);            // 영역
   const [speFacility, setSpeFacility] = useState("");   // 설비명
   const [speStartDate, setSpeStartDate] = useState(null);   // 시작기간
   const [speEndDate, setSpeEndDate] = useState(null);       // 끝기간
