@@ -176,7 +176,7 @@ function SafetyInspectionStatisticsMonthImg() {
                       <div className="hidden lg:ml-6 lg:flex lg:space-x-8 relative group">
                         <div className="relative">
                           <a
-                              href="http://localhost:3000/inspection/statistics/yearimg"
+                              href={`${process.env.REACT_APP_API_CERENT_URL}/inspection/statistics/yearimg`}
                               className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
                           >
                             연간분석
@@ -206,7 +206,7 @@ function SafetyInspectionStatisticsMonthImg() {
                       <div className="hidden lg:ml-6 lg:flex lg:space-x-8 relative group">
                         <div className="relative">
                           <a
-                              href="http://localhost:3000/inspection/statistics/monthimg"
+                              href={`${process.env.REACT_APP_API_CERENT_URL}/inspection/statistics/monthimg`}
                               className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
                           >
                             월간분석
