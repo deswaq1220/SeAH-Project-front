@@ -6,6 +6,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Pagination from "../../components/Pagination";
 import { Link } from "react-router-dom";
+import instance from "../../api/fetcher";
+
+  const TK ="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1IiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY5MzAyNjY1OX0.VVZoLMp3oVPQH-EjiYs_Rcr-ZiaA9WsT5YLf9QlaKnjdbhb1exwRodMJASj7g0jd_8R3Bad9YIvUi4SBe1m1-g"
 
 function SafetyEducationMain() {
   const [currentDate, setCurrentDate] = useState(new Date()); // 년,월
@@ -51,12 +54,19 @@ function SafetyEducationMain() {
       try {
         const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
         const currentYear = getYear(currentDate);
-        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/edumain`, {   // 세아
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/edumain`, { 
+            // 세아
         // const response = await axios.get(`http://localhost:8081/edumain, {
           params: {
             year: currentYear,
             month: currentMonth,
           },
+          headers: {
+              'Content-Type': 'application/json',
+              // 'Authorization' : `Bearer ${TK}`,
+          },
+          
+          
         });
         const sortedEduList = response.data.sort((a, b) => {
           // eduStartTime을 기준으로 오름차순 정렬

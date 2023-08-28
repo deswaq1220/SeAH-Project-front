@@ -26,10 +26,17 @@ import TrainingReport from "./components/TrainingReport";
 import SafetyManagerInspection from "./page/manager/SafetyManagerInspection";
 import RegularMain from "./page/user/RegularMain";
 
+import UserRegularReg from "./page/user/UserRegularReg/UserRegularReg";
+import FaultyModal from "./page/user/UserRegularReg/FaultyModal";
+
 //다인 씀
 import SafetyInspectionStatisticsYearImg from "./page/manager/SafetyInspectionStatisticsYearImg";
 import SafetyInspectionStatisticsMonthImg from "./page/manager/SafetyInspectionStatisticsMonthImg";
+import axios from "axios";
+import TokenRefresher from "./api/fetcher";
 
+// axios.defaults.baseURL = "https://localhost:8081";
+// axios.defaults.withCredentials = true;
 
 function App() {
   console.log(`
@@ -85,10 +92,13 @@ function App() {
         <Route path="/special/detail/:speId" element={<UserFrequentDetails/>}></Route>{/* 수시점검 상세페이지 */}
 
         {/* 정기점검 */}
-        <Route path="/regular/new" element={<UserRegularReg/>}></Route>{/* 정기점검 등록 */}
         <Route path="/regular" element={<RegularMain/>}></Route>{/* 관리자,사용자 정기점검 목록 */}
 
 
+        {/* 사용자 정기점검 */}
+
+        <Route path="/regularreg/:masterdataPart" element={<UserRegularReg/>}></Route>{/* 정기점검 상세페이지 */}
+        <Route path="/faultymodal" element={<FaultyModal/>}></Route>{/* 수시점검 상세페이지 */}
 
 
         <Route path="/404" element={<Error/>}></Route> {/* 에러 */}

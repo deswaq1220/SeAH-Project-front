@@ -373,13 +373,13 @@ function SafetyInspectionStatisticsYearImg() {
                                     <div className="hidden lg:ml-6 lg:flex lg:space-x-8">
                                         {/* Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
                                         <a
-                                            href="http://10.200.18.185:3000/inspection/statistics/yearimg"
+                                            href="http://localhost:3000/inspection/statistics/yearimg"
                                             className="inline-flex items-center border-b-2 border-seahColor px-1 pt-1 text-sm font-medium text-gray-900"
                                         >
                                             연간분석
                                         </a>
                                         <a
-                                            href="http://10.200.18.185:3000/inspection/statistics/monthimg"
+                                            href="http://localhost:3000/inspection/statistics/monthimg"
                                             className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
                                         >
                                             월간분석

@@ -87,6 +87,8 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
+const TK ="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1IiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY5MzAyNjY1OX0.VVZoLMp3oVPQH-EjiYs_Rcr-ZiaA9WsT5YLf9QlaKnjdbhb1exwRodMJASj7g0jd_8R3Bad9YIvUi4SBe1m1-g"
+
 const useSafetyEduForm = (eduData) => {
   const formDataWithFile = new FormData();
   const [selected, setSelected] = useState(people[0]);
@@ -118,18 +120,23 @@ const useSafetyEduForm = (eduData) => {
   useEffect(() => {
     // 서버에서 교육 세부 정보 가져오기 (교육 아이디값 이용)
     axios
-        .get(`${process.env.REACT_APP_API_BASE_URL}/edudetails/${eduId}`)
-        //  .get(`http://localhost:8081/edudetails/${eduId}`)
-        .then((response) => {
-          // 가져온 데이터로 상태 업데이트
-          console.log(response.data);
+      .get(`${process.env.REACT_APP_API_BASE_URL}/edudetails/${eduId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${TK}`,
+        },
+      })
+      //  .get(`http://localhost:8081/edudetails/${eduId}`)
+      .then((response) => {
+        // 가져온 데이터로 상태 업데이트
+        console.log(response.data);
 
-          setFormData(response.data);
-        })
-        .catch((error) => {
-          // 에러 처리
-          console.error("교육 세부 정보를 가져오는 중 에러 발생:", error);
-        });
+        setFormData(response.data);
+      })
+      .catch((error) => {
+        // 에러 처리
+        console.error("교육 세부 정보를 가져오는 중 에러 발생:", error);
+      });
   }, [eduId]);
 
   const handleChange = (e) => {
@@ -158,32 +165,31 @@ const useSafetyEduForm = (eduData) => {
     // setQrValue(JSON.stringify({ ...formData, eduId: eduData.eduId }));
   };
 
-
   const onDrop = useCallback(
-      (acceptedFiles) => {
-        setUploadedFiles([...uploadedFiles, ...acceptedFiles]);
+    (acceptedFiles) => {
+      setUploadedFiles([...uploadedFiles, ...acceptedFiles]);
 
-        // for (const file of acceptedFiles) {
-        //   formData.append("files", file);
-        // }
+      // for (const file of acceptedFiles) {
+      //   formData.append("files", file);
+      // }
 
-        if (acceptedFiles.length > 0) {
-          setFormData({
-            ...formData,
-            files: acceptedFiles, // Update the file property in the formData state
-          });
-        }
+      if (acceptedFiles.length > 0) {
+        setFormData({
+          ...formData,
+          files: acceptedFiles, // Update the file property in the formData state
+        });
+      }
 
-        console.log(acceptedFiles);
-      },
-      [formData, uploadedFiles]
+      console.log(acceptedFiles);
+    },
+    [formData, uploadedFiles]
   );
 
   const deleteFile = (index) => {
     const updatedFiles = [...uploadedFiles];
     updatedFiles.splice(index, 1);
     setUploadedFiles(updatedFiles);
-    setFormData(prevData => ({ ...prevData, files: updatedFiles })); // Update formData with new file array
+    setFormData((prevData) => ({ ...prevData, files: updatedFiles })); // Update formData with new file array
   };
 
   const handleFileChange = (event) => {
@@ -237,7 +243,6 @@ const useSafetyEduForm = (eduData) => {
   // 교육등록 핸들러
   const navigate = useNavigate();
 
-
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -261,29 +266,31 @@ const useSafetyEduForm = (eduData) => {
       if (formData.eduId) {
         // 기존 교육 데이터를 수정하는 경우 (PUT 요청)
         const response = await axios.post(
-            //  `http://localhost:8081/edudetails/${formData.eduId}`,
-            `${process.env.REACT_APP_API_BASE_URL}/edudetails/${formData.eduId}`, //세아
-            formData,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-              withCredentials: true,
-            }
+          //  `http://localhost:8081/edudetails/${formData.eduId}`,
+          `${process.env.REACT_APP_API_BASE_URL}/edudetails/${formData.eduId}`, //세아
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              'Authorization': `Bearer ${TK}`
+            },
+            
+          }
         );
         console.log("수정 결과:", response.data);
       } else {
         // 새로운 교육 데이터를 등록하는 경우 (POST 요청)
         const response = await axios.post(
-            //  "http://localhost:8081/edureg",
-            `${process.env.REACT_APP_API_BASE_URL}/edureg`, // 세아
-            formData,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-              withCredentials: true,
-            }
+          //  "http://localhost:8081/edureg",
+          `${process.env.REACT_APP_API_BASE_URL}/edureg`, // 세아
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              'Authorization': `Bearer ${TK}`
+            },
+            withCredentials: true,
+          }
         );
         console.log("등록 결과:", response.data);
       }
@@ -318,8 +325,6 @@ const useSafetyEduForm = (eduData) => {
     const { value } = event.target;
     setSelectedEtcTime(Number(value));
   };
-
-
 
   return {
     selected,
