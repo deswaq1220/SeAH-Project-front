@@ -21,9 +21,10 @@ import EduAttenStatics from "./page/manager/EduAttenStatics"
 import FrequentIns from "./page/manager/SafetyFrequentInspection";
 import AttenStatus from "./page/manager/AttendanceStatus";
 import UserFrequentDetails from "./page/user/UserFrequentDetails/UserFrequentDetails";
-import UserRegularInspection from "./page/user/UserRegularInspection";
+import UserRegularReg from "./page/user/UserRegularReg";
 import TrainingReport from "./components/TrainingReport";
 import SafetyManagerInspection from "./page/manager/SafetyManagerInspection";
+import RegularMain from "./page/user/RegularMain";
 
 //다인 씀
 import SafetyInspectionStatisticsYearImg from "./page/manager/SafetyInspectionStatisticsYearImg";
@@ -64,6 +65,7 @@ function App() {
 
         
         
+        
 
         {/*다인 추가함 */}
         <Route path="/inspection/statistics/yearimg" element={<SafetyInspectionStatisticsYearImg/>}></Route>{/* 관리자 수시점검 연도 상세 분석 통계 대시보드*/}
@@ -83,7 +85,9 @@ function App() {
         <Route path="/special/detail/:speId" element={<UserFrequentDetails/>}></Route>{/* 수시점검 상세페이지 */}
 
         {/* 정기점검 */}
-        <Route path="/regular/#" element={<UserRegularInspection/>}></Route>{/* 정기점검 등록 */}
+        <Route path="/regular/new" element={<UserRegularReg/>}></Route>{/* 정기점검 등록 */}
+        <Route path="/regular" element={<RegularMain/>}></Route>{/* 관리자,사용자 정기점검 목록 */}
+
 
 
 
