@@ -1,66 +1,59 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 
-// const people = [
-//   {
-//     name: "Lindsay Walton",
-//     title: "Front-end Developer",
-//     email: "lindsay.walton@example.com",
-//     role: "Member",
-//   },
-//   // More people...
-// ];
-
-
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
 
 
 export default function FrequentInseptionTable({ searchResults }) {
+  // const [fetchedResults, setFetchedResults] = useState([]);
 
-  // const handleFormSubmit = () => {
-  //   const requestData = {
-  //     // 영역, 설비명, 기간_시작, 기간_끝, 점검자 이름, 점검자 사번, 완료유무
-  //     spePart: spePart,
-  //     speFacility: speFacility,
-  //     speStartDate: speStartDate,
-  //     speEndDate: speEndDate,
-  //     speComplete: speComplete,
-  //     spePerson: spePerson,
-  //     speEmpNum: speEmpNum,
-  //   }
-  //   console.log(requestData);
 
-  //   // 검색
-  //   axios
-  //       .get(`${process.env.REACT_APP_API_BASE_URL}/frequentinspection`, requestData, {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       })
-  //       .then((response) => {
-  //         setSearchResults(response.data.searchSpeList);
-  //
-  //         if(requestData !== null) {
-  //           // 등록이 완료되었다는 알림 띄우기
-  //           toast.success("등록이 완료되었습니다.", {
-  //             position: "top-center",
-  //             autoClose: 2000, // 알림이 2초 후에 자동으로 사라짐
-  //             hideProgressBar: true,
-  //           });
-  //
-  //           console.log(response);
-  //           console.log(requestData);
-  //
-  //           // // 저장성공시 해당설비의 리스트 페이지
-  //           // navigate(`/special/list/${masterdataPart}/${encodeURIComponent(masterdataFacility)}`);
-  //         }
-  //
-  //       })
-  //       .catch((error) => {
-  //         console.log(requestData);
-  //         console.error(error);
-  //         alert("검색에 실패했습니다. 다시 시도해주세요.");
-  //       });
-  // };
+
+  useEffect(() => {
+    function specialFetchDataWithAxios() {
+    // 검색
+      axios
+        .get(`${process.env.REACT_APP_API_BASE_URL}/frequentinspection`)   // 세아
+        .then((response) => {
+          const speListFromBack = response.data.searchSpeList.searchSpeDataDTOList;
+          const speListData = speListFromBack.map((item) => {
+            return {
+              speId:item.speId,
+              speDate:item.speDate,
+              spePerson:item.spePerson,
+              speEmpNum:item.speEmpNum,
+              speEmail:item.speEmail,
+              spePart:item.spePart,
+              speFacility:item.speFacility,
+              speDanger:item.speDanger,
+              speInjure:item.speInjure,
+              speCause:item.speCause,
+              speTrap:item.speTrap,
+              speRiskAssess:item.speRiskAssess,
+              speContent:item.speContent,
+              speActContent:item.speActContent,
+              speActEmail:item.speActEmail,
+              speActDate:item.speActDate,
+              speDeadline:item.speDeadline,
+              speComplete:item.speComplete,
+            };
+          });
+          console.log("확인ㅇㅁ: "+speListFromBack);
+          // setFetchedResults(speListData);
+          // setSelectedDanger(speDangerData[0]); // 리스트의 첫번째값으로 세팅
+        })
+        .catch((error) => {
+          console.error("Error fetching data: ", error);
+        });
+    }
+
+      specialFetchDataWithAxios();
+  }, []);
+
+  // 검색 결과 또는 전체 데이터를 표시할 배열
+  // const displayResults = searchResults.length > 0 ? searchResults : fetchedResults;
 
 
 

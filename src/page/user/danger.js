@@ -16,7 +16,7 @@ export default function Danger({ onFormDataChange }) {
 
   // 위험분류 get
   useEffect(() => {
-    function specialDangerFetchDataWithAxios(masterdataPart, masterdataFacility) {
+    function specialDangerFetchDataWithAxios(masterdataPart, masterdataId) {
       axios
         .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataId}`)   // 세아
         .then((response) => {

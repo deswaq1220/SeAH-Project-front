@@ -17,7 +17,8 @@ export default function EquipmentName({onFormDataChange, selectedPart}) {
   axios
       .get(`${process.env.REACT_APP_API_BASE_URL}/frequentinspection`)  // 세아
       .then((response) => {
-       const speFacListFromBack = response.data.facilityList;
+       const speFacListFromBack = response.data.searchPartAndFacList.facilityList;
+          console.log("여기확인임: "+speFacListFromBack);
 
        if (part === "선택") {
         setSelectedFacility("");
@@ -36,7 +37,7 @@ export default function EquipmentName({onFormDataChange, selectedPart}) {
          setSpeFacilityList([]);
          setSelectedFacility("");
          onFormDataChange("");
-         alert("선택한 영역에 해당하는 설비가 없습니다.");
+         // alert("선택한 영역에 해당하는 설비가 없습니다.");
         }
        }
       })
@@ -47,6 +48,7 @@ export default function EquipmentName({onFormDataChange, selectedPart}) {
 
  useEffect(() => {
   updateFacilityList(selectedPart);
+
  }, [selectedPart]);
 
  const handleSelectedFac = (value) => {

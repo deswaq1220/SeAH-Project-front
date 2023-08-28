@@ -18,9 +18,16 @@ export default function FrequentInsArea({onFormDataChange}) {
       axios
           .get(`${process.env.REACT_APP_API_BASE_URL}/frequentinspection`)  // 세아
           .then((response) => {
-              const spePartListFromBack = response.data.specialPartList;
-              setSpePartList(spePartListFromBack);
-              setSelectedPart(spePartListFromBack[0].partMenu);
+              const spePartListFromBack = response.data.searchPartAndFacList.specialPartList;
+              console.log("여기확인임: "+spePartListFromBack);
+              const spePartData = spePartListFromBack.map((item) => {
+                  return{
+                      partMenu:item.partMenu,
+                      partNum:item.partNum,
+                  };
+              });
+              setSpePartList(spePartData);
+              setSelectedPart(spePartData[0]);
           })
           .catch((error) => {
             console.error("Error fetching data: ", error);

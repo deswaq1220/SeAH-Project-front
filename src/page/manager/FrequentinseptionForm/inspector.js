@@ -4,8 +4,8 @@ import {useState} from "react";
 export default function Inspector({onFormDataChange}) {
   // 점검자정보
   const [inspectorData, setInspectorData] = useState({
-    inspectorName: "",
-    inspectorNum: "",
+    inspectorName: null,
+    inspectorNum: null,
   });
 
   // 입력란 변경 시 상태 업데이트 함수
@@ -14,7 +14,7 @@ export default function Inspector({onFormDataChange}) {
     // 새로운 상태 업데이트
     const updatedInspecFormDate = {
       ...inspectorData,
-      [name]: value,
+      [name]: value || null, // 빈 문자열이면 null로 설정
     }
     setInspectorData(updatedInspecFormDate);
     // 폼 데이터 업데이트 후에 콜백 호출

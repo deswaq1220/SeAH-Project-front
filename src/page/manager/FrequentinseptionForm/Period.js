@@ -2,26 +2,30 @@ import React, { useState } from 'react';
 
 //기간
 export default function Period({onFormDataChange}) {
-  // const [startDate, setStartDate] = useState(null);
-  // const [endDate, setEndDate] = useState(null);
-  const [date, setDate] = useState({
-      startDate:"",
-      endDate:"",
-  });
+    const [date, setDate] = useState({
+        startDate:null,
+        endDate:null
+    });
 
   const handleInputChange = (e) => {
       const { name, value } = e.target;
+
       // 새로운 상태 업데이트
-       const updateDateFormData = {
-           ...date,
-           [name]: value,
-       }
-      setDate(updateDateFormData);
-       // 폼 데이터 업데이트 후에 콜백 호출
+      const updatedDate = {
+          ...date,
+          [name]: value,
+      }
+      setDate(updatedDate);
+
+
+      // 폼 데이터 업데이트 후에 콜백 호출
       onFormDataChange({
-          startDate: updateDateFormData.startDate,
-          endDate: updateDateFormData.startDate,
+          startDate:updatedDate.startDate,
+          endDate:updatedDate.endDate,
       });
+
+      console.log("handleInputChange - startDate:", updatedDate.startDate);
+      console.log("handleInputChange - endDate:", updatedDate.endDate);
   };
 
 
@@ -35,6 +39,8 @@ export default function Period({onFormDataChange}) {
           <div className="flex">
             <input
               type="date"
+              name="startDate"
+              id="startDate"
               value={date.startDate}
               onChange={handleInputChange}
               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
@@ -42,6 +48,8 @@ export default function Period({onFormDataChange}) {
             <span className="mx-2">~</span>
             <input
               type="date"
+              name="endDate"
+              id="endDate"
               value={date.endDate}
               onChange={handleInputChange}
               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"

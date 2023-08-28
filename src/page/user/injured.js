@@ -19,10 +19,7 @@ export default function Injured({ onFormDataChange }) {
 
   // 부상부위 get
   useEffect(() => {
-    function specialInjureFetchDataWithAxios(
-      masterdataPart,
-      masterdataFacility
-    ) {
+    function specialInjureFetchDataWithAxios( masterdataPart,masterdataId) {
       axios
           .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataId}`)   // 세아
           .then((response) => {
