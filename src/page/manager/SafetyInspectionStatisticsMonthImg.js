@@ -1,5 +1,5 @@
 import Header from "../../components/Header";
-import { Disclosure } from "@headlessui/react";
+import {Disclosure, Listbox, Transition} from "@headlessui/react";
 
 //네비게이션
 import { Fragment, useEffect, useState } from "react";
@@ -11,15 +11,20 @@ import {
   XMarkIcon,
   PresentationChartBarIcon
 } from "@heroicons/react/24/outline";
-import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
+import {CheckIcon, ChevronUpDownIcon, MagnifyingGlassIcon} from "@heroicons/react/20/solid";
 import axios from "axios";
 
 //그래프
 import { ResponsiveRadar } from "@nivo/radar";
+import { ResponsivePie } from '@nivo/pie'
 
 //엑셀
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
 function SafetyInspectionStatisticsMonthImg() {
   //공통: 년도입력, 기본값은 당해로 지정되어 있음
   const options = {
@@ -92,12 +97,68 @@ function SafetyInspectionStatisticsMonthImg() {
     saveAs(excelFile, "수시점검_월간분석.xlsx");
   };
 
+  // 이벤트3: pieChart sort하기
+  const [checkCount, setCheckCount] = useState([]); //백엔드 값
+  const [checkCountSort, setCheckCountSort] = useState([]); //백엔드 값(sort)
+
+  //색 지정
+  const keyColorMap = {
+    "GOOD": "hsl(302, 70%, 50%)",
+    "BAD": "hsl(150, 70%, 50%)",
+    "NA": "hsl(149, 70%, 50%)"
+  };
+
+  //색 값 key,value에 넣기
+    const coloredData = checkCount.map(item => ({
+      ...item,
+      color: keyColorMap[item.id]
+    }));
+
+
   //그 외 변수
-  const [spcCount, setSpcCount] = useState([]);
-  const [partCount, setPartCount] = useState([]);
-  const [partCountForExcel, setPartCountForExcel] = useState([]);
-  const [dangerCount, setDangerCount] = useState([]);
-  const [causeCount, setCauseCount] = useState([]);
+    //수시점검
+    const [spcCount, setSpcCount] = useState([]); //수시점검횟수
+    const [partCount, setPartCount] = useState([]);
+    const [partCountForExcel, setPartCountForExcel] = useState([]);
+    const [dangerCount, setDangerCount] = useState([]);
+    const [causeCount, setCauseCount] = useState([]);
+
+    //정기점검
+    const [regularCount, setRegularCount] = useState([]); //정기점검횟수
+    const [selected, setSelected] = useState([]);
+    const [regularNameList, setRegularNameList] = useState([]);
+
+    // 드롭박스에서 선택한 값을 변경할 때 호출되는 함수
+    const handleSelectedChange = (selected) => {
+      setSelected(selected);
+
+      if(selected !== "선택"){
+      // axios 요청
+        axios
+            .get(`${process.env.REACT_APP_API_BASE_URL}/regular/statistics/checkvaluecountsort`, {
+              params: {
+                yearmonth: selectedYear,
+                regularinsname: selected,
+              },
+            })
+            .then((response) => {
+              setCheckCount(response.data);
+            })
+            .catch((error) => {
+              console.log("드롭박스메소드에서 선택 값을 보내지 못합니다")
+            });
+      }else{
+        axios
+            .get(`${process.env.REACT_APP_API_BASE_URL}/regular/statistics/checkvaluecount`, {
+              params: {yearmonth: selectedYear},
+            })
+            .then((response) => {
+              setCheckCount(response.data);
+            });
+      }
+    };
+
+
 
   useEffect(() => {
     if (selectedYear) {
@@ -105,12 +166,14 @@ function SafetyInspectionStatisticsMonthImg() {
     }
   }, [selectedYear]);
 
+
   const fetchData = async () => {
     try {
+      //수시점검
       //점검건수 값
       await axios
           .get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/count`, {
-            params: { yearmonth: selectedYear },
+            params: {yearmonth: selectedYear},
           }) //세아
           .then((response) => {
             setSpcCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
@@ -120,7 +183,7 @@ function SafetyInspectionStatisticsMonthImg() {
       await axios
           .get(
               `${process.env.REACT_APP_API_BASE_URL}/special/statistics/partandmonth`,
-              { params: { yearmonth: selectedYear } }
+              {params: {yearmonth: selectedYear}}
           )
           .then((response) => {
             setPartCountForExcel(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
@@ -130,7 +193,7 @@ function SafetyInspectionStatisticsMonthImg() {
       await axios
           .get(
               `${process.env.REACT_APP_API_BASE_URL}/special/statistics/partandmonth`,
-              { params: { yearmonth: selectedYear } }
+              {params: {yearmonth: selectedYear}}
           )
           .then((response) => {
             setPartCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
@@ -140,7 +203,7 @@ function SafetyInspectionStatisticsMonthImg() {
       await axios
           .get(
               `${process.env.REACT_APP_API_BASE_URL}/special/statistics/dangerandmonth`,
-              { params: { yearmonth: selectedYear } }
+              {params: {yearmonth: selectedYear}}
           )
           .then((response) => {
             setDangerCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
@@ -150,11 +213,64 @@ function SafetyInspectionStatisticsMonthImg() {
       await axios
           .get(
               `${process.env.REACT_APP_API_BASE_URL}/special/statistics/causeandmonth`,
-              { params: { yearmonth: selectedYear } }
+              {params: {yearmonth: selectedYear}}
           )
           .then((response) => {
             setCauseCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
           });
+
+      //정기점검
+      //점검건수 값
+      await axios
+          .get(`${process.env.REACT_APP_API_BASE_URL}/regular/statistics/monthcount`, {
+            params: {yearmonth: selectedYear},
+          }) //세아
+          .then((response) => {
+            setRegularCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
+          });
+
+      //(pieChart) 위험성결과 분석값
+      //드롭다운 미선택 시, 전체출력
+      await axios
+          .get(`${process.env.REACT_APP_API_BASE_URL}/regular/statistics/checkvaluecount`, {
+            params: {yearmonth: selectedYear},
+          })
+          .then((response) => {
+            setCheckCount(response.data);
+          });
+
+      //드롭다운 선택 시, sort출력
+/*      await axios
+          .get(`${process.env.REACT_APP_API_BASE_URL}/regular/statistics/checkvaluecountsort`,{
+            params: { yearmonth: selectedYear, regularinsname: selected },
+          })
+          .then((response) => {
+            setCheckCountSort(response.data);
+          });*/
+
+
+
+
+      //(pieChart) 위험성결과 드롭다운
+        //백데이터 들고오기
+        const response = await axios.get(
+            `${process.env.REACT_APP_API_BASE_URL}/regular/statistics/namedropdown`);
+
+        // 문자열 배열을 객체로 변환하여 새로운 배열 생성
+        const optionsArray = response.data.regularNameList.map((name, index) => ({
+          id: index + 1,
+          name: name,
+        }));
+
+        setRegularNameList(optionsArray);
+        setSelected(optionsArray[0])
+      console.log("위험성결과드롭다운 값", optionsArray);
+
+
+
+
+
+
     } catch (error) {
       console.error("불러온 데이터에 에러가 발생했습니다:", error);
     }
@@ -285,11 +401,11 @@ function SafetyInspectionStatisticsMonthImg() {
                     </div>
                     <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-1">
                       <div className="overflow-hidden rounded-lg bg-amber-100 bg-opacity-50 px-3 py-1 shadow sm:p-3 max-w-screen-xl flex items-center justify-center">
-                        <dd className="mt-3 text-3xl font-semibold tracking-tight text-gray-900">{spcCount}건</dd>
+                        <dd className="mt-3 text-3xl font-semibold tracking-tight text-gray-900">{regularCount}건</dd>
                       </div>
                     </dl>
                   </div>
-                  {/*위쪽 영역 2번 - 영역별(완료)*/}
+                  {/*위쪽 영역 2번 - 영역별*/}
                   <div>
                     <h3 className="text-xl font-semibold leading-2 text-gray-900">2. 점검영역 분석</h3>
                     <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-3">
@@ -302,6 +418,195 @@ function SafetyInspectionStatisticsMonthImg() {
                               </div>
                           ))}
                     </dl>
+                  </div>
+                  {/*위쪽 영역 3번 - 위험성평가분석*/}
+                  <div>
+                    <h3 className="text-xl font-semibold leading-2 text-gray-900">3. 위험성평가 분석</h3>
+                    <div className="flex flex-col ml-2 z-10">
+                     <Listbox value={selected} onChange={(newValue) => handleSelectedChange(newValue)}>
+                        {({ open }) => (
+                            <>
+                              <div className="relative mt-2">
+                                <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-28 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6" style={{ minHeight: '2.5rem' }}>
+                    <span className="block truncate">
+                      {selected ? selected.name : "선택"}
+                    </span>
+                                  <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                      <ChevronUpDownIcon
+                          className="h-5 w-5 text-gray-400"
+                          aria-hidden="true"
+                      />
+                    </span>
+                                </Listbox.Button>
+
+                                <Transition
+                                    show={open}
+                                    as={Fragment}
+                                    leave="transition ease-in duration-100"
+                                    leaveFrom="opacity-100"
+                                    leaveTo="opacity-0"
+                                >
+                                  <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                                    {regularNameList.map((option) => (
+                                        <Listbox.Option
+                                            key={option.name}
+                                            className={({ active }) =>
+                                                classNames(
+                                                    active
+                                                        ? "bg-seahColor text-white"
+                                                        : "text-gray-900",
+                                                    "relative cursor-default select-none py-2 pl-3 pr-9"
+                                                )
+                                            }
+                                            value={option.name}
+                                        >
+                                          {({ selected, active }) => (
+                                              <>
+                              <span
+                                  className={classNames(
+                                      selected ? "font-semibold" : "font-normal",
+                                      "block truncate"
+                                  )}
+                              >
+                                [{option.name}]
+                              </span>
+
+                                                {selected ? (
+                                                    <span
+                                                        className={classNames(
+                                                            active ? "text-white" : "text-seahColor",
+                                                            "absolute inset-y-0 right-0 flex items-center pr-4"
+                                                        )}
+                                                    >
+                                  <CheckIcon
+                                      className="h-5 w-5"
+                                      aria-hidden="true"
+                                  />
+                                </span>
+                                                ) : null}
+                                              </>
+                                          )}
+                                        </Listbox.Option>
+                                    ))}
+                                  </Listbox.Options>
+                                </Transition>
+                              </div>
+                            </>
+                        )}
+                      </Listbox>
+                    </div>
+                      <ResponsivePie
+                          data={coloredData}
+                          height={300}
+                          margin={{ top: 20, right: 0, bottom: 35, left: 0 }}
+                          innerRadius={0.5}
+                          padAngle={1}
+                          activeOuterRadiusOffset={8}
+                          colors={{ scheme: 'pastel1' }}
+                          borderWidth={1}
+                          borderColor={{
+                            from: 'color',
+                            modifiers: [
+                              [
+                                'darker',
+                                0.2
+                              ]
+                            ]
+                          }}
+                          arcLinkLabelsTextOffset={5}
+                          arcLinkLabelsTextColor="#333333"
+                          arcLinkLabelsOffset={1}
+                          arcLinkLabelsDiagonalLength={7}
+                          arcLinkLabelsStraightLength={12}
+                          arcLinkLabelsThickness={2}
+                          arcLinkLabelsColor={{ from: 'color' }}
+                          arcLabelsSkipAngle={10}
+                          arcLabelsTextColor={{
+                            from: 'color',
+                            modifiers: [
+                              [
+                                'darker',
+                                2
+                              ]
+                            ]
+                          }}
+                          fill={[
+                            {
+                              match: {
+                                id: 'ruby'
+                              },
+                              id: 'dots'
+                            },
+                            {
+                              match: {
+                                id: 'c'
+                              },
+                              id: 'dots'
+                            },
+                            {
+                              match: {
+                                id: 'go'
+                              },
+                              id: 'dots'
+                            },
+                            {
+                              match: {
+                                id: 'python'
+                              },
+                              id: 'dots'
+                            },
+                            {
+                              match: {
+                                id: 'scala'
+                              },
+                              id: 'lines'
+                            },
+                            {
+                              match: {
+                                id: 'lisp'
+                              },
+                              id: 'lines'
+                            },
+                            {
+                              match: {
+                                id: 'elixir'
+                              },
+                              id: 'lines'
+                            },
+                            {
+                              match: {
+                                id: 'javascript'
+                              },
+                              id: 'lines'
+                            }
+                          ]}
+                          legends={[
+                            {
+                              anchor: 'bottom',
+                              direction: 'row',
+                              justify: false,
+                              translateX: 0,
+                              translateY: 25,
+                              itemsSpacing: 0,
+                              itemWidth: 65,
+                              itemHeight: 19,
+                              itemTextColor: '#999',
+                              itemDirection: 'left-to-right',
+                              itemOpacity: 1,
+                              symbolSize: 17,
+                              symbolShape: 'circle',
+                              effects: [
+                                {
+                                  on: 'hover',
+                                  style: {
+                                    itemTextColor: '#000'
+                                  }
+                                }
+                              ]
+                            }
+                          ]}
+                      />
+
                   </div>
                 </div>
 
