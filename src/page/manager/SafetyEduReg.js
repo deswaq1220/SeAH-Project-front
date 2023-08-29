@@ -8,7 +8,7 @@ import {
   CheckIcon,
   ChevronUpDownIcon,
   PhotoIcon,
-  CheckCircleIcon,
+  CheckCircleIcon, PaperClipIcon,
 } from "@heroicons/react/20/solid";
 import { useDropzone } from "react-dropzone";
 import QRCode from "qrcode.react";
@@ -130,6 +130,8 @@ const handleFileUpload = (acceptedFiles) => {
 //교육일지 등록
 function SafetyEduReg() {
   const {
+    eduFiles,
+    handleDeleteFile,
     selected,
     selectedDuty,
     isCompleted,
@@ -252,7 +254,7 @@ function SafetyEduReg() {
                                     >
                                       <CheckIcon
                                         className="h-5 w-5"
-                                        aria-hidden="true"
+                                     m n   aria-hidden="true"
                                       />
                                     </span>
                                   ) : null}
@@ -313,7 +315,7 @@ function SafetyEduReg() {
                     type="text"
                     name="eduInstructor"
                     id="educharge"
-                    value={formData.eduInstructor}
+                    defaultValue={formData.eduInstructor}
                     onChange={handleChange}
                     autoComplete="off"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
@@ -351,64 +353,65 @@ function SafetyEduReg() {
               <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
                 교육시간
               </span>
-              <div className="mt-2">
-                <label
-                  htmlFor="starttimepicker"
-                  className="block mb-2 font-medium text-gray-700"
-                >
-                  시작시간
-                </label>
-                <input
-                  type="datetime-local"
-                  id="starttimepicker"
-                  className="block w-56 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
-                  value={
-                    formData.eduStartTime instanceof Date
-                        ? new Date(formData.eduStartTime.getTime() + (9 * 60 * 60 * 1000)).toISOString().slice(0, 16)
-                        : formData.eduStartTime
-                  }
-                  min={new Date().toISOString().slice(0, 16)}
-                />
+                <div className="mt-2">
+                  <label
+                    htmlFor="starttimepicker"
+                    className="block mb-2 font-medium text-gray-700"
+                  >
+                    시작시간
+                  </label>
+                  <input
+                    type="datetime-local"
+                    id="starttimepicker"
+                    className="block w-56 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
+                    defaultValue={
+                      formData.eduStartTime instanceof Date
+                          ? formData.eduStartTime = new Date(formData.eduStartTime.getTime() + (9 * 60 * 60 * 1000)).toISOString().slice(0, 16)
+                          : formData.eduStartTime
+                    }
+                    onChange={handleStartTimeChange}
+                    min={new Date().toISOString().slice(0, 16)}
+                  />
 
-                {/* <label
-                  htmlFor="endtimepicker"
-                  className="block mt-4 mb-2 font-medium text-gray-700"
-                >
-                  종료시간
-                </label>
-                <input
-                  type="datetime-local"
-                  id="endtimepicker"
-                  className="block w-56 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
-                  value={selectedEndTime}
-                  onChange={handleEndTimeChange}
-                  min={selectedStartTime ? selectedStartTime.slice(0, 16) : ""}
-                /> */}
+                  {/* <label
+                    htmlFor="endtimepicker"
+                    className="block mt-4 mb-2 font-medium text-gray-700"
+                  >
+                    종료시간
+                  </label>
+                  <input
+                    type="datetime-local"
+                    id="endtimepicker"
+                    className="block w-56 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
+                    value={selectedEndTime}
+                    onChange={handleEndTimeChange}
+                    min={selectedStartTime ? selectedStartTime.slice(0, 16) : ""}
+                  /> */}
 
-                <div className="mt-2 text-gray-600">{calculateTotalTime()}</div>
-                {selected.name === "ETC" && (
-                  <div className="mt-2">
-                    <label
-                      htmlFor="etcTime"
-                      className="block text-sm font-medium leading-6 text-gray-900"
-                    >
-                      기타 교육 시간 선택
-                    </label>
-                    <select
-                      id="etcTime"
-                      name="etcTime"
-                      value={selectedEtcTime}
-                      onChange={handleEtcTimeChange}
-                      className="block w-56 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
-                    >
-                      {/* 기타 선택 시, 30분 단위로 선택할 수 있도록 셀렉트 박스 옵션 생성 */}
-                      {[30, 60, 90, 120].map((time) => (
-                        <option key={time} value={time}>{`${time}분`}</option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-              </div>
+                  <div className="mt-2 text-gray-600">{calculateTotalTime()}</div>
+                  {selected.name === "ETC" && (
+                    <div className="mt-2">
+                      <label
+                        htmlFor="etcTime"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        기타 교육 시간 선택
+                      </label>
+                      <select
+                        id="etcTime"
+                        name="etcTime"
+                        defaultValue={selectedEtcTime}
+                        onChange={handleEtcTimeChange}
+                        className="block w-56 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
+                      >
+                        {/* 기타 선택 시, 30분 단위로 선택할 수 있도록 셀렉트 박스 옵션 생성 */}
+                        {[30, 60, 90, 120].map((time) => (
+                          <option key={time} value={time}>{`${time}분`}</option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                </div>
             </div>
             <div
               id="Training_target"
@@ -511,7 +514,7 @@ function SafetyEduReg() {
                   onChange={handleChange}
                   autoComplete="off"
                   className="block w-full h-16 rounded-md border-0 py-1.5 px-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6"
-                  defaultValue={""}
+                  // defaultValue={""}
                 />
               </div>
             </div>
@@ -581,23 +584,24 @@ function SafetyEduReg() {
                     </div>
                   </div>
                 </div>
+
                 <div>
-                  {/*{formData.eduFileList.map((eduFile, index) => (*/}
-                  {/*    <div key={index} className="flex items-start mt-2">*/}
-                        <div className="text-left">
-                          <TruncatedFileName fileName={formData.eduFileList[0].eduFileOriName} />
-                        </div>
-                        {/*<button*/}
-                        {/*    onClick={() => deleteFile(file.name)}*/}
-                        {/*    className="ml-2 text-red-600"*/}
-                        {/*    type="button"*/}
-                        {/*>*/}
-                        {/*  삭제*/}
-                        {/*</button>*/}
-                      {/*</div>*/}
-                  {/*))}*/}
-                </div>
-                <div>
+
+                  {formData.eduFileList.map((file, index) => (
+                    <div key={index} className="flex items-start mt-2">
+                      <div className="text-left">
+                        <TruncatedFileName fileName={file.eduFileOriName} />
+                      </div>
+                      <button
+                        onClick={() => handleDeleteFile(index)}
+                        className="ml-2 text-red-600"
+                        type="button"
+                      >
+                        삭제
+                      </button>
+                    </div>
+                  ))}
+
                   {uploadedFiles.map((file, index) => (
                     <div key={file.name} className="flex items-start mt-2">
                       <div className="text-left">

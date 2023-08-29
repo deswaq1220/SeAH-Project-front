@@ -109,11 +109,13 @@ const useSafetyEduForm = (eduData) => {
   const [selectedDuty, setSelectedDuty] = useState(duty[0]);
   const [isCompleted, setIsCompleted] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
+
   const [error, setError] = useState(null);
   const [qrValue, setQrValue] = useState("");
   const [showNotification, setShowNotification] = useState(false);
-  const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
+  const apiUrl = process.env.REACT_APP_API_BASE_URL;
+  const [eduFiles, setEduFiles] = useState([]);
   const [formData, setFormData] = useState({
     eduCategory: "", // 교육
     eduTitle: "", // 교육제목\
@@ -127,10 +129,14 @@ const useSafetyEduForm = (eduData) => {
     eduWriter: "",
     files: null,
     eduId: "",
+    eduFileList:[],
+    eduFileIds:[],
   });
-
+// let [ eduFiles, setEduFiles] = useState([0,0,0,0,0,0,0,0]);
   const { eduId } = useParams();
-
+  useEffect(() => {
+    formData.eduFileIds = eduFiles;
+  }, [eduFiles]);
   useEffect(() => {
     // 서버에서 교육 세부 정보 가져오기 (교육 아이디값 이용)
 
@@ -141,9 +147,9 @@ const useSafetyEduForm = (eduData) => {
         .then((response) => {
           // 가져온 데이터로 상태 업데이트
           console.log(response.data);
+          // seteduFiles(response.data.eduFileList);
 
-
-            setFormData(response.data);
+            setFormData(response.data, formData.eduFileList= response.data.eduFileList);
 
           })
           .catch((error) => {
@@ -169,6 +175,7 @@ const useSafetyEduForm = (eduData) => {
   const handleStartTimeChange = (e) => {
     const newValue = e.target.value;
     setSelectedStartTime(newValue);
+
     setFormData((prevData) => ({
       ...prevData,
       eduStartTime: newValue, // 시작시간 필드 이름 변경
@@ -209,8 +216,22 @@ const useSafetyEduForm = (eduData) => {
     setFormData(prevData => ({ ...prevData, files: updatedFiles })); // Update formData with new file array
   };
 
+  //불러온 파일 삭제
+  const handleDeleteFile = (index) => {
+    const updatedFileId = formData.eduFileList[index].eduFileId;
+
+    setEduFiles([...eduFiles, updatedFileId]);
+    formData.eduFileList.splice(index, 1);
+
+
+
+      formData.eduFileIds= eduFiles;
+
+  };
+
+
+
   const handleFileChange = (event) => {
-    //이거 이상함? 나중에 터지면 여기 문제일수도
     const selectedFile = event.target.files[0];
     setFormData((prevFormData) => ({ ...prevFormData, file: selectedFile }));
   };
@@ -268,14 +289,13 @@ const useSafetyEduForm = (eduData) => {
       setError("본문 내용 또는 강사를 입력하세요.");
       return;
     }
-    formData.eduFileList = null;
+
     try {
       if (formData.eduId) {
         // 기존 교육 데이터를 수정하는 경우 (PUT 요청)
         formData.eduStartTime = formData.eduStartTime.slice(0, 16);
         formData.eduSumTime = selectPeople(formData.eduCategory).time;
-
-
+        formData.eduFileList = null;
         const response = await axios.post(
             //  `http://localhost:8081/edudetails/${formData.eduId}`,
             `${process.env.REACT_APP_API_BASE_URL}/edudetails/${formData.eduId}`, //세아
@@ -294,6 +314,7 @@ const useSafetyEduForm = (eduData) => {
             //  "http://localhost:8081/edureg",
             `${process.env.REACT_APP_API_BASE_URL}/edureg`, // 세아
             formData,
+
             {
               headers: {
                 "Content-Type": "multipart/form-data",
@@ -338,6 +359,8 @@ const useSafetyEduForm = (eduData) => {
 
 
   return {
+
+    handleDeleteFile,
     selected,
     selectedDuty,
     isCompleted,
