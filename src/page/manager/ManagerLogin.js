@@ -1,9 +1,10 @@
 import "../../style/ManagerLogin.css";
-import React, { useState } from "react";
+import React, { useState,useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import logo from "../../img/logo.png"
 import fetcher from "../../api/fetcher";
+import { useCookies } from 'react-cookie'; // useCookies import
 
 // const TK ="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0IiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY5MzAxMzE4OX0.D4CN3pj14vb4LEUo2pAUYF0RP-nNg5YqBmwFxUxBeBWopLq3b5UDL2PYxUgeIUJydcIB0m5-cwl7CU31UzTN4A"
 
@@ -11,6 +12,10 @@ function ManagerLogin() {
   const [email, setEmail] = useState(""); // 말이 이메일이지 아이디임
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const formRef = useRef();
+	const [atCookies, setAtCookie] = useCookies(['at']); // 쿠키 훅 
+	const [rtCookies, setrtCookie] = useCookies(['rt']); // 쿠키 훅 
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,35 +24,29 @@ function ManagerLogin() {
       const response = await fetcher.post(
         `/auth/login`,
         {
-          email,
-          password,
+          email: email,
+          password: password
         },
         {
           headers: {
             'Content-Type': 'application/json',
-            // "Authorization" : `Bearer {ACCESS_TOKEN}`,
           },
         }
-
       );
-      console.log()
-      navigate('/manager')
-      console.log('로그인완료')
-      // Handle successful login, e.g., store tokens, navigate to a new page
+
+
+      const accessToken = response.data.access_token;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+      setAtCookie('at', response.data.accessToken);
+      setrtCookie('rt',response.data.refreshToken);
+      navigate("/manager");
     } catch (error) {
-      // Handle login error, e.g., show an error message
+      console.error("Login error:", error);
     }
   };
   return (
     <>
-    {/*
-      This example requires updating your template:
-
-      ```
-      <html class="h-full bg-white">
-      <body class="h-full">
-      ```
-    */}
+    
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <img src={logo}
@@ -73,7 +72,6 @@ function ManagerLogin() {
                 autoComplete="email"
                 placeholder="아이디를 입력하세요"
                 required
-                value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
@@ -97,7 +95,6 @@ function ManagerLogin() {
                 autoComplete="current-password"
                 placeholder="비밀번호를 입력하세요"
                 required
-                value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />

@@ -3,7 +3,9 @@ import axios from "axios";
 import { useDropzone } from "react-dropzone";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import NotificationModal from "../components/Notification";
-
+// import { useCookies } from "react-cookie";
+import {useCookies} from "react-cookie"
+import fetcher from "../api/fetcher"
 const people = [
   {
     id: 1,
@@ -87,8 +89,6 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const TK ="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1IiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY5MzAyNjY1OX0.VVZoLMp3oVPQH-EjiYs_Rcr-ZiaA9WsT5YLf9QlaKnjdbhb1exwRodMJASj7g0jd_8R3Bad9YIvUi4SBe1m1-g"
-
 const useSafetyEduForm = (eduData) => {
   const formDataWithFile = new FormData();
   const [selected, setSelected] = useState(people[0]);
@@ -98,8 +98,8 @@ const useSafetyEduForm = (eduData) => {
   const [error, setError] = useState(null);
   const [qrValue, setQrValue] = useState("");
   const [showNotification, setShowNotification] = useState(false);
-  const apiUrl = process.env.REACT_APP_API_BASE_URL;
-
+  const [atCookies, setAtCookie] = useCookies(["at"]); // 쿠키 훅
+  const [rtCookies, setrtCookie] = useCookies(["rt"]); // 쿠키 훅
   const [formData, setFormData] = useState({
     eduCategory: "", // 교육
     eduTitle: "", // 교육제목\
@@ -115,30 +115,34 @@ const useSafetyEduForm = (eduData) => {
     eduId: "",
   });
 
+
   const { eduId } = useParams();
-
   useEffect(() => {
-    // 서버에서 교육 세부 정보 가져오기 (교육 아이디값 이용)
-    axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/edudetails/${eduId}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${TK}`,
-        },
-      })
-      //  .get(`http://localhost:8081/edudetails/${eduId}`)
-      .then((response) => {
-        // 가져온 데이터로 상태 업데이트
+    const fetchEduDetails = async () => {
+      const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
+      console.log("여기는 전달이 안된다",authToken)
+      try {
+        const response = await fetcher.get(`/edudetails/${eduId}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
         console.log(response.data);
-
         setFormData(response.data);
-      })
-      .catch((error) => {
-        // 에러 처리
-        console.error("교육 세부 정보를 가져오는 중 에러 발생:", error);
-      });
-  }, [eduId]);
 
+        const accessToken = response.data.access_token;
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${accessToken}`;
+        console.log("왜??",response.data.accessToken)
+      } catch (error) {
+        console.error("교육 세부 정보를 가져오는 중 에러 발생:", error);
+      }
+    };
+
+    fetchEduDetails();
+  }, [eduId]);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -262,37 +266,47 @@ const useSafetyEduForm = (eduData) => {
     formDataWithFile.append("eduWriter", formData.eduWriter);
 
     console.log("여긴가?: " + formDataWithFile.eduTitle);
+    const authToken = atCookies["at"];
+    console.log("여기는 포스트",authToken)
     try {
       if (formData.eduId) {
         // 기존 교육 데이터를 수정하는 경우 (PUT 요청)
-        const response = await axios.post(
+        const response = await fetcher.post(
           //  `http://localhost:8081/edudetails/${formData.eduId}`,
-          `${process.env.REACT_APP_API_BASE_URL}/edudetails/${formData.eduId}`, //세아
+          `/edudetails/${formData.eduId}`, //세아
           formData,
           {
             headers: {
               "Content-Type": "multipart/form-data",
-              'Authorization': `Bearer ${TK}`
+              Authorization: `Bearer ${authToken}`,
             },
-            
           }
         );
         console.log("수정 결과:", response.data);
+        const accessToken = response.data.access_token;
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${accessToken}`;
       } else {
         // 새로운 교육 데이터를 등록하는 경우 (POST 요청)
-        const response = await axios.post(
+        const response = await fetcher.post(
           //  "http://localhost:8081/edureg",
-          `${process.env.REACT_APP_API_BASE_URL}/edureg`, // 세아
+          `/edureg`, // 세아
           formData,
           {
             headers: {
               "Content-Type": "multipart/form-data",
-              'Authorization': `Bearer ${TK}`
+              Authorization: `Bearer ${authToken}`,
             },
             withCredentials: true,
           }
         );
         console.log("등록 결과:", response.data);
+        const accessToken = response.data.access_token;
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${accessToken}`;
+        
       }
 
       // 성공적으로 저장되면 알림 띄우기

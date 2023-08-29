@@ -18,6 +18,8 @@ import { FilePond, registerPlugin } from "react-filepond";
 import "filepond/dist/filepond.min.css"; // 스타일링을 위한 CSS
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+import fetcher from "../../api/fetcher";
+import { useCookies } from "react-cookie"; // useCookies import
 
 const people = [
   {
@@ -164,6 +166,11 @@ function SafetyEduReg() {
   // const handleClick = () => {
   //   handleEdit(); // 수정 핸들러 호출
   // };
+
+
+
+
+
 
   const [files, setFiles] = useState(null);
   return (

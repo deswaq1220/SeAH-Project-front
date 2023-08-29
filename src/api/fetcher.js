@@ -2,9 +2,8 @@ import Cookies from "universal-cookie/es6";
 import axios from "axios";
 import Swal from "sweetalert2";
 
-const ACCESS_TOKEN_COOKIE ='at';
-const REFRESH_TOKEN_COOKIE ='rt';
-
+const ACCESS_TOKEN_COOKIE = 'myAccessToken';
+const REFRESH_TOKEN_COOKIE = 'myRefreshToken';
 const cookies = new Cookies();
 
 const INSTANCE = () => {

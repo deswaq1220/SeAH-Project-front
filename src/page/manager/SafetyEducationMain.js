@@ -6,20 +6,21 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Pagination from "../../components/Pagination";
 import { Link } from "react-router-dom";
-import instance from "../../api/fetcher";
-
-  const TK ="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1IiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY5MzAyNjY1OX0.VVZoLMp3oVPQH-EjiYs_Rcr-ZiaA9WsT5YLf9QlaKnjdbhb1exwRodMJASj7g0jd_8R3Bad9YIvUi4SBe1m1-g"
+import fetcher from "../../api/fetcher";
+import { useCookies } from "react-cookie"; 
 
 function SafetyEducationMain() {
   const [currentDate, setCurrentDate] = useState(new Date()); // 년,월
   const [eduList, setEduList] = useState([]); // 안전교육 데이터를 담을 상태 변수
-  
+
   const itemsPerPage = 10; // 한 페이지당 보여줄 항목 개수
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 번호
-  const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
+
+  const [atCookies, setAtCookie] = useCookies(["at"]); // 쿠키 훅
+  const [rtCookies, setrtCookie] = useCookies(["rt"]); // 쿠키 훅
 
   // 현재 페이지에 해당하는 항목들을 추출하는 함수
   const getCurrentPageItems = () => {
@@ -33,41 +34,31 @@ function SafetyEducationMain() {
     return index !== -1 ? index + 1 : ""; // 인덱스를 1부터 시작하도록 +1 해줍니다.
   };
 
-  // useEffect(() => {
-  //   const fetchEduList = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `http://localhost:8081/edumain`); 
-  //         // `http://172.20.20.252:8081/edumain`); 
-  //       setEduList(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-
-  //   fetchEduList();
-  // }, []);
-
-
   useEffect(() => {
     const getLogsForCurrentMonth = async () => {
+      const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
+      console.log("새로고침하면 냅다 사라지네", authToken);
       try {
         const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
         const currentYear = getYear(currentDate);
-        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/edumain`, { 
-            // 세아
-        // const response = await axios.get(`http://localhost:8081/edumain, {
+        const response = await fetcher.get(`/eduMain`, {
           params: {
             year: currentYear,
             month: currentMonth,
           },
           headers: {
-              'Content-Type': 'application/json',
-              // 'Authorization' : `Bearer ${TK}`,
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
           },
-          
-          
         });
+        
+
+        const accessToken = response.data.access_token;
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${accessToken}`;
+
+
         const sortedEduList = response.data.sort((a, b) => {
           // eduStartTime을 기준으로 오름차순 정렬
           return new Date(a.eduStartTime) - new Date(b.eduStartTime);
@@ -255,16 +246,17 @@ function SafetyEducationMain() {
                           </div>
                         </td>
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                          {format(new Date(edu.eduStartTime), "yyyy-MM-dd HH시 mm분")}
+                          {format(
+                            new Date(edu.eduStartTime),
+                            "yyyy-MM-dd HH시 mm분"
+                          )}
                         </td>
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-
                           {edu.eduFiles.length > 0 ? (
                             <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                             첨부
+                              첨부
                             </span>
-                          ) 
-                          : null}
+                          ) : null}
                         </td>
 
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
@@ -288,7 +280,9 @@ function SafetyEducationMain() {
               totalItems={eduList.length}
               setCurrentPage={setCurrentPage}
             />
-          ) : ( <p className="flex justify-center">해당 월의 교육은 없습니다.</p>)}
+          ) : (
+            <p className="flex justify-center">해당 월의 교육은 없습니다.</p>
+          )}
         </div>
       </div>
     </div>

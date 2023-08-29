@@ -54,7 +54,7 @@ function App() {
         <Route path="/edudetails/:eduId" element={<SafetyEduDetails/>}></Route>{/* 관리자 안전교육상세*/}
         <Route path="/edureg" element={<SafetyEduReg/>}></Route>{/* 관리자 안전교육 등록페이지 */}
         <Route path="/edureg/:eduId" element={<SafetyEduReg/>}></Route>{/* 관리자 안전교육 등록페이지 */}
-        <Route path="/managerinspection" element={<SafetyManagerInspection/>}></Route>{/* 관리자 안점점검 페이지 */}
+        <Route path="/managerinspection" element={<SafetyManagerInspection/>}></Route>{/* 관리자,사용자 안점점검 페이지 */}
         <Route path="/inspection" element={<SafetyInspection/>}></Route>{/* 관리자 안점점검 페이지 */}
         <Route path="/attenstatus/:eduId" element={<AttenStatus/>}></Route>{/* 관리자 출석현황 */}
         <Route path="/training/:eduId" element={<TrainingReport/>}></Route>{/* 관리자 출석현황 */}

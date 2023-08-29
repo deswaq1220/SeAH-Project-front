@@ -8,21 +8,20 @@ import axios from "axios";
 import useSafetyEduForm from "../../useHook/useSafetyEduForm";
 import QRCode from "qrcode.react";
 import { CheckCircleIcon } from "@heroicons/react/20/solid";
-import { format } from 'date-fns';
+import { format } from "date-fns";
 import { toast } from "react-toastify";
-
-const TK ="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1IiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY5MzAyNjY1OX0.VVZoLMp3oVPQH-EjiYs_Rcr-ZiaA9WsT5YLf9QlaKnjdbhb1exwRodMJASj7g0jd_8R3Bad9YIvUi4SBe1m1-g"
+import fetcher from "../../api/fetcher";
+import { useCookies } from "react-cookie";
 
 export default function SafetyEduDetails() {
   const { eduId } = useParams(); // useParams 훅을 사용하여 URL 파라미터에서 eduId 가져오기
   const [eduData, setEduData] = useState([]);
   const { isCompleted, handleCreate, qrValue, formData, setFormData } =
     useSafetyEduForm(eduData);
-  const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
   const [uploadedFiles, setUploadedFiles] = useState([]);
-
-  const [updatedData, setUpdatedData] = useState({});
+  const [atCookies, setAtCookie] = useCookies(["at"]); // 쿠키 훅
+  const [rtCookies, setrtCookie] = useCookies(["rt"]); // 쿠키 훅
 
   const navigate = useNavigate();
 
@@ -47,29 +46,31 @@ export default function SafetyEduDetails() {
   //   },
   // });
 
-
   useEffect(() => {
     const fetchEduDetail = async () => {
+       const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
       try {
-        const response = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/edudetails/${eduId}`,        // 세아
-            //  `http://localhost:8081/edudetails/${eduId}`
-            {
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization' : `Bearer ${TK}`,
+        const response = await fetcher.get(
+          `/edudetails/${eduId}`, // 세아
+          //  `http://localhost:8081/edudetails/${eduId}`
+          {
+            headers: {
+              "Content-Type": "application/json",
+               Authorization: `Bearer ${authToken}`,
             },
-            }
-
-
+          }
         );
+
+        const accessToken = response.data.access_token;
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${accessToken}`;
         // console.log(response.data);
         setUploadedFiles(response.data.eduFiles);
         setEduData({ ...response.data, eduFiles: response.data.eduFiles });
 
         console.log("파일이름 찾기");
         console.log(eduData.eduFiles);
-
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -105,7 +106,7 @@ export default function SafetyEduDetails() {
       {
         분류: `${eduData.eduCategory}`,
         제목: `${eduData.eduTitle}`,
-        교육시작시간:  `${eduData.eduStartTime}`,
+        교육시작시간: `${eduData.eduStartTime}`,
         교육시간: `${eduData.eduSumTime} 분`,
         교육내용: eduData.eduContent,
         강사: `${eduData.eduInstructor}`,
@@ -165,23 +166,22 @@ export default function SafetyEduDetails() {
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-          `${process.env.REACT_APP_API_BASE_URL}/edudetails/${eduId}`
+        `${process.env.REACT_APP_API_BASE_URL}/edudetails/${eduId}`
       );
 
       if (response.status === 200) {
-        console.log('교육 삭제됨');
+        console.log("교육 삭제됨");
         toast.success("교육이 삭제되었습니다.", {
           position: "top-center",
           autoClose: 3000,
           hideProgressBar: true,
         });
-        navigate('/eduMain');
+        navigate("/eduMain");
       }
     } catch (error) {
-      console.error('교육 삭제 에라 에러', error);
+      console.error("교육 삭제 에라 에러", error);
     }
   };
-
 
   const handleEditClick = () => {
     // educationId는 해당 교육의 아이디 값입니다.
@@ -204,85 +204,85 @@ export default function SafetyEduDetails() {
             <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
               {eduData.eduEndTime}
             </p> */}
-                </div>
-                <div>
-                  <button
-                      type="submit"
-                      className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mr-1"
-                      onClick={handleEditClick}
-                  >
-                    수정하기
-                  </button>
-                  <button
-                      type="submit"
-                      className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-                  onClick={handleDelete}
-                  >
-                    삭제하기
-                  </button>
-                </div>
+            </div>
+            <div>
+              <button
+                type="submit"
+                className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mr-1"
+                onClick={handleEditClick}
+              >
+                수정하기
+              </button>
+              <button
+                type="submit"
+                className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                onClick={handleDelete}
+              >
+                삭제하기
+              </button>
+            </div>
+          </div>
+
+          <div className="mt-6 border-t border-gray-100">
+            <dl className="divide-y divide-gray-100">
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-base font-bold leading-6 text-gray-900">
+                  교육시간
+                </dt>
+                <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  {eduData.eduStartTime}
+                </dd>
+                <dt className="text-base font-bold leading-6 text-gray-900">
+                  총 교육시간
+                </dt>
+                <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  {eduData.eduSumTime} 분
+                </dd>
               </div>
 
-              <div className="mt-6 border-t border-gray-100">
-                <dl className="divide-y divide-gray-100">
-                  <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                    <dt className="text-base font-bold leading-6 text-gray-900">
-                      교육시간
-                    </dt>
-                    <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                      {eduData.eduStartTime}
-                    </dd>
-                    <dt className="text-base font-bold leading-6 text-gray-900">
-                      총 교육시간
-                    </dt>
-                    <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                      {eduData.eduSumTime} 분
-                    </dd>
-                  </div>
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-base font-bold leading-6 text-gray-900">
+                  교육장소
+                </dt>
+                <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0 whitespace-pre-wrap ">
+                  {eduData.eduPlace}
+                </dd>
+              </div>
 
-                  <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                    <dt className="text-base font-bold leading-6 text-gray-900">
-                      교육장소
-                    </dt>
-                    <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0 whitespace-pre-wrap ">
-                      {eduData.eduPlace}
-                    </dd>
-                  </div>
-
-                  <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                    <dt className="text-base font-bold leading-6 text-gray-900">
-                      교육내용
-                    </dt>
-                    <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0 whitespace-pre-wrap ">
-                      {eduData.eduContent}
-                    </dd>
-                  </div>
-                  <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                    <dt className="text-base font-bold leading-6 text-gray-900">
-                      대상자
-                    </dt>
-                    <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0 whitespace-pre-wrap ">
-                      {mapDutyName(eduData.eduTarget)}
-                    </dd>
-                  </div>
-                  <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                    <dt className="text-base font-bold leading-6 text-gray-900">
-                      강사
-                    </dt>
-                    <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0 whitespace-pre-wrap ">
-                      {eduData.eduInstructor}
-                    </dd>
-                  </div>
-                  <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                    <dt className="text-base font-bold leading-6 text-gray-900">
-                      작성자
-                    </dt>
-                    <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0 whitespace-pre-wrap ">
-                      {eduData.eduWriter}
-                    </dd>
-                  </div>
-                  <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt className="text-base font-bold leading-6 text-gray-900">
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-base font-bold leading-6 text-gray-900">
+                  교육내용
+                </dt>
+                <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0 whitespace-pre-wrap ">
+                  {eduData.eduContent}
+                </dd>
+              </div>
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-base font-bold leading-6 text-gray-900">
+                  대상자
+                </dt>
+                <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0 whitespace-pre-wrap ">
+                  {mapDutyName(eduData.eduTarget)}
+                </dd>
+              </div>
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-base font-bold leading-6 text-gray-900">
+                  강사
+                </dt>
+                <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0 whitespace-pre-wrap ">
+                  {eduData.eduInstructor}
+                </dd>
+              </div>
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-base font-bold leading-6 text-gray-900">
+                  작성자
+                </dt>
+                <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0 whitespace-pre-wrap ">
+                  {eduData.eduWriter}
+                </dd>
+              </div>
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-base font-bold leading-6 text-gray-900">
                   첨부파일
                 </dt>
                 <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
@@ -310,16 +310,16 @@ export default function SafetyEduDetails() {
                               </span>
                             </div>
                           </div>
-                                </li>
-                            ))}
-                          </ul>
-                      ) : (
-                          <div>첨부된 파일이 없습니다</div>
-                      )}
-                    </dd>
-                  </div>
-                </dl>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <div>첨부된 파일이 없습니다</div>
+                  )}
+                </dd>
               </div>
+            </dl>
+          </div>
           <div className="mt-6 pr-3 pb-3 flex items-center justify-center gap-x-6 ">
             <div>
               {isCompleted ? (
