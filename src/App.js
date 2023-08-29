@@ -21,7 +21,6 @@ import EduAttenStatics from "./page/manager/EduAttenStatics"
 import FrequentIns from "./page/manager/SafetyFrequentInspection";
 import AttenStatus from "./page/manager/AttendanceStatus";
 import UserFrequentDetails from "./page/user/UserFrequentDetails/UserFrequentDetails";
-import UserRegularReg from "./page/user/UserRegularReg";
 import TrainingReport from "./components/TrainingReport";
 import SafetyManagerInspection from "./page/manager/SafetyManagerInspection";
 import RegularMain from "./page/user/RegularMain";
@@ -97,7 +96,7 @@ function App() {
 
         {/* 사용자 정기점검 */}
 
-        <Route path="/regularreg/:masterdataPart" element={<UserRegularReg/>}></Route>{/* 정기점검 상세페이지 */}
+        <Route path="/regularreg" element={<UserRegularReg/>}></Route>{/* 정기점검 등록페이지 */}
         <Route path="/faultymodal" element={<FaultyModal/>}></Route>{/* 수시점검 상세페이지 */}
 
 
