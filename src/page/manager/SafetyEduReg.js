@@ -1,4 +1,4 @@
-import { useState, Fragment, useCallback, useEffect } from "react";
+import React, { useState, Fragment, useCallback, useEffect } from "react";
 import Header from "../../components/Header";
 // import { format, addMonths, subMonths } from "date-fns";
 import { Listbox, Transition } from "@headlessui/react";
@@ -19,6 +19,11 @@ import { FilePond, registerPlugin } from "react-filepond";
 import "filepond/dist/filepond.min.css"; // 스타일링을 위한 CSS
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+
+// 추가 플러그인을 라이브러리에 등록
+registerPlugin(FilePondPluginImagePreview);
+
+
 
 const people = [
   {
@@ -130,6 +135,7 @@ const handleFileUpload = (acceptedFiles) => {
 //교육일지 등록
 function SafetyEduReg() {
   const {
+    saveFile,
     eduFiles,
     handleDeleteFile,
     selected,
@@ -164,7 +170,7 @@ function SafetyEduReg() {
     // handleEdit,
 
   } = useSafetyEduForm();
-
+  const [files, setFiles] = useState(null);
 
   // const handleClick = () => {
   //   handleEdit(); // 수정 핸들러 호출
@@ -543,82 +549,157 @@ function SafetyEduReg() {
                 </button>
               )}
             </div> */}
-            <div id="file" className="flex items-baseline justify-start ">
+
+            {/*<div id="file" className="flex items-baseline justify-start ">*/}
+            {/*  <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">*/}
+            {/*    파일첨부*/}
+            {/*  </span>*/}
+
+            {/*  <div id="fileuploader" className="flex flex-col items-center">*/}
+                {/*<div*/}
+                {/*  {...getRootProps()}*/}
+                {/*  className={`dropzone ${*/}
+                {/*    isDragActive ? "active" : ""*/}
+                {/*  } col-span-full w-full md:w-96`}*/}
+                {/*>*/}
+                {/*  <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">*/}
+                {/*    <div className="text-center">*/}
+                {/*      <PhotoIcon*/}
+                {/*        className="mx-auto h-12 w-12 text-gray-300"*/}
+                {/*        aria-hidden="true"*/}
+                {/*      />*/}
+                {/*      <div className="mt-4 flex text-sm leading-6 text-gray-600">*/}
+                {/*        <label*/}
+                {/*          htmlFor="file-upload"*/}
+                {/*          className="relative cursor-pointer rounded-md bg-white font-semibold text-seahColor focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-seahDeep"*/}
+                {/*        >*/}
+                {/*          <span>클릭하거나</span>*/}
+                {/*          <input*/}
+                {/*            id="file-upload"*/}
+                {/*            name="file-upload"*/}
+                {/*            {...getInputProps()}*/}
+                {/*            className="sr-only"*/}
+                {/*            type="file"*/}
+                {/*            onChange={handleFileChange}*/}
+                {/*          />*/}
+                {/*        </label>*/}
+                {/*        <p className="pl-1">*/}
+                {/*          파일을 여기에 드롭하여 선택하세요*/}
+                {/*        </p>*/}
+                {/*      </div>*/}
+                {/*      <p className="text-xs leading-5 text-gray-600">10MB</p>*/}
+                {/*    </div>*/}
+                {/*  </div>*/}
+                {/*</div>*/}
+
+
+            {/*    <div>*/}
+
+                  {/*{formData.eduFileList.map((file, index) => (*/}
+                  {/*  <div key={index} className="flex items-start mt-2">*/}
+                  {/*    <div className="text-left">*/}
+                  {/*      <TruncatedFileName fileName={file.eduFileOriName} />*/}
+                  {/*    </div>*/}
+                  {/*    <button*/}
+                  {/*      onClick={() => handleDeleteFile(index)}*/}
+                  {/*      className="ml-2 text-red-600"*/}
+                  {/*      type="button"*/}
+                  {/*    >*/}
+                  {/*      삭제*/}
+                  {/*    </button>*/}
+                  {/*  </div>*/}
+                  {/*))}*/}
+
+                  {/*{uploadedFiles.map((file, index) => (*/}
+                  {/*  <div key={file.name} className="flex items-start mt-2">*/}
+                  {/*    <div className="text-left">*/}
+                  {/*      <TruncatedFileName fileName={file.name} />*/}
+                  {/*    </div>*/}
+                  {/*    <button*/}
+                  {/*      onClick={() => deleteFile(file.name)}*/}
+                  {/*      className="ml-2 text-red-600"*/}
+                  {/*      type="button"*/}
+                  {/*    >*/}
+                  {/*      삭제*/}
+                  {/*    </button>*/}
+                  {/*  </div>*/}
+                  {/*))}*/}
+            {/*    </div>*/}
+            {/*  </div>*/}
+            {/*</div>*/}
+
+            <div id="file" className="flex items-baseline flex-col ">
               <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
                 파일첨부
               </span>
 
-              <div id="fileuploader" className="flex flex-col items-center">
-                <div
-                  {...getRootProps()}
-                  className={`dropzone ${
-                    isDragActive ? "active" : ""
-                  } col-span-full w-full md:w-96`}
-                >
-                  <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                    <div className="text-center">
-                      <PhotoIcon
-                        className="mx-auto h-12 w-12 text-gray-300"
-                        aria-hidden="true"
-                      />
-                      <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                        <label
-                          htmlFor="file-upload"
-                          className="relative cursor-pointer rounded-md bg-white font-semibold text-seahColor focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-seahDeep"
-                        >
-                          <span>클릭하거나</span>
-                          <input
-                            id="file-upload"
-                            name="file-upload"
-                            {...getInputProps()}
-                            className="sr-only"
-                            type="file"
-                            onChange={handleFileChange}
-                          />
-                        </label>
-                        <p className="pl-1">
-                          파일을 여기에 드롭하여 선택하세요
-                        </p>
-                      </div>
-                      <p className="text-xs leading-5 text-gray-600">10MB</p>
+              <FilePond
+                  allowMultiple={true}
+                  maxFiles={5}
+                  acceptedFileTypes={["image/jpeg", "image/jpg", "image/png"]}
+                  onupdatefiles={(fileItems) => {
+                    const selectedFiles = fileItems.map(
+                        (fileItem) => fileItem.file
+                    );
+                    saveFile(selectedFiles);
+                    setFiles(selectedFiles);
+                  }}
+                  server={{
+                    process: (
+                        fieldName,
+                        file,
+                        metadata,
+                        load,
+                        error,
+                        progress,
+                        abort
+                    ) => {
+                      if (
+                          !file.type.includes("image/jpeg") &&
+                          !file.type.includes("image/jpg") &&
+                          !file.type.includes("image/png")
+                      ) {
+                        error("업로드할 수 없는 확장자입니다.");
+                        alert("업로드할 수 없는 확장자입니다.");
+                        return;
+                      }
+                    },
+                  }}
+                  className="dropzone active l w-96"
+                  labelIdle='클릭하거나 <span class="filepond--label-action">파일을 여기에 드롭하여 선택하세요</span>'
+              />
+              {formData.eduFileList.map((file, index) => (
+                  <div key={index} className="flex items-start mt-2">
+                    <div className="text-left">
+                      <TruncatedFileName fileName={file.eduFileOriName} />
                     </div>
-                  </div>
-                </div>
-
-                <div>
-
-                  {formData.eduFileList.map((file, index) => (
-                    <div key={index} className="flex items-start mt-2">
-                      <div className="text-left">
-                        <TruncatedFileName fileName={file.eduFileOriName} />
-                      </div>
-                      <button
+                    <button
                         onClick={() => handleDeleteFile(index)}
                         className="ml-2 text-red-600"
                         type="button"
-                      >
-                        삭제
-                      </button>
-                    </div>
-                  ))}
+                    >
+                      삭제
+                    </button>
+                  </div>
+              ))}
 
-                  {uploadedFiles.map((file, index) => (
-                    <div key={file.name} className="flex items-start mt-2">
-                      <div className="text-left">
-                        <TruncatedFileName fileName={file.name} />
-                      </div>
-                      <button
+              {uploadedFiles.map((file, index) => (
+                  <div key={file.name} className="flex items-start mt-2">
+                    <div className="text-left">
+                      <TruncatedFileName fileName={file.name} />
+                    </div>
+                    <button
                         onClick={() => deleteFile(file.name)}
                         className="ml-2 text-red-600"
                         type="button"
-                      >
-                        삭제
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
+                    >
+                      삭제
+                    </button>
+                  </div>
+              ))}
             </div>
+
+
             <div id="writer" className="flex items-baseline justify-start">
               <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
                 작성자
@@ -683,7 +764,9 @@ function SafetyEduReg() {
       </div>
 
       {/* {showNotification && <Notification />} */}
+
     </div>
+
   );
 }
 

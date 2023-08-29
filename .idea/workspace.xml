@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="beef42e1-c14e-4899-8add-6522e5980981" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/manager/SafetyEduDetails.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/SafetyEduDetails.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/page/manager/SafetyEduReg.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/SafetyEduReg.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/useHook/useSafetyEduForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/useHook/useSafetyEduForm.js" afterDir="false" />
     </list>
@@ -43,7 +41,7 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "preferences.sourceCode.Shell Script",
-    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\IntelliJ IDEA 2023.1\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external",
+    "ts.external.directory.path": "C:\\Users\\codepc\\AppData\\Local\\JetBrains\\IntelliJ IDEA 2023.1.1\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -74,7 +72,7 @@
       <workItem from="1692662925742" duration="7180000" />
       <workItem from="1692704545169" duration="422000" />
       <workItem from="1692864697525" duration="1535000" />
-      <workItem from="1693284078270" duration="7790000" />
+      <workItem from="1693284078270" duration="13721000" />
     </task>
     <servers />
   </component>

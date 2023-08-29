@@ -3,7 +3,7 @@ import axios from "axios";
 import { useDropzone } from "react-dropzone";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import NotificationModal from "../components/Notification";
-
+import safetyEduReg from "../page/manager/SafetyEduReg";
 const people = [
   {
     id: 1,
@@ -104,6 +104,8 @@ function classNames(...classes) {
 
 
 const useSafetyEduForm = (eduData) => {
+
+
   const formDataWithFile = new FormData();
   const [selected, setSelected] = useState(people[0]);
   const [selectedDuty, setSelectedDuty] = useState(duty[0]);
@@ -132,6 +134,7 @@ const useSafetyEduForm = (eduData) => {
     eduFileList:[],
     eduFileIds:[],
   });
+
 // let [ eduFiles, setEduFiles] = useState([0,0,0,0,0,0,0,0]);
   const { eduId } = useParams();
   useEffect(() => {
@@ -216,14 +219,18 @@ const useSafetyEduForm = (eduData) => {
     setFormData(prevData => ({ ...prevData, files: updatedFiles })); // Update formData with new file array
   };
 
+  function saveFile(file){
+    setFormData(prevData => ({ ...prevData, files: file })); // Update formData with new file array
+        console.log("여기?");
+    console.log(formData.files);
+  }
+
   //불러온 파일 삭제
   const handleDeleteFile = (index) => {
     const updatedFileId = formData.eduFileList[index].eduFileId;
 
     setEduFiles([...eduFiles, updatedFileId]);
     formData.eduFileList.splice(index, 1);
-
-
 
       formData.eduFileIds= eduFiles;
 
@@ -289,7 +296,8 @@ const useSafetyEduForm = (eduData) => {
       setError("본문 내용 또는 강사를 입력하세요.");
       return;
     }
-
+    console.log("업로드전 담긴 파일");
+    console.log(formData.files);
     try {
       if (formData.eduId) {
         // 기존 교육 데이터를 수정하는 경우 (PUT 요청)
@@ -359,7 +367,7 @@ const useSafetyEduForm = (eduData) => {
 
 
   return {
-
+    saveFile,
     handleDeleteFile,
     selected,
     selectedDuty,
@@ -389,6 +397,7 @@ const useSafetyEduForm = (eduData) => {
     handleOptionChange,
     showNotification,
   };
+
 };
 
 export default useSafetyEduForm;
