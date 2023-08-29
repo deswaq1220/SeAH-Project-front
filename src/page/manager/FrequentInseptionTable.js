@@ -60,9 +60,11 @@ export default function FrequentInseptionTable({ searchResults }) {
 
   /// 수시점검현황
   return (
+
       <div className="mx-4 mt-4">
+        {searchResults.map((result, index) => (
         <div className="flex">
-          {searchResults.map((result, index) => (
+          {/*{searchResults.map((result, index) => (*/}
               <React.Fragment key={index}>
                 <p className="text-blue-700">
                   <span className=" font-semibold mr-1">점검일자</span>
@@ -73,8 +75,8 @@ export default function FrequentInseptionTable({ searchResults }) {
                   {result.spePerson}
                 </p>
               </React.Fragment>
-          ))}
-      </div>
+          {/*))}*/}
+      {/*</div>*/}
       <div className="-mx-4 mt-2 ring-1 ring-gray-300 sm:mx-0 sm:rounded-lg">
         <div className="mx-8 flow-root">
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -128,7 +130,7 @@ export default function FrequentInseptionTable({ searchResults }) {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                {searchResults.map((result, index) => (
+                {/*{searchResults.map((result, index) => (*/}
                     <tr key={index} className="divide-x divide-gray-200">
                       <td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-0">
                         {result.spePart}
@@ -152,7 +154,7 @@ export default function FrequentInseptionTable({ searchResults }) {
                         {result.speRiskAssess}
                       </td>
                     </tr>
-                  ))}
+                  {/*// ))}*/}
                 </tbody>
               </table>
             </div>
@@ -180,7 +182,7 @@ export default function FrequentInseptionTable({ searchResults }) {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                {searchResults.map((result, index) => (
+                {/*{searchResults.map((result, index) => (*/}
                     <tr key={index} className="divide-x divide-gray-200">
                       <td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-0">
                         {result.speContent}
@@ -189,7 +191,7 @@ export default function FrequentInseptionTable({ searchResults }) {
                         {result.speActContent}
                       </td>
                     </tr>
-                  ))}
+                  {/*))}*/}
                 </tbody>
               </table>
             </div>
@@ -229,7 +231,7 @@ export default function FrequentInseptionTable({ searchResults }) {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                {searchResults.map((result, index) => (
+                {/*{searchResults.map((result, index) => (*/}
                     <tr key={index} className="divide-x divide-gray-200">
                       <td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-0">
                         {result.speActPerson} / {result.speActEmail}
@@ -244,13 +246,15 @@ export default function FrequentInseptionTable({ searchResults }) {
                       {/*  {result.title}*/}
                       {/*</td>*/}
                     </tr>
-                  ))}
+                  {/*))}*/}
                 </tbody>
               </table>
             </div>
           </div>
         </div>
       </div>
+    </div>
+        ))}
     </div>
   );
 }
