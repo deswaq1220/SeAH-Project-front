@@ -169,6 +169,7 @@ function UserfrequentReg() {
        console.error(error);
        alert("수시점검 등록에 실패했습니다. 다시 시도해주세요.");
       });
+
  };
 
  return (
@@ -186,6 +187,7 @@ function UserfrequentReg() {
       <RiskAssessment onFormDataChange={handleRiskAssessmentDataChange} /> {/* 위험성평가 */}
       {/* 위험분류 표 */}
       <div className="flex flex-col justify-center items-center border border-gray-300 px-3 mx-3 ">
+
        <p className=" font-semibold text-lg">평가표</p>
        <img src={DangerImg} className=" p-3 w-100"></img>
 
@@ -235,6 +237,7 @@ function UserfrequentReg() {
             }
             }
            }}
+
       />
 
       <div className="flex justify-center w-full mt-8 mb-10">
