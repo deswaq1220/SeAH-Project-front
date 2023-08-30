@@ -9,7 +9,7 @@ function classNames(...classes) {
 }
 
 export default function ActionRquest({ onFormDataChange }) {
-  const { masterdataPart, masterdataFacility } = useParams();
+  const { masterdataPart, masterdataId } = useParams();
   const [emailDataList, setEmailDataList] = useState([]);
   const [instances, setInstances] = useState([{ selectedEmail: null }]);
 
@@ -17,7 +17,7 @@ export default function ActionRquest({ onFormDataChange }) {
     async function emailFetchDataWithAxios() {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataFacility}`
+          `${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataId}`
         );
 
         const emailListFromBack = response.data["emailList"];
@@ -28,7 +28,7 @@ export default function ActionRquest({ onFormDataChange }) {
       }
     }
     emailFetchDataWithAxios();
-  }, [masterdataPart, masterdataFacility]);
+  }, [masterdataPart, masterdataId]);
 
   // -----------------------------------
   const handleActionChange = (instanceIndex, selectedEmail) => {

@@ -9,9 +9,11 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Injured({onFormDataChange}) {
-  const {masterdataPart} = useParams(); // url 영역 파라미터
-  const {masterdataFacility} = useParams(); // url 설비 파라미터
+
+export default function Injured({ onFormDataChange }) {
+  const { masterdataPart } = useParams(); // url 영역 파라미터
+  const { masterdataId } = useParams(); // url 설비코드 파라미터
+
   const [specialInjuredList, setSpecialInjuredList] = useState([]); // 부상부위List
   const [injuredSelected, setInjuredSelected] = useState(""); //  부상부위
   const [customInjured, setCustomInjured] = useState(""); // 기타[직접선택] 입력된 값
@@ -19,17 +21,24 @@ export default function Injured({onFormDataChange}) {
 
   // 부상부위 get
   useEffect(() => {
-    function specialInjureFetchDataWithAxios(masterdataPart, masterdataFacility) {
+    function specialInjureFetchDataWithAxios( masterdataPart,masterdataId) {
       axios
-        .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${encodeURIComponent(masterdataFacility)}`)   // 세아
-        //  .get(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`)
-        .then((response) => {
-          // 백에서 보내주는 부상부위 리스트
-          const speInjuredListFromBack = response.data.specialInjuredList;
-          const speInjuredData = speInjuredListFromBack.map((item) => {
-            return {
-              injuredMenu: item.injuredMenu, injuredNum: item.injuredNum,
-            };
+          .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataId}`)   // 세아
+          .then((response) => {
+            // 백에서 보내주는 부상부위 리스트
+            const speInjuredListFromBack = response.data.specialInjuredList;
+            const speInjuredData = speInjuredListFromBack.map((item) => {
+              return {
+                injuredMenu: item.injuredMenu,
+                injuredNum: item.injuredNum,
+              };
+            });
+            setSpecialInjuredList(speInjuredData);
+            setInjuredSelected(speInjuredData[0]);
+          })
+          .catch((error) => {
+            console.error("Error fetching data: ", error);
+
           });
           setSpecialInjuredList(speInjuredData);
           setInjuredSelected(speInjuredData[0]);
@@ -39,8 +48,8 @@ export default function Injured({onFormDataChange}) {
         });
     }
 
-    specialInjureFetchDataWithAxios(masterdataPart, masterdataFacility);
-  }, [masterdataPart, masterdataFacility]);
+    specialInjureFetchDataWithAxios(masterdataPart, masterdataId);
+  }, [masterdataPart, masterdataId]);
 
   // 기타(직접입력) 선택 시, customInjured 값 업데이트, onFOrmDataChange 호출
   const handleCustomInjuredChange = (e) => {
@@ -123,14 +132,18 @@ export default function Injured({onFormDataChange}) {
             </>)}
         </Listbox>
         {/* Custom Input */}
-        {injuredSelected && injuredSelected.injuredMenu === "기타(직접입력)" && (<input
-            type="text"
-            value={customInjured}
-            name="speInjure"
-            onChange={handleCustomInjuredChange}
-            className="block w-40 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5 mt-1"
-            placeholder="직접 입력"
-          />)}
+        {injuredSelected &&
+          injuredSelected.injuredMenu === "기타(직접입력)" && (
+            <input
+              type="text"
+              value={customInjured}
+              name="speInjure"
+              onChange={handleCustomInjuredChange}
+              className="block w-40 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5 mt-1"
+              placeholder="직접 입력"
+            />
+          )}
+
       </div>
     </div>);
 }
