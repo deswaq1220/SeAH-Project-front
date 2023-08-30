@@ -43,6 +43,7 @@ function UserfrequentReg() {
   const [speDanger, setSpeDanger] = useState("");
   const [speInjure, setSpeInjure] = useState("");
   const [speCause, setSpeCause] = useState("");
+  const [speFacility, setSpeFacility] = useState("");
   const [speTrap, setSpeTrap] = useState("");
   const [speRiskAssess, setSpeRiskAssess] = useState("");
   const [speContent, setSpeContent] = useState("");
@@ -116,7 +117,7 @@ function UserfrequentReg() {
  const navigate = useNavigate();
 
 
- const handleFormSubmit = () => {
+ const handleFormSubmit = async () => {
   const formData = new FormData();        // 폼데이터 객체 생성
 
   // 업로드 파일 배열 저장

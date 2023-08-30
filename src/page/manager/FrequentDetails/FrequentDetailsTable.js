@@ -3,24 +3,32 @@ import { PaperClipIcon } from "@heroicons/react/20/solid";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import fetcher from "../../../api/fetcher";
+import { useCookies } from "react-cookie";
 export default function FrequentDetailsTable() {
   const navigate = useNavigate(); //변수 할당시켜서 사용
   const { speId } = useParams(); // URL 파라미터로부터 speId를 가져옵니다.
   const [inspectionData, setInspectionData] = useState(null); // API로부터 받은 데이터를 저장할 상태 변수
+  const [atCookies, setAtCookie] = useCookies(["at"]); // 쿠키 훅
 
-  useEffect(() => {
-    // API 요청을 보내 데이터를 가져옵니다.
-    axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/special/detail/${speId}`) // 실제 API 주소로 수정해야합니다.
-      .then((response) => {
-        setInspectionData(response.data); // 데이터를 상태 변수에 저장합니다.
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
+  useEffect(async () => {
+    const authToken = atCookies["at"]; // 사용자의 인증 토큰을
+    try {
+      const response = await fetcher.get(`/user/special/detail/${speId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
       });
-  }, [speId]); // speId가 변경될 때마다 useEffect가 실행됩니다.
+      setInspectionData(response.data);
+      console.log(response.data);
+
+      const accessToken = response.data.access_token;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }, [speId]);
 
   if (!inspectionData) {
     // 데이터가 아직 로드되지 않았을 때의 처리
@@ -63,13 +71,10 @@ export default function FrequentDetailsTable() {
     }
   };
 
-
- // 확인버튼 클릭 시 바로 이전페이지 이동
-  const backBtn = () => { navigate(-1); };
-
-
-
-
+  // 확인버튼 클릭 시 바로 이전페이지 이동
+  const backBtn = () => {
+    navigate(-1);
+  };
 
   return (
     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 mt-5">
@@ -80,8 +85,7 @@ export default function FrequentDetailsTable() {
         <p className="mt-1 max-w-2xl text-base leading-6 text-gray-500">
           등록한 해당 수시점검 조회가 가능합니다
         </p>
-        <div className="flex justify-end mt-1">
-        </div>
+        <div className="flex justify-end mt-1"></div>
       </div>
       <div className="mt-6 border-t border-gray-100">
         <dl className="divide-y divide-gray-100">

@@ -1,6 +1,8 @@
 import Cookies from "universal-cookie/es6";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { useCookies } from "react-cookie"; 
+
 
 const ACCESS_TOKEN_COOKIE = 'myAccessToken';
 const REFRESH_TOKEN_COOKIE = 'myRefreshToken';
@@ -9,7 +11,7 @@ const cookies = new Cookies();
 const INSTANCE = () => {
     const instance = {
         baseURL: process.env.REACT_APP_API_BASE_URL,
-        timeout: 100000,
+        timeout: 10000,
     }
     const accessToken = cookies.get(ACCESS_TOKEN_COOKIE);
 
@@ -27,10 +29,17 @@ function refreshRequest(originalRequest) {
         .then((res) => res) // 200
         .catch((err) => { // 401, 500, 기타 등등
             const config = err.config;
-            if (err?.response?.data === "EXPIRED") {
-                return INSTANCE().post(`${process.env.REACT_APP_API_BASE_URL}/auth/refresh`, {
-                    accessToken: cookies.get(ACCESS_TOKEN_COOKIE),
-                    refreshToken: cookies.get(REFRESH_TOKEN_COOKIE)
+            if (err?.response?.data.statusCode === "EXPIRED") {
+                const authToken = useCookies["at"];
+
+                return axios.post(`process.env.REACT_APP_API_BASE_URL/auth/refresh`, {
+                    accessToken: "test",
+                    refreshToken: "test"
+                },{
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${authToken}`,
+                      },
                 })
                     .then((res) => {
                         if (res?.data?.accessToken && res?.data?.refreshToken) {
@@ -45,6 +54,7 @@ function refreshRequest(originalRequest) {
                                 title: "토큰이 만료되었습니다.",
                                 icon: 'warning',
                             })
+                            console.log("들어오나?");
                             window.location.href = '/login'
                             cookies.remove(ACCESS_TOKEN_COOKIE)
                             cookies.remove(REFRESH_TOKEN_COOKIE)
@@ -56,9 +66,11 @@ function refreshRequest(originalRequest) {
                         cookies.remove(REFRESH_TOKEN_COOKIE)
                     })
             } else {
+                alert("여긴가?");
                 throw err
+                
             }
-        })
+        });
 }
 
 export default {

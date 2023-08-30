@@ -19,7 +19,7 @@ function ManagerLogin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     try {
       const response = await fetcher.post(
         `/auth/login`,
@@ -30,6 +30,7 @@ function ManagerLogin() {
         {
           headers: {
             'Content-Type': 'application/json',
+            // Authorization: `Bearer ${authToken}`,
           },
         }
       );
@@ -39,7 +40,7 @@ function ManagerLogin() {
       axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
       setAtCookie('at', response.data.accessToken);
       setrtCookie('rt',response.data.refreshToken);
-      navigate("/manager");
+      navigate("/admin/manager");
     } catch (error) {
       console.error("Login error:", error);
     }

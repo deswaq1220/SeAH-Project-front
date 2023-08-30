@@ -24,33 +24,13 @@ export default function SafetyEduDetails() {
 
   const navigate = useNavigate();
 
-  // const [education, setEducation] = useState({
-  //   selected: null,
-  //   selectedDuty: null,
-  //   isCompleted: false,
-  //   uploadedFiles: [],
-  //   error: null,
-  //   formData: {
-  //     eduTitle: "",
-  //     eduInstructor: "",
-  //     eduPlace: "",
-  //     eduCategory: "", // 교육
-  //     eduStartTime: new Date(), // 시작시간
-  //     // eduEndTime: new Date(), // 끝나는 시간
-  //     eduSumTime: "", // 총시간
-  //     eduTarget: "", // 대상자
-  //     eduContent: "", // 교육내용
-  //     eduWriter: "",
-  //     eduId: "",
-  //   },
-  // });
 
   useEffect(() => {
     const fetchEduDetail = async () => {
       const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
       try {
         const response = await fetcher.get(
-          `/edudetails/${eduId}`, // 세아
+          `/admin/edudetails/${eduId}`, // 세아
           {
             headers: {
               "Content-Type": "application/json",
@@ -82,25 +62,6 @@ export default function SafetyEduDetails() {
     fetchEduDetail();
   }, [eduId]);
 
-  //
-  // useEffect(() => {
-  //   if (eduData) {
-  //     // eduData가 유효한 경우, 해당 값을 formData에 설정합니다.
-  //     setFormData({
-  //       eduCategory: eduData.eduCategory,
-  //       eduTitle: eduData.eduTitle,
-  //       eduInstructor: eduData.eduInstructor,
-  //       eduPlace: eduData.eduPlace,
-  //       eduStartTime: new Date(eduData.eduStartTime),
-  //       eduSumTime: eduData.eduSumTime,
-  //       eduTarget: eduData.eduTarget,
-  //       eduContent: eduData.eduContent,
-  //       eduWriter: eduData.eduWriter,
-  //       files: null, // 파일 관련 데이터는 여기서 설정하지 않음
-  //       eduId: eduData.eduId,
-  //     });
-  //   }
-  // }, [eduData, setFormData]);
 
   // 엑셀!!!!!!!!!!!
 
@@ -170,7 +131,7 @@ export default function SafetyEduDetails() {
   const handleDelete = async () => {
     const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
     try {
-      const response = await fetcher.delete(`/edudetails/${eduId}`, {
+      const response = await fetcher.delete(`/admin/edudetails/${eduId}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${authToken}`,
@@ -333,10 +294,10 @@ export default function SafetyEduDetails() {
               {isCompleted ? (
                 <div className="mt-4">
 
-                  <Link to={`/userattendance/register/${eduData.eduId}`}>
+                  <Link to={`/user/register/${eduData.eduId}`}>
                     <QRCode
                       // value={`http://10.200.18.185:3000/userattendance/register/${eduData.eduId}`}
-                      value={`http://localhost:3000/userattendance/register/${eduData.eduId}`}
+                      value={`http://localhost:3000/user/register/${eduData.eduId}`}
                     />
                   </Link>
 
@@ -354,7 +315,7 @@ export default function SafetyEduDetails() {
                   QR CODE
                 </button>
               )}
-              <Link to={`/attenstatus/${eduId}`}>
+              <Link to={`/admin/attenstatus/${eduId}`}>
                 <button
                   type="submit"
                   className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mr-1"
@@ -372,10 +333,10 @@ export default function SafetyEduDetails() {
               </button>
               <button
                 type="button"
-                onClick={() => navigate(`/training/${eduId}`)}
+                onClick={() => navigate(`/admin/training/${eduId}`)}
                 className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor ml-1"
               >
-                파일출력
+                공적증빙
               </button>
             </div>
           </div>

@@ -40,7 +40,7 @@ function SafetyEducationMain() {
       try {
         const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
         const currentYear = getYear(currentDate);
-        const response = await fetcher.get(`/eduMain`, {
+        const response = await fetcher.get(`/admin/eduMain`, {
           params: {
             year: currentYear,
             month: currentMonth,
@@ -95,7 +95,7 @@ function SafetyEducationMain() {
 
   const handleClick = () => {
     // 원하는 경로로 이동
-    navigate("/edureg");
+    navigate("/admin/edureg");
   };
 
   // eduList가 undefined일 때 처리
@@ -227,7 +227,7 @@ function SafetyEducationMain() {
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           <div className="flex items-center">
                             <Link
-                              to={`/edudetails/${edu.eduId}`} // 해당 아이디 디테일 페이지로 이동하는 경로 설정
+                              to={`/admin/edudetails/${edu.eduId}`} // 해당 아이디 디테일 페이지로 이동하는 경로 설정
                               className="font-medium text-seahColor hover:text-seahDeep "
                             >
                               {edu.eduTitle}
@@ -237,7 +237,7 @@ function SafetyEducationMain() {
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           <div className="flex items-center">
                             <Link
-                              to={`/edudetails/${edu.eduId}`} // 해당 아이디 디테일 페이지로 이동하는 경로 설정
+                              to={`/admin/edudetails/${edu.eduId}`} // 해당 아이디 디테일 페이지로 이동하는 경로 설정
                               className="font-medium text-seahColor hover:text-seahDeep truncate"
                               style={{ width: "150px" }} // 예시로 150px 너비를 지정
                             >

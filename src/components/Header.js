@@ -15,15 +15,15 @@ import logo from "../img/logo.png";
 
 // 점검 메뉴
 const products = [
-  { name: '안전점검', description: '수시점검 및 정기점검을 할 수 있습니다. ', href: '/managerinspection', icon: ClipboardDocumentListIcon },
-  { name: '안전점검 통계', description: '안전점검 통계를 조회할 수 있습니다', href: '/inspection/statistics/yearimg', icon: ChartPieIcon },
+  { name: '안전점검', description: '수시점검 및 정기점검을 할 수 있습니다. ', href: '/admin/managerinspection', icon: ClipboardDocumentListIcon },
+  { name: '안전점검 통계', description: '안전점검 통계를 조회할 수 있습니다', href: '/admin/inspection/statistics/yearimg', icon: ChartPieIcon },
 ]
 
 // 교육 메뉴
 const eduProducts = [
-  { name: '안전교육', description: '안전교육 리스트 및 등록을 할 수 있습니다', href: '/eduMain', icon: BookOpenIcon },
-  { name: '안전교육 시간 통계', description: '월별 안전교육 시간을 조회할 수 있습니다', href: '/edustatistics', icon: ChartPieIcon },
-  { name: '안전교육 출석 통계', description: '안전교육 참석자를 조회할 수 있습니다', href: '/edustatistics/atten', icon: ChartPieIcon },
+  { name: '안전교육', description: '안전교육 리스트 및 등록을 할 수 있습니다', href: '/admin/eduMain', icon: BookOpenIcon },
+  { name: '안전교육 시간 통계', description: '월별 안전교육 시간을 조회할 수 있습니다', href: '/admin/edustatistics', icon: ChartPieIcon },
+  { name: '안전교육 출석 통계', description: '안전교육 참석자를 조회할 수 있습니다', href: '/admin/edustatistics/atten', icon: ChartPieIcon },
 ]
 // const callsToAction = [
 //   { name: "Watch demo", href: "#", icon: PlayCircleIcon },
@@ -36,28 +36,6 @@ function classNames(...classes) {
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  // const [isSafetyCheckSelected, setSafetyCheckSelected] = useState(false);
-  // const [isEduMainSelected, setEduMainSelected] = useState(false);
-  // const [isReferenceSelected, setReferenceSelected] = useState(false);
-
-  // const handleSafetyCheckClick = () => {
-  //   setSafetyCheckSelected(true);
-  //   setEduMainSelected(false);
-  //   setMobileMenuOpen(false);
-  // };
-
-  // const handleEduMainClick = () => {
-  //   setSafetyCheckSelected(false);
-  //   setEduMainSelected(true);
-  //   setMobileMenuOpen(false);
-  // };
-
-  // const handleReferenceClick = () => {
-  //   setSafetyCheckSelected(false);
-  //   setEduMainSelected(false);
-  //   setReferenceSelected(true);
-  //   setMobileMenuOpen(false);
-  // };
 
   return (
     <header className="bg-white">
