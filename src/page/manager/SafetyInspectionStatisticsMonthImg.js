@@ -22,10 +22,12 @@ import { ResponsivePie } from '@nivo/pie'
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 function SafetyInspectionStatisticsMonthImg() {
+
   //공통: 년도입력, 기본값은 당해로 지정되어 있음
   const options = {
     timeZone: "Asia/Seoul",
@@ -40,6 +42,7 @@ function SafetyInspectionStatisticsMonthImg() {
   const currentYearMonth = `${year}-${month}`;
   const [selectedYear, setSelectedYear] = useState(currentYearMonth);
 
+
   //이벤트1: 연도 검색이벤트
   const handleYearChange = (event) => {
     const inputValue = event.target.value;
@@ -53,6 +56,38 @@ function SafetyInspectionStatisticsMonthImg() {
       }
     }
   };
+
+  const [selected, setSelected] = useState([]);
+
+  // 이벤트4: 드롭다운 선택에 따른 piechart 전체데이터/sort된 데이터 불러오는 기능
+  const handleSelectedChange = (selected) => {
+    setSelected(selected);
+    if(selected !== "전체"){
+      // axios 요청
+      axios
+          .get(`${process.env.REACT_APP_API_BASE_URL}/regular/statistics/checkvaluecountsort`, {
+            params: {
+              yearmonth: selectedYear,
+              regularinsname: selected,
+            },
+          })
+          .then((response) => {
+            setCheckCount(response.data);
+          })
+          .catch((error) => {
+            console.log("드롭박스메소드에서 선택 값을 보내지 못합니다")
+          });
+    }else{
+      axios
+          .get(`${process.env.REACT_APP_API_BASE_URL}/regular/statistics/checkvaluecount`, {
+            params: {yearmonth: selectedYear},
+          })
+          .then((response) => {
+            setCheckCount(response.data);
+          });
+    }
+  };
+
 
   // 이벤트2: 월간 분석 결과 엑셀로 내보내기
   const handleExport = () => {
@@ -97,22 +132,8 @@ function SafetyInspectionStatisticsMonthImg() {
     saveAs(excelFile, "수시점검_월간분석.xlsx");
   };
 
-  // 이벤트3: pieChart sort하기
+  // 이벤트3: pieChart 생성관련
   const [checkCount, setCheckCount] = useState([]); //백엔드 값
-  const [checkCountSort, setCheckCountSort] = useState([]); //백엔드 값(sort)
-
-  //색 지정
-  const keyColorMap = {
-    "GOOD": "hsl(302, 70%, 50%)",
-    "BAD": "hsl(150, 70%, 50%)",
-    "NA": "hsl(149, 70%, 50%)"
-  };
-
-  //색 값 key,value에 넣기
-    const coloredData = checkCount.map(item => ({
-      ...item,
-      color: keyColorMap[item.id]
-    }));
 
 
   //그 외 변수
@@ -125,38 +146,7 @@ function SafetyInspectionStatisticsMonthImg() {
 
     //정기점검
     const [regularCount, setRegularCount] = useState([]); //정기점검횟수
-    const [selected, setSelected] = useState([]);
     const [regularNameList, setRegularNameList] = useState([]);
-
-    // 드롭박스에서 선택한 값을 변경할 때 호출되는 함수
-    const handleSelectedChange = (selected) => {
-      setSelected(selected);
-
-      if(selected !== "선택"){
-      // axios 요청
-        axios
-            .get(`${process.env.REACT_APP_API_BASE_URL}/regular/statistics/checkvaluecountsort`, {
-              params: {
-                yearmonth: selectedYear,
-                regularinsname: selected,
-              },
-            })
-            .then((response) => {
-              setCheckCount(response.data);
-            })
-            .catch((error) => {
-              console.log("드롭박스메소드에서 선택 값을 보내지 못합니다")
-            });
-      }else{
-        axios
-            .get(`${process.env.REACT_APP_API_BASE_URL}/regular/statistics/checkvaluecount`, {
-              params: {yearmonth: selectedYear},
-            })
-            .then((response) => {
-              setCheckCount(response.data);
-            });
-      }
-    };
 
 
 
@@ -189,7 +179,7 @@ function SafetyInspectionStatisticsMonthImg() {
             setPartCountForExcel(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
           });
 
-      //영역값2
+      //영역값
       await axios
           .get(
               `${process.env.REACT_APP_API_BASE_URL}/special/statistics/partandmonth`,
@@ -229,8 +219,8 @@ function SafetyInspectionStatisticsMonthImg() {
             setRegularCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
           });
 
-      //(pieChart) 위험성결과 분석값
-      //드롭다운 미선택 시, 전체출력
+      //(pieChart) 위험성결과 분석
+      //드롭다운 미선택 시,  전체 위험성 결과 출력
       await axios
           .get(`${process.env.REACT_APP_API_BASE_URL}/regular/statistics/checkvaluecount`, {
             params: {yearmonth: selectedYear},
@@ -239,19 +229,8 @@ function SafetyInspectionStatisticsMonthImg() {
             setCheckCount(response.data);
           });
 
-      //드롭다운 선택 시, sort출력
-/*      await axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/regular/statistics/checkvaluecountsort`,{
-            params: { yearmonth: selectedYear, regularinsname: selected },
-          })
-          .then((response) => {
-            setCheckCountSort(response.data);
-          });*/
 
-
-
-
-      //(pieChart) 위험성결과 드롭다운
+      //(pieChart) 위험성결과 드롭다운 기능
         //백데이터 들고오기
         const response = await axios.get(
             `${process.env.REACT_APP_API_BASE_URL}/regular/statistics/namedropdown`);
@@ -265,10 +244,6 @@ function SafetyInspectionStatisticsMonthImg() {
         setRegularNameList(optionsArray);
         setSelected(optionsArray[0])
       console.log("위험성결과드롭다운 값", optionsArray);
-
-
-
-
 
 
     } catch (error) {
@@ -428,17 +403,18 @@ function SafetyInspectionStatisticsMonthImg() {
                             <>
                               <div className="relative mt-2">
                                 <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-28 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6" style={{ minHeight: '2.5rem' }}>
-                    <span className="block truncate">
-                      {selected ? selected.name : "선택"}
-                    </span>
+                                  <span className="block truncate">
+                                    {selected ? `[${typeof selected === 'object' ? selected.name : selected}]` : "전체"}
+                                  </span>
                                   <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                      <ChevronUpDownIcon
-                          className="h-5 w-5 text-gray-400"
-                          aria-hidden="true"
-                      />
-                    </span>
+                                    <ChevronUpDownIcon
+                                        className="h-5 w-5 text-gray-400"
+                                        aria-hidden="true"
+                                    />
+                                  </span>
                                 </Listbox.Button>
 
+                                {/*드롭다운 목록이 나타날 때와 사라질 때의 애니메이션 효과*/}
                                 <Transition
                                     show={open}
                                     as={Fragment}
@@ -446,6 +422,7 @@ function SafetyInspectionStatisticsMonthImg() {
                                     leaveFrom="opacity-100"
                                     leaveTo="opacity-0"
                                 >
+                                  {/*실제 선택지 목록을 포함하는 컨테이너*/}
                                   <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                                     {regularNameList.map((option) => (
                                         <Listbox.Option
@@ -462,15 +439,14 @@ function SafetyInspectionStatisticsMonthImg() {
                                         >
                                           {({ selected, active }) => (
                                               <>
-                              <span
-                                  className={classNames(
-                                      selected ? "font-semibold" : "font-normal",
-                                      "block truncate"
-                                  )}
-                              >
-                                [{option.name}]
-                              </span>
-
+                                  <span
+                                      className={classNames(
+                                          selected ? "font-semibold" : "font-normal",
+                                          "block truncate"
+                                      )}
+                                  >
+                                    [{option.name}]
+                                  </span>
                                                 {selected ? (
                                                     <span
                                                         className={classNames(
@@ -478,16 +454,16 @@ function SafetyInspectionStatisticsMonthImg() {
                                                             "absolute inset-y-0 right-0 flex items-center pr-4"
                                                         )}
                                                     >
-                                  <CheckIcon
-                                      className="h-5 w-5"
-                                      aria-hidden="true"
-                                  />
-                                </span>
+                                                      <CheckIcon
+                                                          className="h-5 w-5"
+                                                          aria-hidden="true"
+                                                      />
+                                                    </span>
                                                 ) : null}
                                               </>
                                           )}
                                         </Listbox.Option>
-                                    ))}
+                                        ))}
                                   </Listbox.Options>
                                 </Transition>
                               </div>
@@ -495,14 +471,25 @@ function SafetyInspectionStatisticsMonthImg() {
                         )}
                       </Listbox>
                     </div>
+
+                      {checkCount.length === 0 ? (
+                          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <p>데이터가 없습니다.</p>
+                          </div>
+                      ) : (
                       <ResponsivePie
-                          data={coloredData}
-                          height={300}
-                          margin={{ top: 20, right: 0, bottom: 35, left: 0 }}
+                          data={checkCount}
+                          height={310}
+                          margin={{ top: 20, right: 0, bottom: 54, left: 0 }}
                           innerRadius={0.5}
                           padAngle={1}
                           activeOuterRadiusOffset={8}
-                          colors={{ scheme: 'pastel1' }}
+                          colors={({ id }) => {
+                            if (id === '양호') return 'hsl(207, 46%, 80%)';
+                            if (id === '불량') return 'hsl(5, 92%, 85%)';
+                            if (id === 'NA') return '#e7e7e7';
+                            return '#ccc'; // 기본 값
+                          }}
                           borderWidth={1}
                           borderColor={{
                             from: 'color',
@@ -530,67 +517,18 @@ function SafetyInspectionStatisticsMonthImg() {
                               ]
                             ]
                           }}
-                          fill={[
-                            {
-                              match: {
-                                id: 'ruby'
-                              },
-                              id: 'dots'
-                            },
-                            {
-                              match: {
-                                id: 'c'
-                              },
-                              id: 'dots'
-                            },
-                            {
-                              match: {
-                                id: 'go'
-                              },
-                              id: 'dots'
-                            },
-                            {
-                              match: {
-                                id: 'python'
-                              },
-                              id: 'dots'
-                            },
-                            {
-                              match: {
-                                id: 'scala'
-                              },
-                              id: 'lines'
-                            },
-                            {
-                              match: {
-                                id: 'lisp'
-                              },
-                              id: 'lines'
-                            },
-                            {
-                              match: {
-                                id: 'elixir'
-                              },
-                              id: 'lines'
-                            },
-                            {
-                              match: {
-                                id: 'javascript'
-                              },
-                              id: 'lines'
-                            }
-                          ]}
+/*                          fill={coloredData.map(item => item.color)}*/
                           legends={[
                             {
                               anchor: 'bottom',
                               direction: 'row',
                               justify: false,
                               translateX: 0,
-                              translateY: 25,
+                              translateY: 50,
                               itemsSpacing: 0,
                               itemWidth: 65,
                               itemHeight: 19,
-                              itemTextColor: '#999',
+                              itemTextColor: '#131313',
                               itemDirection: 'left-to-right',
                               itemOpacity: 1,
                               symbolSize: 17,
@@ -606,6 +544,7 @@ function SafetyInspectionStatisticsMonthImg() {
                             }
                           ]}
                       />
+                      )}
 
                   </div>
                 </div>
