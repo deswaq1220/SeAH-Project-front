@@ -76,7 +76,7 @@ function RegularMain() {
 
   const handleClick = () => {
     // 원하는 경로로 이동
-    navigate("/regular/new");
+    navigate("/regularreg");
   };
 
   if (regularList === undefined) {
