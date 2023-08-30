@@ -3,9 +3,11 @@ import Header from "../../components/Header";
 import axios from "axios";
 import { format, addMonths, subMonths, getMonth, getYear } from "date-fns";
 import Pagination from "../../components/Pagination";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import fetcher from "../../api/fetcher";
+import { useCookies } from "react-cookie";
 
 function EduStatics() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -23,63 +25,85 @@ function EduStatics() {
     ETC: 0,
   });
 
+  const [atCookies, setAtCookie] = useCookies(["at"]); // 쿠키 훅
+
   const navigate = useNavigate();
 
   const handleStatClick = async (category) => {
+    const authToken = atCookies["at"];
     try {
       const currentMonth = getMonth(currentDate) + 1;
       const currentYear = getYear(currentDate);
       // 월&카테고리 별 교육시간 총 합계
-      const response = await  axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}/getmonthlyedulist`, {
-        params: {
-          year: currentYear,
-          month: currentMonth,
-          eduCategory: category
+      const response = await fetcher.get(
+        `/getmonthlyedulist`,
+        {
+          params: {
+            year: currentYear,
+            month: currentMonth,
+            eduCategory: category,
+          },
         },
-      });
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+
+      const accessToken = response.data.access_token;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+
       const data = response.data;
       console.log(data);
       setEduList(data); // eduList 업데이트
     } catch (error) {
       console.error("데이터 가져오기 오류:", error);
     }
-  
+
     console.log(`Clicked on category: ${category}`);
   };
-
 
   // 현재 페이지에 해당하는 항목들을 추출하는 함수
   const getCurrentPageItems = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    console.log("검색 리스트2?"  + eduList);
-    
+    console.log("검색 리스트2?" + eduList);
+
     return eduList.slice(startIndex, endIndex);
   };
-
 
   const getDisplayedId = (eduId) => {
     const index = data.findIndex((edu) => edu.eduId === eduId);
     return index !== -1 ? index + 1 : ""; // 인덱스를 1부터 시작하도록 +1 해줍니다.
   };
 
-
-
   useEffect(() => {
     const getLogsForCurrentMonth = async () => {
+      const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
       try {
         const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
         const currentYear = getYear(currentDate);
-        
+
         // 월&카테고리 별 교육시간 총 합계
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/edustatistics/getmonthlyruntime`, {   // 세아
+        const response = await fetcher.get(`/edustatistics/getmonthlyruntime`, {
+          // 세아
           params: {
             year: currentYear,
-            month: currentMonth
+            month: currentMonth,
+          },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
           },
         });
+
+        const accessToken = response.data.access_token;
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${accessToken}`;
+
         const data = response.data;
         setMonthlyEduTime({
           total: data[0],
@@ -98,21 +122,29 @@ function EduStatics() {
   }, [currentDate]);
 
   useEffect(() => {
-    const  getStartPage =async  () => {
+    const getStartPage = async () => {
+      const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
       try {
         const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
         const currentYear = getYear(currentDate);
         // 월&카테고리 별 교육시간 총 합계
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/edustatistics/getmonthlyedulist`, {
+        const response = await fetcher.get(`/edustatistics/getmonthlyedulist`, {
           params: {
             year: currentYear,
             month: currentMonth,
-            eduCategory: null
+            eduCategory: null,
+          },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
           },
         });
+        const accessToken = response.data.access_token;
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${accessToken}`;
+
         const data = response.data;
-    
         setEduList(data);
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
@@ -122,50 +154,44 @@ function EduStatics() {
     getStartPage();
   }, [currentDate]);
 
-    // 엑셀!!!!!!!!!!!
-    const createExcelData = (eduList) => {
+  // 엑셀!!!!!!!!!!!
+  const createExcelData = (eduList) => {
+    // 교육 정보를 바탕으로 엑셀 데이터를 생성하는 로직 작성
+    const data = eduList.map((item) => ({
+      제목: `${item[1]}`,
+      교육일정: `${item[2]}`,
+      교육시간: `${item[3]} 분`,
+    }));
 
-      // 교육 정보를 바탕으로 엑셀 데이터를 생성하는 로직 작성
-      const data = eduList.map((item) => ({
-        제목: `${item[1]}`,
-        교육일정: `${item[2]}`,
-        교육시간: `${item[3]} 분`,
-      }));
-        
-      return data;
-    };
-    
-    const handleExport = () => {
-      
-      if (!eduList || eduList.length === 0) {
-        console.log("데이터가 없습니다.");
-        return;
-      }
-      // 엑셀 데이터 생성
-      const data = createExcelData(eduList);
-      
-      console.log("저장");
-      // 엑셀 시트 생성
-      const worksheet = XLSX.utils.json_to_sheet(data);
-  
-      // 엑셀 워크북 생성
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-  
-      // 엑셀 파일 저장
-      const excelBuffer = XLSX.write(workbook, {
-        bookType: "xlsx",
-        type: "array",
-      });
-      const excelFile = new Blob([excelBuffer], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      });
-      saveAs(excelFile, `안전교육시간.xlsx`);
-    };
+    return data;
+  };
 
+  const handleExport = () => {
+    if (!eduList || eduList.length === 0) {
+      console.log("데이터가 없습니다.");
+      return;
+    }
+    // 엑셀 데이터 생성
+    const data = createExcelData(eduList);
 
+    console.log("저장");
+    // 엑셀 시트 생성
+    const worksheet = XLSX.utils.json_to_sheet(data);
 
+    // 엑셀 워크북 생성
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
 
+    // 엑셀 파일 저장
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+    const excelFile = new Blob([excelBuffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    saveAs(excelFile, `안전교육시간.xlsx`);
+  };
 
   //달력 넣기
   const goToPreviousMonth = () => {
@@ -176,7 +202,7 @@ function EduStatics() {
   const goToNextMonth = () => {
     const nextMonthDate = addMonths(currentDate, 1);
     setCurrentDate(nextMonthDate);
-  }
+  };
 
   const getFormattedDate = () => {
     const year = currentDate.getFullYear();
@@ -187,13 +213,16 @@ function EduStatics() {
 
   //테일윈드에서 가져옴
   const stats = [
-    { name: '전체 시간', value: `${monthlyEduTime.total} 분`, category: null },
-    { name: '크루미팅', value: `${monthlyEduTime.CREW} 분`, category: 'CREW' },
-    { name: 'DM미팅', value: `${monthlyEduTime.DM} 분`, category: 'DM' },
-    { name: '관리감독', value: `${monthlyEduTime.MANAGE} 분`, category: 'MANAGE' },
-    { name: '기타', value: `${monthlyEduTime.ETC} 분`, category: 'ETC' },
+    { name: "전체 시간", value: `${monthlyEduTime.total} 분`, category: null },
+    { name: "크루미팅", value: `${monthlyEduTime.CREW} 분`, category: "CREW" },
+    { name: "DM미팅", value: `${monthlyEduTime.DM} 분`, category: "DM" },
+    {
+      name: "관리감독",
+      value: `${monthlyEduTime.MANAGE} 분`,
+      category: "MANAGE",
+    },
+    { name: "기타", value: `${monthlyEduTime.ETC} 분`, category: "ETC" },
   ];
-
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -250,11 +279,12 @@ function EduStatics() {
             className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 bg-white px-4 py-10 sm:px-6 xl:px-8 hover:bg-gray-50 cursor-pointer"
             onClick={() => handleStatClick(stat.category)}
           >
-            <dt className="text-sm font-medium leading-6 text-gray-500">{stat.name}</dt>
+            <dt className="text-sm font-medium leading-6 text-gray-500">
+              {stat.name}
+            </dt>
             <dd className="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">
               {stat.value}
             </dd>
-
           </div>
         ))}
       </dl>
@@ -268,12 +298,12 @@ function EduStatics() {
                 {getFormattedDate()} 안전교육 목록입니다
               </h1>
               <button
-              type="button"
-              className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-              onClick={handleExport}
-            >
-              엑셀 저장
-            </button>
+                type="button"
+                className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                onClick={handleExport}
+              >
+                엑셀 저장
+              </button>
             </div>
           </div>
           <div className="mt-8 flow-root">
@@ -310,7 +340,6 @@ function EduStatics() {
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
                     {getCurrentPageItems().map((edu, index) => (
-
                       <tr key={index}>
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           <div className="flex items-center">
@@ -323,7 +352,7 @@ function EduStatics() {
                           {edu[1]}
                         </td>
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                        {format(new Date(edu[2]), 'yyyy-MM-dd HH시 mm분')}
+                          {format(new Date(edu[2]), "yyyy-MM-dd HH시 mm분")}
                         </td>
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
                           {edu[3]} 분
@@ -340,7 +369,6 @@ function EduStatics() {
       <div className="flex justify-center">
         <div className="px-4 sm:px-6 lg:px-8 max-w-screen-xl w-full">
           {eduList.length > 0 ? (
-
             <Pagination
               currentPage={currentPage}
               itemsPerPage={itemsPerPage}
@@ -348,11 +376,10 @@ function EduStatics() {
               setCurrentPage={setCurrentPage}
             />
           ) : (
-            <p className="flex justify-center">해당 월의 교육은 없습니다.</p>)}
+            <p className="flex justify-center">해당 월의 교육은 없습니다.</p>
+          )}
         </div>
       </div>
-
-
     </div>
   );
 }

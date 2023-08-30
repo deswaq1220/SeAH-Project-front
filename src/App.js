@@ -48,7 +48,7 @@ function App() {
     <Router>
       <Routes>
         {/* 관리자 */}
-        <Route path="/" element={<ManagerLogin/>}></Route> {/* 관리자 로그인페이지 */}
+        <Route path="/login" element={<ManagerLogin/>}></Route> {/* 관리자 로그인페이지 */}
         <Route path="/manager" element={<MainManager/>}></Route> {/* 관리자 메인페이지 */}
         <Route path="/eduMain" element={<SafetyEducationMain/>}></Route>{/* 관리자 안전교육페이지 */}
         <Route path="/edudetails/:eduId" element={<SafetyEduDetails/>}></Route>{/* 관리자 안전교육상세*/}

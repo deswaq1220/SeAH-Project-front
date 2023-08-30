@@ -28,7 +28,7 @@ function refreshRequest(originalRequest) {
         .catch((err) => { // 401, 500, 기타 등등
             const config = err.config;
             if (err?.response?.data === "EXPIRED") {
-                return INSTANCE().post('http://localhost:8081/auth/refresh', {
+                return INSTANCE().post(`${process.env.REACT_APP_API_BASE_URL}/auth/refresh`, {
                     accessToken: cookies.get(ACCESS_TOKEN_COOKIE),
                     refreshToken: cookies.get(REFRESH_TOKEN_COOKIE)
                 })
@@ -45,7 +45,7 @@ function refreshRequest(originalRequest) {
                                 title: "토큰이 만료되었습니다.",
                                 icon: 'warning',
                             })
-                            window.location.href = '/'
+                            window.location.href = '/login'
                             cookies.remove(ACCESS_TOKEN_COOKIE)
                             cookies.remove(REFRESH_TOKEN_COOKIE)
                         }

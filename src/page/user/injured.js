@@ -3,7 +3,8 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-
+import fetcher from "../../api/fetcher";
+import { useCookies } from "react-cookie";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -16,34 +17,39 @@ export default function Injured({ onFormDataChange }) {
   const [injuredSelected, setInjuredSelected] = useState(""); //  부상부위
   const [customInjured, setCustomInjured] = useState(""); // 기타[직접선택] 입력된 값
   const [showErrorMessage, setShowErrorMessage] = useState(false); // 해당 셀렉박스 미설정시 알람
+  const [atCookies, setAtCookie] = useCookies(["at"]); // 쿠키 훅
 
   // 부상부위 get
   useEffect(() => {
-    function specialInjureFetchDataWithAxios(
-      masterdataPart,
-      masterdataFacility
-    ) {
-      axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataFacility}`)   // 세아
-          //  .get(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`)
-          .then((response) => {
-            // 백에서 보내주는 부상부위 리스트
-            const speInjuredListFromBack = response.data.specialInjuredList;
-            const speInjuredData = speInjuredListFromBack.map((item) => {
-              return {
-                injuredMenu: item.injuredMenu,
-                injuredNum: item.injuredNum,
-              };
-            });
-            setSpecialInjuredList(speInjuredData);
-            setInjuredSelected(speInjuredData[0]);
-          })
-          .catch((error) => {
-            console.error("Error fetching data: ", error);
-          });
-    }
+    async function fetchData() {
+      const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
+      try {
+        const response = await fetcher.get(`/special/new/${masterdataPart}/${masterdataFacility}`,{
+          headers: {
+            "Content-Type": "application/json",
+             Authorization: `Bearer ${authToken}`,
+          },
+        });
+  
+        const speInjuredListFromBack = response.data.specialInjuredList;
+        const speInjuredData = speInjuredListFromBack.map((item) => ({
+          injuredMenu: item.injuredMenu,
+          injuredNum: item.injuredNum,
+        }));
 
-    specialInjureFetchDataWithAxios(masterdataPart, masterdataFacility);
+        const accessToken = response.data.access_token;
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${accessToken}`;
+  
+        setSpecialInjuredList(speInjuredData);
+        setInjuredSelected(speInjuredData[0]);
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+    }
+  
+    fetchData();
   }, [masterdataPart, masterdataFacility]);
 
   // 기타(직접입력) 선택 시, customInjured 값 업데이트, onFOrmDataChange 호출

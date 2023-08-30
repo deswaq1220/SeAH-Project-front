@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Pagination from "../../../components/Pagination";
+import fetcher from "../../../api/fetcher";
+import { useCookies } from "react-cookie";
 
 export default function EmailTable() {
   const [people, setPeople] = useState({ email: [] });
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
-
+  const [atCookies, setAtCookie] = useCookies(["at"]); // 쿠키 훅
   const [editingRow, setEditingRow] = useState(null);
   const [editedValues, setEditedValues] = useState({
     emailPart: "",
@@ -20,23 +22,38 @@ export default function EmailTable() {
   }, []);
 
   async function fetchData() {
+    const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}/master/viewemail`
-      );
+      const response = await fetcher.get(`/master/viewemail`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
       console.log("API Response:", response.data);
       setPeople(response.data);
+
+      const accessToken = response.data.access_token;
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${accessToken}`;
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   }
 
   async function updateEmail(emailId) {
+    const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
     try {
-      await axios.put(
-        `${process.env.REACT_APP_API_BASE_URL}/master/email/update/${emailId}`,
+      await fetcher.put(
+        `/master/email/update/${emailId}`,
         editedValues
-      );
+      ,{
+        headers: {
+              "Content-Type": "application/json",
+               Authorization: `Bearer ${authToken}`,
+            },
+      });
       console.log("이메일이 수정되었습니다");
       setEditingRow(null);
       setEditedValues({
@@ -228,9 +245,7 @@ export default function EmailTable() {
                       )}
                     </td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-left text-sm font-medium sm:pr-6 lg:pr-8">
-                      <button
-                        className="text-seahColor hover:text-seahDeep"
-                      >
+                      <button className="text-seahColor hover:text-seahDeep">
                         삭제
                       </button>
                     </td>

@@ -3,6 +3,8 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import fetcher from "../../api/fetcher";
+import { useCookies } from "react-cookie";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -13,36 +15,42 @@ export default function Danger({ onFormDataChange }) {
   const { masterdataFacility } = useParams(); // url 설비 파라미터
   const [specialDangerList, setSpecialDangerList] = useState([]); // 위험분류List
   const [selectedDanger, setSelectedDanger] = useState(""); // 위험분류
+  const [atCookies, setAtCookie] = useCookies(["at"]); // 쿠키 훅
 
   // 위험분류 get
   useEffect(() => {
-    function specialDangerFetchDataWithAxios(
-      masterdataPart,
-      masterdataFacility
-    ) {
-      axios
-        .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataFacility}`)   // 세아
-        // .get(
-        //   `http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`
-        // )
-        // .get(`http://192.168.202.1:8081/special/new/${masterdataPart}/${masterdataFacility}`)
-        .then((response) => {
-          const speDangerListFromBack = response.data.specialDangerList;
-          const speDangerData = speDangerListFromBack.map((item) => {
-            return {
-              dangerMenu: item.dangerMenu,
-              dangerNum: item.dangerNum,
-            };
-          });
-          setSpecialDangerList(speDangerData);
-          setSelectedDanger(speDangerData[0]); // 리스트의 첫번째값으로 세팅
-        })
-        .catch((error) => {
-          console.error("Error fetching data: ", error);
-        });
+    async function fetchData() {
+      const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
+      try {
+        const response = await fetcher.get(
+          `/special/new/${masterdataPart}/${masterdataFacility}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        const speDangerListFromBack = response.data.specialDangerList;
+        const speDangerData = speDangerListFromBack.map((item) => ({
+          dangerMenu: item.dangerMenu,
+          dangerNum: item.dangerNum,
+        }));
+
+        const accessToken = response.data.access_token;
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${accessToken}`;
+
+        setSpecialDangerList(speDangerData);
+        setSelectedDanger(speDangerData[0]); // 리스트의 첫번째값으로 세팅
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
     }
 
-    specialDangerFetchDataWithAxios(masterdataPart, masterdataFacility);
+    fetchData();
   }, [masterdataPart, masterdataFacility]);
 
   // 선택한 값 세팅

@@ -6,6 +6,8 @@ import EquipmentName from "./FrequentinseptionForm/equipmentName";
 import Period from "./FrequentinseptionForm/Period";
 import Inspector from "./FrequentinseptionForm/inspector";
 import axios from "axios";
+
+
 //수시점검 현황
 export default function FrequentIns() {
   

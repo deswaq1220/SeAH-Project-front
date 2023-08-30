@@ -3,7 +3,8 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import axios from "axios";
 import {useParams} from "react-router-dom";
-
+import fetcher from "../../api/fetcher";
+import { useCookies } from "react-cookie";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -15,32 +16,39 @@ export default function Dangersource({onFormDataChange}) {
   const [specialCauseList, setSpecialCauseList] = useState([]);       // 위험원인List
   const [sourceSelected, setSourceSelected] = useState("");
   const [customSource, setCustomSource] = useState("");
-
+  const [atCookies, setAtCookie] = useCookies(["at"]); // 쿠키 훅
 
   // 위험원인 get
   useEffect(() => {
-    function specialCauseFetchDataWithAxios(masterdataPart, masterdataFacility) {
-      axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataFacility}`)  // 세아
-          //  .get(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`)
-          .then((response) => {
-            const speCauseListFromBack = response.data.specialCauseList;
+    async function fetchData() {
+      const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
+      try {
+        const response = await fetcher.get(`/special/new/${masterdataPart}/${masterdataFacility}`,{
+          headers: {
+            "Content-Type": "application/json",
+             Authorization: `Bearer ${authToken}`,
+          },
+        });
+  
+        const speCauseListFromBack = response.data.specialCauseList;
+        const speCauseData = speCauseListFromBack.map((item) => ({
+          causeMenu: item.causeMenu,
+          causeNum: item.causeNum,
+        }));
 
-            const speCauseData = speCauseListFromBack.map((item) => {
-              return {
-                causeMenu : item.causeMenu,
-                causeNum: item.causeNum,
-              };
-            });
-            setSpecialCauseList(speCauseData);
-            setSourceSelected(speCauseData[0]);
-          })
-          .catch((error) => {
-            console.error("Error fetching data: ", error);
-          });
+        const accessToken = response.data.access_token;
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${accessToken}`;
+  
+        setSpecialCauseList(speCauseData);
+        setSourceSelected(speCauseData[0]);
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
     }
-
-    specialCauseFetchDataWithAxios(masterdataPart, masterdataFacility);
+  
+    fetchData();
   }, [masterdataPart, masterdataFacility]);
 
   // 기타(직접입력) 선택 시, customSource 값을 업데이트하고 onFormDataChange를 호출

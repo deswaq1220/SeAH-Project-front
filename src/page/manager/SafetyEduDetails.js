@@ -21,7 +21,6 @@ export default function SafetyEduDetails() {
 
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [atCookies, setAtCookie] = useCookies(["at"]); // 쿠키 훅
-  const [rtCookies, setrtCookie] = useCookies(["rt"]); // 쿠키 훅
 
   const navigate = useNavigate();
 
@@ -48,15 +47,14 @@ export default function SafetyEduDetails() {
 
   useEffect(() => {
     const fetchEduDetail = async () => {
-       const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
+      const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
       try {
         const response = await fetcher.get(
           `/edudetails/${eduId}`, // 세아
-          //  `http://localhost:8081/edudetails/${eduId}`
           {
             headers: {
               "Content-Type": "application/json",
-               Authorization: `Bearer ${authToken}`,
+              Authorization: `Bearer ${authToken}`,
             },
           }
         );
@@ -164,10 +162,14 @@ export default function SafetyEduDetails() {
 
   // 교육 삭제
   const handleDelete = async () => {
+    const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
     try {
-      const response = await axios.delete(
-        `${process.env.REACT_APP_API_BASE_URL}/edudetails/${eduId}`
-      );
+      const response = await fetcher.delete(`/edudetails/${eduId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
 
       if (response.status === 200) {
         console.log("교육 삭제됨");

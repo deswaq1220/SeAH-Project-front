@@ -16,9 +16,10 @@ import {
 } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams,useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { format, addMonths, subMonths } from "date-fns";
-
+import fetcher from "../../api/fetcher";
+import { useCookies } from "react-cookie";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -30,6 +31,7 @@ export default function SafetyManagerInspection() {
 
   const [currentDate, setCurrentDate] = useState(new Date()); // 년,월
   const navigate = useNavigate();
+  const [atCookies, setAtCookie] = useCookies(["at"]); // 쿠키 훅
 
   // function 위에 있던거 function으로 옮겼음
   const actions = [
@@ -82,24 +84,32 @@ export default function SafetyManagerInspection() {
 
   useEffect(() => {
     // Json값 가져와서 세팅
-    function fetchDataWithAxios(masterdataPart, masterdataFacility) {
-      axios
-        .get(
-          `${process.env.REACT_APP_API_BASE_URL}/special/${masterdataPart}/${masterdataFacility}`
-        ) // 세아
-        //  .get(`http://localhost:8081/special/${masterdataPart}/${masterdataFacility}`)
-        .then((response) => {
-          const data = response.data;
-          // 가져온 데이터로 상태 변수 업데이트
-          setMonthlyAll(data.monthlyAll);
-          setMonthlyComplete(data.monthlyComplete);
-          setMonthlyNoComplete(data.monthlyNoComplete);
-          console.log(data); // JSON 데이터가 출력됩니다.
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-          console.error("에러가?:", error);
-        });
+    async function fetchDataWithAxios(masterdataPart, masterdataFacility) {
+      const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
+      try {
+        const response = await fetcher.get(
+          `/special/${masterdataPart}/${masterdataFacility}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+        const accessToken = response.data.access_token;
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${accessToken}`;
+
+        const data = response.data;
+        // 가져온 데이터로 상태 변수 업데이트
+        setMonthlyAll(data.monthlyAll);
+        setMonthlyComplete(data.monthlyComplete);
+        setMonthlyNoComplete(data.monthlyNoComplete);
+        console.log(data); // JSON 데이터가 출력됩니다.
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     }
 
     fetchDataWithAxios(masterdataPart, masterdataFacility);

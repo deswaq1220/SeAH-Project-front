@@ -9,8 +9,9 @@ import axios from "axios";
 import fetcher from "../../api/fetcher";
 import { useState } from "react";
 import { useCookies } from "react-cookie"; // useCookies import
-import {  getMonth, getYear } from "date-fns";
+import { getMonth, getYear } from "date-fns";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 function Mainmanager() {
   const products = [
     {
@@ -77,13 +78,21 @@ function Mainmanager() {
         const response = await fetcher.get(href, requestConfig);
 
         // 필요하면 navigate 함수를 사용하여 라우트 변경 가능합니다
-        navigate(href)
+        navigate(href);
       } else {
-        console.log("사용자가 로그인되지 않았습니다.");
         // 로그인 페이지로 이동하도록 처리하거나 에러 메시지를 보여줄 수 있습니다.
       }
     } catch (error) {
       // 에러 처리: 에러를 처리합니다.
+      navigate("/login");
+      toast.error("로그인이 만료되었습니다.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        style: {
+          marginTop: "5rem", // 원하는 세로 위치로 조정
+        },
+      });
       console.error("에러:", error);
     }
   };

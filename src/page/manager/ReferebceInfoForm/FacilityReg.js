@@ -2,7 +2,8 @@ import { Fragment, useState, useEffect } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import axios from "axios"; // axios를 임포트]
-
+import fetcher from "../../../api/fetcher";
+import { useCookies } from "react-cookie";
 
 
 function classNames(...classes) {
@@ -13,14 +14,27 @@ export default function FacilityReg({ fetchData, handleNewData }) {
   const [selected, setSelected] = useState(null);
   const [facilityName, setFacilityName] = useState(""); // 설비명 관련 상태 추가
   const [specialPartList, setSpecialPartList] = useState([]); // 설비영역
-
+  const [atCookies, setAtCookie] = useCookies(["at"]); // 쿠키 훅
   useEffect(() => {
     async function fetchOptions() {
+      const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/master/partdropdown`
+        const response = await fetcher.get(
+          `/admin/master/partdropdown`,{
+            headers: {
+              "Content-Type": "application/json",
+               Authorization: `Bearer ${authToken}`,
+            },
+          }
         );
+
+        const accessToken = response.data.access_token;
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${accessToken}`;
         
+        // setAtCookie('at', response.data.accessToken);
+        // setrtCookie('rt',response.data.refreshToken);
         // 문자열 배열을 객체로 변환하여 새로운 배열 생성
         const optionsArray = response.data.specialPartList.map((name, index) => ({
           id: index + 1,
@@ -45,11 +59,23 @@ export default function FacilityReg({ fetchData, handleNewData }) {
     };
 
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_BASE_URL}/master`,
-        requestData
-      ); //세아
-      // const response = await axios.post("http://localhost:8081/master", requestData); // POST 요청 보내기
+      const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
+      const response = await fetcher.post(
+        `/admin/master`,
+        requestData,{
+          headers: {
+            "Content-Type": "application/json",
+             Authorization: `Bearer ${authToken}`,
+          },
+        }
+      ); 
+      const accessToken = response.data.access_token;
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${accessToken}`;
+        // setAtCookie('at', response.data.accessToken);
+        // setrtCookie('rt',response.data.refreshToken);
+        
       console.log("서버 응답:", response.data);
       fetchData();
       // Add this line to update FacilityTable's state directly
@@ -118,7 +144,7 @@ export default function FacilityReg({ fetchData, handleNewData }) {
                     <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                       {specialPartList.map((option) => (
                         <Listbox.Option
-                          key={option}
+                          key={option.id}
                           className={({ active }) =>
                             classNames(
                               active

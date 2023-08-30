@@ -3,6 +3,8 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import QRCode from "qrcode.react"; // QR 코드 라이브러리 추가
 import axios from "axios"; // axios를 임포트]
+import fetcher from "../../../api/fetcher";
+import { useCookies } from "react-cookie";
 
 const Status = [
   { id: 1, name: "선택" },
@@ -20,6 +22,8 @@ export default function FacilityInfo() {
   const [facilityName, setFacilityName] = useState(""); // 설비명 관련 상태 추가
   const [qrValue, setQRValue] = useState(""); // QR 코드 데이터
   const [specialPartList, setSpecialPartList] = useState([]); // 설비영역
+  const [atCookies, setAtCookie] = useCookies(["at"]); // 쿠키 훅
+  const [rtCookies, setrtCookie] = useCookies(["rt"]); // 쿠키 훅
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -32,11 +36,19 @@ export default function FacilityInfo() {
 
   useEffect(() => {
     async function fetchOptions() {
+      const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/master/partdropdown`
-        );
+        const response = await fetcher.get(`/admin/master/partdropdown`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
 
+        const accessToken = response.data.access_token;
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${accessToken}`;
         // 문자열 배열을 객체로 변환하여 새로운 배열 생성
         const optionsArray = response.data.specialPartList.map(
           (name, index) => ({
@@ -57,16 +69,26 @@ export default function FacilityInfo() {
   }, []);
 
   const handleSubmit = async () => {
+    const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_BASE_URL}/master/email`,
+      const response = await fetcher.post(
+        `/admin/master/email`,
         {
           emailPart: selectedArea.name,
           emailName: name, // 상태로 관리된 이름 값
           emailAdd: email, // 상태로 관리된 이메일 주소 값
           masterStatus: status.name,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
         }
       );
+
+      const accessToken = response.data.access_token;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
       // API 호출이 성공한 경우에 대한 처리
       console.log("등록 성공:", response.data);
@@ -124,7 +146,7 @@ export default function FacilityInfo() {
                     <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                       {specialPartList.map((option) => (
                         <Listbox.Option
-                          key={option}
+                          key={option.id}
                           className={({ active }) =>
                             classNames(
                               active
@@ -252,7 +274,7 @@ export default function FacilityInfo() {
                                 "relative cursor-default select-none py-2 pl-3 pr-9"
                               )
                             }
-                            value={person} 
+                            value={person}
                           >
                             {({ selected, active }) => (
                               <>

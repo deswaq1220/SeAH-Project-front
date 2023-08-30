@@ -1,8 +1,9 @@
-import { Fragment, useState,useEffect } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import axios from "axios";
-
+import fetcher from "../../../api/fetcher";
+import { useCookies } from "react-cookie";
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -10,13 +11,21 @@ function classNames(...classes) {
 export default function InspectionArea() {
   const [specialPartList, setSpecialPartList] = useState([]); // 설비영역
   const [selectedArea, setSelectedArea] = useState(null);
-
+  const [atCookies, setAtCookie] = useCookies(["at"]); // 쿠키 훅
   useEffect(() => {
     async function fetchOptions() {
+      const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/master/partdropdown`
-        );
+        const response = await fetcher.get(`/master/partdropdown`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
+        const accessToken = response.data.access_token;
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${accessToken}`;
 
         // 문자열 배열을 객체로 변환하여 새로운 배열 생성
         const optionsArray = response.data.specialPartList.map(

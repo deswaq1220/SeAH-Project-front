@@ -3,6 +3,8 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import fetcher from "../../api/fetcher";
+import { useCookies } from "react-cookie";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -12,12 +14,19 @@ export default function ActionRquest({ onFormDataChange }) {
   const { masterdataPart, masterdataFacility } = useParams();
   const [emailDataList, setEmailDataList] = useState([]);
   const [instances, setInstances] = useState([{ selectedEmail: null }]);
-
+  const [atCookies, setAtCookie] = useCookies(["at"]); // 쿠키 훅
   useEffect(() => {
     async function emailFetchDataWithAxios() {
+      const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataFacility}`
+        const response = await fetcher.get(
+          `/special/new/${masterdataPart}/${masterdataFacility}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
         );
 
         const emailListFromBack = response.data["emailList"];
@@ -52,10 +61,7 @@ export default function ActionRquest({ onFormDataChange }) {
       speActPerson: selectedEmailNames,
       speActEmail: selectedEmailAddresses,
     });
-
   };
-
-
 
   // 이메일 정보 추가 : +버튼
   const handleAddInstance = () => {
@@ -90,7 +96,6 @@ export default function ActionRquest({ onFormDataChange }) {
       id="ActionRequest"
       className="grid sm:flex items-baseline justify-start"
     >
-     
       <div className="">
         {/* 조치요청 */}
         {instances.map((instance, index) => (

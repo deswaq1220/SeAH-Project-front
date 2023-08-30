@@ -37,7 +37,6 @@ function SafetyEducationMain() {
   useEffect(() => {
     const getLogsForCurrentMonth = async () => {
       const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
-      console.log("새로고침하면 냅다 사라지네", authToken);
       try {
         const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
         const currentYear = getYear(currentDate);

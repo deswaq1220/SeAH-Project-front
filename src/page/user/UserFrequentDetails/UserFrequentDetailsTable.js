@@ -2,22 +2,36 @@ import React, { useState, useEffect } from "react";
 import { PaperClipIcon } from "@heroicons/react/20/solid";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-
+import fetcher from "../../../api/fetcher";
+import { useCookies } from "react-cookie";
 export default function UserFrequentDetailsTable() {
   const { speId } = useParams(); // URL 파라미터로부터 speId를 가져옵니다.
   const [inspectionData, setInspectionData] = useState(null); // API로부터 받은 데이터를 저장할 상태 변수
+  const [atCookies, setAtCookie] = useCookies(["at"]); // 쿠키 훅
 
   useEffect(() => {
     // API 요청을 보내 데이터를 가져옵니다.
-    axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/special/detail/${speId}`) // 실제 API 주소로 수정해야합니다.
-      .then((response) => {
+    async function fetchData() {
+      const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
+      try {
+        const response = await fetcher.get(`/special/detail/${speId}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
         setInspectionData(response.data); // 데이터를 상태 변수에 저장합니다.
         console.log(response.data);
-      })
-      .catch((error) => {
+        const accessToken = response.data.access_token;
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${accessToken}`;
+      } catch (error) {
         console.error("Error fetching data:", error);
-      });
+      }
+    }
+
+    fetchData();
   }, [speId]); // speId가 변경될 때마다 useEffect가 실행됩니다.
 
   if (!inspectionData) {

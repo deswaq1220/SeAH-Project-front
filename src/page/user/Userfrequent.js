@@ -7,6 +7,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { useParams } from "react-router-dom";
+import fetcher from "../../api/fetcher";
+import { useCookies } from "react-cookie";
 
 export default function Userfrequent() {
   // qr 정보따라 url 파라미터 세팅되어야됨
@@ -14,71 +16,57 @@ export default function Userfrequent() {
   const { masterdataFacility } = useParams(); // url 설비 파라미터
   const [people, setPeople] = useState([]);
   const navigate = useNavigate();
+  const [atCookies, setAtCookie] = useCookies(["at"]); // 쿠키 훅
 
   // Json값 가져와서 세팅
   useEffect(() => {
-    function fetchDataWithAxios(masterdataPart, masterdataFacility) {
-      axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/special/list/${masterdataPart}/${masterdataFacility}`) //세아
-          // .get(`http://localhost:8081/special/list/${masterdataPart}/${masterdataFacility}`)
-          .then((response) => {
-            const dataFromBackend = response.data.listOfFac;
+    async function fetchDataWithAxios(masterdataPart, masterdataFacility) {
+      const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
+      try {
+        const response = await fetcher.get(`/special/list/${masterdataPart}/${masterdataFacility}`,{
+          headers: {
+            "Content-Type": "application/json",
+             Authorization: `Bearer ${authToken}`,
+          },
+        });
+  
+        const dataFromBackend = response.data.listOfFac;
+        const peopleData = dataFromBackend.map((item) => {
+          const dateObj = new Date(item.speDate);
+          const formatDate = format(dateObj, "yyyy-MM-dd");
+  
+          let formatActDate = null;
+          if (item.speActDate !== null) {
+            const actDateObj = new Date(item.speActDate);
+            formatActDate = format(actDateObj, "yyyy-MM-dd");
+          }
+  
+          return {
+            speId: item.speId,
+            date: `[${formatDate}]`,
+            name: `[${item.spePerson}]`,
+            actName: `[${item.speActPerson}]`,
+            actDate: formatActDate === null ? "[]" : `[${formatActDate}]`,
+            content: item.speContent,
+            action: item.speActContent,
+            icon: item.speComplete === "OK" ? CheckCircleIcon : XCircleIcon,
+          };
+        });
 
-            // 백엔드에서 받은 데이터를 가공하여 people 배열 생성
-            const peopleData = dataFromBackend.map((item) => {
-              // 점검일 format 변환
-              const dateObj = new Date(item.speDate);
-              const formatDate = format(dateObj, "yyyy-MM-dd");
-              // 완료일 format 변환
-              let formatActDate = null;
-              if (item.speActDate !== null) {
-                const actDateObj = new Date(item.speActDate);
-                formatActDate = format(actDateObj, "yyyy-MM-dd");
-              }
-
-              return {
-                speId: item.speId,
-                date: `[${formatDate}]`, // 등록날짜
-                name: `[${item.spePerson}]`, // 점검자
-                actName: `[${item.speActPerson}]`, // 조치자
-                actDate: formatActDate === null ? "[]" : `[${formatActDate}]`, // 조치일자
-                content: item.speContent, // 점검내용
-                action: item.speActContent, // 조치요청내용
-                icon: item.speComplete === "OK" ? CheckCircleIcon : XCircleIcon,
-              };
-            });
-            setPeople(peopleData);
-          })
-          .catch((error) => {
-            console.error("Error fetching data:", error);
-            console.error("에러다잉:", error);
-          });
+        const accessToken = response.data.access_token;
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${accessToken}`;
+  
+        setPeople(peopleData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     }
-
+  
     fetchDataWithAxios(masterdataPart, masterdataFacility);
   }, [masterdataPart, masterdataFacility]);
 
-  // const people = [
-  //   {
-  //     name: '[2023-07-31 08:00]',
-  //     title: '[김흥돌]',
-  //     department: '',
-  //     email: '',
-  //     inscontent:'브레이크 정밀 점검 필요',
-  //     action: '',
-  //     icon: XCircleIcon ,
-  //   },
-  //   {
-  //     name: '[' + ']',
-  //     title: '[김흥돌]',             // 점검자
-  //     department: '[김안전]',        // 조치자
-  //     email: '[2023-08-02 16:00]',
-  //     inscontent:'브레이크 정밀 점검 필요',
-  //     action: '정밀 점검 수행',
-  //     icon: CheckCircleIcon ,
-  //   },
-  //   // More people...
-  // ]
 
   return (
       <div className="container mx-auto sm:px-6 lg:px-8">

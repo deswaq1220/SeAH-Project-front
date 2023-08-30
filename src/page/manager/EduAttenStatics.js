@@ -5,7 +5,8 @@ import Pagination from "../../components/Pagination";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { format, addMonths, subMonths, getMonth, getYear } from "date-fns";
-import { async } from "q";
+import fetcher from "../../api/fetcher";
+import { useCookies } from "react-cookie";
 // 부서 드롭다운
 const department = [
   { id: null, name: "부서" },
@@ -34,21 +35,26 @@ function EduAttenStatics() {
     ETC: 0,
   });
 
-  //테일윈드에서 가져옴 
-  const stats = [
-    { name: '전체 시간', value: `${monthlyEduTime.total} 분`, category: null },
-    { name: '크루미팅', value: `${monthlyEduTime.CREW} 분`, category: 'CREW' },
-    { name: 'DM미팅', value: `${monthlyEduTime.DM} 분`, category: 'DM' },
-    { name: '관리감독', value: `${monthlyEduTime.MANAGE} 분`, category: 'MANAGE' },
-    { name: '기타', value: `${monthlyEduTime.ETC} 분`, category: 'ETC' },
-  ];
+  const [atCookies, setAtCookie] = useCookies(["at"]); // 쿠키 훅
 
+  //테일윈드에서 가져옴
+  const stats = [
+    { name: "전체 시간", value: `${monthlyEduTime.total} 분`, category: null },
+    { name: "크루미팅", value: `${monthlyEduTime.CREW} 분`, category: "CREW" },
+    { name: "DM미팅", value: `${monthlyEduTime.DM} 분`, category: "DM" },
+    {
+      name: "관리감독",
+      value: `${monthlyEduTime.MANAGE} 분`,
+      category: "MANAGE",
+    },
+    { name: "기타", value: `${monthlyEduTime.ETC} 분`, category: "ETC" },
+  ];
 
   useEffect(() => {
     const getLogsForCurrentMonth = async () => {
+      const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/edustatistics/atten`, {
+        const response = await fetcher.get(`/edustatistics/atten`, {
           params: {
             year: getYear(currentDate),
             eduCategory: selectedCategory,
@@ -56,8 +62,11 @@ function EduAttenStatics() {
             department: searchDepartment,
             name: searchName,
           },
-        }
-        );
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
 
         const data = response.data;
         if (selectedCategory === "") {
@@ -72,6 +81,11 @@ function EduAttenStatics() {
         }
 
         setAttenList(data.eduStatisticsDTO);
+
+        const accessToken = response.data.access_token;
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${accessToken}`;
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
       }
@@ -80,38 +94,55 @@ function EduAttenStatics() {
     getLogsForCurrentMonth();
   }, [selectedCategory, currentDate]);
 
-
   //검색
   const handleSearch = async () => {
+    const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}/edustatistics/atten`, {
-        params: {
-          year: getYear(currentDate),
-          eduCategory: selectedCategory,
-          month: getMonth(currentDate) + 1,
-          department: searchDepartment,
-          name: searchName,
+      const response = await fetcher.get(
+        `/edustatistics/atten`,
+        {
+          params: {
+            year: getYear(currentDate),
+            eduCategory: selectedCategory,
+            month: getMonth(currentDate) + 1,
+            department: searchDepartment,
+            name: searchName,
+          },
         },
-      }
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
       );
 
       const data = response.data;
       setAttenList(data.eduStatisticsDTO);
+
+      const accessToken = response.data.access_token;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
     } catch (error) {
       console.error("데이터 가져오기 오류:", error);
     }
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}/edustatistics/atten`, {
-        params: {
-          year: getYear(currentDate),
-          eduCategory: null,
-          month: getMonth(currentDate) + 1,
-          department: searchDepartment,
-          name: searchName,
+      const response = await fetcher.get(
+        `/edustatistics/atten`,
+        {
+          params: {
+            year: getYear(currentDate),
+            eduCategory: null,
+            month: getMonth(currentDate) + 1,
+            department: searchDepartment,
+            name: searchName,
+          },
         },
-      }
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
       );
 
       const data = response.data;
@@ -125,22 +156,24 @@ function EduAttenStatics() {
         ETC: attenNameSumEduTimeList[4],
       });
       return attenNameSumEduTimeList;
+
+      const accessToken = response.data.access_token;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
     } catch (error) {
       console.error("데이터 가져오기 오류:", error);
     }
   };
 
-
   // 엑셀!!!!!!!!!!!
   const createExcelData = (attenList, attenNameSumEduTimeList) => {
     const categoryHeaders = {
-      전체_수강시간: attenNameSumEduTimeList[0]+"분",
-      크루미팅: attenNameSumEduTimeList[1]+"분",
-      DM미팅: attenNameSumEduTimeList[2]+"분",
-      관리감독: attenNameSumEduTimeList[3]+"분",
-      기타: attenNameSumEduTimeList[4]+"분",
+      전체_수강시간: attenNameSumEduTimeList[0] + "분",
+      크루미팅: attenNameSumEduTimeList[1] + "분",
+      DM미팅: attenNameSumEduTimeList[2] + "분",
+      관리감독: attenNameSumEduTimeList[3] + "분",
+      기타: attenNameSumEduTimeList[4] + "분",
     };
-  
+
     // 교육 정보를 바탕으로 엑셀 데이터를 생성하는 로직 작성
     const data = [
       categoryHeaders, // 카테고리 별 합계 시간 행
@@ -153,7 +186,7 @@ function EduAttenStatics() {
         이름: item.attenName,
       })),
     ];
-  
+
     return data;
   };
 
@@ -186,8 +219,6 @@ function EduAttenStatics() {
     saveAs(excelFile, `안전교육_출석_통계.xlsx`);
   };
 
-
-
   //달력 넣기
   const goToPreviousMonth = () => {
     const previousMonthDate = subMonths(currentDate, 1);
@@ -199,7 +230,7 @@ function EduAttenStatics() {
     setSelectedCategory("");
     const nextMonthDate = addMonths(currentDate, 1);
     setCurrentDate(nextMonthDate);
-  }
+  };
 
   const getFormattedDate = () => {
     const year = currentDate.getFullYear();
@@ -221,7 +252,8 @@ function EduAttenStatics() {
       {/* 달력  */}
       <div className="flex flex-col justify-center items-center text-3xl mt-28">
         <h1 className="text-base font-semibold leading-6 text-gray-900">
-          월별 교육 참가자 명단</h1>
+          월별 교육 참가자 명단
+        </h1>
         <div className="flex items-center">
           <button onClick={goToPreviousMonth} className="mr-2">
             <svg
@@ -270,7 +302,6 @@ function EduAttenStatics() {
             className="mt-1 block w-full border-gray-300 shadow-sm focus:ring-seahColor focus:border-seahColor sm:text-sm rounded-md"
           >
             {department.map((dept) => (
-
               <option key={dept.id} value={dept.name}>
                 {dept.name}
               </option>
@@ -278,7 +309,9 @@ function EduAttenStatics() {
           </select>
         </div>
         <div className=" flex">
-          <label className="block text-sm font-medium text-gray-700 mr-2">이름</label>
+          <label className="block text-sm font-medium text-gray-700 mr-2">
+            이름
+          </label>
           <input
             type="text"
             onChange={(e) => setSearchName(e.target.value)}
@@ -308,21 +341,20 @@ function EduAttenStatics() {
             className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 bg-white px-4 py-10 sm:px-6 xl:px-8 hover:bg-gray-50 cursor-pointer"
             onClick={() => setSelectedCategory(stat.category)}
           >
-            <dt className="text-sm font-medium leading-6 text-gray-500">{stat.name}</dt>
+            <dt className="text-sm font-medium leading-6 text-gray-500">
+              {stat.name}
+            </dt>
             <dd className="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">
               {stat.value}
             </dd>
-
           </div>
         ))}
       </dl>
 
-
       <div className="flex justify-center mt-8">
         <div className="px-4 sm:px-6 lg:px-8 max-w-screen-xl w-full">
           <div className="sm:flex sm:items-center">
-            <div className="sm:flex-auto">
-            </div>
+            <div className="sm:flex-auto"></div>
             <button
               type="button"
               className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
@@ -383,7 +415,10 @@ function EduAttenStatics() {
                           {item.eduTitle}
                         </td>
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
-                          {format(new Date(item.eduStartTime), "yyyy-MM-dd HH시 mm분")}
+                          {format(
+                            new Date(item.eduStartTime),
+                            "yyyy-MM-dd HH시 mm분"
+                          )}
                         </td>
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           {item.eduSumTime} 분
@@ -402,7 +437,6 @@ function EduAttenStatics() {
                   </tbody>
                 </table>
               </div>
-
             </div>
           </div>
         </div>

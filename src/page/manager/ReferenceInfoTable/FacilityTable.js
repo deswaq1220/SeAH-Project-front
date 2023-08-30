@@ -3,33 +3,40 @@ import axios from "axios";
 import QRCode from "qrcode.react";
 import FacilityReg from "../ReferebceInfoForm/FacilityReg";
 import { toast, ToastContainer } from "react-toastify";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import fetcher from "../../../api/fetcher";
+import { useCookies } from "react-cookie";
 
 export default function FacilityTable() {
   const [facilityList, setFacilityList] = useState([]);
   const [selectedFacility, setSelectedFacility] = useState(null);
   const [selectedFacilityData, setSelectedFacilityData] = useState(null);
   const [selectedPart, setSelectedPart] = useState("");
-
-
+  const [atCookies, setAtCookie] = useCookies(["at"]); // 쿠키 훅
 
   const handleDelete = async (masterdataId) => {
-    try {
-      await axios.delete(
-        `${process.env.REACT_APP_API_BASE_URL}/master/delete/${masterdataId}`
-      );
-      setFacilityList((prevList) =>
-        prevList.filter((facility) => facility.masterdataId !== masterdataId)
-      );
-      toast.success("등록하신 정보가 삭제되었습니다.", {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: true,
-      });
-    } catch (error) {
-      console.error("Error deleting data:", error);
-    }
-  };
+  const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
+  try {
+    await fetcher.delete(`/master/delete/${masterdataId}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
+
+    setFacilityList((prevList) =>
+      prevList.filter((facility) => facility.masterdataId !== masterdataId)
+    );
+
+    toast.success("등록하신 정보가 삭제되었습니다.", {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: true,
+    });
+  } catch (error) {
+    console.error("Error deleting data:", error);
+  }
+};
 
   const handleButtonClick = (part) => {
     setSelectedPart(part);
@@ -38,11 +45,18 @@ export default function FacilityTable() {
   };
 
   const fetchData = async () => {
+    const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}/master/viewfacilities`
-      );
+      const response = await fetcher.get(`/master/viewfacilities`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
       setFacilityList(response.data.facilityList);
+
+      const accessToken = authToken.data.access_token;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -64,8 +78,6 @@ export default function FacilityTable() {
   const handleNewData = (newData) => {
     setFacilityList((prevList) => [...prevList, newData]);
   };
-
-
 
   return (
     <div>
@@ -177,7 +189,9 @@ export default function FacilityTable() {
                         </td>
                         <td className="whitespace-nowrap p-4 text-sm text-gray-500">
                           {selectedFacility === facility.masterdataId ? (
-                            <Link to={`/special/${facility.masterdataPart}/${facility.masterdataFacility}`}>
+                            <Link
+                              to={`/special/${facility.masterdataPart}/${facility.masterdataFacility}`}
+                            >
                               <QRCode
                                 value={`http://172.20.20.252:3000/special/${facility.masterdataPart}/${facility.masterdataFacility}`}
                                 // value={`http://10.200.18.185:3000/special/${facility.masterdataPart}/${facility.masterdataFacility}`}
@@ -193,10 +207,13 @@ export default function FacilityTable() {
                               보기
                             </button>
                           )}
-
                         </td>
                         <td className="whitespace-nowrap text-sm font-medium text-gray-900 sm:pl-4 px-4">
-                          <button onClick={() => handleDelete(facility.masterdataId)}>삭제</button>
+                          <button
+                            onClick={() => handleDelete(facility.masterdataId)}
+                          >
+                            삭제
+                          </button>
                         </td>
                       </tr>
                     ))}
