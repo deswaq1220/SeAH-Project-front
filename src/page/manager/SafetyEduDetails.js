@@ -64,11 +64,16 @@ export default function SafetyEduDetails() {
           "Authorization"
         ] = `Bearer ${accessToken}`;
         // console.log(response.data);
-        setUploadedFiles(response.data.eduFiles);
-        setEduData({ ...response.data, eduFiles: response.data.eduFiles });
-
+        // setUploadedFiles(response.data.eduFiles);
+        setEduData({
+          ...response.data,
+          eduFileList: response.data.eduFileList,
+        });
+        // setUploadedFiles(response.data.eduFileList);
+        // setFiles(response.data.eduFileList);
         console.log("파일이름 찾기");
         console.log(eduData.eduFiles);
+        console.log(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -77,24 +82,25 @@ export default function SafetyEduDetails() {
     fetchEduDetail();
   }, [eduId]);
 
-  useEffect(() => {
-    if (eduData) {
-      // eduData가 유효한 경우, 해당 값을 formData에 설정합니다.
-      setFormData({
-        eduCategory: eduData.eduCategory,
-        eduTitle: eduData.eduTitle,
-        eduInstructor: eduData.eduInstructor,
-        eduPlace: eduData.eduPlace,
-        eduStartTime: new Date(eduData.eduStartTime),
-        eduSumTime: eduData.eduSumTime,
-        eduTarget: eduData.eduTarget,
-        eduContent: eduData.eduContent,
-        eduWriter: eduData.eduWriter,
-        files: null, // 파일 관련 데이터는 여기서 설정하지 않음
-        eduId: eduData.eduId,
-      });
-    }
-  }, [eduData, setFormData]);
+  //
+  // useEffect(() => {
+  //   if (eduData) {
+  //     // eduData가 유효한 경우, 해당 값을 formData에 설정합니다.
+  //     setFormData({
+  //       eduCategory: eduData.eduCategory,
+  //       eduTitle: eduData.eduTitle,
+  //       eduInstructor: eduData.eduInstructor,
+  //       eduPlace: eduData.eduPlace,
+  //       eduStartTime: new Date(eduData.eduStartTime),
+  //       eduSumTime: eduData.eduSumTime,
+  //       eduTarget: eduData.eduTarget,
+  //       eduContent: eduData.eduContent,
+  //       eduWriter: eduData.eduWriter,
+  //       files: null, // 파일 관련 데이터는 여기서 설정하지 않음
+  //       eduId: eduData.eduId,
+  //     });
+  //   }
+  // }, [eduData, setFormData]);
 
   // 엑셀!!!!!!!!!!!
 
@@ -250,7 +256,6 @@ export default function SafetyEduDetails() {
                   {eduData.eduPlace}
                 </dd>
               </div>
-
               <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt className="text-base font-bold leading-6 text-gray-900">
                   교육내용
@@ -288,14 +293,14 @@ export default function SafetyEduDetails() {
                   첨부파일
                 </dt>
                 <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                  {eduData.eduFiles && eduData.eduFiles.length > 0 ? (
+                  {eduData.eduFileList && eduData.eduFileList.length > 0 ? (
                     <ul
                       role="list"
                       className="divide-y divide-gray-100 rounded-md border border-gray-200"
                     >
-                      {eduData.eduFiles.map((eduFiles, index) => (
+                      {eduData.eduFileList.map((eduFiles) => (
                         <li
-                          key={index}
+                          key={eduFiles.eduFileId}
                           className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6"
                         >
                           <div className="flex w-0 flex-1 items-center">
@@ -305,8 +310,9 @@ export default function SafetyEduDetails() {
                             />
                             <div className="ml-4 flex min-w-0 flex-1 gap-2">
                               <span className="truncate font-medium">
-                                {eduFiles}
+                                {eduFiles.eduFileOriName}
                               </span>
+
                               <span className="flex-shrink-0 text-gray-400">
                                 {eduFiles.size}
                               </span>
@@ -326,7 +332,6 @@ export default function SafetyEduDetails() {
             <div>
               {isCompleted ? (
                 <div className="mt-4">
-                  {/* <QRCode value={JSON.stringify(formData)} /> */}
 
                   <Link to={`/userattendance/register/${eduData.eduId}`}>
                     <QRCode

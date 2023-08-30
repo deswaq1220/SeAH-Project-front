@@ -12,7 +12,7 @@ function classNames(...classes) {
 
 export default function Injured({ onFormDataChange }) {
   const { masterdataPart } = useParams(); // url 영역 파라미터
-  const { masterdataFacility } = useParams(); // url 설비 파라미터
+  const { masterdataId } = useParams(); // url 설비코드 파라미터
   const [specialInjuredList, setSpecialInjuredList] = useState([]); // 부상부위List
   const [injuredSelected, setInjuredSelected] = useState(""); //  부상부위
   const [customInjured, setCustomInjured] = useState(""); // 기타[직접선택] 입력된 값
@@ -24,7 +24,7 @@ export default function Injured({ onFormDataChange }) {
     async function fetchData() {
       const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
       try {
-        const response = await fetcher.get(`/special/new/${masterdataPart}/${masterdataFacility}`,{
+        const response = await fetcher.get(`/special/new/${masterdataPart}/${masterdataId}`,{
           headers: {
             "Content-Type": "application/json",
              Authorization: `Bearer ${authToken}`,
@@ -50,7 +50,7 @@ export default function Injured({ onFormDataChange }) {
     }
   
     fetchData();
-  }, [masterdataPart, masterdataFacility]);
+  }, [masterdataPart, masterdataId]);
 
   // 기타(직접입력) 선택 시, customInjured 값 업데이트, onFOrmDataChange 호출
   const handleCustomInjuredChange = (e) => {
@@ -63,7 +63,7 @@ export default function Injured({ onFormDataChange }) {
     setInjuredSelected(value);
 
     // 기타(직접입력)을 제외한 경우 onFormDataChange에 value값 넘김
-    if (value.injuredMenu !== "[기타(직접입력)]") {
+    if (value.injuredMenu !== "기타(직접입력)") {
       onFormDataChange(value);
     } else {
       // 기타(직접입력)인 경우에는 customInjured 입력된 값을 넘김
@@ -156,7 +156,7 @@ export default function Injured({ onFormDataChange }) {
         </Listbox>
         {/* Custom Input */}
         {injuredSelected &&
-          injuredSelected.injuredMenu === "[기타(직접입력)]" && (
+          injuredSelected.injuredMenu === "기타(직접입력)" && (
             <input
               type="text"
               value={customInjured}

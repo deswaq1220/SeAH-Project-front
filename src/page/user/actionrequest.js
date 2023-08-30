@@ -11,7 +11,7 @@ function classNames(...classes) {
 }
 
 export default function ActionRquest({ onFormDataChange }) {
-  const { masterdataPart, masterdataFacility } = useParams();
+  const { masterdataPart, masterdataId } = useParams();
   const [emailDataList, setEmailDataList] = useState([]);
   const [instances, setInstances] = useState([{ selectedEmail: null }]);
   const [atCookies, setAtCookie] = useCookies(["at"]); // 쿠키 훅
@@ -20,7 +20,7 @@ export default function ActionRquest({ onFormDataChange }) {
       const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
       try {
         const response = await fetcher.get(
-          `/special/new/${masterdataPart}/${masterdataFacility}`,
+          `/special/new/${masterdataPart}/${masterdataId}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -37,7 +37,7 @@ export default function ActionRquest({ onFormDataChange }) {
       }
     }
     emailFetchDataWithAxios();
-  }, [masterdataPart, masterdataFacility]);
+  }, [masterdataPart, masterdataId]);
 
   // -----------------------------------
   const handleActionChange = (instanceIndex, selectedEmail) => {

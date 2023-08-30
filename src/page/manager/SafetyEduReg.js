@@ -1,4 +1,4 @@
-import { useState, Fragment, useCallback, useEffect } from "react";
+import React, { useState, Fragment, useCallback, useEffect } from "react";
 import Header from "../../components/Header";
 // import { format, addMonths, subMonths } from "date-fns";
 import { Listbox, Transition } from "@headlessui/react";
@@ -8,18 +8,24 @@ import {
   CheckIcon,
   ChevronUpDownIcon,
   PhotoIcon,
-  CheckCircleIcon,
+  CheckCircleIcon, PaperClipIcon,
 } from "@heroicons/react/20/solid";
 import { useDropzone } from "react-dropzone";
 import QRCode from "qrcode.react";
 import axios from "axios";
 import useSafetyEduForm from "../../useHook/useSafetyEduForm";
+import SafetyEduDetails from "./SafetyEduDetails";
 import { FilePond, registerPlugin } from "react-filepond";
 import "filepond/dist/filepond.min.css"; // 스타일링을 위한 CSS
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import fetcher from "../../api/fetcher";
 import { useCookies } from "react-cookie"; // useCookies import
+
+// 추가 플러그인을 라이브러리에 등록
+registerPlugin(FilePondPluginImagePreview);
+
+
 
 const people = [
   {
@@ -62,7 +68,7 @@ function mapEduCategoryName(category) {
     case "ETC":
       return "[기타]";
     default:
-      return "";
+      return "[선택]";
   }
 }
 
@@ -97,7 +103,7 @@ function mapDutyName(duty) {
     case "F":
       return "[현장직]";
     default:
-      return "";
+      return "[선택]";
   }
 }
 
@@ -131,6 +137,9 @@ const handleFileUpload = (acceptedFiles) => {
 //교육일지 등록
 function SafetyEduReg() {
   const {
+    saveFile,
+    eduFiles,
+    handleDeleteFile,
     selected,
     selectedDuty,
     isCompleted,
@@ -161,6 +170,7 @@ function SafetyEduReg() {
     resetForm,
     showNotification,
     // handleEdit,
+
   } = useSafetyEduForm();
 
   // const handleClick = () => {
@@ -173,6 +183,7 @@ function SafetyEduReg() {
 
 
   const [files, setFiles] = useState(null);
+
   return (
     <div>
       <Header />
@@ -190,16 +201,16 @@ function SafetyEduReg() {
               <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
                 구분
               </span>
+
               <Listbox value={selected} onChange={handleListboxChange}>
                 {({ open }) => (
                   <>
                     <div className="relative mt-2">
                       <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-16 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
                         <span className="flex items-center">
+
                           <span className="ml-3 block truncate">
-                            {selected
-                              ? mapEduCategoryName(selected.name)
-                              : "선택"}
+                            {mapEduCategoryName(formData.eduCategory)}
                           </span>
                         </span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
@@ -257,7 +268,7 @@ function SafetyEduReg() {
                                     >
                                       <CheckIcon
                                         className="h-5 w-5"
-                                        aria-hidden="true"
+                                     m n   aria-hidden="true"
                                       />
                                     </span>
                                   ) : null}
@@ -279,34 +290,30 @@ function SafetyEduReg() {
               <span className="w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
                 교육 제목
               </span>
-              {selected.name === "ETC" ? (
-                <div className="sm:col-span-3 w-56">
-                  <div className="mt-2">
-                    <input
-                      type="text"
-                      name="eduTitle"
-                      id="eduTitle"
-                      value={formData.eduTitle}
-                      onChange={handleChange}
-                      autoComplete="off"
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
-                    />
-                  </div>
-                </div>
-              ) : (
+
+
                 <div className="sm:col-span-3">
                   <div className="mt-2">
-                    <input
-                      type="text"
-                      name="eduClass"
-                      id="eduClass"
-                      value={mapEduCategoryName(selected.name)}
-                      readOnly
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 bg-gray-100 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
-                    />
+                    {formData.eduCategory === "ETC" ? (<input
+                        type="text"
+                        name="eduTitle"
+                        id="eduTitle"
+                        value={formData.eduTitle}
+                        onChange={handleChange}
+                        autoComplete="off"
+                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
+                    />):( <input
+                        type="text"
+                        name="eduClass"
+                        id="eduClass"
+                        value={mapEduCategoryName(formData.eduCategory)}
+                        readOnly
+                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 bg-gray-100 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
+                    />)}
+
                   </div>
                 </div>
-              )}
+              {/*)}*/}
             </div>
             <div id="charge" className="flex items-baseline justify-start">
               <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
@@ -322,7 +329,7 @@ function SafetyEduReg() {
                     type="text"
                     name="eduInstructor"
                     id="educharge"
-                    value={formData.eduInstructor}
+                    defaultValue={formData.eduInstructor}
                     onChange={handleChange}
                     autoComplete="off"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
@@ -360,61 +367,65 @@ function SafetyEduReg() {
               <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
                 교육시간
               </span>
-              <div className="mt-2">
-                <label
-                  htmlFor="starttimepicker"
-                  className="block mb-2 font-medium text-gray-700"
-                >
-                  시작시간
-                </label>
-                <input
-                  type="datetime-local"
-                  id="starttimepicker"
-                  className="block w-56 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
-                  value={selectedStartTime}
-                  onChange={handleStartTimeChange}
-                  min={new Date().toISOString().slice(0, 16)}
-                />
+                <div className="mt-2">
+                  <label
+                    htmlFor="starttimepicker"
+                    className="block mb-2 font-medium text-gray-700"
+                  >
+                    시작시간
+                  </label>
+                  <input
+                    type="datetime-local"
+                    id="starttimepicker"
+                    className="block w-56 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
+                    defaultValue={
+                      formData.eduStartTime instanceof Date
+                          ? formData.eduStartTime = new Date(formData.eduStartTime.getTime() + (9 * 60 * 60 * 1000)).toISOString().slice(0, 16)
+                          : formData.eduStartTime
+                    }
+                    onChange={handleStartTimeChange}
+                    min={new Date().toISOString().slice(0, 16)}
+                  />
 
-                {/* <label
-                  htmlFor="endtimepicker"
-                  className="block mt-4 mb-2 font-medium text-gray-700"
-                >
-                  종료시간
-                </label>
-                <input
-                  type="datetime-local"
-                  id="endtimepicker"
-                  className="block w-56 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
-                  value={selectedEndTime}
-                  onChange={handleEndTimeChange}
-                  min={selectedStartTime ? selectedStartTime.slice(0, 16) : ""}
-                /> */}
+                  {/* <label
+                    htmlFor="endtimepicker"
+                    className="block mt-4 mb-2 font-medium text-gray-700"
+                  >
+                    종료시간
+                  </label>
+                  <input
+                    type="datetime-local"
+                    id="endtimepicker"
+                    className="block w-56 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
+                    value={selectedEndTime}
+                    onChange={handleEndTimeChange}
+                    min={selectedStartTime ? selectedStartTime.slice(0, 16) : ""}
+                  /> */}
 
-                <div className="mt-2 text-gray-600">{calculateTotalTime()}</div>
-                {selected.name === "ETC" && (
-                  <div className="mt-2">
-                    <label
-                      htmlFor="etcTime"
-                      className="block text-sm font-medium leading-6 text-gray-900"
-                    >
-                      기타 교육 시간 선택
-                    </label>
-                    <select
-                      id="etcTime"
-                      name="etcTime"
-                      value={selectedEtcTime}
-                      onChange={handleEtcTimeChange}
-                      className="block w-56 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
-                    >
-                      {/* 기타 선택 시, 30분 단위로 선택할 수 있도록 셀렉트 박스 옵션 생성 */}
-                      {[30, 60, 90, 120].map((time) => (
-                        <option key={time} value={time}>{`${time}분`}</option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-              </div>
+                  <div className="mt-2 text-gray-600">{calculateTotalTime()}</div>
+                  {selected.name === "ETC" && (
+                    <div className="mt-2">
+                      <label
+                        htmlFor="etcTime"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        기타 교육 시간 선택
+                      </label>
+                      <select
+                        id="etcTime"
+                        name="etcTime"
+                        defaultValue={selectedEtcTime}
+                        onChange={handleEtcTimeChange}
+                        className="block w-56 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
+                      >
+                        {/* 기타 선택 시, 30분 단위로 선택할 수 있도록 셀렉트 박스 옵션 생성 */}
+                        {[30, 60, 90, 120].map((time) => (
+                          <option key={time} value={time}>{`${time}분`}</option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                </div>
             </div>
             <div
               id="Training_target"
@@ -430,9 +441,7 @@ function SafetyEduReg() {
                       <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-16 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
                         <span className="flex items-center">
                           <span className="ml-3 block truncate">
-                            {selectedDuty
-                              ? mapDutyName(selectedDuty.name)
-                              : "선택"}
+                            {mapDutyName(formData.eduTarget)}
                           </span>
                         </span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
@@ -519,75 +528,82 @@ function SafetyEduReg() {
                   onChange={handleChange}
                   autoComplete="off"
                   className="block w-full h-16 rounded-md border-0 py-1.5 px-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6"
-                  defaultValue={""}
+                  // defaultValue={""}
                 />
               </div>
             </div>
-            {/* <div id="qr" className="flex items-baseline justify-start">
-              <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
-                QR생성
-              </span>
-              {isCompleted ? (
-                <div className="mt-4">
-                  <QRCode value={JSON.stringify(formData)} />
-                  
-                    <QRCode value={qrValue} />
-                  
-                  <div className="flex items-center mt-2">
-                    <CheckCircleIcon className="h-5 w-5 text-green-500" />
-                    <span className="ml-1">생성완료</span>
-                  </div>
-                </div>
-              ) : (
-                <button
-                  type="submit"
-                  className="block w-30 rounded-md bg-seahColor px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  onClick={handleCreate}
-                >
-                  생성하기
-                </button>
-              )}
-            </div> */}
             <div id="file" className="flex items-baseline flex-col ">
               <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
                 파일첨부
               </span>
 
               <FilePond
-                allowMultiple={true}
-                maxFiles={5}
-                acceptedFileTypes={["image/jpeg", "image/jpg", "image/png"]}
-                onupdatefiles={(fileItems) => {
-                  const selectedFiles = fileItems.map(
-                    (fileItem) => fileItem.file
-                  );
-                  setFiles(selectedFiles);
-                }}
-                server={{
-                  process: (
-                    fieldName,
-                    file,
-                    metadata,
-                    load,
-                    error,
-                    progress,
-                    abort
-                  ) => {
-                    if (
-                      !file.type.includes("image/jpeg") &&
-                      !file.type.includes("image/jpg") &&
-                      !file.type.includes("image/png")
-                    ) {
-                      error("업로드할 수 없는 확장자입니다.");
-                      alert("업로드할 수 없는 확장자입니다.");
-                      return;
-                    }
-                  },
-                }}
-                className="dropzone active l w-96"
-                labelIdle='클릭하거나 <span class="filepond--label-action">파일을 여기에 드롭하여 선택하세요</span>'
+                  allowMultiple={true}
+                  maxFiles={5}
+                  acceptedFileTypes={["image/jpeg", "image/jpg", "image/png"]}
+                  onupdatefiles={(fileItems) => {
+                    const selectedFiles = fileItems.map(
+                        (fileItem) => fileItem.file
+                    );
+                    saveFile(selectedFiles);
+                    setFiles(selectedFiles);
+                  }}
+                  server={{
+                    process: (
+                        fieldName,
+                        file,
+                        metadata,
+                        load,
+                        error,
+                        progress,
+                        abort
+                    ) => {
+                      if (
+                          !file.type.includes("image/jpeg") &&
+                          !file.type.includes("image/jpg") &&
+                          !file.type.includes("image/png")
+                      ) {
+                        error("업로드할 수 없는 확장자입니다.");
+                        alert("업로드할 수 없는 확장자입니다.");
+                        return;
+                      }
+                    },
+                  }}
+                  className="dropzone active l w-96"
+                  labelIdle='클릭하거나 <span class="filepond--label-action">파일을 여기에 드롭하여 선택하세요</span>'
               />
+              {formData.eduFileList.map((file, index) => (
+                  <div key={index} className="flex items-start mt-2">
+                    <div className="text-left">
+                      <TruncatedFileName fileName={file.eduFileOriName} />
+                    </div>
+                    <button
+                        onClick={() => handleDeleteFile(index)}
+                        className="ml-2 text-red-600"
+                        type="button"
+                    >
+                      삭제
+                    </button>
+                  </div>
+              ))}
+
+              {uploadedFiles.map((file, index) => (
+                  <div key={file.name} className="flex items-start mt-2">
+                    <div className="text-left">
+                      <TruncatedFileName fileName={file.name} />
+                    </div>
+                    <button
+                        onClick={() => deleteFile(file.name)}
+                        className="ml-2 text-red-600"
+                        type="button"
+                    >
+                      삭제
+                    </button>
+                  </div>
+              ))}
             </div>
+
+
             <div id="writer" className="flex items-baseline justify-start">
               <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
                 작성자
@@ -625,34 +641,11 @@ function SafetyEduReg() {
                 저장하기
               </button>
             </div>
-            <h1>파일 업로드</h1>
-            {/*<FilePond*/}
-            {/*    allowMultiple={true}*/}
-            {/*    maxFiles={5}*/}
-            {/*    onupdatefiles={(fileItems) => {*/}
-            {/*        const acceptedFiles = fileItems.map((fileItem) => fileItem.file);*/}
-            {/*        handleFileUpload(acceptedFiles);*/}
-            {/*    }}*/}
-            {/*/>
-                        {/* <FilePond
-                allowMultiple={true} // 다중 파일 업로드 허용
-                maxFiles={5} // 최대 파일 수 설정
-                // server={`http:localhost:8081/edureg`} // 파일 업로드를 처리하는 서버 엔드포인트
-                // 엔드포인트는 백엔드 구현되면 연결요
-                onupdatefiles={onDrop
-
-                //   (fileItems) => {
-                //   // 업로드한 파일 정보를 처리할 콜백 함수
-                //   console.log(fileItems.map((fileItem) => fileItem.file));
-                // }
-              }
-              /> */}
           </form>
         </div>
       </div>
-
-      {/* {showNotification && <Notification />} */}
     </div>
+
   );
 }
 

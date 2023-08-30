@@ -9,14 +9,14 @@ function classNames(...classes) {
 }
 
 export default function InspectionArea() {
-  const [specialPartList, setSpecialPartList] = useState([]); // 설비영역
+  const [regularPartList, setRegularPartList] = useState([]); // 설비영역
   const [selectedArea, setSelectedArea] = useState(null);
   const [atCookies, setAtCookie] = useCookies(["at"]); // 쿠키 훅
   useEffect(() => {
     async function fetchOptions() {
       const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
       try {
-        const response = await fetcher.get(`/master/partdropdown`, {
+        const response = await fetcher.get(`/regularpart`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${authToken}`,
@@ -27,15 +27,17 @@ export default function InspectionArea() {
           "Authorization"
         ] = `Bearer ${accessToken}`;
 
+        
+
         // 문자열 배열을 객체로 변환하여 새로운 배열 생성
-        const optionsArray = response.data.specialPartList.map(
+        const optionsArray = response.data.regularPartList.map(
           (name, index) => ({
             id: index + 1,
             name: name,
           })
         );
 
-        setSpecialPartList(optionsArray);
+        setRegularPartList(optionsArray);
         setSelectedArea(optionsArray[0]);
         console.log(response.data);
       } catch (error) {
@@ -53,7 +55,7 @@ export default function InspectionArea() {
             {({ open }) => (
               <>
                 <div className="relative mt-2">
-                  <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-28 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
+                  <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-32 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
                     <span className="block truncate">
                       {selectedArea ? selectedArea.name : "선택"}
                     </span>
@@ -73,7 +75,7 @@ export default function InspectionArea() {
                     leaveTo="opacity-0"
                   >
                     <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                      {specialPartList.map((option) => (
+                      {regularPartList.map((option) => (
                         <Listbox.Option
                           key={option.id}
                           className={({ active }) =>

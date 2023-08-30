@@ -6,6 +6,7 @@ import NotificationModal from "../components/Notification";
 // import { useCookies } from "react-cookie";
 import {useCookies} from "react-cookie"
 import fetcher from "../api/fetcher"
+import safetyEduReg from "../page/manager/SafetyEduReg";
 const people = [
   {
     id: 1,
@@ -32,7 +33,22 @@ const people = [
     time: 30,
   },
 ];
-
+function selectPeople(category) {
+  switch (category) {
+    case "선택":
+      return people[0];
+    case "CREW":
+      return people[1];
+    case "DM":
+      return people[2];
+    case "MANAGE":
+      return people[3];
+    case "ETC":
+      return people[5];
+    default:
+      return people[0];
+  }
+}
 // 한글 값 매핑 함수
 function mapEduCategoryName(category) {
   switch (category) {
@@ -69,37 +85,44 @@ const duty = [
     name: "F",
   },
 ];
-// 한글 값 매핑 함수
-function mapDutyName(duty) {
-  switch (duty) {
-    case "선택":
-      return "[선택]";
-    case "T":
-      return "[전체]";
-    case "O":
-      return "[사무직]";
-    case "F":
-      return "[현장직]";
-    default:
-      return "";
-  }
-}
+// // 한글 값 매핑 함수
+// function mapDutyName(duty) {
+//   switch (duty) {
+//     case "선택":
+//       return "[선택]";
+//     case "T":
+//       return "[전체]";
+//     case "O":
+//       return "[사무직]";
+//     case "F":
+//       return "[현장직]";
+//     default:
+//       return "[선택]";
+//   }
+// }
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
+
 const useSafetyEduForm = (eduData) => {
+
+
   const formDataWithFile = new FormData();
   const [selected, setSelected] = useState(people[0]);
   const [selectedDuty, setSelectedDuty] = useState(duty[0]);
   const [isCompleted, setIsCompleted] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
+
   const [error, setError] = useState(null);
   const [qrValue, setQrValue] = useState("");
   const [showNotification, setShowNotification] = useState(false);
   const [atCookies, setAtCookie] = useCookies(["at"]); // 쿠키 훅
   const [rtCookies, setrtCookie] = useCookies(["rt"]); // 쿠키 훅
+
+  const apiUrl = process.env.REACT_APP_API_BASE_URL;
+  const [eduFiles, setEduFiles] = useState([]);
   const [formData, setFormData] = useState({
     eduCategory: "", // 교육
     eduTitle: "", // 교육제목\
@@ -113,36 +136,42 @@ const useSafetyEduForm = (eduData) => {
     eduWriter: "",
     files: null,
     eduId: "",
+    eduFileList:[],
+    eduFileIds:[],
   });
 
-
+// let [ eduFiles, setEduFiles] = useState([0,0,0,0,0,0,0,0]);
   const { eduId } = useParams();
   useEffect(() => {
-    const fetchEduDetails = async () => {
-      const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
-      console.log("여기는 전달이 안된다",authToken)
-      try {
-        const response = await fetcher.get(`/edudetails/${eduId}`, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authToken}`,
-          },
-        });
-        console.log(response.data);
-        setFormData(response.data);
+    formData.eduFileIds = eduFiles;
+  }, [eduFiles]);
+  useEffect(() => {
+    // 서버에서 교육 세부 정보 가져오기 (교육 아이디값 이용)
 
-        const accessToken = response.data.access_token;
-        axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${accessToken}`;
-        console.log("왜??",response.data.accessToken)
-      } catch (error) {
-        console.error("교육 세부 정보를 가져오는 중 에러 발생:", error);
-      }
-    };
+    if (eduId) {
+     axios
+        .get(`${process.env.REACT_APP_API_BASE_URL}/edudetails/${eduId}`)
+        //  .get(`http://localhost:8081/edudetails/${eduId}`)
+        .then((response) => {
+          // 가져온 데이터로 상태 업데이트
+          console.log(response.data);
+          // seteduFiles(response.data.eduFileList);
 
-    fetchEduDetails();
+            setFormData(response.data, formData.eduFileList= response.data.eduFileList);
+
+          })
+          .catch((error) => {
+            // 에러 처리
+            console.error("교육 세부 정보를 가져오는 중 에러 발생:", error);
+          });
+    }else {
+      console.log(formData);
+    }
   }, [eduId]);
+
+
+
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -157,6 +186,7 @@ const useSafetyEduForm = (eduData) => {
   const handleStartTimeChange = (e) => {
     const newValue = e.target.value;
     setSelectedStartTime(newValue);
+
     setFormData((prevData) => ({
       ...prevData,
       eduStartTime: newValue, // 시작시간 필드 이름 변경
@@ -196,8 +226,26 @@ const useSafetyEduForm = (eduData) => {
     setFormData((prevData) => ({ ...prevData, files: updatedFiles })); // Update formData with new file array
   };
 
+  function saveFile(file){
+    setFormData(prevData => ({ ...prevData, files: file })); // Update formData with new file array
+        console.log("여기?");
+    console.log(formData.files);
+  }
+
+  //불러온 파일 삭제
+  const handleDeleteFile = (index) => {
+    const updatedFileId = formData.eduFileList[index].eduFileId;
+
+    setEduFiles([...eduFiles, updatedFileId]);
+    formData.eduFileList.splice(index, 1);
+
+      formData.eduFileIds= eduFiles;
+
+  };
+
+
+
   const handleFileChange = (event) => {
-    //이거 이상함? 나중에 터지면 여기 문제일수도
     const selectedFile = event.target.files[0];
     setFormData((prevFormData) => ({ ...prevFormData, file: selectedFile }));
   };
@@ -254,31 +302,21 @@ const useSafetyEduForm = (eduData) => {
       setError("본문 내용 또는 강사를 입력하세요.");
       return;
     }
-    console.log("여긴가1?: " + formData.eduContent);
-    formDataWithFile.append("eduCategory", formData.eduCategory);
-    formDataWithFile.append("eduTitle", formData.eduTitle);
-    formDataWithFile.append("eduInstructor", formData.eduInstructor);
-    formDataWithFile.append("eduPlace", formData.eduPlace);
-    formDataWithFile.append("eduStartTime", formData.eduStartTime);
-    formDataWithFile.append("eduSumTime", formData.eduSumTime);
-    formDataWithFile.append("eduTarget", formData.eduTarget);
-    formDataWithFile.append("eduContent", formData.eduContent);
-    formDataWithFile.append("eduWriter", formData.eduWriter);
-
-    console.log("여긴가?: " + formDataWithFile.eduTitle);
-    const authToken = atCookies["at"];
-    console.log("여기는 포스트",authToken)
+    console.log("업로드전 담긴 파일");
+    console.log(formData.files);
     try {
       if (formData.eduId) {
         // 기존 교육 데이터를 수정하는 경우 (PUT 요청)
-        const response = await fetcher.post(
+        formData.eduStartTime = formData.eduStartTime.slice(0, 16);
+        formData.eduSumTime = selectPeople(formData.eduCategory).time;
+        formData.eduFileList = null;
+        const response = await axios.post(
           //  `http://localhost:8081/edudetails/${formData.eduId}`,
           `/edudetails/${formData.eduId}`, //세아
           formData,
           {
             headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${authToken}`,
+              "Content-Type": "multipart/form-data"
             },
           }
         );
@@ -289,23 +327,19 @@ const useSafetyEduForm = (eduData) => {
         ] = `Bearer ${accessToken}`;
       } else {
         // 새로운 교육 데이터를 등록하는 경우 (POST 요청)
-        const response = await fetcher.post(
-          //  "http://localhost:8081/edureg",
-          `/edureg`, // 세아
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${authToken}`,
-            },
-            withCredentials: true,
-          }
+        const response = await axios.post(
+            //  "http://localhost:8081/edureg",
+            `${process.env.REACT_APP_API_BASE_URL}/edureg`, // 세아
+            formData,
+
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+              withCredentials: true,
+            }
         );
         console.log("등록 결과:", response.data);
-        const accessToken = response.data.access_token;
-        axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${accessToken}`;
         
       }
 
@@ -331,7 +365,7 @@ const useSafetyEduForm = (eduData) => {
       return `총 교육시간: ${selectedEtcTime}분`;
     } else {
       formData.eduSumTime = selected.time;
-      return `총 교육시간: ${selected.time || 0}분`;
+      return `총 교육시간: ${selectPeople(formData.eduCategory).time || 0}분`;
     }
   };
 
@@ -341,6 +375,8 @@ const useSafetyEduForm = (eduData) => {
   };
 
   return {
+    saveFile,
+    handleDeleteFile,
     selected,
     selectedDuty,
     isCompleted,
@@ -369,6 +405,7 @@ const useSafetyEduForm = (eduData) => {
     handleOptionChange,
     showNotification,
   };
+
 };
 
 export default useSafetyEduForm;

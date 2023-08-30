@@ -9,21 +9,23 @@ import { format } from "date-fns";
 import { useParams } from "react-router-dom";
 import fetcher from "../../api/fetcher";
 import { useCookies } from "react-cookie";
+import userSafetyEduAttendance from "./UserSafetyEduAttendance";
 
 export default function Userfrequent() {
   // qr 정보따라 url 파라미터 세팅되어야됨
   const { masterdataPart } = useParams(); // url 영역 파라미터
-  const { masterdataFacility } = useParams(); // url 설비 파라미터
+  const { masterdataId } = useParams(); // url 설비id 파라미터
+  const [masterdataFacility, setMasterdataFacility] = useState("");  // 설비명
   const [people, setPeople] = useState([]);
   const navigate = useNavigate();
   const [atCookies, setAtCookie] = useCookies(["at"]); // 쿠키 훅
 
   // Json값 가져와서 세팅
   useEffect(() => {
-    async function fetchDataWithAxios(masterdataPart, masterdataFacility) {
+    async function fetchDataWithAxios(masterdataPart, masterdataId) {
       const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
       try {
-        const response = await fetcher.get(`/special/list/${masterdataPart}/${masterdataFacility}`,{
+        const response = await fetcher.get(`/special/list/${masterdataPart}/${masterdataId}`,{
           headers: {
             "Content-Type": "application/json",
              Authorization: `Bearer ${authToken}`,
@@ -64,8 +66,8 @@ export default function Userfrequent() {
       }
     }
   
-    fetchDataWithAxios(masterdataPart, masterdataFacility);
-  }, [masterdataPart, masterdataFacility]);
+    fetchDataWithAxios(masterdataPart, masterdataId);
+  }, [masterdataPart, masterdataId]);
 
 
   return (
@@ -79,13 +81,13 @@ export default function Userfrequent() {
                 type="text"
                 name="output"
                 id="output"
-                className="block w-auto rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-4 mr-2"
-                value={`${masterdataPart} / ${masterdataFacility}`}
+                className="block w-auto rounded-md border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-4 mr-2"
+                value={`${masterdataPart}/${masterdataFacility}`}
                 readOnly
             />
 
             {/*수시점검 등록하기 클릭 시 등록페이지 이동*/}
-            <Link to={`/special/new/${masterdataPart}/${masterdataFacility}`}>
+            <Link to={`/special/new/${masterdataPart}/${masterdataId}`}>
               <button
                   type="button"
                   className="inline-flex items-center gap-x-2 rounded-md bg-seahColor px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
@@ -96,7 +98,6 @@ export default function Userfrequent() {
             </Link>
           </div>
         </div>
-        {/* <div className="sm:flex sm:items-center"></div> */}
         <div className="mt-8 flow-root">
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">

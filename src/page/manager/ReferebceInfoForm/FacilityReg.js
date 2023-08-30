@@ -12,6 +12,7 @@ function classNames(...classes) {
 
 export default function FacilityReg({ fetchData, handleNewData }) {
   const [selected, setSelected] = useState(null);
+  const [facilityCode, setFacilityCode] = useState(""); // 설비코드 관련 상태 추가
   const [facilityName, setFacilityName] = useState(""); // 설비명 관련 상태 추가
   const [specialPartList, setSpecialPartList] = useState([]); // 설비영역
   const [atCookies, setAtCookie] = useCookies(["at"]); // 쿠키 훅
@@ -56,6 +57,7 @@ export default function FacilityReg({ fetchData, handleNewData }) {
     const requestData = {
       masterdataFacility: facilityName,
       masterdataPart: selected.name,
+      masterdataId : facilityCode
     };
 
     try {
@@ -82,10 +84,11 @@ export default function FacilityReg({ fetchData, handleNewData }) {
       handleNewData(response.data);
     } catch (error) {
       console.error("서버 요청 오류:", error);
+      alert("기존 코드 정보와 중복됩니다. 다른 코드를 사용하세요.");
     }
   };
 
-  
+
 
 
 
@@ -97,24 +100,45 @@ export default function FacilityReg({ fetchData, handleNewData }) {
       <div id="charge" className="flex  items-baseline justify-start">
         <div className="sm:col-span-3">
           <label
-            htmlFor="Facilityname"
-            className="block text-sm font-medium leading-6 text-gray-900"
+              htmlFor="FacilityCode"
+              className="block text-sm font-medium leading-6 text-gray-900"
+          >
+            설비코드
+          </label>
+
+            <div className="mt-2">
+              <input
+                  type="text"
+                  name="FacilityCode"
+                  id="FacilityCode"
+                  value={facilityCode}
+                  onChange={(e) => setFacilityCode(e.target.value)} // 입력 값 변경 시 설비명 상태 업데이트
+                  autoComplete="family-name"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
+              />
+            </div>
+          </div>
+        <div className="sm:col-span-3 ml-2">
+          <label
+              htmlFor="Facilityname"
+              className="block text-sm font-medium leading-6 text-gray-900"
           >
             설비명
           </label>
           <div className="mt-2">
             <input
-              type="text"
-              name="Facilityname"
-              id="Facilityname"
-              value={facilityName}
-              onChange={(e) => setFacilityName(e.target.value)} // 입력 값 변경 시 설비명 상태 업데이트
-              autoComplete="family-name"
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
+                type="text"
+                name="Facilityname"
+                id="Facilityname"
+                value={facilityName}
+                onChange={(e) => setFacilityName(e.target.value)} // 입력 값 변경 시 설비명 상태 업데이트
+                autoComplete="family-name"
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
             />
           </div>
         </div>
-        <div className="flex flex-col ml-2 z-10">
+
+        <div className="flex flex-col ml-2 z-10 mb-2">
           <Listbox value={selected} onChange={setSelected}>
             {({ open }) => (
               <>

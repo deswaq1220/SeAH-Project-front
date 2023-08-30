@@ -11,7 +11,7 @@ function classNames(...classes) {
 
 export default function Falsetrap({ onFormDataChange }) {
   const { masterdataPart } = useParams(); // url 영역 파라미터
-  const { masterdataFacility } = useParams(); // url 설비 파라미터
+  const { masterdataId } = useParams(); // url 설비 파라미터
   const [specialTrapList, setSpecialTrapList] = useState([]); // 실수함정List
   const [trapSelected, setTrapSelected] = useState(""); //  실수함정
   const [atCookies, setAtCookie] = useCookies(["at"]);
@@ -22,7 +22,7 @@ export default function Falsetrap({ onFormDataChange }) {
       const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
       try {
         const response = await fetcher.get(
-          `/special/new/${masterdataPart}/${masterdataFacility}`,
+          `/special/new/${masterdataPart}/${masterdataId}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -49,7 +49,7 @@ export default function Falsetrap({ onFormDataChange }) {
     }
 
     fetchData();
-  }, [masterdataPart, masterdataFacility]);
+  }, [masterdataPart, masterdataId]);
 
   // 선택한 값 세팅
   const handleTrapChange = (value) => {
@@ -59,24 +59,25 @@ export default function Falsetrap({ onFormDataChange }) {
 
   return (
     <div id="falsetrap" className="flex items-baseline justify-start">
-      <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
-        실수함정
-      </span>
-      {/* 실수함정 */}
-      {/*<Listbox value={falsetrapSelected} onChange={setFalsetrapSelected}>*/}
-      <Listbox value={trapSelected} onChange={handleTrapChange}>
-        {({ open }) => (
-          <>
-            <div className="relative mt-2">
-              <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-32 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
-                <span className="block truncate">{trapSelected.trapMenu}</span>
-                <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                  <ChevronUpDownIcon
-                    className="h-5 w-5 text-gray-400"
-                    aria-hidden="true"
-                  />
-                </span>
-              </Listbox.Button>
+        <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
+          실수함정
+        </span>
+        {/* 실수함정 */}
+        <Listbox value={trapSelected} onChange={handleTrapChange}>
+          {({ open }) => (
+            <>
+              <div className="relative mt-2">
+                <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-32 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
+                  <span className="block truncate">
+                    {trapSelected.trapMenu}
+                  </span>
+                  <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                    <ChevronUpDownIcon
+                      className="h-5 w-5 text-gray-400"
+                      aria-hidden="true"
+                    />
+                  </span>
+                </Listbox.Button>
 
               <Transition
                 show={open}

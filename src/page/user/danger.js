@@ -12,7 +12,7 @@ function classNames(...classes) {
 
 export default function Danger({ onFormDataChange }) {
   const { masterdataPart } = useParams(); // url 영역 파라미터
-  const { masterdataFacility } = useParams(); // url 설비 파라미터
+  const { masterdataId } = useParams(); // url 설비코드 파라미터
   const [specialDangerList, setSpecialDangerList] = useState([]); // 위험분류List
   const [selectedDanger, setSelectedDanger] = useState(""); // 위험분류
   const [atCookies, setAtCookie] = useCookies(["at"]); // 쿠키 훅
@@ -23,7 +23,7 @@ export default function Danger({ onFormDataChange }) {
       const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
       try {
         const response = await fetcher.get(
-          `/special/new/${masterdataPart}/${masterdataFacility}`,
+          `/special/new/${masterdataPart}/${masterdataId}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -51,7 +51,7 @@ export default function Danger({ onFormDataChange }) {
     }
 
     fetchData();
-  }, [masterdataPart, masterdataFacility]);
+  }, [masterdataPart, masterdataId]);
 
   // 선택한 값 세팅
   const handleDangerChange = (value) => {
@@ -64,7 +64,6 @@ export default function Danger({ onFormDataChange }) {
       <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
         위험분류
       </span>
-      {/*<Listbox value={selected} onChange={setSelected}>*/}
       <Listbox value={selectedDanger} onChange={handleDangerChange}>
         {({ open }) => (
           <>
