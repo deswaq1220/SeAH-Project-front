@@ -172,11 +172,6 @@ function SafetyEduReg() {
   } = useSafetyEduForm();
   const [files, setFiles] = useState(null);
 
-  // const handleClick = () => {
-  //   handleEdit(); // 수정 핸들러 호출
-  // };
-
-  const [files, setFiles] = useState(null);
   return (
     <div>
       <Header />

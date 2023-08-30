@@ -308,8 +308,7 @@ const useSafetyEduForm = (eduData) => {
           formData,
           {
             headers: {
-              "Content-Type": "multipart/form-data",
-              'Authorization': `Bearer ${TK}`
+              "Content-Type": "multipart/form-data"
             },
             
           }

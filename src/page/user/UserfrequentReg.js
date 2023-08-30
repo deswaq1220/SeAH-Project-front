@@ -215,7 +215,7 @@ function UserfrequentReg() {
 
           const emailData = {
             recipients: speActEmail.split(", "), // 이메일 주소를 수신자로 설정
-            subject: emailTitle, // 이메일 제목
+            // subject: emailTitle, // 이메일 제목
             content: inspectionData, // 이메일 내용 (점검 내용 등)
             // 필요한 다른 속성도 여기에 추가 가능
           };
