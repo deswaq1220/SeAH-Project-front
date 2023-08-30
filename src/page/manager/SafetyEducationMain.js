@@ -72,6 +72,7 @@ function SafetyEducationMain() {
           // eduStartTime을 기준으로 오름차순 정렬
           return new Date(a.eduStartTime) - new Date(b.eduStartTime);
         });
+        // console.log(response.data[0].eduFiles[0]);
         setEduList(sortedEduList);
         setSelectedMonth(currentMonth);
       } catch (error) {
@@ -259,7 +260,7 @@ function SafetyEducationMain() {
                         </td>
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
 
-                          {edu.eduFiles.length > 0 ? (
+                          {edu.eduFileList.length > 0 ? (
                             <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
                              첨부
                             </span>

@@ -59,8 +59,8 @@ function SafetyInspectionStatisticsMonthImg() {
       {
         sheetName: "점검영역 분석",
         data: partCountForExcel.map((item) => ({
-          점검영역: item[0],
-          건수: item[1],
+          점검영역: item.sort,
+          건수: item.수시점검,
         })),
       },
       {
@@ -89,7 +89,7 @@ function SafetyInspectionStatisticsMonthImg() {
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     });
 
-    saveAs(excelFile, "분석_결과.xlsx");
+    saveAs(excelFile, "수시점검_월간분석.xlsx");
   };
 
   //그 외 변수
@@ -112,10 +112,8 @@ function SafetyInspectionStatisticsMonthImg() {
           .get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/count`, {
             params: { yearmonth: selectedYear },
           }) //세아
-          //  await axios.get(`${process.env.REACT_APP_API_BASE_URL}/statistics/count`, { params: { yearmonth: selectedYear } })
           .then((response) => {
             setSpcCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
-            console.log(response.data);
           });
 
       //영역값(엑셀용)
@@ -123,11 +121,9 @@ function SafetyInspectionStatisticsMonthImg() {
           .get(
               `${process.env.REACT_APP_API_BASE_URL}/special/statistics/partandmonth`,
               { params: { yearmonth: selectedYear } }
-          ) //세아
-          //await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/partandmonthforexcel`, { params: { yearmonth: selectedYear } })
+          )
           .then((response) => {
             setPartCountForExcel(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
-            console.log("체크체크체크" + response.data);
           });
 
       //영역값2
@@ -135,11 +131,9 @@ function SafetyInspectionStatisticsMonthImg() {
           .get(
               `${process.env.REACT_APP_API_BASE_URL}/special/statistics/partandmonth`,
               { params: { yearmonth: selectedYear } }
-          ) //세아
-          //await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/partandmonth`, { params: { yearmonth: selectedYear } })
+          )
           .then((response) => {
             setPartCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
-            console.log(response.data);
           });
 
       //위험분류값
@@ -147,11 +141,9 @@ function SafetyInspectionStatisticsMonthImg() {
           .get(
               `${process.env.REACT_APP_API_BASE_URL}/special/statistics/dangerandmonth`,
               { params: { yearmonth: selectedYear } }
-          ) //세아
-          //await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/dangerandmonth`, { params: { yearmonth: selectedYear } })
+          )
           .then((response) => {
             setDangerCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
-            console.log(response.data);
           });
 
       //위험원인값
@@ -159,11 +151,9 @@ function SafetyInspectionStatisticsMonthImg() {
           .get(
               `${process.env.REACT_APP_API_BASE_URL}/special/statistics/causeandmonth`,
               { params: { yearmonth: selectedYear } }
-          ) //세아
-          //await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/causeandmonth`, { params: { yearmonth: selectedYear } })
+          )
           .then((response) => {
             setCauseCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
-            console.log(response.data);
           });
     } catch (error) {
       console.error("불러온 데이터에 에러가 발생했습니다:", error);
@@ -180,33 +170,66 @@ function SafetyInspectionStatisticsMonthImg() {
           {({ open }) => (
               <>
                 <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
-                  <div className="flex h-16 justify-between">
-                    <div className="flex px-2 lg:px-0">
-                      <div className="flex flex-shrink-0 items-center">
-                        <PresentationChartBarIcon
-                            className="h-8 w-auto text-seahColor"/>
+                  <div className="flex h-16 justify-between relative ">
+                    <div className="flex items-center px-2 lg:px-0 relative z-10">
+                      <PresentationChartBarIcon className="h-8 w-auto text-seahColor mr-2" />
+                      <div className="hidden lg:ml-6 lg:flex lg:space-x-8 relative group">
+                        <div className="relative">
+                          <a
+                              href="http://172.20.20.252:3000/inspection/statistics/yearimg"
+                              className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                          >
+                            연간분석
+                          </a>
+                          <div className="absolute left-3 hidden group-hover:block mt-2 bg-white border border-gray-300 rounded-lg shadow-lg top-4">
+                            <a
+                                href="URL_TO_SUSICHECK1"
+                                className="block px-0 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                            >
+                              수시/정기점검
+                            </a>
+                            <a
+                                href="URL_TO_SUSICHECK1"
+                                className="block px-2 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                            >
+                              수시점검
+                            </a>
+                            <a
+                                href="URL_TO_REGULARCHECK1"
+                                className="block px-2 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                            >
+                              정기점검
+                            </a>
+                          </div>
+                        </div>
                       </div>
-                      <div className="hidden lg:ml-6 lg:flex lg:space-x-8">
-                        {/* Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
-                        <a
-                            href="http://localhost:3000/inspection/statistics/yearimg"
-                            className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                        >
-                          연간분석
-                        </a>
-                        <a
-                            href="http://localhost:3000/inspection/statistics/monthimg"
-                            className="inline-flex items-center border-b-2 border-seahColor px-1 pt-1 text-sm font-medium text-gray-900"
-                        >
-                          월간분석
-                        </a>
+                      <div className="hidden lg:ml-6 lg:flex lg:space-x-8 relative group">
+                        <div className="relative">
+                          <a
+                              href="http://172.20.20.252:3000/inspection/statistics/monthimg"
+                              className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                          >
+                            월간분석
+                          </a>
+                          <div className="absolute left-3 hidden group-hover:block mt-2 bg-white border border-gray-300 rounded-lg shadow-lg top-4">
+                            <a
+                                href="URL_TO_SUSICHECK1"
+                                className="block px-2 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                            >
+                              수시점검
+                            </a>
+                            <a
+                                href="URL_TO_REGULARCHECK1"
+                                className="block px-2 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                            >
+                              정기점검
+                            </a>
+                          </div>
+                        </div>
                       </div>
                     </div>
                     <div className="flex flex-1 items-center justify-center px-2 lg:ml-6 lg:justify-end">
                       <div className="w-full max-w-lg lg:max-w-xs">
-                        <label htmlFor="search" className="sr-only">
-                          Search
-                        </label>
                         <div className="relative">
                           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                             <MagnifyingGlassIcon
