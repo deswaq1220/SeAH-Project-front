@@ -21,6 +21,7 @@ import EduAttenStatics from "./page/manager/EduAttenStatics"
 import FrequentIns from "./page/manager/SafetyFrequentInspection";
 import AttenStatus from "./page/manager/AttendanceStatus";
 import UserFrequentDetails from "./page/user/UserFrequentDetails/UserFrequentDetails";
+import FrequentDetails from "./page/manager/FrequentDetails/FrequentDetails"
 import TrainingReport from "./components/TrainingReport";
 import SafetyManagerInspection from "./page/manager/SafetyManagerInspection";
 
@@ -60,7 +61,11 @@ function App() {
         <Route path="/sendEmail" element={<EmailForm/>}></Route> {/* 이메일 */}
         <Route path="/edustatistics" element={<EduStatics/>}></Route>{/* 관리자 안전교육통계*/}
         <Route path="/edustatistics/atten" element={<EduAttenStatics/>}></Route>{/* 관리자 안전교육 참가자통계*/}
-        <Route path="/frequentinspection" element={<FrequentIns/>}></Route>{/* 관리자 수시점검 현황*/}
+
+
+        {/* 공통 */}
+        <Route path="/frequentinspection" element={<FrequentIns/>}></Route>{/* 공통 수시점검 현황*/}
+        <Route path="/all/special/detail/:speId" element={<FrequentDetails/>}></Route>{/* 공통 수시점검 상세페이지 */}
 
         
         

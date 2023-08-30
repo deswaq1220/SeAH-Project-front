@@ -5,10 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c20fbe9c-9169-4241-9ec0-dff0f7b0e503" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/page/manager/FrequentDetails/FrequentDetails.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/page/manager/FrequentDetails/FrequentDetailsTable.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/manager/FrequentinseptionForm/area.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/FrequentinseptionForm/area.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/manager/FrequentinseptionForm/equipmentName.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/FrequentinseptionForm/equipmentName.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/FrequentInseptionTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/FrequentInseptionTable.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/page/manager/SafetyFrequentInspection.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/SafetyFrequentInspection.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/UserSelectInspection.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserSelectInspection.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,7 +43,7 @@
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/SeAHAnDIT/Desktop/SeAH_Project",
+    "last_opened_file_path": "C:/SeAH-Project-front/src/page/manager",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -53,6 +56,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\SeAH-Project-front\src\page\manager" />
       <recent name="C:\Users\user\Documents\GitHub\SeAH-Project-front\src\style" />
     </key>
   </component>
@@ -83,6 +87,7 @@
       <workItem from="1692928711164" duration="10215000" />
       <workItem from="1693187530743" duration="1477000" />
       <workItem from="1693189032511" duration="21520000" />
+      <workItem from="1693355484712" duration="12516000" />
     </task>
     <servers />
   </component>

@@ -205,9 +205,7 @@ export default function UserSelectInspection() {
         <nav className="flex flex-1 flex-col" aria-label="Sidebar">
           <p className="flex justify-center font-semibold text-lg mb-2">
             <CalendarDaysIcon className="w-6 h-6 mr-1" />
-            {/*------------------------  수정 필요  -------------------------*/}
             {getFormattedDate()} 점검현황
-            {/*------------------------  수정 필요  -------------------------*/}
           </p>
           <p className=" text-lg font-semibold">정기점검</p>
           <ul role="list" className="-mx-2 space-y-1 mb-3">

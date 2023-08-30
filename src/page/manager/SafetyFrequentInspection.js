@@ -49,7 +49,6 @@ export default function FrequentIns() {
 
   // 검색 조건을 이용하여 서버로 요청 보내고 검색 결과를 받아옴
   const handleSearchButtonClick = () => {
-
     axios
         .get(`${process.env.REACT_APP_API_BASE_URL}/frequentinspection`, {
           params: {
@@ -74,7 +73,6 @@ export default function FrequentIns() {
 
             });
           }
-
         })
 
         .catch((error) => {
