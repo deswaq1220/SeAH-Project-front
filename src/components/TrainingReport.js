@@ -3,6 +3,9 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
+const TK =
+  "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1IiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY5MzAyNjY1OX0.VVZoLMp3oVPQH-EjiYs_Rcr-ZiaA9WsT5YLf9QlaKnjdbhb1exwRodMJASj7g0jd_8R3Bad9YIvUi4SBe1m1-g";
+
 export default function TrainingReport() {
   const { eduId } = useParams();
   const [eduDetails, setEduDetails] = useState(null);
@@ -10,7 +13,12 @@ export default function TrainingReport() {
   useEffect(() => {
     // API 요청을 통해 해당 교육 아이디에 해당하는 데이터 가져오기
     axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/edudetails/${eduId}`)
+      .get(`${process.env.REACT_APP_API_BASE_URL}/edudetails/${eduId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${TK}`,
+        },
+      })
       .then((response) => {
         setEduDetails(response.data);
         console.log();
@@ -68,7 +76,9 @@ export default function TrainingReport() {
         <header className="flex justify-between">
           <img className="h-8 w-auto" src={logo} alt="" />
           <div className="flex  flex-col items-center">
-            {eduDetails && <p className=" font-bold text-xl">{eduDetails.eduTitle}</p>}
+            {eduDetails && (
+              <p className=" font-bold text-xl">{eduDetails.eduTitle}</p>
+            )}
             <p className="text-lg">안전교육수강확인서</p>
           </div>
         </header>
@@ -80,7 +90,9 @@ export default function TrainingReport() {
             <table className="w-[310px]">
               <tr className="border border-black">
                 <td className="p-1 border-r border-black text-center">날짜</td>
-                <td className="p-1">{formatTime(eduDetails && eduDetails.eduStartTime)}</td>
+                <td className="p-1">
+                  {formatTime(eduDetails && eduDetails.eduStartTime)}
+                </td>
               </tr>
               <tr className="border border-black">
                 <td className="p-1 border-r border-black text-center">시간</td>
@@ -167,7 +179,6 @@ export default function TrainingReport() {
               <td className=" p-4  border-black  w-[97mm] h-[350px]">
                 <p>{eduDetails && eduDetails.eduFiles}</p>
               </td>
-            
             </tr>
           </table>
         </section>

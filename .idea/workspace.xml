@@ -4,6 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+    <list default="true" id="beef42e1-c14e-4899-8add-6522e5980981" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/SafetyEduReg.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/SafetyEduReg.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/useHook/useSafetyEduForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/useHook/useSafetyEduForm.js" afterDir="false" />
     <list default="true" id="c20fbe9c-9169-4241-9ec0-dff0f7b0e503" name="Changes" comment="">
       <change afterPath="$PROJECT_DIR$/src/page/manager/FrequentDetails/FrequentDetails.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/page/manager/FrequentDetails/FrequentDetailsTable.js" afterDir="false" />
@@ -30,16 +34,11 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo">{
-  &quot;customColor&quot;: &quot;&quot;,
-  &quot;associatedIndex&quot;: 2
-}</component>
-  <component name="ProjectId" id="2TgPPceME3ob5HegBdmZMz8sWiT" />
+  <component name="ProjectId" id="2U5lffYWmDoGFpwT9496hdves55" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
-    <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
@@ -49,6 +48,7 @@
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/SpringBootWork/SeAH_Project",
 
     "last_opened_file_path": "C:/SeAH-Project-front/src/page/manager",
 
@@ -63,6 +63,7 @@
     "settings.editor.selected.configurable": "preferences.sourceCode.Markdown",
 
     "settings.editor.selected.configurable": "preferences.sourceCode.Shell Script",
+    "ts.external.directory.path": "C:\\Users\\codepc\\AppData\\Local\\JetBrains\\IntelliJ IDEA 2023.1.1\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external",
 
     "ts.external.directory.path": "C:\\Program Files\\JetBrains\\IntelliJ IDEA 2023.1\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
@@ -77,8 +78,8 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="c20fbe9c-9169-4241-9ec0-dff0f7b0e503" name="Changes" comment="" />
-      <created>1691461728933</created>
+      <changelist id="beef42e1-c14e-4899-8add-6522e5980981" name="Changes" comment="" />
+      <created>1692237437544</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1691461728933</updated>
@@ -105,7 +106,6 @@
       <workItem from="1693355484712" duration="12516000" />
 
       <workItem from="1692864697525" duration="1535000" />
-
     </task>
     <servers />
   </component>

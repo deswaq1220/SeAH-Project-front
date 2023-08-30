@@ -24,11 +24,19 @@ import UserFrequentDetails from "./page/user/UserFrequentDetails/UserFrequentDet
 import FrequentDetails from "./page/manager/FrequentDetails/FrequentDetails"
 import TrainingReport from "./components/TrainingReport";
 import SafetyManagerInspection from "./page/manager/SafetyManagerInspection";
+import RegularMain from "./page/user/RegularMain";
+
+import UserRegularReg from "./page/user/UserRegularReg/UserRegularReg";
+import FaultyModal from "./page/user/UserRegularReg/FaultyModal";
 
 //다인 씀
 import SafetyInspectionStatisticsYearImg from "./page/manager/SafetyInspectionStatisticsYearImg";
 import SafetyInspectionStatisticsMonthImg from "./page/manager/SafetyInspectionStatisticsMonthImg";
+import axios from "axios";
+import TokenRefresher from "./api/fetcher";
 
+// axios.defaults.baseURL = "https://localhost:8081";
+// axios.defaults.withCredentials = true;
 
 function App() {
   console.log(`
@@ -57,7 +65,6 @@ function App() {
 
         <Route path="/reginfo" element={<ReferenceInfo/>}></Route> {/* 관리자 기준정보페이지 */}
 
-
         <Route path="/sendEmail" element={<EmailForm/>}></Route> {/* 이메일 */}
         <Route path="/edustatistics" element={<EduStatics/>}></Route>{/* 관리자 안전교육통계*/}
         <Route path="/edustatistics/atten" element={<EduAttenStatics/>}></Route>{/* 관리자 안전교육 참가자통계*/}
@@ -67,6 +74,7 @@ function App() {
         <Route path="/frequentinspection" element={<FrequentIns/>}></Route>{/* 공통 수시점검 현황*/}
         <Route path="/all/special/detail/:speId" element={<FrequentDetails/>}></Route>{/* 공통 수시점검 상세페이지 */}
 
+        
         
         
 
@@ -86,8 +94,16 @@ function App() {
         <Route path="/special/new/:masterdataPart/:masterdataId" element={<UserfrequentReg/>}></Route>{/* 사용자 수시점검등록페이지 */}
 
         <Route path="/userfrequentreg" element={<UserfrequentReg/>}></Route>{/* 수시점검 등록페이지 */}
-
         <Route path="/special/detail/:speId" element={<UserFrequentDetails/>}></Route>{/* 수시점검 상세페이지 */}
+
+        {/* 정기점검 */}
+        <Route path="/regular" element={<RegularMain/>}></Route>{/* 관리자,사용자 정기점검 목록 */}
+
+
+        {/* 사용자 정기점검 */}
+
+        <Route path="/regularreg" element={<UserRegularReg/>}></Route>{/* 정기점검 등록페이지 */}
+        <Route path="/faultymodal" element={<FaultyModal/>}></Route>{/* 수시점검 상세페이지 */}
 
 
         <Route path="/404" element={<Error/>}></Route> {/* 에러 */}
