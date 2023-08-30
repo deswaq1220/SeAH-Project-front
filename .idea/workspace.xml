@@ -5,10 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c20fbe9c-9169-4241-9ec0-dff0f7b0e503" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/page/manager/FrequentDetails/FrequentDetails.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/page/manager/FrequentDetails/FrequentDetailsTable.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/FrequentInseptionTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/FrequentInseptionTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/SafetyFrequentInspection.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/SafetyFrequentInspection.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/UserSelectInspection.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserSelectInspection.js" afterDir="false" />
+
       <change beforePath="$PROJECT_DIR$/src/page/user/UserfrequentReg.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserfrequentReg.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/page/user/injured.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/injured.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/page/user/sourceDanger.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/sourceDanger.js" afterDir="false" />
+
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,19 +49,28 @@
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
+
+    "last_opened_file_path": "C:/SeAH-Project-front/src/page/manager",
+
     "last_opened_file_path": "C:/Users/SeAHAnDIT/Desktop/SeAH_Project",
+
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+
+    "settings.editor.selected.configurable": "preferences.sourceCode.Markdown",
+
     "settings.editor.selected.configurable": "preferences.sourceCode.Shell Script",
+
     "ts.external.directory.path": "C:\\Program Files\\JetBrains\\IntelliJ IDEA 2023.1\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\SeAH-Project-front\src\page\manager" />
       <recent name="C:\Users\user\Documents\GitHub\SeAH-Project-front\src\style" />
     </key>
   </component>
@@ -73,11 +91,21 @@
       <workItem from="1692346299743" duration="1314000" />
       <workItem from="1692504398326" duration="1514000" />
       <workItem from="1692505925577" duration="3075000" />
+      <workItem from="1692519825122" duration="2086000" />
       <workItem from="1692519825122" duration="2085000" />
       <workItem from="1692581271214" duration="3391000" />
       <workItem from="1692662925742" duration="7180000" />
       <workItem from="1692704545169" duration="422000" />
+
+      <workItem from="1692854099272" duration="11861000" />
+      <workItem from="1692927434768" duration="822000" />
+      <workItem from="1692928711164" duration="10215000" />
+      <workItem from="1693187530743" duration="1477000" />
+      <workItem from="1693189032511" duration="21520000" />
+      <workItem from="1693355484712" duration="12516000" />
+
       <workItem from="1692864697525" duration="1535000" />
+
     </task>
     <servers />
   </component>
