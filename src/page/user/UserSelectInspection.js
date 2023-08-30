@@ -26,7 +26,7 @@ function classNames(...classes) {
 
 export default function UserSelectInspection() {
   const { masterdataPart } = useParams(); // url 영역 파라미터
-  const { masterdataFacility } = useParams(); // url 설비 파라미터
+  const { masterdataId } = useParams(); // url 설비코드 파라미터
 
   const [currentDate, setCurrentDate] = useState(new Date()); // 년,월
   const navigate = useNavigate();
@@ -44,7 +44,7 @@ export default function UserSelectInspection() {
     {
       title: "수시점검",
       sub: "영역 및 설비에 따른 수시점검을 할 수 있습니다.",
-      href: `/special/list/${masterdataPart}/${masterdataFacility}`,
+      href: `/special/list/${masterdataPart}/${masterdataId}`,
       icon: ClipboardDocumentCheckIcon,
       iconForeground: "text-purple-700",
       iconBackground: "bg-purple-50",
@@ -82,12 +82,11 @@ export default function UserSelectInspection() {
 
   useEffect(() => {
     // Json값 가져와서 세팅
-    function fetchDataWithAxios(masterdataPart, masterdataFacility) {
+    function fetchDataWithAxios(masterdataPart, masterdataId) {
       axios
         .get(
-          `${process.env.REACT_APP_API_BASE_URL}/special/${masterdataPart}/${masterdataFacility}`
-        ) // 세아
-        //  .get(`http://localhost:8081/special/${masterdataPart}/${masterdataFacility}`)
+          `${process.env.REACT_APP_API_BASE_URL}/special/${masterdataPart}/${masterdataId}`
+        )
         .then((response) => {
           const data = response.data;
           // 가져온 데이터로 상태 변수 업데이트
@@ -95,6 +94,7 @@ export default function UserSelectInspection() {
           setMonthlyComplete(data.monthlyComplete);
           setMonthlyNoComplete(data.monthlyNoComplete);
           console.log(data); // JSON 데이터가 출력됩니다.
+
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
@@ -102,8 +102,8 @@ export default function UserSelectInspection() {
         });
     }
 
-    fetchDataWithAxios(masterdataPart, masterdataFacility);
-  }, [masterdataPart, masterdataFacility]);
+    fetchDataWithAxios(masterdataPart, masterdataId);
+  }, [masterdataPart, masterdataId]);
 
   const frequent = [
     {
@@ -205,9 +205,7 @@ export default function UserSelectInspection() {
         <nav className="flex flex-1 flex-col" aria-label="Sidebar">
           <p className="flex justify-center font-semibold text-lg mb-2">
             <CalendarDaysIcon className="w-6 h-6 mr-1" />
-            {/*------------------------  수정 필요  -------------------------*/}
             {getFormattedDate()} 점검현황
-            {/*------------------------  수정 필요  -------------------------*/}
           </p>
           <p className=" text-lg font-semibold">정기점검</p>
           <ul role="list" className="-mx-2 space-y-1 mb-3">

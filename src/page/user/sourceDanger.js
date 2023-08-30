@@ -10,8 +10,9 @@ function classNames(...classes) {
 }
 
 export default function Dangersource({onFormDataChange}) {
-  const {masterdataPart} = useParams(); // url 영역 파라미터
-  const {masterdataFacility} = useParams(); // url 설비 파라미터
+  const { masterdataPart } = useParams(); // url 영역 파라미터
+  const { masterdataId } = useParams(); // url 설비코드 파라미터
+
   const [specialCauseList, setSpecialCauseList] = useState([]);       // 위험원인List
   const [sourceSelected, setSourceSelected] = useState("");
   const [customSource, setCustomSource] = useState("");
@@ -21,15 +22,21 @@ export default function Dangersource({onFormDataChange}) {
   useEffect(() => {
     function specialCauseFetchDataWithAxios(masterdataPart, masterdataFacility) {
       axios
-        .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${encodeURIComponent(masterdataFacility)}`)  // 세아
-        //  .get(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`)
-        .then((response) => {
-          const speCauseListFromBack = response.data.specialCauseList;
+          .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataId}`)  // 세아
+          .then((response) => {
+            const speCauseListFromBack = response.data.specialCauseList;
 
-          const speCauseData = speCauseListFromBack.map((item) => {
-            return {
-              causeMenu: item.causeMenu, causeNum: item.causeNum,
-            };
+            const speCauseData = speCauseListFromBack.map((item) => {
+              return {
+                causeMenu : item.causeMenu,
+                causeNum: item.causeNum,
+              };
+            });
+            setSpecialCauseList(speCauseData);
+            setSourceSelected(speCauseData[0]);
+          })
+          .catch((error) => {
+            console.error("Error fetching data: ", error);
           });
           setSpecialCauseList(speCauseData);
           setSourceSelected(speCauseData[0]);
@@ -39,8 +46,8 @@ export default function Dangersource({onFormDataChange}) {
         });
     }
 
-    specialCauseFetchDataWithAxios(masterdataPart, masterdataFacility);
-  }, [masterdataPart, masterdataFacility]);
+    specialCauseFetchDataWithAxios(masterdataPart, masterdataId);
+  }, [masterdataPart, masterdataId]);
 
   // 기타(직접입력) 선택 시, customSource 값을 업데이트하고 onFormDataChange를 호출
   const handleCustomSourceChange = (e) => {
@@ -118,16 +125,16 @@ export default function Dangersource({onFormDataChange}) {
               </div>
             </>)}
         </Listbox>
-        {sourceSelected && sourceSelected.causeMenu === "기타(직접입력)" && (<input
-            type="text"
-            value={customSource}
-            name="speCause"
-            onChange={handleCustomSourceChange}
-            className="block w-40 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5 mt-1"
-            placeholder="직접 입력"
-          />)}
-      </div>
-
-
+        {sourceSelected && sourceSelected.causeMenu === "기타(직접입력)" && (
+            <input
+                type="text"
+                value={customSource}
+                name="speCause"
+                onChange={handleCustomSourceChange}
+                className="block w-40 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5 mt-1"
+                placeholder="직접 입력"
+            />
+          )}
+        </div>
     </div>)
 }
