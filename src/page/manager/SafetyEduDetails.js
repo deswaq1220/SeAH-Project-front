@@ -10,7 +10,7 @@ import QRCode from "qrcode.react";
 import { CheckCircleIcon } from "@heroicons/react/20/solid";
 import { format } from "date-fns";
 import { toast } from "react-toastify";
-import fetcher from "../../api/fetcher";
+import instance from "../../api/fetcher";
 import { useCookies } from "react-cookie";
 
 export default function SafetyEduDetails() {
@@ -29,7 +29,7 @@ export default function SafetyEduDetails() {
     const fetchEduDetail = async () => {
       const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
       try {
-        const response = await fetcher.get(
+        const response = await instance.get(
           `/admin/edudetails/${eduId}`, // 세아
           {
             headers: {
@@ -131,7 +131,7 @@ export default function SafetyEduDetails() {
   const handleDelete = async () => {
     const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
     try {
-      const response = await fetcher.delete(`/admin/edudetails/${eduId}`, {
+      const response = await instance.delete(`/admin/edudetails/${eduId}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${authToken}`,

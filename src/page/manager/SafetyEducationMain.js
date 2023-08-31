@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Pagination from "../../components/Pagination";
 import { Link } from "react-router-dom";
-import fetcher from "../../api/fetcher";
+import instance from "../../api/fetcher";
 import { useCookies } from "react-cookie"; 
 
 function SafetyEducationMain() {
@@ -40,7 +40,7 @@ function SafetyEducationMain() {
       try {
         const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
         const currentYear = getYear(currentDate);
-        const response = await fetcher.get(`/admin/eduMain`, {
+        const response = await instance.get(`/admin/eduMain`, {
           params: {
             year: currentYear,
             month: currentMonth,

@@ -3,7 +3,8 @@ import React, { useState,useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import logo from "../../img/logo.png"
-import fetcher from "../../api/fetcher";
+// import fetcher from "../../api/fetcher";
+import instance from "../../api/fetcher";
 import { useCookies } from 'react-cookie'; // useCookies import
 
 // const TK ="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0IiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY5MzAxMzE4OX0.D4CN3pj14vb4LEUo2pAUYF0RP-nNg5YqBmwFxUxBeBWopLq3b5UDL2PYxUgeIUJydcIB0m5-cwl7CU31UzTN4A"
@@ -13,38 +14,79 @@ function ManagerLogin() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const formRef = useRef();
-	const [atCookies, setAtCookie] = useCookies(['at']); // 쿠키 훅 
-	const [rtCookies, setrtCookie] = useCookies(['rt']); // 쿠키 훅 
 
 
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await instance.post(
+  //       `/auth/login`,
+  //       {
+  //         email: email,
+  //         password: password
+  //       },
+  //       {
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           Authorization: `Bearer`,
+  //         },
+  //       }
+  //     );
+
+
+  //     const accessToken = response.data.access_token;
+  //     axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+  //     setAtCookie('at', response.data.accessToken);
+  //     setrtCookie('rt',response.data.refreshToken);
+  //     navigate("/admin/manager");
+  //   } catch (error) {
+  //     console.error("Login error:", error);
+  //   }
+  // };
+
+  //성욱 테스트용
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     try {
-      const response = await fetcher.post(
+      const response = await instance.post(
         `/auth/login`,
         {
           email: email,
           password: password
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            // Authorization: `Bearer ${authToken}`,
-          },
         }
       );
+  
+      // 로그인 성공 후에 실행할 작업
+      const accessToken = response.data.accessToken;
+      const refreshToken = response.data.refreshToken;
+      localStorage.setItem("access_token", accessToken);
+      localStorage.setItem("refresh_token", refreshToken);
 
-
-      const accessToken = response.data.access_token;
-      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-      setAtCookie('at', response.data.accessToken);
-      setrtCookie('rt',response.data.refreshToken);
+      // 로그인 이후에 요청을 보내기 전에 인터셉터 설정
+      // instance.interceptors.request.use(
+      //   (config) => {
+      //     config.headers['Content-Type'] = 'application/json';
+      //     config.headers['Authorization'] = `Bearer ${accessToken}`;
+      //     return config;
+      //   },
+      //   (error) => {
+      //     console.log(error);
+      //     return Promise.reject(error);
+      //   }
+      // );
+  
+      // 필요한 처리 실행
+      // setAtCookie('at', response.data.accessToken);
+      // setrtCookie('rt', response.data.refreshToken);
       navigate("/admin/manager");
     } catch (error) {
       console.error("Login error:", error);
     }
   };
+
+
+
   return (
     <>
     
