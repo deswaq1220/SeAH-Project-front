@@ -31,7 +31,12 @@ export default function FrequentIns() {
 
   // 설비 콜백
   const handleFacilityDataChange = (selected) => {
-    setSpeFacility(selected.masterdataFacility);
+    if(selected.masterdataFacility === "전체"){
+      setSpeFacility(null);
+    } else {
+      setSpeFacility(selected.masterdataFacility);
+    }
+
   };
 
   // 기간 콜백
