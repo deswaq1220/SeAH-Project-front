@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import {format} from "date-fns";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -8,47 +9,17 @@ function classNames(...classes) {
 
 
 export default function FrequentInseptionTable({ searchResults }) {
-  // const [fetchedResults, setFetchedResults] = useState([]);
   const navigate = useNavigate();
-  const [fetchedResults, setFetchedResults] = useState([]);
+  const [thisMonthResults, setThisMonthResults] = useState([]);   // 해당 월 데이터
 
-  // var now = new Data();
-  // const thisYear =  currentDate.getFullYear();    // 현재년도
-  // const thisMonth = thisYear.format("M");
-  // console.log("thisYear 확인: " + thisYear);
-  // console.log("thisMonth 확인: " + thisMonth);
-
-  // useEffect(() => {
-  //   function specialFetchDataWithAxios() {
-  //   // 첫 화면
-  //     axios
-  //       .get(`${process.env.REACT_APP_API_BASE_URL}/frequentinspection`, {
-  //         params: {
-  //           spePart,
-  //           speFacility,
-  //           speStartDate ,
-  //           speEndDate,
-  //           speComplete,
-  //           spePerson,
-  //           speEmpNum,
-  //         },
-  //       })
-  //       .then((response) => {
-  //         const speListFromBack = response.data.searchSpeList.searchSpeDataDTOList;
-  //         setSearchData(speListFromBack);
-  //
-  //       })
-  //
-  //       .catch((error) => {
-  //         console.error("Error fetching data: ", error);
-  //       });
-  //   };
-  //     specialFetchDataWithAxios();
-  // }, []);
-  //
+  // 현재월 구하기
+  var today = new Date();
+  var year = today.getFullYear();
+  var month = ('0' + (today.getMonth() + 1)).slice(-2);
+  var dateString = year + '-' + month;
+  console.log(dateString);
 
 
-  //
   useEffect(() => {
     function specialFetchDataWithAxios() {
       // 첫 화면
@@ -56,27 +27,13 @@ export default function FrequentInseptionTable({ searchResults }) {
         .get(`${process.env.REACT_APP_API_BASE_URL}/frequentinspection`)   // 세아
         .then((response) => {
           const speListFromBack = response.data.searchSpeList.searchSpeDataDTOList;
-          const speListData = speListFromBack.map((item) => {
-            return {
-              speId:item.speId,
-              speDate:item.speDate,
-              spePerson:item.spePerson,
-              speEmpNum:item.speEmpNum,
-              speEmail:item.speEmail,
-              spePart:item.spePart,
-              speFacility:item.speFacility,
-              speContent:item.speContent,
-              speActContent:item.speActContent,
-              speActEmail:item.speActEmail,
-              speActDate:item.speActDate,
-              speActPerson:item.speActPerson,
-              speComplete:item.speComplete,
-            };
-          });
-          console.log("확인ㅇㅁ: "+speListFromBack);
-          setFetchedResults(speListData);
-          // setSelectedDanger(speDangerData[0]); // 리스트의 첫번째값으로 세팅
+
+          // 해당 월 데이터 세팅
+          const thisMonthData = speListFromBack.filter((item) => item.speDate.substring(0, 7) === dateString);
+          setThisMonthResults(thisMonthData);
         })
+
+
         .catch((error) => {
           console.error("Error fetching data: ", error);
         });
@@ -86,8 +43,8 @@ export default function FrequentInseptionTable({ searchResults }) {
   }, []);
 
 
-  // 검색 결과 또는 전체 데이터를 표시할 배열
-  const displayResults = searchResults.length > 0 ? searchResults : fetchedResults;
+  // 검색 결과 또는 해당월 데이터를 표시할 배열
+  const displayResults = searchResults.length > 0 ? searchResults : thisMonthResults;
 
 
 
