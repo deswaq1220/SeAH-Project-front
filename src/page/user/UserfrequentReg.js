@@ -39,7 +39,7 @@ function UserfrequentReg() {
  const [speEmpNum, setSpeEmpNum] = useState("");
  const [spePerson, setSpePerson] = useState("");
  const [speEmail, setSpeEmail] = useState("");
- const [speFacility, setSpeFacility] = useState("");
+  const [speFacility, setSpeFacility] = useState("");
  const [speDanger, setSpeDanger] = useState("");
  const [speInjure, setSpeInjure] = useState("");
  const [speCause, setSpeCause] = useState("");
@@ -51,6 +51,7 @@ function UserfrequentReg() {
  const [speActEmail, setSpeActEmail] = useState("");
  const [speComplete, setSpeComplete] = useState("");
  const [files, setFiles] = useState(null);
+ const emailTitle = `${spePerson}님의 수시점검 요청메일입니다`;
 
 
  // Inspector 콜백 함수 : 점검자(이름, 이메일, 사원번호)
@@ -60,17 +61,17 @@ function UserfrequentReg() {
   setSpeEmail(inspectorForm.inspectoremail);
  };
 
- // Facilityname 콜백 : 완료여부
- const handleFacilityDatae = (selected) => {
-  setSpeFacility(selected);
- };
+  // Facilityname 콜백 : 완료여부
+  const handleFacilityDataChange  = (selected) => {
+    setSpeFacility(selected);
+  };
 
  // Danger 콜백함수 : 위험분류
  const handleDangerDataChange = (selected) => {
   setSpeDanger(selected.dangerMenu);
  };
 
- // Injured 콜백함수 : 부상부위
+  // Injured 콜백함수 : 부상부위
  const handleInjuredDataChange = (speInjuredData) => {
   setSpeInjure(speInjuredData.injuredMenu);
  };
@@ -113,6 +114,7 @@ function UserfrequentReg() {
 
  const navigate = useNavigate();
 
+console.log("레지확인: "+ speFacility);
 
  const handleFormSubmit = () => {
   const formData = new FormData();        // 폼데이터 객체 생성
@@ -127,6 +129,7 @@ function UserfrequentReg() {
   formData.append('speEmpNum', speEmpNum);
   formData.append('spePerson', spePerson);
   formData.append('speEmail', speEmail);
+   formData.append('speFacility', speFacility);
   formData.append('speDanger', speDanger);
   formData.append('speInjure', speInjure);
   formData.append('speCause', speCause);
@@ -141,34 +144,125 @@ function UserfrequentReg() {
   console.log(formData); // 요청 데이터 콘솔에 출력
 
   // 수시점검 등록 요청
-  axios
-      .post(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataId}`, formData, {
+   axios
+     .post(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataId}`, formData, {
        headers: {
-        "Content-Type": "multipart/form-data",
+         "Content-Type": "multipart/form-data",
        },
-      })
-      .then((response) => {
+     })
+     .then((response) => {
        console.log(response);
 
-       if(formData !== null) {
-        // 등록이 완료되었다는 알림 띄우기
-        toast.success("등록이 완료되었습니다.", {
-         position: "top-center",
-         autoClose: 2000, // 알림이 3초 후에 자동으로 사라짐
-         hideProgressBar: true,
-        });
+       const speDate = new Date(response.data.speDate);
+       const speDeadline = new Date(response.data.speDeadline);
 
-        // 저장성공시 해당설비의 리스트 페이지
-        navigate(`/special/list/${masterdataPart}/${masterdataId}`);
+       // 원하는 날짜와 시간 형식으로 포맷팅
+       const formattedSpeDate = `${speDate.toLocaleDateString()} ${speDate.toLocaleTimeString()}`;
+       const formattedSpeDeadline = `${speDeadline.toLocaleDateString()} ${speDeadline.toLocaleTimeString()}`;
+
+       if (speActPerson && speActEmail) {
+         const inspectionData = `
+          <table style="width: 100%; border-collapse: collapse; border: 1px solid #ccc;">
+          <tr>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">항목</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">내용</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검일시</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${formattedSpeDate}</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검자</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.spePerson}</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검영역</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.spePart}</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검설비</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speFacility}</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">위험분류</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speDanger}</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">위험원인</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speTrap}</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">부상부위</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speCause}</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">위험성평가</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speRiskAssess}</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검내용</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"> ${response.data.speContent}</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">개선대책</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speActContent}</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">담당자</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speActPerson}</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">요청기한</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${formattedSpeDeadline}</td>
+          </tr>
+          </table>
+            <p style="font-size:16px;">링크 : <a href="http://localhost:3000/special/detail/${response.data.speId}">상세보기</a></p>
+    `;
+
+         const emailData = {
+           recipients: speActEmail.split(", "), // 이메일 주소를 수신자로 설정
+           // subject: emailTitle, // 이메일 제목
+           content: inspectionData, // 이메일 내용 (점검 내용 등)
+           // 필요한 다른 속성도 여기에 추가 가능
+         };
+
+         axios
+           .post(
+             `${process.env.REACT_APP_API_BASE_URL}/api/send-email`,
+             emailData
+           )
+           .then((response) => {
+             console.log("이메일 전송 완료:", response);
+             // ... (나머지 처리 로직)
+           })
+           .catch((error) => {
+             console.error("이메일 전송 오류: ", error);
+             // ... (에러 처리 로직)
+           });
+       } else {
+         console.log("이메일 정보가 없습니다. 전송되지 않았습니다.");
+         // ... (이메일 정보가 없을 때 처리 로직)
        }
 
-      })
-      .catch((error) => {
+       if (formData !== null) {
+         // 등록이 완료되었다는 알림 띄우기
+         toast.success("등록이 완료되었습니다.", {
+           position: "top-center",
+           autoClose: 2000, // 알림이 3초 후에 자동으로 사라짐
+           hideProgressBar: true,
+         });
+
+         // 저장성공시 해당설비의 리스트 페이지
+         // navigate(`/special/list/${masterdataPart}/${masterdataId}`);
+       }
+
+     })
+     .catch((error) => {
        // console.log(requestData);
        console.log(formData);
        console.error(error);
        alert("수시점검 등록에 실패했습니다. 다시 시도해주세요.");
-      });
+     });
 
  };
 
@@ -179,7 +273,7 @@ function UserfrequentReg() {
       <p>수시점검 내용등록</p>
       <Inspector onFormDataChange={handleInspectorDataChange} /> {/* 점검자 */}
       <Inspectionarea /> {/* 점검영역 */}
-      <Facilityname onFormDataChange={handleDangerDataChange} /> {/* 설비명 */}
+      <Facilityname onChange={handleFacilityDataChange } /> {/* 설비명 */}
       <Danger onFormDataChange={handleDangerDataChange} /> {/* 위험분류 */}
       <Injured onFormDataChange={handleInjuredDataChange} /> {/* 부상부위 */}
       <Dangersource onFormDataChange={handleCauseDataChange} /> {/* 위험원인 */}
