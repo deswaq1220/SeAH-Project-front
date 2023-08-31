@@ -145,8 +145,9 @@ function SafetyInspectionStatisticsMonthImg() {
     const [causeCount, setCauseCount] = useState([]);
 
     //정기점검
-    const [regularCount, setRegularCount] = useState([]); //정기점검횟수
+    const [regularCount, setRegularCount] = useState([]); //월간 총 정기점검횟수
     const [regularNameList, setRegularNameList] = useState([]);
+    const [regularCountByPart, setRegularCountByPart] = useState([]); //월간 영역별 정기점검횟수
 
 
 
@@ -219,6 +220,15 @@ function SafetyInspectionStatisticsMonthImg() {
             setRegularCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
           });
 
+      //(radarChart) 영역별 점검영역 값 **
+/*      await axios
+          .get(`${process.env.REACT_APP_API_BASE_URL}/regular/statistics/partandmonth`, {
+            params: {yearmonth: selectedYear},
+          })
+          .then((response) => {
+            setRegularCountByPart(response.data);
+          }); */
+
       //(pieChart) 위험성결과 분석
       //드롭다운 미선택 시,  전체 위험성 결과 출력
       await axios
@@ -244,6 +254,8 @@ function SafetyInspectionStatisticsMonthImg() {
         setRegularNameList(optionsArray);
         setSelected(optionsArray[0])
       console.log("위험성결과드롭다운 값", optionsArray);
+
+
 
 
     } catch (error) {
@@ -383,7 +395,7 @@ function SafetyInspectionStatisticsMonthImg() {
                   {/*위쪽 영역 2번 - 영역별*/}
                   <div>
                     <h3 className="text-xl font-semibold leading-2 text-gray-900">2. 점검영역 분석</h3>
-                    <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-3">
+                    {/*<dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-3">
                       {partCount
                           .sort((a, b) => b[1] - a[1]) // 배열을 내림차순으로 정렬
                           .map((item, index) => (
@@ -392,7 +404,47 @@ function SafetyInspectionStatisticsMonthImg() {
                                 <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">{item[1]}건</dd>
                               </div>
                           ))}
-                    </dl>
+                    </dl>*/}
+                    <div style={{ height: '360px' }}>
+                      <ResponsiveRadar
+                          data={regularCountByPart}
+                          keys={['정기점검']}
+                          indexBy="sort"
+                          margin={{ top: 43, right: 60, bottom: 40, left: 60 }}
+                          borderWidth={0.5}
+                          borderColor={{ from: 'color' }}
+                          gridLabelOffset={36}
+                          dotSize={10}
+                          dotColor={'#f4f4f6'}
+                          dotBorderWidth={2}
+                          enableDotLabel={true}
+                          dotLabelYOffset={-8}
+                          colors={'rgba(11,107,8,0.54)'}
+                          blendMode="multiply"
+                          motionConfig="wobbly"
+                          legends={[
+                            {
+                              anchor: 'top-left',
+                              direction: 'column',
+                              translateX: -50,
+                              translateY: -40,
+                              itemWidth: 80,
+                              itemHeight: 20,
+                              itemTextColor: '#999',
+                              symbolSize: 12,
+                              symbolShape: 'circle',
+                              effects: [
+                                {
+                                  on: 'hover',
+                                  style: {
+                                    itemTextColor: '#000'
+                                  }
+                                }
+                              ]
+                            }
+                          ]}
+                      />
+                    </div>
                   </div>
                   {/*위쪽 영역 3번 - 위험성평가분석*/}
                   <div>
