@@ -5,7 +5,6 @@ import axios from "axios";
 const tokenRefresh = async () => {
   try {
     const refreshToken = localStorage.getItem("refresh_token");
-    console.log("토큰갱신 리프레시 :" + refreshToken);
     const response = await fetch(
       `${process.env.REACT_APP_API_BASE_URL}/auth/refresh`,
       {

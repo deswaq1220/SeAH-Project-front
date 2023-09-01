@@ -46,8 +46,9 @@ function Mainmanager() {
     // More products...
   ];
 
-  const [atCookies, setAtCookie] = useCookies(["at"]); // 엑세스 토큰 쿠키
-  const [rtCookies, setrtCookie] = useCookies(["rt"]); // 리프레시 토큰 쿠키
+  // const [atCookies, setAtCookie] = useCookies(["at"]); // 엑세스 토큰 쿠키
+  // const [rtCookies, setrtCookie] = useCookies(["rt"]); // 리프레시 토큰 쿠키
+
   const [currentDate, setCurrentDate] = useState(new Date()); // 년,월
   const navigate = useNavigate();
 
@@ -55,8 +56,9 @@ function Mainmanager() {
     e.preventDefault();
 
     try {
-      const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
+      // const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
 
+      const authToken = localStorage.getItem("access_token");
       if (authToken !== "") {
         const requestConfig = {
           headers: {

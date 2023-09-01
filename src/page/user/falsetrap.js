@@ -19,7 +19,8 @@ export default function Falsetrap({ onFormDataChange }) {
   // 실수함정 get
   useEffect(() => {
     async function fetchData() {
-      const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
+      // const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
+      const authToken = localStorage.getItem("access_token"); // 사용자의 인증 토큰을 가져옵니다.
       try {
         const response = await fetcher.get(
           `/special/new/${masterdataPart}/${masterdataId}`,

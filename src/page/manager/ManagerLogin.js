@@ -81,6 +81,7 @@ function ManagerLogin() {
       // setrtCookie('rt', response.data.refreshToken);
       navigate("/admin/manager");
     } catch (error) {
+
       console.error("Login error:", error);
     }
   };
