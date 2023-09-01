@@ -15,7 +15,7 @@ export default function InspectionArea() {
     async function fetchOptions() {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/regularpart`
+          `${process.env.REACT_APP_API_BASE_URL}/user/regularpart`
         );
 
         // 문자열 배열을 객체로 변환하여 새로운 배열 생성
@@ -25,10 +25,8 @@ export default function InspectionArea() {
             name: name,
           })
         );
-
         setRegularPartList(optionsArray);
         setSelectedArea(optionsArray[0]);
-        console.log(response.data);
       } catch (error) {
         console.error("서버 요청 오류:", error);
       }

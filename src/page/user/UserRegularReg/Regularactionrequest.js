@@ -22,7 +22,6 @@ export default function Regularactionrequest({ onFormDataChange }) {
 
         const emailListFromBack = response.data["emailList"];
         setEmailDataList(emailListFromBack);
-        console.log(emailDataList);
       } catch (error) {
         console.error("데이터 가져오기 오류: ", error);
       }
@@ -103,8 +102,8 @@ export default function Regularactionrequest({ onFormDataChange }) {
             >
               {({ open }) => (
                 <>
-                  <div className="relative mt-2 ml-4">
-                    <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-32 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6 ml-2">
+                  <div className="relative mt-2">
+                    <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-16 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
                       <span className="block truncate">
                         {instance.selectedEmail
                           ? instance.selectedEmail.emailName
@@ -188,7 +187,7 @@ export default function Regularactionrequest({ onFormDataChange }) {
                 id="Inspectionarea"
                 placeholder="E-Mail"
                 autoComplete=""
-                className="block w-full rounded-md border-0  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5 ml-2"
+                className="block w-full rounded-md border-0  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5 "
                 value={
                   instance.selectedEmail ? instance.selectedEmail.emailAdd : ""
                 }

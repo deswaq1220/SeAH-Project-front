@@ -19,7 +19,7 @@ export default function FacilityReg({ fetchData, handleNewData }) {
     async function fetchOptions() {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/master/partdropdown`
+          `${process.env.REACT_APP_API_BASE_URL}/admin/master/partdropdown`
         );
         
         // 문자열 배열을 객체로 변환하여 새로운 배열 생성
@@ -48,7 +48,7 @@ export default function FacilityReg({ fetchData, handleNewData }) {
 
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_BASE_URL}/master`,
+        `${process.env.REACT_APP_API_BASE_URL}/admin/master`,
         requestData
       ); //세아
       // const response = await axios.post("http://localhost:8081/master", requestData); // POST 요청 보내기

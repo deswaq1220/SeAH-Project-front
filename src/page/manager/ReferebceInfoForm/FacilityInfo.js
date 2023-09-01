@@ -34,7 +34,7 @@ export default function FacilityInfo() {
     async function fetchOptions() {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/master/partdropdown`
+          `${process.env.REACT_APP_API_BASE_URL}/admin/master/partdropdown`
         );
 
         // 문자열 배열을 객체로 변환하여 새로운 배열 생성
@@ -59,7 +59,7 @@ export default function FacilityInfo() {
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_BASE_URL}/master/email`,
+        `${process.env.REACT_APP_API_BASE_URL}/admin/master/email`,
         {
           emailPart: selectedArea.name,
           emailName: name, // 상태로 관리된 이름 값

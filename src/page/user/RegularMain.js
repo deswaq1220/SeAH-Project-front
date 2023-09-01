@@ -34,7 +34,7 @@ function RegularMain() {
       try {
         const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
         const currentYear = getYear(currentDate);
-        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/regularlist`, {   // 세아
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/user/regularlist`, {   // 세아
         // const response = await axios.get(`http://localhost:8081/regularlist, {
           params: {
             year: currentYear,
@@ -192,7 +192,7 @@ function RegularMain() {
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           <div className="flex items-center">
                             <Link
-                              to={`/regular/detail/${regular.regularId}`}
+                              to={`/user/regular/detail/${regular.regularId}`}
                               className="font-medium text-seahColor hover:text-seahDeep "
                             >
                               {regular.regularInsName}
@@ -202,7 +202,7 @@ function RegularMain() {
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           <div className="flex items-center">
                             <Link
-                              to={`/regular/detail/${regular.regularId}`}
+                              to={`/user/regular/detail/${regular.regularId}`}
                               className="font-medium text-seahColor hover:text-seahDeep "
                             >
                               {regular.regularPart}

@@ -1,11 +1,12 @@
 import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/24/outline";
-import ActionRquest from "../actionrequest";
+import Regularactionrequest from "./Regularactionrequest";
 import { FilePond, registerPlugin } from "react-filepond";
 import "filepond/dist/filepond.min.css"; // 스타일링을 위한 CSS
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+import axios from "axios";
 
 // 추가 플러그인을 라이브러리에 등록
 registerPlugin(FilePondPluginImagePreview);
@@ -13,14 +14,30 @@ registerPlugin(FilePondPluginImagePreview);
 export default function FaultyModal({ person, closeModal }) {
   const [open, setOpen] = useState(true);
   const cancelButtonRef = useRef(null);
-  const [speActPerson, setSpeActPerson] = useState("");
-  const [speActEmail, setSpeActEmail] = useState("");
+  const [regularActPerson, setRegularActPerson] = useState("");
+  const [regularActEmail, setRegularActEmail] = useState("");
+  const [regularActContent, setRegularActContent] = useState("");
  const [files, setFiles] = useState(null);
   // ActionRquest 콜백 : 조치자(이름, 이메일)
   const handleActionRequestDetailsDataChange = (data) => {
-    setSpeActPerson(data.speActPerson);
-    setSpeActEmail(data.speActEmail);
+    setRegularActPerson(data.regularActPerson);
+    setRegularActEmail(data.regularActEmail);
   };
+
+  const handleSaveClick = async()=> {
+    try{
+      const dataSave = {
+        regularActEmail,
+        regularActPerson,
+        regularActContent
+      };
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/regular/new`, dataSave);
+      //모달창 닫기
+      setOpen(false);
+    } catch(error){
+      console.error("개선대책 조치 등록 오류",  error);
+    }
+  }
 
   
 
@@ -73,18 +90,18 @@ export default function FaultyModal({ person, closeModal }) {
                         defaultValue={""}
                       />
                     </div>
-                    <div className="mt-2">
+                    <div className="mt-10">
                       <Dialog.Title
                         as="h3"
                         className="text-base font-semibold leading-6 text-gray-900"
                       >
                         점검자
                       </Dialog.Title>
-                      <ActionRquest
+                      <Regularactionrequest
                         onFormDataChange={handleActionRequestDetailsDataChange}
                       />{" "}
                     </div>
-                    <div className="mt-2">
+                    <div className="mt-10">
                       <Dialog.Title
                         as="h3"
                         className="text-base font-semibold leading-6 text-gray-900"
@@ -129,15 +146,17 @@ export default function FaultyModal({ person, closeModal }) {
                             }
                           },
                         }}
+                        labelIdle='클릭하거나 <span class="filepond--label-action">파일을 여기에 드롭하여 선택하세요</span>'
                       />
                     </div>
                   </div>
                 </div>
-                <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
+                <div className="mt-10 mb-16 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor sm:col-start-2"
-                    onClick={() => setOpen(false)}
+                    // onClick={() => setOpen(false)}
+                    onClick={handleSaveClick} 
                   >
                     저장
                   </button>

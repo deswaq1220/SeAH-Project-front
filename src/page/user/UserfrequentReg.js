@@ -342,6 +342,7 @@ function UserfrequentReg() {
             }
             }
            }}
+           labelIdle='클릭하거나 <span class="filepond--label-action">파일을 여기에 드롭하여 선택하세요</span>'
 
       />
 
