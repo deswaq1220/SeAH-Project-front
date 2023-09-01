@@ -88,13 +88,52 @@ function SafetyInspectionStatisticsMonthImg() {
     }
   };
 
+  // 이벤트: 정기점검 분석 결과 엑셀로 내보내기
+  const regularHandleExport = () => {
+    const data = [
+      {
+        sheetName: "정기점검 총 건수",
+        data: [{ "이번달 정기점검 총 건수": regularCount }],
+      },
+      {
+        sheetName: "점검영역 분석",
+        data: regularCntByPartForExcel.map((item) => ({
+          점검영역: item[0],
+          건수: item[1],
+        })),
+      },
+      {
+        sheetName: "위험성평가 분석",
+        data: checkCount.map((item) => ({ 위험분류: item[0], 건수: item[1] })),
+      },
+    ];
 
-  // 이벤트2: 월간 분석 결과 엑셀로 내보내기
+    const workbook = XLSX.utils.book_new();
+
+    data.forEach(({ sheetName, data }) => {
+      const worksheet = XLSX.utils.json_to_sheet(data);
+      XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
+    });
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+
+    const excelFile = new Blob([excelBuffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+
+    saveAs(excelFile, "정기점검_월간분석.xlsx");
+  };
+
+
+  // 이벤트2: 수시점검 분석 결과 엑셀로 내보내기
   const handleExport = () => {
     const data = [
       {
-        sheetName: "이번달 수시점검 건수",
-        data: [{ "수시점검 건수": spcCount }],
+        sheetName: "수시점검 총 건수",
+        data: [{ "이번달 정기점검 총 건수": spcCount }],
       },
       {
         sheetName: "점검영역 분석",
@@ -132,9 +171,6 @@ function SafetyInspectionStatisticsMonthImg() {
     saveAs(excelFile, "수시점검_월간분석.xlsx");
   };
 
-  // 이벤트3: pieChart 생성관련
-  const [checkCount, setCheckCount] = useState([]); //백엔드 값
-
 
   //그 외 변수
     //수시점검
@@ -148,7 +184,8 @@ function SafetyInspectionStatisticsMonthImg() {
     const [regularCount, setRegularCount] = useState([]); //월간 총 정기점검횟수
     const [regularNameList, setRegularNameList] = useState([]);
     const [regularCountByPart, setRegularCountByPart] = useState([]); //월간 영역별 정기점검횟수
-
+    const [regularCntByPartForExcel, setRegularCntByPartForExcel] = useState([]); //월간 영역별 정기점검횟수 엑셀용
+    const [checkCount, setCheckCount] = useState([]); //백엔드 값
 
 
   useEffect(() => {
@@ -220,14 +257,23 @@ function SafetyInspectionStatisticsMonthImg() {
             setRegularCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
           });
 
-      //(radarChart) 영역별 점검영역 값 **
-/*      await axios
+      //(엑셀) 영역별 점검건수
+      await axios
+          .get(`${process.env.REACT_APP_API_BASE_URL}/regular/statistics/partandmonthforexcel`, {
+            params: {yearmonth: selectedYear},
+          }) //세아
+          .then((response) => {
+            setRegularCntByPartForExcel(response.data);
+          });
+
+      //(radarChart) 영역별 점검건수
+      await axios
           .get(`${process.env.REACT_APP_API_BASE_URL}/regular/statistics/partandmonth`, {
             params: {yearmonth: selectedYear},
           })
           .then((response) => {
             setRegularCountByPart(response.data);
-          }); */
+          });
 
       //(pieChart) 위험성결과 분석
       //드롭다운 미선택 시,  전체 위험성 결과 출력
@@ -375,7 +421,7 @@ function SafetyInspectionStatisticsMonthImg() {
                   <span>정기점검</span>
                   <button
                       className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-                      onClick={handleExport}
+                      onClick={regularHandleExport}
                   >
                     정기점검 엑셀 저장
                   </button>
@@ -394,7 +440,7 @@ function SafetyInspectionStatisticsMonthImg() {
                   </div>
                   {/*위쪽 영역 2번 - 영역별*/}
                   <div>
-                    <h3 className="text-xl font-semibold leading-2 text-gray-900">2. 점검영역 분석</h3>
+                    <h3 className="text-xl font-semibold leading-2 text-gray-900">2. 점검영역 분석(건)</h3>
                     {/*<dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-3">
                       {partCount
                           .sort((a, b) => b[1] - a[1]) // 배열을 내림차순으로 정렬
@@ -448,7 +494,7 @@ function SafetyInspectionStatisticsMonthImg() {
                   </div>
                   {/*위쪽 영역 3번 - 위험성평가분석*/}
                   <div>
-                    <h3 className="text-xl font-semibold leading-2 text-gray-900">3. 위험성평가 분석</h3>
+                    <h3 className="text-xl font-semibold leading-2 text-gray-900">3. 위험성평가 분석(건)</h3>
                     <div className="flex flex-col ml-2 z-10">
                      <Listbox value={selected} onChange={(newValue) => handleSelectedChange(newValue)}>
                         {({ open }) => (
@@ -526,7 +572,7 @@ function SafetyInspectionStatisticsMonthImg() {
 
                       {checkCount.length === 0 ? (
                           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                            <p>데이터가 없습니다.</p>
+                            <p>점검 내용이 없습니다.</p>
                           </div>
                       ) : (
                       <ResponsivePie
@@ -632,7 +678,7 @@ function SafetyInspectionStatisticsMonthImg() {
                   </div>
                   {/*아래쪽 영역 2번 - 영역별(완료)*/}
                   <div>
-                    <h3 className="text-xl font-semibold leading-2 text-gray-900">2. 점검영역 분석</h3>
+                    <h3 className="text-xl font-semibold leading-2 text-gray-900">2. 점검영역 분석(건)</h3>
 
                     {/*영역별 건수 숫자로 보여주는 메소드*/}
                     {/*                          <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-3">
