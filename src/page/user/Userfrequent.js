@@ -21,7 +21,7 @@ export default function Userfrequent() {
   useEffect(() => {
     function fetchDataWithAxios(masterdataPart, masterdataId) {
       axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/special/list/${masterdataPart}/${masterdataId}`) //세아
+          .get(`${process.env.REACT_APP_API_BASE_URL}/user/special/list/${masterdataPart}/${masterdataId}`) //세아
           .then((response) => {
             const dataFromBackend = response.data.listOfFac;
             const facilityFromBack = response.data.facilityName;

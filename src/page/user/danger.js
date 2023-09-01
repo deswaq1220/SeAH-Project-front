@@ -18,7 +18,7 @@ export default function Danger({ onFormDataChange }) {
   useEffect(() => {
     function specialDangerFetchDataWithAxios(masterdataPart, masterdataId) {
       axios
-        .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataId}`)   // 세아
+        .get(`${process.env.REACT_APP_API_BASE_URL}/user/special/new/${masterdataPart}/${masterdataId}`)   // 세아
         .then((response) => {
           const speDangerListFromBack = response.data.specialDangerList;
           const speDangerData = speDangerListFromBack.map((item) => {

@@ -8,27 +8,31 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Regularactionrequest({ onFormDataChange }) {
+export default function ActionRquest({ onFormDataChange }) {
   const { masterdataPart, masterdataId } = useParams();
-  const [emailDataList, setEmailDataList] = useState([]);
-  const [instances, setInstances] = useState([{ selectedEmail: null }]);
+  const [emailDataList, setEmailDataList] = useState([]); // 영역별 이메일 리스트
+  const [emailYDataList, setEmailYDataList] = useState([]); // 이메일 고정수신자 리스트
+  const [instances, setInstances] = useState([{ selectedEmail: null }]); // 선택한 이메일 리스트
 
   useEffect(() => {
     async function emailFetchDataWithAxios() {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/user/regularemail`
+          `${process.env.REACT_APP_API_BASE_URL}/user/special/new/${masterdataPart}/${masterdataId}`
         );
-
+        // 영역별 이메일리스트(선택)
         const emailListFromBack = response.data["emailList"];
         setEmailDataList(emailListFromBack);
-        console.log(emailDataList);
+
+        // 이메일 고정수신자 리스트
+        const emailYListFromBack = response.data["staticEmailList"];
+        setEmailYDataList(emailYListFromBack);
       } catch (error) {
         console.error("데이터 가져오기 오류: ", error);
       }
     }
-    emailFetchDataWithAxios();
-  }, [masterdataPart, masterdataId]);
+    emailFetchDataWithAxios(masterdataPart, masterdataId);
+  }, []);
 
   // -----------------------------------
   const handleActionChange = (instanceIndex, selectedEmail) => {
@@ -52,10 +56,7 @@ export default function Regularactionrequest({ onFormDataChange }) {
       speActPerson: selectedEmailNames,
       speActEmail: selectedEmailAddresses,
     });
-
   };
-
-
 
   // 이메일 정보 추가 : +버튼
   const handleAddInstance = () => {
@@ -90,7 +91,9 @@ export default function Regularactionrequest({ onFormDataChange }) {
       id="ActionRequest"
       className="grid sm:flex items-baseline justify-start"
     >
-     
+      {/* <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 my-4 ml-4 ">
+        조치요청
+      </span> */}
       <div className="">
         {/* 조치요청 */}
         {instances.map((instance, index) => (
@@ -181,14 +184,14 @@ export default function Regularactionrequest({ onFormDataChange }) {
               전송
             </button> */}
 
-            <div className="mt-2 ml-1 flex items-center">
+            <div className="mt-2 ml-2 flex">
               <input
                 type="text"
                 name="Inspectionarea"
                 id="Inspectionarea"
                 placeholder="E-Mail"
                 autoComplete=""
-                className="block w-full rounded-md border-0  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5 ml-2"
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5 ml-1"
                 value={
                   instance.selectedEmail ? instance.selectedEmail.emailAdd : ""
                 }

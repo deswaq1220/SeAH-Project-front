@@ -3,8 +3,7 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import axios from "axios";
 import {useParams} from "react-router-dom";
-import fetcher from "../../api/fetcher";
-import { useCookies } from "react-cookie";
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -12,23 +11,18 @@ function classNames(...classes) {
 
 export default function Dangersource({onFormDataChange}) {
   const { masterdataPart } = useParams(); // url 영역 파라미터
-  const { masterdataFacility } = useParams(); // url 설비 파라미터
+  const { masterdataId } = useParams(); // url 설비 파라미터
   const [specialCauseList, setSpecialCauseList] = useState([]);       // 위험원인List
   const [sourceSelected, setSourceSelected] = useState("");
   const [customSource, setCustomSource] = useState("");
-  const [atCookies, setAtCookie] = useCookies(["at"]); // 쿠키 훅
+
 
   // 위험원인 get
   useEffect(() => {
     async function fetchData() {
-      const authToken = atCookies["at"]; // 사용자의 인증 토큰을 가져옵니다.
+
       try {
-        const response = await fetcher.get(`/special/new/${masterdataPart}/${masterdataFacility}`,{
-          headers: {
-            "Content-Type": "application/json",
-             Authorization: `Bearer ${authToken}`,
-          },
-        });
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/user/special/new/${masterdataPart}/${masterdataId}`);
   
         const speCauseListFromBack = response.data.specialCauseList;
         const speCauseData = speCauseListFromBack.map((item) => ({
@@ -49,7 +43,7 @@ export default function Dangersource({onFormDataChange}) {
     }
   
     fetchData();
-  }, [masterdataPart, masterdataFacility]);
+  }, [masterdataPart, masterdataId]);
 
   // 기타(직접입력) 선택 시, customSource 값을 업데이트하고 onFormDataChange를 호출
   const handleCustomSourceChange = (e) => {

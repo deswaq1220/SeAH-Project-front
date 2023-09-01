@@ -227,7 +227,7 @@ export default function UserRegularTable() {
         });
 
       // 저장성공시 리스트 페이지
-      navigate(`//user/regularlist`);
+      navigate(`/regularlist`);
      }
 
     })

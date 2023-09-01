@@ -22,7 +22,7 @@ export default function EmailTable() {
   async function fetchData() {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}/master/viewemail`
+        `${process.env.REACT_APP_API_BASE_URL}/admin/master/viewemail`
       );
       console.log("API Response:", response.data);
       setPeople(response.data);
@@ -34,7 +34,7 @@ export default function EmailTable() {
   async function updateEmail(emailId) {
     try {
       await axios.put(
-        `${process.env.REACT_APP_API_BASE_URL}/master/email/update/${emailId}`,
+        `${process.env.REACT_APP_API_BASE_URL}/admin/master/email/update/${emailId}`,
         editedValues
       );
       console.log("이메일이 수정되었습니다");

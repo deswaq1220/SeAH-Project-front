@@ -11,7 +11,6 @@ import { CheckCircleIcon } from "@heroicons/react/20/solid";
 import { format } from 'date-fns';
 import { toast } from "react-toastify";
 
-const TK ="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1IiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY5MzAyNjY1OX0.VVZoLMp3oVPQH-EjiYs_Rcr-ZiaA9WsT5YLf9QlaKnjdbhb1exwRodMJASj7g0jd_8R3Bad9YIvUi4SBe1m1-g"
 
 export default function SafetyEduDetails() {
   const { eduId } = useParams(); // useParams 훅을 사용하여 URL 파라미터에서 eduId 가져오기
@@ -54,15 +53,8 @@ export default function SafetyEduDetails() {
     const fetchEduDetail = async () => {
       try {
         const response = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/edudetails/${eduId}`,        // 세아
+            `${process.env.REACT_APP_API_BASE_URL}/admin/edudetails/${eduId}`,        // 세아
             //  `http://localhost:8081/edudetails/${eduId}`
-            {
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization' : `Bearer ${TK}`,
-            },
-            }
-
 
         );
         // console.log(response.data);
@@ -169,7 +161,7 @@ export default function SafetyEduDetails() {
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-          `${process.env.REACT_APP_API_BASE_URL}/edudetails/${eduId}`
+          `${process.env.REACT_APP_API_BASE_URL}/admin/edudetails/${eduId}`
       );
 
       if (response.status === 200) {

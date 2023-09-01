@@ -12,7 +12,7 @@ export default function Facilityname(onFormDataChange) {
  useEffect(() => {
   function specialDangerFetchDataWithAxios(masterdataPart, masterdataId) {
    axios
-       .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataId}`)   // 세아
+       .get(`${process.env.REACT_APP_API_BASE_URL}/user/special/new/${masterdataPart}/${masterdataId}`)   // 세아
        .then((response) => {
         const facilityFromBack = response.data.facilityName;
         setMasterdataFacility(facilityFromBack); // 설비코드에 따른 설비명

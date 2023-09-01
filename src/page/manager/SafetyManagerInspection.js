@@ -36,7 +36,7 @@ export default function SafetyManagerInspection() {
     {
       title: "정기점검",
       sub: "안전점검 영역에 대한 정기점검을 할 수 있습니다.",
-      href: "#",
+      href: "/regular",
       icon: ClipboardDocumentListIcon,
       iconForeground: "text-teal-700",
       iconBackground: "bg-teal-50",
@@ -85,7 +85,7 @@ export default function SafetyManagerInspection() {
     function fetchDataWithAxios(masterdataPart, masterdataFacility) {
       axios
         .get(
-          `${process.env.REACT_APP_API_BASE_URL}/special/${masterdataPart}/${masterdataFacility}`
+          `${process.env.REACT_APP_API_BASE_URL}/user/special/${masterdataPart}/${masterdataFacility}`
         ) // 세아
         //  .get(`http://localhost:8081/special/${masterdataPart}/${masterdataFacility}`)
         .then((response) => {

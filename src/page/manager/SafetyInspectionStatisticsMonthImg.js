@@ -109,7 +109,7 @@ function SafetyInspectionStatisticsMonthImg() {
     try {
       //점검건수 값
       await axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/count`, {
+          .get(`${process.env.REACT_APP_API_BASE_URL}/admin/special/statistics/count`, {
             params: { yearmonth: selectedYear },
           }) //세아
           .then((response) => {
@@ -119,7 +119,7 @@ function SafetyInspectionStatisticsMonthImg() {
       //영역값(엑셀용)
       await axios
           .get(
-              `${process.env.REACT_APP_API_BASE_URL}/special/statistics/partandmonth`,
+              `${process.env.REACT_APP_API_BASE_URL}/admin/special/statistics/partandmonth`,
               { params: { yearmonth: selectedYear } }
           )
           .then((response) => {
@@ -129,7 +129,7 @@ function SafetyInspectionStatisticsMonthImg() {
       //영역값2
       await axios
           .get(
-              `${process.env.REACT_APP_API_BASE_URL}/special/statistics/partandmonth`,
+              `${process.env.REACT_APP_API_BASE_URL}/admin/special/statistics/partandmonth`,
               { params: { yearmonth: selectedYear } }
           )
           .then((response) => {
@@ -139,7 +139,7 @@ function SafetyInspectionStatisticsMonthImg() {
       //위험분류값
       await axios
           .get(
-              `${process.env.REACT_APP_API_BASE_URL}/special/statistics/dangerandmonth`,
+              `${process.env.REACT_APP_API_BASE_URL}/admin/special/statistics/dangerandmonth`,
               { params: { yearmonth: selectedYear } }
           )
           .then((response) => {
@@ -149,7 +149,7 @@ function SafetyInspectionStatisticsMonthImg() {
       //위험원인값
       await axios
           .get(
-              `${process.env.REACT_APP_API_BASE_URL}/special/statistics/causeandmonth`,
+              `${process.env.REACT_APP_API_BASE_URL}/admin/special/statistics/causeandmonth`,
               { params: { yearmonth: selectedYear } }
           )
           .then((response) => {

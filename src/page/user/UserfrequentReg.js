@@ -51,6 +51,7 @@ function UserfrequentReg() {
  const [speActEmail, setSpeActEmail] = useState("");
  const [speComplete, setSpeComplete] = useState("");
  const [files, setFiles] = useState(null);
+ const emailTitle = `${spePerson}님의 수시점검 요청메일입니다`;
 
 
  // Inspector 콜백 함수 : 점검자(이름, 이메일, 사원번호)
@@ -142,7 +143,7 @@ function UserfrequentReg() {
 
   // 수시점검 등록 요청
   axios
-      .post(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataId}`, formData, {
+      .post(`${process.env.REACT_APP_API_BASE_URL}/user/special/new/${masterdataPart}/${masterdataId}`, formData, {
        headers: {
         "Content-Type": "multipart/form-data",
        },
