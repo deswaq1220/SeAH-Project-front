@@ -61,9 +61,14 @@ function UserfrequentReg() {
   setSpeEmail(inspectorForm.inspectoremail);
  };
 
+  // // Facilityname 콜백 : 완료여부
+  // const handleFacilityDataChange  = (selected) => {
+  //   setSpeFacility(selected);
+  // };
+
   // Facilityname 콜백 : 완료여부
-  const handleFacilityDataChange  = (selected) => {
-    setSpeFacility(selected);
+  const handleFacilityChange   = (facility) => {
+    setSpeFacility(facility);
   };
 
  // Danger 콜백함수 : 위험분류
@@ -253,7 +258,7 @@ console.log("레지확인: "+ speFacility);
          });
 
          // 저장성공시 해당설비의 리스트 페이지
-         // navigate(`/special/list/${masterdataPart}/${masterdataId}`);
+         navigate(`/special/list/${masterdataPart}/${masterdataId}`);
        }
 
      })
@@ -273,7 +278,7 @@ console.log("레지확인: "+ speFacility);
       <p>수시점검 내용등록</p>
       <Inspector onFormDataChange={handleInspectorDataChange} /> {/* 점검자 */}
       <Inspectionarea /> {/* 점검영역 */}
-      <Facilityname onChange={handleFacilityDataChange } /> {/* 설비명 */}
+      <Facilityname onChange={handleFacilityChange} /> {/* 설비명 */}
       <Danger onFormDataChange={handleDangerDataChange} /> {/* 위험분류 */}
       <Injured onFormDataChange={handleInjuredDataChange} /> {/* 부상부위 */}
       <Dangersource onFormDataChange={handleCauseDataChange} /> {/* 위험원인 */}
