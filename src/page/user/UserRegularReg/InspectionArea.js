@@ -7,9 +7,25 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function InspectionArea() {
+export default function InspectionArea({handleInspectionAreaChange}) {
   const [regularPartList, setRegularPartList] = useState([]); // 설비영역
   const [selectedArea, setSelectedArea] = useState(null);
+
+  const handleInputChange = (name) => {
+    const regularPart  = name;
+    console.log(regularPart);
+    };
+    useEffect(() => {
+      if (selectedArea !== null) {
+        handleInputChange(selectedArea.name);
+        handleInspectionAreaChange({
+          regularPart:selectedArea.name,
+
+        })
+
+      }
+      
+    }, [selectedArea]);
 
   useEffect(() => {
     async function fetchOptions() {

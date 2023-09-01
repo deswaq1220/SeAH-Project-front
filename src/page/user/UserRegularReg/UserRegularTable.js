@@ -41,6 +41,13 @@ export default function UserRegularTable() {
   const [regularNum, setRegularNum] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState([]); // 각 행마다 모달 상태 저장
   const [isEditButtonVisible, setIsEditButtonVisible] = useState([]); // 각 행마다 수정 버튼 상태 저장
+  const [regularcheckList, setRegularcheckList] = useState({
+    id : "",
+    regularCheck  :"",
+    regularActContent: "",
+    regularActPerson: "",
+    regularActEmail: "",
+  });
 
   const handleRadioChange = (index, method) => {
     let newModalState = [...isModalOpen]; // 현재의 모달 상태 복사
@@ -68,26 +75,34 @@ export default function UserRegularTable() {
     regularEmail:"", //관찰자 이메일
     regularEmpNum: "", // 관찰자 사원번호
     regularPart: "", // 점검구역(주조, 압출 등)
-    regularInsName: "", //점검항목(중대재해, LOTO 등 )
+    regularInsName: "중대재해예방 일반점검", //점검항목(중대재해, LOTO 등 )
+    regularDetailDTO: [],
   });
 
  // Inspector 항목 저장 : 관찰자(이름, 이메일, 사원번호)
  const handleInspectorDataChange = (inspectorForm) => {
-  setFormData(() => ({
-    
-    regularPerson: inspectorForm.inspectorname, //
-    regularEmail:inspectorForm.inspectoremail,
+  setFormData((prevData) => ({
+    ...prevData,
+    regularPerson: inspectorForm.name, //
+    regularEmail:inspectorForm.email,
     regularEmpNum:inspectorForm.employeenumber,
   }));
   console.log(inspectorForm);
  };
+
+ const handleRegularPartDataChange =(form)=>{
+  setFormData((prevData) => ({
+    ...prevData,
+    regularPart: form.regularPart,
+  }));
+ }
 
   //점검항목 저장
   const handleRegularInsNameChange = (value) => {
     setSelectedArea(value);
     setFormData((prevData) => ({
       ...prevData,
-      regularInsName: value, //
+      regularInsName: value.name, //
     }));
     console.log(value);
   };
@@ -104,7 +119,7 @@ export default function UserRegularTable() {
       if (selectedPosition !== -1) {
         //  regularNum = selectedPosition + 1;
         const newRegularNum = selectedPosition + 1;
-        console.log("안쪽난바", newRegularNum); // 새로운 값을 먼저 로그에 출력
+
         setRegularNum(newRegularNum);
 
         const response = await axios.get(
@@ -127,9 +142,9 @@ export default function UserRegularTable() {
     console.log(formData);
     axios
     .post(`${process.env.REACT_APP_API_BASE_URL}/user/regular/new`, formData, {
-     headers: {
-      "Content-Type": "multipart/form-data",
-     },
+    //  headers: {
+    //   "Content-Type": "multipart/form-data",
+    //  },
     })
     .then((response) => {
      console.log(response);
@@ -227,7 +242,7 @@ export default function UserRegularTable() {
         });
 
       // 저장성공시 리스트 페이지
-      navigate(`//user/regularlist`);
+      navigate(`/regular`);
      }
 
     })
@@ -279,7 +294,7 @@ export default function UserRegularTable() {
         <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
           점검구역
         </span>
-        <InspectionArea />
+        <InspectionArea handleInspectionAreaChange={handleRegularPartDataChange}/>
       </div>
       <div id="ReformMeasures" className="flex items-center flex-wrap">
         <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4">
