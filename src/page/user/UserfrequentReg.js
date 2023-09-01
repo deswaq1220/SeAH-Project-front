@@ -38,8 +38,9 @@ function UserfrequentReg() {
  const { masterdataId } = useParams();       // url 설비 파라미터
  const [speEmpNum, setSpeEmpNum] = useState("");
  const [spePerson, setSpePerson] = useState("");
- const [speEmail, setSpeEmail] = useState("");
-  const [speFacility, setSpeFacility] = useState("");
+ const [speEmail, setSpeEmail] = useState("");        // 조치자 이메일정보
+  // const [emailYDataList, setEmailYDataList] = useState([]); // 고정수신자 이메ㅣㅇㄹ정보
+ const [speFacility, setSpeFacility] = useState("");
  const [speDanger, setSpeDanger] = useState("");
  const [speInjure, setSpeInjure] = useState("");
  const [speCause, setSpeCause] = useState("");
@@ -61,13 +62,8 @@ function UserfrequentReg() {
   setSpeEmail(inspectorForm.inspectoremail);
  };
 
-  // // Facilityname 콜백 : 완료여부
-  // const handleFacilityDataChange  = (selected) => {
-  //   setSpeFacility(selected);
-  // };
-
-  // Facilityname 콜백 : 완료여부
-  const handleFacilityChange   = (facility) => {
+  // Facilityname 콜백 : 설비명
+  const handleFacilityChange = (facility) => {
     setSpeFacility(facility);
   };
 
@@ -103,9 +99,15 @@ function UserfrequentReg() {
 
  // ActionRquest 콜백 : 조치자(이름, 이메일)
  const handleActionRequestDetailsDataChange = (data) => {
-  setSpeActPerson(data.speActPerson);
-  setSpeActEmail(data.speActEmail);
+   setSpeActPerson(data.speActPerson);
+   setSpeActEmail(data.speActEmail);
  };
+
+  // 고정수신자
+  // const handleStaticEmailChange = (staticEmailList) => {
+  //   setStaticEmailPerson(staticEmailList.emailAdd);
+  //   console.log("확인: "+staticEmailList.emailAdd);
+  // };
 
  // 개선대책
  const handleActContChange = (e) => {
@@ -119,8 +121,6 @@ function UserfrequentReg() {
 
  const navigate = useNavigate();
 
-console.log("레지확인: "+ speFacility);
-
  const handleFormSubmit = () => {
   const formData = new FormData();        // 폼데이터 객체 생성
 
@@ -131,10 +131,11 @@ console.log("레지확인: "+ speFacility);
    }
   }
 
+  // formData.append('staticEmailPerson', staticEmailPerson);
   formData.append('speEmpNum', speEmpNum);
   formData.append('spePerson', spePerson);
   formData.append('speEmail', speEmail);
-   formData.append('speFacility', speFacility);
+  formData.append('speFacility', speFacility);
   formData.append('speDanger', speDanger);
   formData.append('speInjure', speInjure);
   formData.append('speCause', speCause);
@@ -166,7 +167,8 @@ console.log("레지확인: "+ speFacility);
        const formattedSpeDeadline = `${speDeadline.toLocaleDateString()} ${speDeadline.toLocaleTimeString()}`;
 
        if (speActPerson && speActEmail) {
-         const inspectionData = `
+         const inspectionData =
+           `
           <table style="width: 100%; border-collapse: collapse; border: 1px solid #ccc;">
           <tr>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">항목</td>
@@ -221,12 +223,11 @@ console.log("레지확인: "+ speFacility);
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${formattedSpeDeadline}</td>
           </tr>
           </table>
-            <p style="font-size:16px;">링크 : <a href="http://localhost:3000/special/detail/${response.data.speId}">상세보기</a></p>
-    `;
+            <p style="font-size:16px;">링크 : <a href="http://localhost:3000/special/detail/${response.data.speId}">상세보기</a></p>`;
 
          const emailData = {
            recipients: speActEmail.split(", "), // 이메일 주소를 수신자로 설정
-           // subject: emailTitle, // 이메일 제목
+           subject: emailTitle, // 이메일 제목
            content: inspectionData, // 이메일 내용 (점검 내용 등)
            // 필요한 다른 속성도 여기에 추가 가능
          };
@@ -312,7 +313,9 @@ console.log("레지확인: "+ speFacility);
        </div>
       </div>
          <ActionRquest onFormDataChange={handleActionRequestDetailsDataChange} />{" "}{/* 조치요청 */}
-      {/* 혜영추가-완료여부 */}
+       {/*setEmailYDataList={setEmailYDataList}*/}
+
+       {/* 혜영추가-완료여부 */}
       <IsCompelete onFormDataChange={handleIsCompeleteDataChange} />{" "}{/* 완료여부 */}
       {/* 경원추가 */}
       <h1>파일 업로드</h1>

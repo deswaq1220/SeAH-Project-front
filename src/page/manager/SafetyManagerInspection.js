@@ -26,7 +26,7 @@ function classNames(...classes) {
 
 export default function SafetyManagerInspection() {
   const { masterdataPart } = useParams(); // url 영역 파라미터
-  const { masterdataFacility } = useParams(); // url 설비 파라미터
+  const { masterdataId } = useParams(); // url 설비 파라미터
 
   const [currentDate, setCurrentDate] = useState(new Date()); // 년,월
   const navigate = useNavigate();
@@ -44,7 +44,7 @@ export default function SafetyManagerInspection() {
     {
       title: "수시점검",
       sub: "영역 및 설비에 따른 수시점검을 할 수 있습니다.",
-      href: `/special/list/${masterdataPart}/${masterdataFacility}`,
+      href: `/special/list/${masterdataPart}/${masterdataId}`,
       icon: ClipboardDocumentCheckIcon,
       iconForeground: "text-purple-700",
       iconBackground: "bg-purple-50",
@@ -82,12 +82,11 @@ export default function SafetyManagerInspection() {
 
   useEffect(() => {
     // Json값 가져와서 세팅
-    function fetchDataWithAxios(masterdataPart, masterdataFacility) {
+    function fetchDataWithAxios(masterdataPart, masterdataId) {
       axios
         .get(
-          `${process.env.REACT_APP_API_BASE_URL}/special/${masterdataPart}/${masterdataFacility}`
-        ) // 세아
-        //  .get(`http://localhost:8081/special/${masterdataPart}/${masterdataFacility}`)
+          `${process.env.REACT_APP_API_BASE_URL}/special/${masterdataPart}/${masterdataId}`
+        )
         .then((response) => {
           const data = response.data;
           // 가져온 데이터로 상태 변수 업데이트
@@ -102,8 +101,8 @@ export default function SafetyManagerInspection() {
         });
     }
 
-    fetchDataWithAxios(masterdataPart, masterdataFacility);
-  }, [masterdataPart, masterdataFacility]);
+    fetchDataWithAxios(masterdataPart, masterdataId);
+  }, [masterdataPart, masterdataId]);
 
   const frequent = [
     {
