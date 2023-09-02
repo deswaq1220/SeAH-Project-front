@@ -145,7 +145,7 @@ const useSafetyEduForm = (eduData) => {
 
     if (eduId) {
      axios
-        .get(`${process.env.REACT_APP_API_BASE_URL}/edudetails/${eduId}`)
+        .get(`${process.env.REACT_APP_API_BASE_URL}/admin/edudetails/${eduId}`)
         //  .get(`http://localhost:8081/edudetails/${eduId}`)
         .then((response) => {
           // 가져온 데이터로 상태 업데이트
@@ -300,11 +300,11 @@ const useSafetyEduForm = (eduData) => {
       if (formData.eduId) {
         // 기존 교육 데이터를 수정하는 경우 (PUT 요청)
         formData.eduStartTime = formData.eduStartTime.slice(0, 16);
-        formData.eduSumTime = selectPeople(formData.eduCategory).time;
+//        formData.eduSumTime = selectPeople(formData.eduCategory).time;
         formData.eduFileList = null;
         const response = await axios.post(
           //  `http://localhost:8081/edudetails/${formData.eduId}`,
-          `${process.env.REACT_APP_API_BASE_URL}/edudetails/${formData.eduId}`, //세아
+          `${process.env.REACT_APP_API_BASE_URL}/admin/edudetails/${formData.eduId}`, //세아
           formData,
           {
             headers: {
@@ -318,14 +318,14 @@ const useSafetyEduForm = (eduData) => {
         // 새로운 교육 데이터를 등록하는 경우 (POST 요청)
         const response = await axios.post(
             //  "http://localhost:8081/edureg",
-            `${process.env.REACT_APP_API_BASE_URL}/edureg`, // 세아
+            `${process.env.REACT_APP_API_BASE_URL}/admin/edureg`, // 세아
             formData,
 
             {
               headers: {
                 "Content-Type": "multipart/form-data",
               },
-              withCredentials: true,
+                  withCredentials: true,
             }
         );
         console.log("등록 결과:", response.data);
@@ -353,7 +353,8 @@ const useSafetyEduForm = (eduData) => {
       return `총 교육시간: ${selectedEtcTime}분`;
     } else {
       formData.eduSumTime = selected.time;
-      return `총 교육시간: ${selectPeople(formData.eduCategory).time || 0}분`;
+      return `총 교육시간: ${selectedEtcTime} || 0}분`;
+//      return `총 교육시간: ${selectPeople(formData.eduCategory).time || 0}분`;
     }
   };
 

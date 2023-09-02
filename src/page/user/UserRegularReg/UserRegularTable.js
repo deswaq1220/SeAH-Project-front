@@ -12,8 +12,8 @@ import { useNavigate, useParams } from "react-router-dom";
 
 
 const notificationMethods = [
-  { id: "good", title: "양호", color: "text-blue-600" },
-  { id: "bad", title: "불량", color: "text-red-600" },
+  { id: "GOOD", title: "양호", color: "text-blue-600" },
+  { id: "BAD", title: "불량", color: "text-red-600" },
   { id: "NA", title: "N/A", color: "text-gray-900" },
 ];
 
@@ -41,29 +41,37 @@ export default function UserRegularTable() {
   const [regularNum, setRegularNum] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState([]); // 각 행마다 모달 상태 저장
   const [isEditButtonVisible, setIsEditButtonVisible] = useState([]); // 각 행마다 수정 버튼 상태 저장
-  const [regularcheckList, setRegularcheckList] = useState({
-    id : "",
-    regularCheck  :"",
-    regularActContent: "",
-    regularActPerson: "",
-    regularActEmail: "",
-  });
+  const [regularcheckList, setRegularcheckList] = useState([]);
 
-  const handleRadioChange = (index, method) => {
-    let newModalState = [...isModalOpen]; // 현재의 모달 상태 복사
-    let newEditButtonState = [...isEditButtonVisible]; // 현재의 수정 버튼 상태 복사
+//  const handleRadioChange = (index, method) => {
+//    let newModalState = [...isModalOpen]; // 현재의 모달 상태 복사
+////    let newEditButtonState = [...isEditButtonVisible]; // 현재의 수정 버튼 상태 복사
+////
+//    if (method === "bad") {
+//      isModalOpen[index] = true; // 불량을 선택한 행의 모달을 열기
+////
+////      newEditButtonState[index] = true; // 불량을 선택한 행의 수정 버튼 보이기
+//    } else {
+//      isModalOpen[index] = false; // 그 외에는 모달 닫기
+////      newEditButtonState[index] = false; // 그 외에는 수정버튼 숨기기
+//    }
+//
+//    regularcheckList[index].regularcheck = method; //해당 행의 상태 입력
+////
+//    setIsModalOpen(newModalState); // 새로운 모달 상태 설정
+////    setIsEditButtonVisible(newEditButtonState); // 새로운 수정버튼 상태 설정
+//  };
+const handleRadioChange = (index, method) => {
+  if (method === "BAD") {
+    isModalOpen[index] = true; // 불량을 선택한 행의 모달을 열기
+  } else {
+    isModalOpen[index] = false; // 그 외에는 모달 닫기
+  }
 
-    if (method === "bad") {
-      newModalState[index] = true; // 불량을 선택한 행의 모달을 열기
-      newEditButtonState[index] = true; // 불량을 선택한 행의 수정 버튼 보이기
-    } else {
-      newModalState[index] = false; // 그 외에는 모달 닫기
-      newEditButtonState[index] = false; // 그 외에는 수정버튼 숨기기
-    }
+  regularcheckList[index].regularCheck = method; // 해당 행의 상태 입력
 
-    setIsModalOpen(newModalState); // 새로운 모달 상태 설정
-    setIsEditButtonVisible(newEditButtonState); // 새로운 수정버튼 상태 설정
-  };
+  setIsModalOpen([...isModalOpen]); // 새로운 모달 상태 설정
+};
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -76,8 +84,18 @@ export default function UserRegularTable() {
     regularEmpNum: "", // 관찰자 사원번호
     regularPart: "", // 점검구역(주조, 압출 등)
     regularInsName: "중대재해예방 일반점검", //점검항목(중대재해, LOTO 등 )
-    regularDetailDTO: [],
-  });
+   regularDetailDTOList: [ // regularDetailDTOList는 배열입니다.
+       {
+         id: '',
+         regularCheck: '',
+         checklist: '',
+         regularActContent: '',
+         regularActEmail: '',
+         regularActPerson: '',
+       },
+     ],
+     files: null, // 파일 업로드와 관련된 필드
+   });
 
  // Inspector 항목 저장 : 관찰자(이름, 이메일, 사원번호)
  const handleInspectorDataChange = (inspectorForm) => {
@@ -87,7 +105,6 @@ export default function UserRegularTable() {
     regularEmail:inspectorForm.email,
     regularEmpNum:inspectorForm.employeenumber,
   }));
-  console.log(inspectorForm);
  };
 
  const handleRegularPartDataChange =(form)=>{
@@ -107,6 +124,20 @@ export default function UserRegularTable() {
     console.log(value);
   };
 
+
+  //bad 상태일때 점검자 이름, 이메일,내용 저장
+ const handleActDataChange = (actForm) => {
+   const updatedActPerson = actForm.regularActPerson;
+  const updatedActEmail = actForm.regularActEmail;
+const updatedActContent = actForm.regularActContent;
+const updatedFile = actForm.files;
+
+  const updatedCheckList = [...regularcheckList]; // 기존 배열 복사
+    updatedCheckList[actForm.index].regularActPerson = updatedActPerson;
+    updatedCheckList[actForm.index].regularActEmail = updatedActEmail;
+    updatedCheckList[actForm.index].regularActContent = updatedActContent;
+    updatedCheckList[actForm.index].files = updatedFile;
+ };
 
   //점검리스트 조회
   const handleSearchClick = async () => {
@@ -130,8 +161,10 @@ export default function UserRegularTable() {
             },
           }
         );
-        setCheckList(response.data.checklist);
+
+        setRegularcheckList(response.data);
         console.log("초기화 된다..");
+        console.log(response.data);
       }
     } catch (error) {
       console.error("점검리스트 조회 오류", error);
@@ -139,12 +172,15 @@ export default function UserRegularTable() {
   };
 
   const handleFormSubmit = () => {
-    console.log(formData);
+    console.log(regularcheckList);
+
+    formData.regularDetailDTOList= [...regularcheckList];
     axios
-    .post(`${process.env.REACT_APP_API_BASE_URL}/user/regular/new`, formData, {
-    //  headers: {
-    //   "Content-Type": "multipart/form-data",
-    //  },
+    .post(`${process.env.REACT_APP_API_BASE_URL}/user/regular/new`,
+     formData, {
+      headers: {
+       "Content-Type": "multipart/form-data",
+      },
     })
     .then((response) => {
      console.log(response);
@@ -429,84 +465,50 @@ export default function UserRegularTable() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white">
-              {checkList.map((item, index) => (
-                <tr key={index}>
-                  <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
-                    {index + 1}
-                    <dl className="font-normal lg:hidden">
-                      <dt className="sr-only">Title</dt>
-                      <dd className="mt-1 truncate text-gray-700">{item}</dd>
-                      <dt className="sr-only sm:hidden">Email</dt>
-                      <dd className="mt-1 truncate text-gray-500 sm:hidden">
-                        <div className="space-x-4 flex">
-                          {notificationMethods.map((notificationMethod) => (
-                            <div
-                              key={notificationMethod.id}
-                              className="flex items-center"
-                            >
-                              <input
-                                type="radio"
-                                name={`radio-group-${index}`}
-                                value={item}
-                                onChange={() =>
-                                  handleRadioChange(
-                                    index,
-                                    notificationMethod.id
-                                  )
-                                }
-                                className="h-4 w-4 border-gray-300 text-seahColor focus:ring-seahColor"
-                              />
-                              <label
-                                htmlFor={notificationMethod.id}
-                                className={`ml-3 block text-sm font-bold leading-6 ${notificationMethod.color}`}
-                              >
-                                {notificationMethod.title}
-                              </label>
-                            </div>
-                          ))}
-                        </div>
-                      </dd>
-                    </dl>
-                  </td>
-                  <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
-                  {item}
-                  </td>
-                  <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                    {/* {item} */}
-                  </td>
-                  <td className=" hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                    <div className="space-x-4 flex">
-                      {notificationMethods.map((notificationMethod) => (
-                        <div
-                          key={notificationMethod.id}
-                          className="flex items-center"
-                        >
-                          <input
-                            type="radio"
-                            name={`radio-group-${index}`}
-                            value={item}
-                            onChange={() =>
-                              handleRadioChange(index, notificationMethod.id)
-                            }
-                            className="h-4 w-4 border-gray-300 text-seahColor focus:ring-seahColor"
-                          />
-                          <label
-                            htmlFor={notificationMethod.id}
-                            className={`ml-3 block text-sm font-bold leading-6 ${notificationMethod.color}`}
-                          >
-                            {notificationMethod.title}
-                          </label>
-                        </div>
-                      ))}
-                    </div>
-                  </td>
-                  <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                    {isEditButtonVisible[index] && (
-                      <button type="button">수정</button>
-                    )}
-                  </td>
-                </tr>
-              ))}
+             {regularcheckList.map((item, index) => (
+               <tr key={index}>
+                 <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
+                   {index + 1}
+                 </td>
+                 <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
+                   {item.checklist}
+                 </td>
+                 <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
+                   <div className="space-x-4 flex">
+                     {notificationMethods.map((notificationMethod) => (
+                       <div key={notificationMethod.id} className="flex items-center">
+                         <input
+                           type="radio"
+                           name={`radio-group-${index}`}
+                           value={item.id}
+                           onChange={() =>
+                             handleRadioChange(index, notificationMethod.id)
+                           }
+                           className="h-4 w-4 border-gray-300 text-seahColor focus:ring-seahColor"
+                         />
+                         <label
+                           htmlFor={notificationMethod.id}
+                           className={`ml-3 block text-sm font-bold leading-6 ${notificationMethod.color}`}
+                         >
+                           {notificationMethod.title}
+                         </label>
+                       </div>
+                     ))}
+                   </div>
+                   {item.regularCheck === 'BAD' ? (
+                     <FaultyModal
+                    actForm={handleActDataChange}
+                       index={index}
+//                       closeModal={() => handleRadioChange(index, 'good')}
+//                       key={index}
+                     />
+                   ) : null}
+                 </td>
+                 <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                   {isEditButtonVisible[index] && <button type="button">수정</button>}
+                 </td>
+               </tr>
+             ))}
             </tbody>
           </table>
         </div>
@@ -519,15 +521,6 @@ export default function UserRegularTable() {
             저장
           </button>
         </div>
-        {checkList.map((item, index) =>
-          isModalOpen[index] ? (
-            <FaultyModal
-              person={selectedPerson}
-              closeModal={() => handleRadioChange(index, "good")}
-              key={index}
-            />
-          ) : null
-        )}
       </div>
     </div>
   );

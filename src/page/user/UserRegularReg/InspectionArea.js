@@ -20,7 +20,6 @@ export default function InspectionArea({handleInspectionAreaChange}) {
         handleInputChange(selectedArea.name);
         handleInspectionAreaChange({
           regularPart:selectedArea.name,
-
         })
 
       }
@@ -41,6 +40,7 @@ export default function InspectionArea({handleInspectionAreaChange}) {
             name: name,
           })
         );
+        console.log(response.data);
         setRegularPartList(optionsArray);
         setSelectedArea(optionsArray[0]);
       } catch (error) {
