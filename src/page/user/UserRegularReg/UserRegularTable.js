@@ -43,6 +43,7 @@ export default function UserRegularTable() {
   const [isEditButtonVisible, setIsEditButtonVisible] = useState([]); // 각 행마다 수정 버튼 상태 저장
   const [regularcheckList, setRegularcheckList] = useState([]);
 
+
 //  const handleRadioChange = (index, method) => {
 //    let newModalState = [...isModalOpen]; // 현재의 모달 상태 복사
 ////    let newEditButtonState = [...isEditButtonVisible]; // 현재의 수정 버튼 상태 복사
@@ -78,28 +79,17 @@ const handleRadioChange = (index, method) => {
     setSelectedItemIndex(null); // 모달을 닫을 때 선택된 항목 인덱스 초기화
   };
 
-  const [formData, setFormData] = useState({
+  const [regularDTO, setRegularDTO] = useState({
     regularPerson: "", // 관찰자 이름
     regularEmail:"", //관찰자 이메일
     regularEmpNum: "", // 관찰자 사원번호
     regularPart: "", // 점검구역(주조, 압출 등)
     regularInsName: "중대재해예방 일반점검", //점검항목(중대재해, LOTO 등 )
-   regularDetailDTOList: [ // regularDetailDTOList는 배열입니다.
-       {
-         id: '',
-         regularCheck: '',
-         checklist: '',
-         regularActContent: '',
-         regularActEmail: '',
-         regularActPerson: '',
-       },
-     ],
-     files: null, // 파일 업로드와 관련된 필드
    });
 
  // Inspector 항목 저장 : 관찰자(이름, 이메일, 사원번호)
  const handleInspectorDataChange = (inspectorForm) => {
-  setFormData((prevData) => ({
+   setRegularDTO((prevData) => ({
     ...prevData,
     regularPerson: inspectorForm.name, //
     regularEmail:inspectorForm.email,
@@ -108,7 +98,7 @@ const handleRadioChange = (index, method) => {
  };
 
  const handleRegularPartDataChange =(form)=>{
-  setFormData((prevData) => ({
+   setRegularDTO((prevData) => ({
     ...prevData,
     regularPart: form.regularPart,
   }));
@@ -117,7 +107,7 @@ const handleRadioChange = (index, method) => {
   //점검항목 저장
   const handleRegularInsNameChange = (value) => {
     setSelectedArea(value);
-    setFormData((prevData) => ({
+    setRegularDTO((prevData) => ({
       ...prevData,
       regularInsName: value.name, //
     }));
@@ -171,13 +161,30 @@ const updatedFile = actForm.files;
     }
   };
 
-  const handleFormSubmit = () => {
-    console.log(regularcheckList);
+    // console.log(regularcheckList);
 
-    formData.regularDetailDTOList= [...regularcheckList];
+
+    // formData.regularDetailDTOList= [...regularcheckList];
+    // regularDTO.regularDetailDTOList = JSON.stringify(regularcheckList);
+
+
+    // formData.file = [...regularcheckList.files];
+    // formData.regularDTO = JSON.stringify(regularDTO);// EduDTO 객체를 문자열로 변환하여 추가
+    // saveFormData.append('file', regularcheckList.files); // 파일 추가
+  const handleFormSubmit = () => {
+    regularDTO.regularDetailDTOList = [...checkList];
+      const formData = new FormData();
+      formData.append('regularDTO', new Blob([JSON.stringify(regularDTO)], {type: 'application/json'})); // 컨텐츠 타입 설정
+    console.log(regularDTO.regularDetailDTOList);
+    // console.log("여기");
+    //   for (let [key, value] of formData.entries()) {
+    //       console.log(`${key}: ${value}`);
+    //   }
+
+
     axios
     .post(`${process.env.REACT_APP_API_BASE_URL}/user/regular/new`,
-     formData, {
+        formData, {
       headers: {
        "Content-Type": "multipart/form-data",
       },
