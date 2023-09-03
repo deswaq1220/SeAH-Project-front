@@ -42,8 +42,8 @@ export default function UserRegularTable() {
   const [isModalOpen, setIsModalOpen] = useState([]); // 각 행마다 모달 상태 저장
   const [isEditButtonVisible, setIsEditButtonVisible] = useState([]); // 각 행마다 수정 버튼 상태 저장
   const [regularcheckList, setRegularcheckList] = useState([]);
-
-
+  const [files, setFiles] = useState([]);
+      const formData = new FormData();
 //  const handleRadioChange = (index, method) => {
 //    let newModalState = [...isModalOpen]; // 현재의 모달 상태 복사
 ////    let newEditButtonState = [...isEditButtonVisible]; // 현재의 수정 버튼 상태 복사
@@ -62,6 +62,7 @@ export default function UserRegularTable() {
 //    setIsModalOpen(newModalState); // 새로운 모달 상태 설정
 ////    setIsEditButtonVisible(newEditButtonState); // 새로운 수정버튼 상태 설정
 //  };
+
 const handleRadioChange = (index, method) => {
   if (method === "BAD") {
     isModalOpen[index] = true; // 불량을 선택한 행의 모달을 열기
@@ -85,6 +86,7 @@ const handleRadioChange = (index, method) => {
     regularEmpNum: "", // 관찰자 사원번호
     regularPart: "", // 점검구역(주조, 압출 등)
     regularInsName: "중대재해예방 일반점검", //점검항목(중대재해, LOTO 등 )
+    file : null,
    });
 
  // Inspector 항목 저장 : 관찰자(이름, 이메일, 사원번호)
@@ -116,18 +118,29 @@ const handleRadioChange = (index, method) => {
 
 
   //bad 상태일때 점검자 이름, 이메일,내용 저장
- const handleActDataChange = (actForm) => {
-   const updatedActPerson = actForm.regularActPerson;
-  const updatedActEmail = actForm.regularActEmail;
-const updatedActContent = actForm.regularActContent;
-const updatedFile = actForm.files;
+  const handleActDataChange = (actForm) => {
+    const updatedActPerson = actForm.regularActPerson;
+    const updatedActEmail = actForm.regularActEmail;
+    const updatedActContent = actForm.regularActContent;
+    const updatedFile = actForm.files;
 
-  const updatedCheckList = [...regularcheckList]; // 기존 배열 복사
-    updatedCheckList[actForm.index].regularActPerson = updatedActPerson;
-    updatedCheckList[actForm.index].regularActEmail = updatedActEmail;
-    updatedCheckList[actForm.index].regularActContent = updatedActContent;
-    updatedCheckList[actForm.index].files = updatedFile;
- };
+    setRegularcheckList(prevChecklist => {
+      const updatedChecklist = [...prevChecklist]; // Copy the previous checklist
+      // Update the specific object in the checklist
+      updatedChecklist[actForm.index].regularActPerson = updatedActPerson;
+      updatedChecklist[actForm.index].regularActEmail = updatedActEmail;
+      updatedChecklist[actForm.index].regularActContent = updatedActContent;
+
+      return updatedChecklist; // Return the new checklist to update the state
+    });
+//id: actForm.id,
+    setFiles(prevFiles => {
+        const newFilesState=[...prevFiles];
+        newFilesState.push({file:updatedFile});
+        return newFilesState;
+     });
+  };
+
 
   //점검리스트 조회
   const handleSearchClick = async () => {
@@ -146,6 +159,7 @@ const updatedFile = actForm.files;
         const response = await axios.get(
           `${process.env.REACT_APP_API_BASE_URL}/user/regularcheck`,
           {
+
             params: {
               regularNum: newRegularNum,
             },
@@ -171,110 +185,29 @@ const updatedFile = actForm.files;
     // formData.file = [...regularcheckList.files];
     // formData.regularDTO = JSON.stringify(regularDTO);// EduDTO 객체를 문자열로 변환하여 추가
     // saveFormData.append('file', regularcheckList.files); // 파일 추가
-  const handleFormSubmit = () => {
-    regularDTO.regularDetailDTOList = [...checkList];
-      const formData = new FormData();
-      formData.append('regularDTO', new Blob([JSON.stringify(regularDTO)], {type: 'application/json'})); // 컨텐츠 타입 설정
-    console.log(regularDTO.regularDetailDTOList);
-    // console.log("여기");
-    //   for (let [key, value] of formData.entries()) {
-    //       console.log(`${key}: ${value}`);
-    //   }
 
 
-    axios
-    .post(`${process.env.REACT_APP_API_BASE_URL}/user/regular/new`,
-        formData, {
-      headers: {
-       "Content-Type": "multipart/form-data",
-      },
-    })
+    const handleFormSubmit = async () => {
+
+     regularDTO.regularDetailDTOList = JSON.stringify(regularcheckList);
+     regularDTO.file = files;
+    console.log(regularDTO);
+//        let formData = new FormData();
+
+
+        const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/regular/new`,
+
+        regularDTO,
+         {
+            headers: {
+              "Content-Type": "multipart/form-data"
+            },
+          }
+        )
     .then((response) => {
      console.log(response);
 
-  //     if (speActPerson && speActEmail) {
-  //       const inspectionData = `
-  //       <table style="width: 100%; border-collapse: collapse; border: 1px solid #ccc;">
-  //       <tr>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">항목</td>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">내용</td>
-  //       </tr>
-  //       <tr>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검일시</td>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${formattedSpeDate}</td>
-  //       </tr>
-  //       <tr>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검자</td>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.spePerson}</td>
-  //       </tr>
-  //       <tr>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검영역</td>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.spePart}</td>
-  //       </tr>
-  //       <tr>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검설비</td>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speFacility}</td>
-  //       </tr>
-  //       <tr>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">위험분류</td>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speDanger}</td>
-  //       </tr>
-  //       <tr>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">위험원인</td>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speTrap}</td>
-  //       </tr>
-  //       <tr>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">부상부위</td>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speCause}</td>
-  //       </tr>
-  //       <tr>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">위험성평가</td>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speRiskAssess}</td>
-  //       </tr>
-  //       <tr>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검내용</td>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"> ${response.data.speContent}</td>
-  //       </tr>
-  //       <tr>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">개선대책</td>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speActContent}</td>
-  //       </tr>
-  //       <tr>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">담당자</td>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speActPerson}</td>
-  //       </tr>
-  //       <tr>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">요청기한</td>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${formattedSpeDeadline}</td>
-  //       </tr>
-  //       </table>
-  //         <p style="font-size:16px;">링크 : <a href="http://localhost:3000/special/detail/${response.data.speId}">상세보기</a></p>
-  // `;
 
-  //       const emailData = {
-  //         recipients: speActEmail.split(", "), // 이메일 주소를 수신자로 설정
-  //         // subject: emailTitle, // 이메일 제목
-  //         content: inspectionData, // 이메일 내용 (점검 내용 등)
-  //         // 필요한 다른 속성도 여기에 추가 가능
-  //       };
-
-  //       axios
-  //         .post(
-  //           `${process.env.REACT_APP_API_BASE_URL}/api/send-email`,
-  //           emailData
-  //         )
-  //         .then((response) => {
-  //           console.log("이메일 전송 완료:", response);
-  //           // ... (나머지 처리 로직)
-  //         })
-  //         .catch((error) => {
-  //           console.error("이메일 전송 오류: ", error);
-  //           // ... (에러 처리 로직)
-  //         });
-  //     } else {
-  //       console.log("이메일 정보가 없습니다. 전송되지 않았습니다.");
-  //       // ... (이메일 정보가 없을 때 처리 로직)
-  //     }
 
       if (formData !== null) {
         // 등록이 완료되었다는 알림 띄우기
@@ -506,8 +439,7 @@ const updatedFile = actForm.files;
                      <FaultyModal
                     actForm={handleActDataChange}
                        index={index}
-//                       closeModal={() => handleRadioChange(index, 'good')}
-//                       key={index}
+                       id ={item.id}
                      />
                    ) : null}
                  </td>

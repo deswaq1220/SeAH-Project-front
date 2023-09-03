@@ -11,7 +11,7 @@ import axios from "axios";
 // 추가 플러그인을 라이브러리에 등록
 registerPlugin(FilePondPluginImagePreview);
 
-export default function FaultyModal({ index, actForm }) {
+export default function FaultyModal({ index, actForm, id }) {
   const [open, setOpen] = useState(true);
   const cancelButtonRef = useRef(null);
   const [regularActPerson, setRegularActPerson] = useState("");
@@ -37,6 +37,7 @@ export default function FaultyModal({ index, actForm }) {
   const handleSaveClick = async()=> {
 // actForm 함수 호출
       actForm({
+      id: id,
       index: index,
         regularActPerson: regularActPerson,
         regularActEmail: regularActEmail,

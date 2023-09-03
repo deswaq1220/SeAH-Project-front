@@ -30,6 +30,7 @@
     "filepond": "^4.30.4",
     "filepond-plugin-image-preview": "^4.6.11",
     "http-proxy-middelware": "^0.0.1-security",
+    "jquery": "^3.7.1",
     "jsonwebtoken": "^9.0.1",
     "qrcode": "^1.5.3",
     "qrcode.react": "^3.1.0",
