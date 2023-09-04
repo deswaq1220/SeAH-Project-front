@@ -36,7 +36,7 @@ export default function UserSelectInspection() {
     {
       title: "정기점검",
       sub: "안전점검 영역에 대한 정기점검을 할 수 있습니다.",
-      href: "/regulardetails",
+      href: "/regular",
       icon: ClipboardDocumentListIcon,
       iconForeground: "text-teal-700",
       iconBackground: "bg-teal-50",
