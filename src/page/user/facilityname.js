@@ -2,28 +2,36 @@ import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
 
-export default function Facilityname(onFormDataChange) {
+export default function Facilityname({onChange}) {
  const { masterdataPart } = useParams(); // url 영역 파라미터
  const { masterdataId } = useParams(); // url 설비코드 파라미터
- const [masterdataFacility, setMasterdataFacility] = useState(""); // 설비이름
+ const [ fromBackFacility, setFromBackFacility ] = useState(""); // 백에서 받은 설비이름
+ // const [masterdataFacility, setMasterdataFacility] = useState(""); // 넘겨줄 설비이름
 
 
- // 위험분류 get
+ // 설비명
  useEffect(() => {
-  function specialDangerFetchDataWithAxios(masterdataPart, masterdataId) {
+  function fetchDataFromApi() {
    axios
        .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataId}`)   // 세아
        .then((response) => {
-        const facilityFromBack = response.data.facilityName;
-        setMasterdataFacility(facilityFromBack); // 설비코드에 따른 설비명
+        const facilityFromBackName = response.data.facilityName;
+         setFromBackFacility(facilityFromBackName); // 설비코드에 따른 설비명
+         console.log("확인설비: "+ facilityFromBackName);
+         onChange(facilityFromBackName);    // 상위 컴포넌트 전달
        })
        .catch((error) => {
         console.error("Error fetching data: ", error);
        });
   }
+   fetchDataFromApi(masterdataPart, masterdataId);
+ }, [onChange]);
 
-  specialDangerFetchDataWithAxios(masterdataPart, masterdataId);
- }, [masterdataPart, masterdataId]);
+  // const facChangeHandler = (value) => {
+  //   props.onMasterdataFacility(value);
+  //   console.log("setMasterdataFacility확인설비: "+ value);
+  // };
+
 
 
 
@@ -43,7 +51,7 @@ export default function Facilityname(onFormDataChange) {
               name="Facilityname"
               id="Facilityname"
               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
-              value={masterdataFacility}
+              value={fromBackFacility}
               readOnly
             />
           </div>

@@ -8,10 +8,11 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Regularactionrequest({ onFormDataChange }) {
+export default function ActionRquest({ onFormDataChange, onChange }) {
   const { masterdataPart, masterdataId } = useParams();
-  const [emailDataList, setEmailDataList] = useState([]);
-  const [instances, setInstances] = useState([{ selectedEmail: null }]);
+  const [emailDataList, setEmailDataList] = useState([]);                     // 영역별 이메일 리스트
+  const [emailYDataList, setEmailYDataList] = useState([]);   // 이메일 고정수신자 리스트
+  const [instances, setInstances] = useState([{ selectedEmail: null }]);    // 선택한 이메일 리스트
 
   useEffect(() => {
     async function emailFetchDataWithAxios() {
@@ -19,16 +20,21 @@ export default function Regularactionrequest({ onFormDataChange }) {
         const response = await axios.get(
           `${process.env.REACT_APP_API_BASE_URL}/user/regularemail`
         );
-
+        // 영역별 이메일리스트(선택)
         const emailListFromBack = response.data["emailList"];
         setEmailDataList(emailListFromBack);
-        console.log(emailDataList);
+
+        // 이메일 고정수신자 리스트
+        const emailYListFromBack = response.data.staticEmailList;
+        setEmailYDataList(emailYListFromBack);
+        onChange(emailYListFromBack);
+
       } catch (error) {
         console.error("데이터 가져오기 오류: ", error);
       }
     }
-    emailFetchDataWithAxios();
-  }, [masterdataPart, masterdataId]);
+    emailFetchDataWithAxios(masterdataPart, masterdataId);
+  }, []);
 
   // -----------------------------------
   const handleActionChange = (instanceIndex, selectedEmail) => {

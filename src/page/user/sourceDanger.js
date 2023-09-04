@@ -17,31 +17,30 @@ export default function Dangersource({onFormDataChange}) {
   const [customSource, setCustomSource] = useState("");
 
 
-  // 위험원인 get
-  useEffect(() => {
-    function specialCauseFetchDataWithAxios(masterdataPart, masterdataFacility) {
-      axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataId}`)  // 세아
-          .then((response) => {
-            const speCauseListFromBack = response.data.specialCauseList;
+ // 위험원인 get
+ useEffect(() => {
+  function specialCauseFetchDataWithAxios(masterdataPart, masterdataFacility) {
+    axios
+      .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataId}`)  // 세아
+      .then((response) => {
+        const speCauseListFromBack = response.data.specialCauseList;
 
-            const speCauseData = speCauseListFromBack.map((item) => {
-              return {
-                causeMenu : item.causeMenu,
-                causeNum: item.causeNum,
-              };
-            });
-            setSpecialCauseList(speCauseData);
-            setSourceSelected(speCauseData[0]);
-          })
-          .catch((error) => {
-            console.error("Error fetching data: ", error);
-          });
-    }
+        const speCauseData = speCauseListFromBack.map((item) => {
+          return {
+            causeMenu : item.causeMenu,
+            causeNum: item.causeNum,
+          };
+        });
+        setSpecialCauseList(speCauseData);
+        setSourceSelected(speCauseData[0]);
+      })
+      .catch((error) => {
+        console.error("Error fetching data: ", error);
+      });
+  }
 
-    specialCauseFetchDataWithAxios(masterdataPart, masterdataId);
-  }, [masterdataPart, masterdataId]);
-
+  specialCauseFetchDataWithAxios(masterdataPart, masterdataId);
+}, [masterdataPart, masterdataId]);
   // 기타(직접입력) 선택 시, customSource 값을 업데이트하고 onFormDataChange를 호출
   const handleCustomSourceChange = (e) => {
     setCustomSource(e.target.value);
@@ -90,7 +89,7 @@ export default function Dangersource({onFormDataChange}) {
                   leaveTo="opacity-0"
                 >
                   <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                      {specialCauseList.map((specialCauseItem) => (
+                    {specialCauseList.map((specialCauseItem) => (
                       <Listbox.Option
                         key={specialCauseItem.causeMenu}
                         className={({ active }) =>
@@ -138,20 +137,17 @@ export default function Dangersource({onFormDataChange}) {
           )}
         </Listbox>
         {sourceSelected && sourceSelected.causeMenu === "기타(직접입력)" && (
-            <input
-                type="text"
-                value={customSource}
-                name="speCause"
-                onChange={handleCustomSourceChange}
-                className="block w-40 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5 mt-1"
-                placeholder="직접 입력"
-            />
-          )}
-        </div>
-
-
-
-
+          <input
+            type="text"
+            value={customSource}
+            name="speCause"
+            onChange={handleCustomSourceChange}
+            className="block w-40 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5 mt-1"
+            placeholder="직접 입력"
+          />
+        )}
       </div>
+
+    </div>
   )
 }

@@ -1,6 +1,6 @@
 import {Fragment, useEffect, useState} from "react";
-import { Listbox, Transition } from "@headlessui/react";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import {Listbox, Transition} from "@headlessui/react";
+import {CheckIcon, ChevronUpDownIcon} from "@heroicons/react/20/solid";
 import axios from "axios";
 
 function classNames(...classes) {
@@ -8,57 +8,59 @@ function classNames(...classes) {
 }
 
 export default function FrequentInsArea({onFormDataChange}) {
-  const[spePartList, setSpePartList] = useState([]);
-  const[selectedPart, setSelectedPart] = useState(""); // 선택영역
+  const [spePartList, setSpePartList] = useState([]);
+  const [selectedPart, setSelectedPart] = useState(""); // 선택영역
 
 
   // 영역 get
   useEffect(() => {
     function specialPartFetchDataWithAxios() {
       axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/frequentinspection`)  // 세아
-          .then((response) => {
-              const spePartListFromBack = response.data.searchPartAndFacList.specialPartList;
-              console.log("여기확인임: "+spePartListFromBack);
-              const spePartData = spePartListFromBack.map((item) => {
-                  return{
-                      partMenu:item.partMenu,
-                      partNum:item.partNum,
-                  };
-              });
-              setSpePartList(spePartData);
-              setSelectedPart(spePartData[0]);
-              onFormDataChange(null);
-          })
-          .catch((error) => {
-            console.error("Error fetching data: ", error);
+        .get(`${process.env.REACT_APP_API_BASE_URL}/frequentinspection`)  // 세아
+        .then((response) => {
+          const spePartListFromBack = response.data.searchPartAndFacList.specialPartList;
+          console.log("여기확인임: " + spePartListFromBack);
+          const spePartData = spePartListFromBack.map((item) => {
+            return {
+              partMenu: item.partMenu,
+              partNum: item.partNum,
+            };
           });
+          setSpePartList(spePartData);
+          setSelectedPart(spePartData[0]);
+          onFormDataChange(null);
+        })
+        .catch((error) => {
+          console.error("Error fetching data: ", error);
+        });
     }
 
     specialPartFetchDataWithAxios();
   }, []);
 
 
- // 영역 선택 시 selectedPart 값 업데이트하고 onFormDataChange 호출
- const handleSelectedPart= (value) => {
-   setSelectedPart(value);
-   onFormDataChange(value);
+  // 영역 선택 시 selectedPart 값 업데이트하고 onFormDataChange 호출
+  const handleSelectedPart = (value) => {
+    setSelectedPart(value);
+    onFormDataChange(value);
 
- };
+  };
 
 
   return (
     <>
       <div className="flex flex-col ">
         <div className="flex items-center">
-          <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
+          <span
+            className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
             영역
           </span>
           <Listbox value={selectedPart} onChange={handleSelectedPart}>
-            {({ open }) => (
+            {({open}) => (
               <>
                 <div className="relative mt-2">
-                  <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-20 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
+                  <Listbox.Button
+                    className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-20 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
                     <span className="block truncate">{selectedPart.partMenu}</span>
                     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                       <ChevronUpDownIcon
@@ -75,11 +77,12 @@ export default function FrequentInsArea({onFormDataChange}) {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                   >
-                    <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                    <Listbox.Options
+                      className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                       {spePartList.map((item) => (
                         <Listbox.Option
                           key={item.partMenu}
-                          className={({ active }) =>
+                          className={({active}) =>
                             classNames(
                               active
                                 ? "bg-seahColor text-white"
@@ -89,7 +92,7 @@ export default function FrequentInsArea({onFormDataChange}) {
                           }
                           value={item}
                         >
-                          {({ selected, active }) => (
+                          {({selected, active}) => (
                             <>
                               <span
                                 className={classNames(

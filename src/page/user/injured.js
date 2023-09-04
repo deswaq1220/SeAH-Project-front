@@ -21,26 +21,27 @@ export default function Injured({ onFormDataChange }) {
   useEffect(() => {
     function specialInjureFetchDataWithAxios( masterdataPart,masterdataId) {
       axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataId}`)   // 세아
-          .then((response) => {
-            // 백에서 보내주는 부상부위 리스트
-            const speInjuredListFromBack = response.data.specialInjuredList;
-            const speInjuredData = speInjuredListFromBack.map((item) => {
-              return {
-                injuredMenu: item.injuredMenu,
-                injuredNum: item.injuredNum,
-              };
-            });
-            setSpecialInjuredList(speInjuredData);
-            setInjuredSelected(speInjuredData[0]);
-          })
-          .catch((error) => {
-            console.error("Error fetching data: ", error);
+        .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataId}`)   // 세아
+        .then((response) => {
+          // 백에서 보내주는 부상부위 리스트
+          const speInjuredListFromBack = response.data.specialInjuredList;
+          const speInjuredData = speInjuredListFromBack.map((item) => {
+            return {
+              injuredMenu: item.injuredMenu,
+              injuredNum: item.injuredNum,
+            };
           });
+          setSpecialInjuredList(speInjuredData);
+          setInjuredSelected(speInjuredData[0]);
+        })
+        .catch((error) => {
+          console.error("Error fetching data: ", error);
+        });
     }
 
     specialInjureFetchDataWithAxios(masterdataPart, masterdataId);
   }, [masterdataPart, masterdataId]);
+
 
   // 기타(직접입력) 선택 시, customInjured 값 업데이트, onFOrmDataChange 호출
   const handleCustomInjuredChange = (e) => {
