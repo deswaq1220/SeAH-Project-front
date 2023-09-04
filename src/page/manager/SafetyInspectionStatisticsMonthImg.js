@@ -108,10 +108,9 @@ function SafetyInspectionStatisticsMonthImg() {
       {
         sheetName: "위험성평가 분석",
         data: regularCntByNameForExcel.map((item) => ({
-          구분: Object.keys(item)[0],
-          위험성평가: Object.keys(item[]),
-          건수: Object.values
-
+          구분: item.key,
+          위험성평가: item.evaluationValue,
+          건수: item.count,
         })),
       },
     ];
@@ -311,8 +310,8 @@ function SafetyInspectionStatisticsMonthImg() {
       console.log("위험성결과드롭다운 값", optionsArray);
 
       //(pieChart, 엑셀) 위험성결과 데이터 출력
-/*      await axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/regular/statistics/nameandmonthforexcel`, {
+      await axios
+          .get(`${process.env.REACT_APP_API_BASE_URL}/admin/regular/statistics/nameandmonthforexcel`, {
             params: {yearmonth: selectedYear}
           })
           .then((response) => {
@@ -320,23 +319,25 @@ function SafetyInspectionStatisticsMonthImg() {
               let key = Object.keys(item)[0];
               let innerData = item[key];
 
-              let Evaluation
-              let value = item[key];
+              let evaluationValue = Object.keys(innerData)[0]; //평가값
+              let count = innerData[evaluationValue]; //숫자
 
-              if (key.includes("BAD")) {
-                key = key.replace("BAD", "불량");
-              } else if (key.includes("GOOD")) {
-                key = key.replace("GOOD", "양호");
+              if (evaluationValue.includes("BAD")) {
+                evaluationValue = "불량";
+              } else if (evaluationValue.includes("GOOD")) {
+                evaluationValue = "양호";
               }
 
               return {
-                [key]: value
+                key,
+                evaluationValue,
+                count,
               };
             });
 
             // 데이터 변환 const로 업데이트
             setRegularCntByNameForExcel(transformedData);
-          });*/
+          });
 
 
 
