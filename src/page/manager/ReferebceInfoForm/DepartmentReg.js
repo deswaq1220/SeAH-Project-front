@@ -8,6 +8,22 @@ function classNames(...classes) {
 }
 
 export default function DepartmentReg() {
+  const [departmentId, setDepartmentId] = useState("");
+  const [departmentName, setDepartmentName] = useState("");
+
+  const handleSubmit = async () => {
+    try {
+      await axios.post(`${process.env.REACT_APP_API_BASE_URL}/admin/master/department/reg`, {
+        departmentId: departmentId,
+        departmentName: departmentName,
+      });
+      
+    } catch (error) {
+      console.error("등록 오류:", error);
+    }
+  };
+
+
   return (
     <>
       <div className="px-8 relative z-20">
@@ -19,18 +35,20 @@ export default function DepartmentReg() {
 
         <div className="sm:col-span-3 ml-2">
           <label
-            htmlFor="name"
+            htmlFor="DepartmentCode"
             className="block text-sm font-medium leading-6 text-gray-900"
           >
-            부서명1
+            부서코드
           </label>
           <div className="mt-2">
             <input
               type="text"
-              name="Department"
-              id="Department"
-              placeholder="영업부"
+              name="DepartmentCode"
+              id="DepartmentCode"
+              placeholder="120000"
               autoComplete="family-name"
+              value={departmentId}
+              onChange={(e) => setDepartmentId(e.target.value)}
               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
             />
           </div>
@@ -40,7 +58,7 @@ export default function DepartmentReg() {
             htmlFor="email"
             className="block text-sm font-medium leading-6 text-gray-900"
           >
-            부서명2
+            부서명
           </label>
           <div className="mt-2">
             <input
@@ -48,6 +66,8 @@ export default function DepartmentReg() {
               name="Department2"
               id="Department2"
               placeholder="영업팀"
+              value={departmentName}
+              onChange={(e) => setDepartmentName(e.target.value)}
               autoComplete="family-name"
               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
             />
@@ -64,6 +84,7 @@ export default function DepartmentReg() {
           <button
             type="button"
             id="submit"
+            onClick={handleSubmit}
             className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mt-2"
           >
             등록하기

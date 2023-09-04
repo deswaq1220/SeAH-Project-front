@@ -21,7 +21,7 @@ export default function Injured({ onFormDataChange }) {
   useEffect(() => {
     function specialInjureFetchDataWithAxios( masterdataPart,masterdataId) {
       axios
-        .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataId}`)   // 세아
+        .get(`${process.env.REACT_APP_API_BASE_URL}/user/special/new/${masterdataPart}/${masterdataId}`)   // 세아
         .then((response) => {
           // 백에서 보내주는 부상부위 리스트
           const speInjuredListFromBack = response.data.specialInjuredList;

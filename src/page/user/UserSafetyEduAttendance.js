@@ -7,79 +7,62 @@ import UserHeader from "../../components/UserHeader";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
-const department = [
-  {
-    id: 1,
-    name: "선택",
-  },
-  {
-    id: 2,
-    name: "소형압연팀",
-  },
-  {
-    id: 3,
-    name: "주조팀",
-  },
-  {
-    id: 4,
-    name: "압출팀",
-  },
-];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 function UserSafetyEduAttendance() {
+  const [department, setDepartment] = useState([]);
   const [selected, setSelected] = useState({
-    ...department[0],
-    attenName: "", // 빈 문자열로 초기화
-    attenEmployeeNumber: "", // 빈 문자열로 초기화
+    departmentName: "", // 부서 이름을 나중에 설정하기 위한 임시 값
+    attenName: "",
+    attenEmployeeNumber: "",
   });
   // ...
   const { eduId } = useParams();
   const [eduList, setEduList] = useState([]); // 안전교육 데이터를 담을 상태 변수
   const [eduData, setEduData] = useState(null);
   // const [eduTitle, setEduTitle] = useState(null);
-  const [eduTitle, setEduTitle] = useState("")
+  const [eduTitle, setEduTitle] = useState("");
   const [isAttendanceCompleted, setIsAttendanceCompleted] = useState(false); // 출석 완료 여부 상태 변수
   const today = new Date();
   const year = today.getFullYear();
   const month = String(today.getMonth() + 1).padStart(2, "0");
   const day = String(today.getDate()).padStart(2, "0");
   const formattedDate = `${year}. ${month}. ${day}`;
-  const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
   const handleSubmit = (event) => {
     event.preventDefault();
-  
-  
+
     // Form 데이터 가져오기
     const attenDepartment = selected.name;
     const attenName = selected.attenName;
     const attenEmployeeNumber = selected.attenEmployeeNumber;
-  
+
     const requestData = {
       attenDepartment,
       attenName,
       attenEmployeeNumber,
       eduId,
     };
-  
+
     // 버튼이 비활성화되어 있더라도 클릭 이벤트가 발생하도록 수정
     axios
       .post(
-          `${process.env.REACT_APP_API_BASE_URL}/usereduatten/register/${eduId}`,     // 세아
+        `${process.env.REACT_APP_API_BASE_URL}/user/register/${eduId}`, // 세아
         //  `http://localhost:8081/usereduatten/register/${eduId}`,
-        requestData, {
-        //http://localhost:8081/usereduatten/register 이거는 진짜 사용할때
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+        requestData,
+        {
+          //http://localhost:8081/usereduatten/register 이거는 진짜 사용할때
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((response) => {
         console.log(response);
-  
+
         toast.success("출석이 완료되었습니다.", {
           position: "top-center",
           autoClose: 3000,
@@ -116,7 +99,7 @@ function UserSafetyEduAttendance() {
     const fetchEduList = async () => {
       try {
         const response = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/edudetails/${eduId}`    // 세아
+          `${process.env.REACT_APP_API_BASE_URL}/admin/edudetails/${eduId}` // 세아
           //  `http://localhost:8081/edudetails/${eduId}`
         );
         console.log(response.data); // 서버로부터 받은 데이터 확인
@@ -126,8 +109,8 @@ function UserSafetyEduAttendance() {
       }
     };
     // GET 요청을 통해 eduTitle 가져오기
-    axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}/usereduatten/register/${eduId}`)   // 세아
+    axios
+      .get(`${process.env.REACT_APP_API_BASE_URL}/user/register/${eduId}`) // 세아
       // `http://localhost:8081/usereduatten/register/${eduId}`)
       .then((response) => {
         // 응답 데이터에서 eduTitle 값을 추출하여 상태 업데이트
@@ -141,10 +124,32 @@ function UserSafetyEduAttendance() {
     fetchEduList(); // 데이터 가져오기 함수 호출
   }, [eduId]); // eduId를 두 번째 인자로 넣어줌으로써 eduId가 변경될 때마다 useEffect가 실행되도록 함
 
-
-  
-
-
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_BASE_URL}/admin/master/departdropdown`)
+      .then((response) => {
+        if (
+          response.data &&
+          response.data.departmentList &&
+          response.data.departmentList.length > 0
+        ) {
+          const departmentData = response.data.departmentList.map((item) => {
+            const [id, name] = item.split(","); // 각 항목을 쉼표로 분리
+            return { id, name }; // 분리한 값을 가진 객체 반환
+          });
+          setDepartment(departmentData);
+          setSelected((prevSelected) => ({
+            ...prevSelected,
+            name: departmentData[0].name,
+          }));
+        } else {
+          console.error("No department data received");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching department data:", error);
+      });
+  }, []); // 빈 배열을 두 번째 인자로 넣어줌으로써 컴포넌트가 마운트될 때만 useEffect가 실행되도록 함
 
   return (
     <div>
@@ -160,7 +165,10 @@ function UserSafetyEduAttendance() {
               {formattedDate}
             </h3>
             <p className="mt-1 max-w-2xl text-lg leading-6 text-gray-500">
-            <span className=" font-bold text-seahColor">{eduList.eduTitle}</span> 교육 사원출석 페이지입니다
+              <span className=" font-bold text-seahColor">
+                {eduList.eduTitle}
+              </span>{" "}
+              교육 사원출석 페이지입니다
             </p>
           </div>
           <form className="w-full md:grid-cols-2" onSubmit={handleSubmit}>
@@ -172,7 +180,7 @@ function UserSafetyEduAttendance() {
                 {({ open }) => (
                   <>
                     <div className="relative mt-2">
-                      <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-16 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
+                      <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-28 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
                         <span className="flex items-center">
                           <span className="ml-3 block truncate">
                             {selected.name}
@@ -227,7 +235,7 @@ function UserSafetyEduAttendance() {
                                       className={classNames(
                                         active
                                           ? "text-white"
-                                          : "text-indigo-600",
+                                          : "text-seahColor",
                                         "absolute inset-y-0 right-0 flex items-center pr-4"
                                       )}
                                     >
@@ -313,6 +321,6 @@ function UserSafetyEduAttendance() {
       </div>
     </div>
   );
-                                      }
+}
 
 export default UserSafetyEduAttendance;

@@ -18,7 +18,7 @@ export default function ActionRquest({ onFormDataChange, onChange }) {
     async function emailFetchDataWithAxios() {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/user/regularemail`
+          `${process.env.REACT_APP_API_BASE_URL}/user/special/new/${masterdataPart}/${masterdataId}`
         );
         // 영역별 이메일리스트(선택)
         const emailListFromBack = response.data["emailList"];
@@ -58,10 +58,7 @@ export default function ActionRquest({ onFormDataChange, onChange }) {
       speActPerson: selectedEmailNames,
       speActEmail: selectedEmailAddresses,
     });
-
   };
-
-
 
   // 이메일 정보 추가 : +버튼
   const handleAddInstance = () => {
@@ -96,7 +93,9 @@ export default function ActionRquest({ onFormDataChange, onChange }) {
       id="ActionRequest"
       className="grid sm:flex items-baseline justify-start"
     >
-     
+      {/* <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 my-4 ml-4 ">
+        조치요청
+      </span> */}
       <div className="">
         {/* 조치요청 */}
         {instances.map((instance, index) => (
@@ -187,14 +186,14 @@ export default function ActionRquest({ onFormDataChange, onChange }) {
               전송
             </button> */}
 
-            <div className="mt-2 ml-1 flex items-center">
+            <div className="mt-2 ml-2 flex">
               <input
                 type="text"
                 name="Inspectionarea"
                 id="Inspectionarea"
                 placeholder="E-Mail"
                 autoComplete=""
-                className="block w-full rounded-md border-0  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5 ml-2"
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5 ml-1"
                 value={
                   instance.selectedEmail ? instance.selectedEmail.emailAdd : ""
                 }

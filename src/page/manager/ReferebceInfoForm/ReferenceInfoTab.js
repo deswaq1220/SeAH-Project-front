@@ -9,7 +9,7 @@ import DepartmentTable from "../ReferenceInfoTable/DepartmentTable";
  
 const tabs = [
   { name: '설비등록',  component: [ <FacilityTable />], current: true },
-  { name: '조치담당자 등록', component: [<FacilityInfo />, <EmailTable />], current: false },
+  { name: '조치담당자 등록', component: [<EmailTable />], current: false },
   { name: '부서 관리', component: [<DepartmentReg />,<DepartmentTable/>], current: false },
 
 ]

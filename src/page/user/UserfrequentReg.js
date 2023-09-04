@@ -168,8 +168,8 @@ function UserfrequentReg() {
   console.log(formData); // 요청 데이터 콘솔에 출력
 
   // 수시점검 등록 요청
-   axios
-     .post(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataId}`, formData, {
+  axios
+      .post(`${process.env.REACT_APP_API_BASE_URL}/user/special/new/${masterdataPart}/${masterdataId}`, formData, {
        headers: {
          "Content-Type": "multipart/form-data",
        },

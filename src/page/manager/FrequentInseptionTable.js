@@ -24,7 +24,7 @@ export default function FrequentInseptionTable({ searchResults }) {
     function specialFetchDataWithAxios() {
       // 첫 화면
       axios
-        .get(`${process.env.REACT_APP_API_BASE_URL}/frequentinspection`)   // 세아
+        .get(`${process.env.REACT_APP_API_BASE_URL}/user/frequentinspection`)   // 세아
         .then((response) => {
           const speListFromBack = response.data.searchSpeList.searchSpeDataDTOList;
 

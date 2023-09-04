@@ -13,7 +13,7 @@ export default function Facilityname({onChange}) {
  useEffect(() => {
   function fetchDataFromApi() {
    axios
-       .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataId}`)   // 세아
+       .get(`${process.env.REACT_APP_API_BASE_URL}/user/special/new/${masterdataPart}/${masterdataId}`)   // 세아
        .then((response) => {
         const facilityFromBackName = response.data.facilityName;
          setFromBackFacility(facilityFromBackName); // 설비코드에 따른 설비명

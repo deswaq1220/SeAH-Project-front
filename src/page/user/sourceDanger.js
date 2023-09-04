@@ -19,9 +19,9 @@ export default function Dangersource({onFormDataChange}) {
 
  // 위험원인 get
  useEffect(() => {
-  function specialCauseFetchDataWithAxios(masterdataPart, masterdataFacility) {
+  function specialCauseFetchDataWithAxios(masterdataPart, masterdataId) {
     axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataId}`)  // 세아
+      .get(`${process.env.REACT_APP_API_BASE_URL}/user/special/new/${masterdataPart}/${masterdataId}`)  // 세아
       .then((response) => {
         const speCauseListFromBack = response.data.specialCauseList;
 

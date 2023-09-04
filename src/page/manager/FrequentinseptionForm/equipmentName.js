@@ -15,7 +15,7 @@ export default function EquipmentName({onFormDataChange, selectedPart}) {
  // 설비 목록 업데이트 함수
   const updateFacilityList = (part) => {
     axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/frequentinspection`)  // 세아
+      .get(`${process.env.REACT_APP_API_BASE_URL}/user/frequentinspection`)  // 세아
       .then((response) => {
         const speFacListFromBack = response.data.searchPartAndFacList.facilityList;
         console.log("여기확인임: "+speFacListFromBack);
