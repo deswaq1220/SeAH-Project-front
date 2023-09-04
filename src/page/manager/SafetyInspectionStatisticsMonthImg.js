@@ -65,7 +65,7 @@ function SafetyInspectionStatisticsMonthImg() {
     if(selected !== "전체"){
       // axios 요청
       axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/regular/statistics/checkvaluecountsort`, {
+          .get(`${process.env.REACT_APP_API_BASE_URL}/admin/regular/statistics/checkvaluecountsort`, {
             params: {
               yearmonth: selectedYear,
               regularinsname: selected,
@@ -79,7 +79,7 @@ function SafetyInspectionStatisticsMonthImg() {
           });
     }else{
       axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/regular/statistics/checkvaluecount`, {
+          .get(`${process.env.REACT_APP_API_BASE_URL}/admin/regular/statistics/checkvaluecount`, {
             params: {yearmonth: selectedYear},
           })
           .then((response) => {
@@ -93,6 +93,8 @@ function SafetyInspectionStatisticsMonthImg() {
 
   // 이벤트: 정기점검 분석 결과 엑셀로 내보내기
   const regularHandleExport = () => {
+    // "구분" 값을 중복되지 않게 추출
+    const uniqueKeys = [...new Set(regularCntByNameForExcel.map((item) => item.key))];
     const data = [
       {
         sheetName: "정기점검 총 건수",
@@ -107,11 +109,28 @@ function SafetyInspectionStatisticsMonthImg() {
       },
       {
         sheetName: "위험성평가 분석",
-        data: regularCntByNameForExcel.map((item) => ({
-          구분: item.key,
-          위험성평가: item.evaluationValue,
-          건수: item.count,
-        })),
+        data: uniqueKeys.map((key) => {
+          const transformedItem = {
+            구분: key,
+          };
+
+          // 해당 키를 가진 항목만 필터링
+          const filteredItems = regularCntByNameForExcel.filter((item) => item.key === key);
+
+          filteredItems.forEach((item) => {
+            const evaluationValue = item.evaluationValue;
+            const count = item.count;
+
+            // GOOD 또는 BAD에 따라 키를 동적으로 설정
+            if (evaluationValue === "GOOD") {
+              transformedItem["양호"] = count;
+            } else if (evaluationValue === "BAD") {
+              transformedItem["불량"] = count;
+            }
+          });
+
+          return transformedItem;
+        }),
       },
     ];
 
@@ -258,7 +277,7 @@ function SafetyInspectionStatisticsMonthImg() {
       //정기점검
       //점검건수 값
       await axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/regular/statistics/monthcount`, {
+          .get(`${process.env.REACT_APP_API_BASE_URL}/admin/regular/statistics/monthcount`, {
             params: {yearmonth: selectedYear},
           }) //세아
           .then((response) => {
@@ -267,7 +286,7 @@ function SafetyInspectionStatisticsMonthImg() {
 
       //(엑셀) 영역별 점검건수
       await axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/regular/statistics/partandmonthforexcel`, {
+          .get(`${process.env.REACT_APP_API_BASE_URL}/admin/regular/statistics/partandmonthforexcel`, {
             params: {yearmonth: selectedYear},
           }) //세아
           .then((response) => {
@@ -276,7 +295,7 @@ function SafetyInspectionStatisticsMonthImg() {
 
       //(radarChart) 영역별 점검건수
       await axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/regular/statistics/partandmonth`, {
+          .get(`${process.env.REACT_APP_API_BASE_URL}/admin/regular/statistics/partandmonth`, {
             params: {yearmonth: selectedYear},
           })
           .then((response) => {
@@ -286,7 +305,7 @@ function SafetyInspectionStatisticsMonthImg() {
       //(pieChart) 위험성결과 분석
       //드롭다운 미선택 시,  전체 위험성 결과 출력
       await axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/regular/statistics/checkvaluecount`, {
+          .get(`${process.env.REACT_APP_API_BASE_URL}/admin/regular/statistics/checkvaluecount`, {
             params: {yearmonth: selectedYear},
           })
           .then((response) => {
@@ -297,7 +316,7 @@ function SafetyInspectionStatisticsMonthImg() {
       //(pieChart) 위험성결과 드롭다운 기능
         //백데이터 들고오기
         const response = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/regular/statistics/namedropdown`);
+            `${process.env.REACT_APP_API_BASE_URL}/admin/regular/statistics/namedropdown`);
 
         // 문자열 배열을 객체로 변환하여 새로운 배열 생성
         const optionsArray = response.data.regularNameList.map((name, index) => ({
@@ -319,33 +338,34 @@ function SafetyInspectionStatisticsMonthImg() {
               let key = Object.keys(item)[0];
               let innerData = item[key];
 
-              let evaluationValue = Object.keys(innerData)[0]; //평가값
-              let count = innerData[evaluationValue]; //숫자
+              // 평가값(key) 배열과 개수 배열 생성
+              const evaluationValues = Object.keys(innerData);
+              const counts = evaluationValues.map((value) => innerData[value]);
 
-              if (evaluationValue.includes("BAD")) {
-                evaluationValue = "불량";
-              } else if (evaluationValue.includes("GOOD")) {
-                evaluationValue = "양호";
+              const rowData = [];
+
+              // 각 항목을 키 값마다 행으로 나누기
+              for (let i = 0; i < evaluationValues.length; i++) {
+                rowData.push({
+                  key,
+                  evaluationValue: evaluationValues[i],
+                  count: counts[i],
+                });
               }
 
-              return {
-                key,
-                evaluationValue,
-                count,
-              };
+              return rowData;
             });
 
-            // 데이터 변환 const로 업데이트
+            // 모든 데이터를 단일 배열로 펼치기
+            transformedData = [].concat(...transformedData);
+
+            // 데이터를 state에 저장
             setRegularCntByNameForExcel(transformedData);
           });
-
-
-
     } catch (error) {
       console.error("불러온 데이터에 에러가 발생했습니다:", error);
     }
   };
-
   return (
 
       <div>
