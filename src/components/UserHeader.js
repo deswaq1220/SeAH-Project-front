@@ -137,13 +137,7 @@ export default function UserHeader() {
           >
             정기점검
           </Link>
-          <Link
-            to="/#"
-            className="text-lg font-semibold leading-6 text-gray-900 hover:bg-slate-100"
-          >
-            My요청
-          </Link>
-          
+
         </Popover.Group>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           {/* <Link to="/" className="text-lg font-semibold leading-6 text-gray-900">
@@ -211,11 +205,7 @@ export default function UserHeader() {
                 >
                   정기점검
                 </Link>
-                <Link to="/eduMain"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                >
-                  My요청
-                </Link>
+                
                 {/* <Link to="/reinfo"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >

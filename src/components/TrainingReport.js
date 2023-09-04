@@ -3,9 +3,6 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
-const TK =
-  "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1IiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY5MzAyNjY1OX0.VVZoLMp3oVPQH-EjiYs_Rcr-ZiaA9WsT5YLf9QlaKnjdbhb1exwRodMJASj7g0jd_8R3Bad9YIvUi4SBe1m1-g";
-
 export default function TrainingReport() {
   const { eduId } = useParams();
   const [eduDetails, setEduDetails] = useState(null);
@@ -13,10 +10,9 @@ export default function TrainingReport() {
   useEffect(() => {
     // API 요청을 통해 해당 교육 아이디에 해당하는 데이터 가져오기
     axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/edudetails/${eduId}`, {
+      .get(`${process.env.REACT_APP_API_BASE_URL}/admin/edudetails/${eduId}`, {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${TK}`,
+          "Content-Type": "application/json"
         },
       })
       .then((response) => {
@@ -48,7 +44,7 @@ export default function TrainingReport() {
   useEffect(() => {
     // 교육 아이디에 맞는 출석목록 데이터를 받아오는 API 호출
     axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/usereduatten/list/${eduId}`) //세아
+      .get(`${process.env.REACT_APP_API_BASE_URL}/admin/list/${eduId}`) //세아
       // axios.get(`http://localhost:8081/usereduatten/list/${eduId}`)
       .then((response) => {
         // 받아온 출석목록 데이터를 attendanceList 상태에 저장

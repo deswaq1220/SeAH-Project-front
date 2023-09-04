@@ -9,20 +9,28 @@ function classNames(...classes) {
 
 export default function EquipmentName({onFormDataChange, selectedPart}) {
  const [speFacilityList, setSpeFacilityList] = useState([]);
- const [selectedFacility, setSelectedFacility] = useState("선택"); // 선택영역
+ const [selectedFacility, setSelectedFacility] = useState(""); // 선택영역
 
 
  // 설비 목록 업데이트 함수
   const updateFacilityList = (part) => {
     axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/frequentinspection`)  // 세아
+      .get(`${process.env.REACT_APP_API_BASE_URL}/user/frequentinspection`)  // 세아
       .then((response) => {
         const speFacListFromBack = response.data.searchPartAndFacList.facilityList;
         console.log("여기확인임: "+speFacListFromBack);
 
+        // "전체" 항목 추가
+        const additionalItem = {
+          masterdataId: 0,
+          masterdataPart: "전체",
+          masterdataFacility: "전체",
+        };
+        let combinedFacilityList = [];
+
         if (part === "선택") {
           setSpeFacilityList([]); // 설비 목록 초기화
-          setSelectedFacility(null); // 선택 항목 초기화
+          // setSelectedFacility(null); // 선택 항목 초기화
           onFormDataChange(null);
         } else {
           // 선택한 영역에 해당하는 설비가 등록되어있을때
@@ -30,18 +38,19 @@ export default function EquipmentName({onFormDataChange, selectedPart}) {
             (item) => item.masterdataPart === part
           );
 
-          if (filteredFacilityData.length > 0) {
-            setSpeFacilityList(filteredFacilityData);
-            setSelectedFacility(null); // 설비 목록 초기화 후 null로 설정
-            onFormDataChange(null); // 설비 선택을 초기화로 처리
-          } else {
-            // 선택한 영역에 해당하는 설비가 등록되지 않았을 때
+          // 병합
+          combinedFacilityList = [additionalItem, ...filteredFacilityData];
+          if (combinedFacilityList.length === 0) {
             setSpeFacilityList([]);
             setSelectedFacility(null); // 선택 항목 초기화
             onFormDataChange("");
-            // alert("선택한 영역에 해당하는 설비가 없습니다.");
+          } else {
+            setSelectedFacility(additionalItem);
+            onFormDataChange(additionalItem);
           }
         }
+        setSpeFacilityList(combinedFacilityList);
+
       })
       .catch((error) => {
         console.error("Error fetching data: ", error);
@@ -72,7 +81,7 @@ export default function EquipmentName({onFormDataChange, selectedPart}) {
               <>
                 <div className="relative mt-2">
                   <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-20 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
-                    <span className="block truncate">{selectedFacility === null ? "선택" : selectedFacility.masterdataFacility} </span>
+                    <span className="block truncate">{selectedFacility.masterdataFacility} </span>
                     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                       <ChevronUpDownIcon
                         className="h-5 w-5 text-gray-400"

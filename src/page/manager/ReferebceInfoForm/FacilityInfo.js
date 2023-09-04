@@ -14,7 +14,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function FacilityInfo() {
+export default function FacilityInfo( { fetchData, handleNewData }) {
   const [selectedArea, setSelectedArea] = useState(null);
   const [status, setStatus] = useState(Status[0]);
   const [facilityName, setFacilityName] = useState(""); // 설비명 관련 상태 추가
@@ -67,6 +67,10 @@ export default function FacilityInfo() {
           masterStatus: status.name,
         }
       );
+
+      fetchData();
+      // Add this line to update FacilityTable's state directly
+      handleNewData(response.data);
 
       // API 호출이 성공한 경우에 대한 처리
       console.log("등록 성공:", response.data);

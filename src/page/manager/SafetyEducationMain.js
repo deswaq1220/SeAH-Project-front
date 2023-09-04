@@ -6,9 +6,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Pagination from "../../components/Pagination";
 import { Link } from "react-router-dom";
-import instance from "../../api/fetcher";
 
-  const TK ="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1IiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY5MzAyNjY1OX0.VVZoLMp3oVPQH-EjiYs_Rcr-ZiaA9WsT5YLf9QlaKnjdbhb1exwRodMJASj7g0jd_8R3Bad9YIvUi4SBe1m1-g"
 
 function SafetyEducationMain() {
   const [currentDate, setCurrentDate] = useState(new Date()); // 년,월
@@ -16,7 +14,6 @@ function SafetyEducationMain() {
   
   const itemsPerPage = 10; // 한 페이지당 보여줄 항목 개수
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 번호
-  const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");

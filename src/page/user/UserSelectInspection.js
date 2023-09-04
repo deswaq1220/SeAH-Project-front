@@ -36,7 +36,7 @@ export default function UserSelectInspection() {
     {
       title: "정기점검",
       sub: "안전점검 영역에 대한 정기점검을 할 수 있습니다.",
-      href: "#",
+      href: "/regulardetails",
       icon: ClipboardDocumentListIcon,
       iconForeground: "text-teal-700",
       iconBackground: "bg-teal-50",
@@ -85,7 +85,7 @@ export default function UserSelectInspection() {
     function fetchDataWithAxios(masterdataPart, masterdataId) {
       axios
         .get(
-          `${process.env.REACT_APP_API_BASE_URL}/special/${masterdataPart}/${masterdataId}`
+          `${process.env.REACT_APP_API_BASE_URL}/user/special/${masterdataPart}/${masterdataId}`
         )
         .then((response) => {
           const data = response.data;

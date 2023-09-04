@@ -133,17 +133,13 @@ const handleRadioChange = (index, method) => {
 
       return updatedChecklist; // Return the new checklist to update the state
     });
-//
+//id: actForm.id,
 //     setFiles(prevFiles => {
 //         const newFilesState=[...prevFiles];
 //         newFilesState.push({file:updatedFile});
 //         return newFilesState;
 //      });
-      setRegularDTO(prevData => ({  ...prevData,
-          file: {
-              ...prevData.file,
-              [id] : updatedFile // '1' is the key and 'updatedFile' should be an array of File or Blob objects.
-          } })); // Update formData with new file array
+      setRegularDTO(prevData => ({ ...prevData, file:'1', updatedFile })); // Update formData with new file array
 //       setRegularDTO({
 //           file: updatedFile, // Update the file property in the formData state
 //       });

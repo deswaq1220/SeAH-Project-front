@@ -31,7 +31,7 @@ function EduStatics() {
       const currentYear = getYear(currentDate);
       // 월&카테고리 별 교육시간 총 합계
       const response = await  axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}/edustatistics/getmonthlyedulist`, {
+        `${process.env.REACT_APP_API_BASE_URL}/admin/edustatistics/getmonthlyedulist`, {
         params: {
           year: currentYear,
           month: currentMonth,
@@ -74,7 +74,7 @@ function EduStatics() {
         
         // 월&카테고리 별 교육시간 총 합계
         const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/edustatistics/getmonthlyruntime`, {   // 세아
+          `${process.env.REACT_APP_API_BASE_URL}/admin/edustatistics/getmonthlyruntime`, {   // 세아
           params: {
             year: currentYear,
             month: currentMonth
@@ -104,7 +104,7 @@ function EduStatics() {
         const currentYear = getYear(currentDate);
         // 월&카테고리 별 교육시간 총 합계
         const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/edustatistics/getmonthlyedulist`, {
+          `${process.env.REACT_APP_API_BASE_URL}/admin/edustatistics/getmonthlyedulist`, {
           params: {
             year: currentYear,
             month: currentMonth,
