@@ -146,14 +146,23 @@ const useSafetyEduForm = (eduData) => {
     if (eduId) {
      axios
         .get(`${process.env.REACT_APP_API_BASE_URL}/admin/edudetails/${eduId}`)
-        //  .get(`http://localhost:8081/edudetails/${eduId}`)
         .then((response) => {
           // 가져온 데이터로 상태 업데이트
-          console.log(response.data);
-          // seteduFiles(response.data.eduFileList);
+          formData.eduSumTime = response.data.eduSumTime;
+          setFormData({
+            ...response.data,
+            eduFileList: response.data.eduFileList,
+            eduSumTime:response.data.eduSumTime,
 
-            setFormData(response.data, formData.eduFileList= response.data.eduFileList);
+          });
 
+          if(response.data.eduCategory ==="ETC"){
+            selected.name = "ETC";
+            setSelectedEtcTime(response.data.eduSumTime);
+          }
+          
+          // setSelectedEtcTime(response.data.eduSumTime);
+          console.log("교육 총시간 뭘까.. ?" , response.data.eduSumTime)
           })
           .catch((error) => {
             // 에러 처리
@@ -173,7 +182,6 @@ const useSafetyEduForm = (eduData) => {
   };
 
   const [selectedStartTime, setSelectedStartTime] = useState("");
-  // const [selectedEndTime, setSelectedEndTime] = useState("");
 
   const handleStartTimeChange = (e) => {
     const newValue = e.target.value;
@@ -191,25 +199,25 @@ const useSafetyEduForm = (eduData) => {
     // setQrValue(JSON.stringify({ ...formData, eduId: eduData.eduId }));
   };
 
-  const onDrop = useCallback(
-    (acceptedFiles) => {
-      setUploadedFiles([...uploadedFiles, ...acceptedFiles]);
+  // const onDrop = useCallback(
+  //   (acceptedFiles) => {
+  //     setUploadedFiles([...uploadedFiles, ...acceptedFiles]);
 
-      // for (const file of acceptedFiles) {
-      //   formData.append("files", file);
-      // }
+  //     // for (const file of acceptedFiles) {
+  //     //   formData.append("files", file);
+  //     // }
 
-      if (acceptedFiles.length > 0) {
-        setFormData({
-          ...formData,
-          files: acceptedFiles, // Update the file property in the formData state
-        });
-      }
+  //     if (acceptedFiles.length > 0) {
+  //       setFormData({
+  //         ...formData,
+  //         files: acceptedFiles, // Update the file property in the formData state
+  //       });
+  //     }
 
-      console.log(acceptedFiles);
-    },
-    [formData, uploadedFiles]
-  );
+  //     console.log(acceptedFiles);
+  //   },
+  //   [formData, uploadedFiles]
+  // );
 
   const deleteFile = (index) => {
     const updatedFiles = [...uploadedFiles];
@@ -220,7 +228,6 @@ const useSafetyEduForm = (eduData) => {
 
   function saveFile(file){
     setFormData(prevData => ({ ...prevData, files: file })); // Update formData with new file array
-        console.log("여기?");
     console.log(formData.files);
   }
 
@@ -242,7 +249,7 @@ const useSafetyEduForm = (eduData) => {
     setFormData((prevFormData) => ({ ...prevFormData, file: selectedFile }));
   };
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  // const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   // 교육 카테고리를 선택했을 때 호출되는 함수
   const handleListboxChange = (selectedItem) => {
@@ -253,7 +260,6 @@ const useSafetyEduForm = (eduData) => {
         ...prevData,
         eduCategory: selectedItem.name,
         eduTitle: mapEduCategoryName(selectedItem.name),
-        eduSumTime: selectedEtcTime,
       }));
     } else {
       // 기타 카테고리가 아닌 경우 선택한 카테고리의 시간 값을 formData.eduSumTime으로 설정
@@ -303,7 +309,6 @@ const useSafetyEduForm = (eduData) => {
 //        formData.eduSumTime = selectPeople(formData.eduCategory).time;
         formData.eduFileList = null;
         const response = await axios.post(
-          //  `http://localhost:8081/edudetails/${formData.eduId}`,
           `${process.env.REACT_APP_API_BASE_URL}/admin/edudetails/${formData.eduId}`, //세아
           formData,
           {
@@ -317,7 +322,6 @@ const useSafetyEduForm = (eduData) => {
       } else {
         // 새로운 교육 데이터를 등록하는 경우 (POST 요청)
         const response = await axios.post(
-            //  "http://localhost:8081/edureg",
             `${process.env.REACT_APP_API_BASE_URL}/admin/edureg`, // 세아
             formData,
 
@@ -352,15 +356,19 @@ const useSafetyEduForm = (eduData) => {
     if (selected.name === "ETC") {
       return `총 교육시간: ${selectedEtcTime}분`;
     } else {
-      formData.eduSumTime = selected.time;
-      return `총 교육시간: ${selectedEtcTime}분`;
-//      return `총 교육시간: ${selectPeople(formData.eduCategory).time || 0}분`;
+      return `총 교육시간: ${formData.eduSumTime}분`; 
     }
   };
 
   const handleEtcTimeChange = (event) => {
-    const { value } = event.target;
+    const  value  = event.target.value;
+    
     setSelectedEtcTime(Number(value));
+
+    setFormData((prevData) => ({
+      ...prevData,
+      eduSumTime: Number(value),
+    }));
   };
 
   return {
@@ -376,12 +384,12 @@ const useSafetyEduForm = (eduData) => {
     handleChange,
     handleStartTimeChange,
     handleCreate,
-    onDrop,
+    // onDrop,
     deleteFile,
     handleFileChange,
-    getRootProps,
-    getInputProps,
-    isDragActive,
+    // getRootProps,
+    // getInputProps,
+    // isDragActive,
     handleListboxChange,
     handleDutyChange,
     navigate,
