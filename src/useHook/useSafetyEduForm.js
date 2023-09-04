@@ -353,7 +353,7 @@ const useSafetyEduForm = (eduData) => {
       return `총 교육시간: ${selectedEtcTime}분`;
     } else {
       formData.eduSumTime = selected.time;
-      return `총 교육시간: ${selectedEtcTime} || 0}분`;
+      return `총 교육시간: ${selectedEtcTime}분`;
 //      return `총 교육시간: ${selectPeople(formData.eduCategory).time || 0}분`;
     }
   };
