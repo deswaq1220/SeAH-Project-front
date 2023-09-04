@@ -8,7 +8,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function ActionRquest({ onFormDataChange }) {
+export default function ActionRquest({ onFormDataChange, onChange }) {
   const { masterdataPart, masterdataId } = useParams();
   const [emailDataList, setEmailDataList] = useState([]);                     // 영역별 이메일 리스트
   const [emailYDataList, setEmailYDataList] = useState([]);   // 이메일 고정수신자 리스트
@@ -25,8 +25,9 @@ export default function ActionRquest({ onFormDataChange }) {
         setEmailDataList(emailListFromBack);
 
         // 이메일 고정수신자 리스트
-        const emailYListFromBack = response.data["staticEmailList"];
+        const emailYListFromBack = response.data.staticEmailList;
         setEmailYDataList(emailYListFromBack);
+        onChange(emailYListFromBack);
 
       } catch (error) {
         console.error("데이터 가져오기 오류: ", error);

@@ -39,7 +39,10 @@ function UserfrequentReg() {
  const [speEmpNum, setSpeEmpNum] = useState("");
  const [spePerson, setSpePerson] = useState("");
  const [speEmail, setSpeEmail] = useState("");        // 조치자 이메일정보
-  // const [emailYDataList, setEmailYDataList] = useState([]); // 고정수신자 이메ㅣㅇㄹ정보
+  const [staticEmailPerson, setStaticEmailPerson] = useState(() => {
+    // 초기값 설정
+    return [];
+  });
  const [speFacility, setSpeFacility] = useState("");
  const [speDanger, setSpeDanger] = useState("");
  const [speInjure, setSpeInjure] = useState("");
@@ -104,10 +107,26 @@ function UserfrequentReg() {
  };
 
   // 고정수신자
-  // const handleStaticEmailChange = (staticEmailList) => {
-  //   setStaticEmailPerson(staticEmailList.emailAdd);
-  //   console.log("확인: "+staticEmailList.emailAdd);
-  // };
+  const handleStaticEmailChange = (staticEmailList) => {
+
+    // // staticEmailList가 배열인 경우, 각 이메일 주소를 추출하여 배열에 추가
+    const staticEmailAddresses = Array.isArray(staticEmailList)
+      ? staticEmailList.map((item) => item.emailAdd)
+      : [staticEmailList.emailAdd];
+
+    setStaticEmailPerson(staticEmailAddresses);
+    console.log("고정 수신자:", staticEmailAddresses);
+
+    // if (Array.isArray(staticEmailList)) {
+    //   staticEmailList.forEach((item) => {
+    //     if (item.emailAdd) {
+    //       console.log("설정된 이메일 주소:", item.emailAdd);
+    //     }
+    //   });
+    // }
+  };
+
+
 
  // 개선대책
  const handleActContChange = (e) => {
@@ -131,7 +150,6 @@ function UserfrequentReg() {
    }
   }
 
-  // formData.append('staticEmailPerson', staticEmailPerson);
   formData.append('speEmpNum', speEmpNum);
   formData.append('spePerson', spePerson);
   formData.append('speEmail', speEmail);
@@ -173,6 +191,10 @@ function UserfrequentReg() {
           <tr>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">항목</td>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">내용</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">고정수신자</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.staticEmailPerson}</td>
           </tr>
           <tr>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검일시</td>
@@ -226,7 +248,7 @@ function UserfrequentReg() {
             <p style="font-size:16px;">링크 : <a href="http://localhost:3000/special/detail/${response.data.speId}">상세보기</a></p>`;
 
          const emailData = {
-           recipients: speActEmail.split(", "), // 이메일 주소를 수신자로 설정
+           recipients: [...speActEmail.split(", "), ...staticEmailPerson.map(person => person.emailAdd)], // 이메일 주소를 수신자로 설정
            subject: emailTitle, // 이메일 제목
            content: inspectionData, // 이메일 내용 (점검 내용 등)
            // 필요한 다른 속성도 여기에 추가 가능
@@ -312,8 +334,8 @@ function UserfrequentReg() {
           />
        </div>
       </div>
-         <ActionRquest onFormDataChange={handleActionRequestDetailsDataChange} />{" "}{/* 조치요청 */}
-       {/*setEmailYDataList={setEmailYDataList}*/}
+         <ActionRquest onFormDataChange={handleActionRequestDetailsDataChange}
+                       onChange={handleStaticEmailChange}/>{" "}{/* 조치요청 */}
 
        {/* 혜영추가-완료여부 */}
       <IsCompelete onFormDataChange={handleIsCompeleteDataChange} />{" "}{/* 완료여부 */}
