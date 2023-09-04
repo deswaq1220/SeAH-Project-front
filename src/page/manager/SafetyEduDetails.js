@@ -54,7 +54,7 @@ export default function SafetyEduDetails() {
     const fetchEduDetail = async () => {
       try {
         const response = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/edudetails/${eduId}`,        // 세아
+            `${process.env.REACT_APP_API_BASE_URL}/admin/edudetails/${eduId}`,        // 세아
             //  `http://localhost:8081/edudetails/${eduId}`
             {
               headers: {

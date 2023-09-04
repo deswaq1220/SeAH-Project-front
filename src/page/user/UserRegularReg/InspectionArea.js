@@ -7,15 +7,30 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function InspectionArea() {
+export default function InspectionArea({handleInspectionAreaChange}) {
   const [regularPartList, setRegularPartList] = useState([]); // 설비영역
   const [selectedArea, setSelectedArea] = useState(null);
+
+  const handleInputChange = (name) => {
+    const regularPart  = name;
+    console.log(regularPart);
+    };
+    useEffect(() => {
+      if (selectedArea !== null) {
+        handleInputChange(selectedArea.name);
+        handleInspectionAreaChange({
+          regularPart:selectedArea.name,
+        })
+
+      }
+      
+    }, [selectedArea]);
 
   useEffect(() => {
     async function fetchOptions() {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/regularpart`
+          `${process.env.REACT_APP_API_BASE_URL}/user/regularpart`
         );
 
         // 문자열 배열을 객체로 변환하여 새로운 배열 생성
@@ -25,10 +40,9 @@ export default function InspectionArea() {
             name: name,
           })
         );
-
+        console.log(response.data);
         setRegularPartList(optionsArray);
         setSelectedArea(optionsArray[0]);
-        console.log(response.data);
       } catch (error) {
         console.error("서버 요청 오류:", error);
       }

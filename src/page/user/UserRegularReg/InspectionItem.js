@@ -20,11 +20,9 @@ export default function InspectionItem() {
     try {
       if (selectedArea) {
         const selectedPosition = regularNameList.indexOf(selectedArea);
-        console.log("selectedPosition: " + selectedPosition)
         if (selectedPosition !== -1) {
           const regularNum = selectedPosition + 1;
-          console.log("regularNum: " + regularNum)
-          const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/regularcheck`, {   // 세아
+          const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/user/regularcheck`, {   // 세아
               params: {
                 regularNum: regularNum,
               },
@@ -49,7 +47,7 @@ export default function InspectionItem() {
     async function fetchOptions() {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/regularname`
+          `${process.env.REACT_APP_API_BASE_URL}/user/regularname`
         );
 
         // 문자열 배열을 객체로 변환하여 새로운 배열 생성
