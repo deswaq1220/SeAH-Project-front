@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
-
 export default function TrainingReport() {
   const { eduId } = useParams();
   const [eduDetails, setEduDetails] = useState(null);
@@ -12,11 +11,13 @@ export default function TrainingReport() {
     // API 요청을 통해 해당 교육 아이디에 해당하는 데이터 가져오기
     axios
       .get(`${process.env.REACT_APP_API_BASE_URL}/admin/edudetails/${eduId}`, {
-        
+        headers: {
+          "Content-Type": "application/json"
+        },
       })
       .then((response) => {
         setEduDetails(response.data);
-        console.log(eduDetails);
+        console.log();
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -172,15 +173,7 @@ export default function TrainingReport() {
             </tr>
             <tr className="flex">
               <td className=" p-4  border-black  w-[97mm] h-[350px]">
-                <p> {eduDetails && eduDetails.eduFileUrl
-                ? eduDetails.eduFileUrl.map((file, index) => (
-                    <img
-                      key={index}
-                      src={process.env.REACT_APP_API_BASE_URL + file}
-                      alt={`사진 ${index + 1}`}
-                    />
-                  ))
-                : "첨부된 사진이 없습니다"}</p>
+                <p>{eduDetails && eduDetails.eduFiles}</p>
               </td>
             </tr>
           </table>
