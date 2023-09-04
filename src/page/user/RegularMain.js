@@ -1,49 +1,32 @@
 import React, { useState, useEffect } from "react";
-import Header from "../../components/Header";
-// import { format, addMonths, subMonths } from "date-fns";
+import UserHeader from "../../components/UserHeader";
 import { format, addMonths, subMonths, getMonth, getYear } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Pagination from "../../components/Pagination";
 import { Link } from "react-router-dom";
 
-
-function SafetyEducationMain() {
+function RegularMain() {
   const [currentDate, setCurrentDate] = useState(new Date()); // 년,월
-  const [eduList, setEduList] = useState([]); // 안전교육 데이터를 담을 상태 변수
+  const [regularList, setRegularList] = useState([]); // 안전교육 데이터를 담을 상태 변수
   
   const itemsPerPage = 10; // 한 페이지당 보여줄 항목 개수
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 번호
+  const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
-  const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
 
   // 현재 페이지에 해당하는 항목들을 추출하는 함수
   const getCurrentPageItems = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    return eduList.slice(startIndex, endIndex);
+    return regularList.slice(startIndex, endIndex);
   };
 
-  const getDisplayedId = (eduId) => {
-    const index = eduList.findIndex((edu) => edu.eduId === eduId);
+  const getDisplayedId = (regularId) => {
+    const index = regularList.findIndex((regular) => regular.regularId === regularId);
     return index !== -1 ? index + 1 : ""; // 인덱스를 1부터 시작하도록 +1 해줍니다.
   };
-
-  // useEffect(() => {
-  //   const fetchEduList = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `http://localhost:8081/edumain`); 
-  //         // `http://172.20.20.252:8081/edumain`); 
-  //       setEduList(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-
-  //   fetchEduList();
-  // }, []);
 
 
   useEffect(() => {
@@ -51,26 +34,17 @@ function SafetyEducationMain() {
       try {
         const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
         const currentYear = getYear(currentDate);
-        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/admin/edumain`, {
-            // 세아
-        // const response = await axios.get(`http://localhost:8081/edumain, {
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/user/regularlist`, {   // 세아
+        // const response = await axios.get(`http://localhost:8081/regularlist, {
           params: {
             year: currentYear,
             month: currentMonth,
           },
-          headers: {
-              'Content-Type': 'application/json',
-              // 'Authorization' : `Bearer ${TK}`,
-          },
-          
-          
         });
-        const sortedEduList = response.data.sort((a, b) => {
-          // eduStartTime을 기준으로 오름차순 정렬
-          return new Date(a.eduStartTime) - new Date(b.eduStartTime);
+        const sortRegularList = response.data.sort((a, b) => {
+          return new Date(a.regularDate) - new Date(b.regularDate);
         });
-        // console.log(response.data[0].eduFiles[0]);
-        setEduList(sortedEduList);
+        setRegularList(sortRegularList);
         setSelectedMonth(currentMonth);
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
@@ -79,7 +53,7 @@ function SafetyEducationMain() {
 
     // 현재 월의 로그를 가져오는 함수 호출
     getLogsForCurrentMonth();
-  }, [selectedCategory, currentDate]);
+  }, [currentDate]);
 
   const goToPreviousMonth = () => {
     const previousMonthDate = subMonths(currentDate, 1);
@@ -102,17 +76,16 @@ function SafetyEducationMain() {
 
   const handleClick = () => {
     // 원하는 경로로 이동
-    navigate("/edureg");
+    navigate("/regularreg");
   };
 
-  // eduList가 undefined일 때 처리
-  if (eduList === undefined) {
-    return <div>Loading...</div>;
+  if (regularList === undefined) {
+    return <div> 등록된 정기점검이 없습니다.</div>;
   }
 
   return (
     <div>
-      <Header />
+      <UserHeader />
       <div className="flex flex-col justify-center items-center text-3xl mt-28">
         <div className="flex items-center">
           <button onClick={goToPreviousMonth} className="mr-2">
@@ -155,11 +128,8 @@ function SafetyEducationMain() {
           <div className="sm:flex sm:items-center">
             <div className="sm:flex-auto">
               <h1 className="text-base font-semibold leading-6 text-gray-900">
-                안전교육 조회목록입니다
+              {getFormattedDate()} 정기점검 목록
               </h1>
-              <p className="mt-2 text-sm text-gray-700">
-                {getFormattedDate()} 안전교육 목록입니다
-              </p>
               <div className="flex justify-end">
                 <button
                   type="submit"
@@ -187,86 +157,69 @@ function SafetyEducationMain() {
                         scope="col"
                         className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
                       >
-                        제목
+                        분류
+                      </th>
+                      <th
+                        scope="col"
+                        className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                      >
+                        영역
                       </th>
                       <th
                         scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
-                        내용
+                        점검 일자
                       </th>
                       <th
                         scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
-                        교육일
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                      >
-                        첨부파일
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                      >
-                        작성자
-                      </th>
-                      <th
-                        scope="col"
-                        className="relative py-3.5 pl-3 pr-4 sm:pr-0"
-                      >
-                        <span className="sr-only">Edit</span>
+                        완료여부
                       </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
-                    {getCurrentPageItems().map((edu, index) => (
-                      <tr key={edu.eduId}>
+                    {getCurrentPageItems().map((regular, index) => (
+                      <tr key={regular.regularId}>
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           <div className="flex items-center">
                             <div className="mt-1 text-gray-500">
-                              {getDisplayedId(edu.eduId)}
+                              {getDisplayedId(regular.regularId)}
                             </div>
                           </div>
                         </td>
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           <div className="flex items-center">
                             <Link
-                              to={`/edudetails/${edu.eduId}`} // 해당 아이디 디테일 페이지로 이동하는 경로 설정
+                              to={`/user/regular/detail/${regular.regularId}`}
                               className="font-medium text-seahColor hover:text-seahDeep "
                             >
-                              {edu.eduTitle}
+                              {regular.regularInsName}
                             </Link>
                           </div>
                         </td>
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           <div className="flex items-center">
                             <Link
-                              to={`/edudetails/${edu.eduId}`} // 해당 아이디 디테일 페이지로 이동하는 경로 설정
-                              className="font-medium text-seahColor hover:text-seahDeep truncate"
-                              style={{ width: "150px" }} // 예시로 150px 너비를 지정
+                              to={`/user/regular/detail/${regular.regularId}`}
+                              className="font-medium text-seahColor hover:text-seahDeep "
                             >
-                              {edu.eduContent}
+                              {regular.regularPart}
                             </Link>
                           </div>
                         </td>
-                        <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                          {format(new Date(edu.eduStartTime), "yyyy-MM-dd HH시 mm분")}
+                       <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                          {format(new Date(regular.regularDate), "yyyy-MM-dd HH시 mm분")}
                         </td>
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
 
-                          {edu.eduFileList.length > 0 ? (
+                          {/* {regular.eduFiles.length > 0 ? (
                             <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
                              첨부
                             </span>
                           ) 
-                          : null}
-                        </td>
-
-                        <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                          {edu.eduWriter}
+                          : null} */}
                         </td>
                       </tr>
                     ))}
@@ -279,18 +232,18 @@ function SafetyEducationMain() {
       </div>
       <div className="flex justify-center">
         <div className="px-4 sm:px-6 lg:px-8 max-w-screen-xl w-full">
-          {eduList.length > 0 ? (
+          {regularList.length > 0 ? (
             <Pagination
               currentPage={currentPage}
               itemsPerPage={itemsPerPage}
-              totalItems={eduList.length}
+              totalItems={regularList.length}
               setCurrentPage={setCurrentPage}
             />
-          ) : ( <p className="flex justify-center">해당 월의 교육은 없습니다.</p>)}
+          ) : ( <p className="flex justify-center">해당 월의 정기점검이 없습니다.</p>)}
         </div>
       </div>
     </div>
   );
 }
 
-export default SafetyEducationMain;
+export default RegularMain;

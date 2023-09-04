@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
+
 export default function TrainingReport() {
   const { eduId } = useParams();
   const [eduDetails, setEduDetails] = useState(null);
@@ -10,10 +11,12 @@ export default function TrainingReport() {
   useEffect(() => {
     // API 요청을 통해 해당 교육 아이디에 해당하는 데이터 가져오기
     axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/edudetails/${eduId}`)
+      .get(`${process.env.REACT_APP_API_BASE_URL}/admin/edudetails/${eduId}`, {
+        
+      })
       .then((response) => {
         setEduDetails(response.data);
-        console.log();
+        console.log(eduDetails);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -40,7 +43,7 @@ export default function TrainingReport() {
   useEffect(() => {
     // 교육 아이디에 맞는 출석목록 데이터를 받아오는 API 호출
     axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/usereduatten/list/${eduId}`) //세아
+      .get(`${process.env.REACT_APP_API_BASE_URL}/admin/list/${eduId}`) //세아
       // axios.get(`http://localhost:8081/usereduatten/list/${eduId}`)
       .then((response) => {
         // 받아온 출석목록 데이터를 attendanceList 상태에 저장
@@ -68,7 +71,9 @@ export default function TrainingReport() {
         <header className="flex justify-between">
           <img className="h-8 w-auto" src={logo} alt="" />
           <div className="flex  flex-col items-center">
-            {eduDetails && <p className=" font-bold text-xl">{eduDetails.eduTitle}</p>}
+            {eduDetails && (
+              <p className=" font-bold text-xl">{eduDetails.eduTitle}</p>
+            )}
             <p className="text-lg">안전교육수강확인서</p>
           </div>
         </header>
@@ -80,7 +85,9 @@ export default function TrainingReport() {
             <table className="w-[310px]">
               <tr className="border border-black">
                 <td className="p-1 border-r border-black text-center">날짜</td>
-                <td className="p-1">{formatTime(eduDetails && eduDetails.eduStartTime)}</td>
+                <td className="p-1">
+                  {formatTime(eduDetails && eduDetails.eduStartTime)}
+                </td>
               </tr>
               <tr className="border border-black">
                 <td className="p-1 border-r border-black text-center">시간</td>
@@ -165,9 +172,16 @@ export default function TrainingReport() {
             </tr>
             <tr className="flex">
               <td className=" p-4  border-black  w-[97mm] h-[350px]">
-                <p>{eduDetails && eduDetails.eduFiles}</p>
+                <p> {eduDetails && eduDetails.eduFileUrl
+                ? eduDetails.eduFileUrl.map((file, index) => (
+                    <img
+                      key={index}
+                      src={process.env.REACT_APP_API_BASE_URL + file}
+                      alt={`사진 ${index + 1}`}
+                    />
+                  ))
+                : "첨부된 사진이 없습니다"}</p>
               </td>
-            
             </tr>
           </table>
         </section>

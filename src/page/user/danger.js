@@ -10,22 +10,15 @@ function classNames(...classes) {
 
 export default function Danger({ onFormDataChange }) {
   const { masterdataPart } = useParams(); // url 영역 파라미터
-  const { masterdataFacility } = useParams(); // url 설비 파라미터
+  const { masterdataId } = useParams(); // url 설비코드 파라미터
   const [specialDangerList, setSpecialDangerList] = useState([]); // 위험분류List
   const [selectedDanger, setSelectedDanger] = useState(""); // 위험분류
 
   // 위험분류 get
   useEffect(() => {
-    function specialDangerFetchDataWithAxios(
-      masterdataPart,
-      masterdataFacility
-    ) {
+    function specialDangerFetchDataWithAxios(masterdataPart, masterdataId) {
       axios
-        .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataFacility}`)   // 세아
-        // .get(
-        //   `http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`
-        // )
-        // .get(`http://192.168.202.1:8081/special/new/${masterdataPart}/${masterdataFacility}`)
+        .get(`${process.env.REACT_APP_API_BASE_URL}/user/special/new/${masterdataPart}/${masterdataId}`)   // 세아
         .then((response) => {
           const speDangerListFromBack = response.data.specialDangerList;
           const speDangerData = speDangerListFromBack.map((item) => {
@@ -42,8 +35,8 @@ export default function Danger({ onFormDataChange }) {
         });
     }
 
-    specialDangerFetchDataWithAxios(masterdataPart, masterdataFacility);
-  }, [masterdataPart, masterdataFacility]);
+    specialDangerFetchDataWithAxios(masterdataPart, masterdataId);
+  }, [masterdataPart, masterdataId]);
 
   // 선택한 값 세팅
   const handleDangerChange = (value) => {
@@ -56,7 +49,6 @@ export default function Danger({ onFormDataChange }) {
       <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
         위험분류
       </span>
-      {/*<Listbox value={selected} onChange={setSelected}>*/}
       <Listbox value={selectedDanger} onChange={handleDangerChange}>
         {({ open }) => (
           <>

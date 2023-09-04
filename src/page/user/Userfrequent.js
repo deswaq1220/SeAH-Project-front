@@ -7,22 +7,25 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { useParams } from "react-router-dom";
+import userSafetyEduAttendance from "./UserSafetyEduAttendance";
 
 export default function Userfrequent() {
   // qr 정보따라 url 파라미터 세팅되어야됨
   const { masterdataPart } = useParams(); // url 영역 파라미터
-  const { masterdataFacility } = useParams(); // url 설비 파라미터
+  const { masterdataId } = useParams(); // url 설비id 파라미터
+  const [masterdataFacility, setMasterdataFacility] = useState("");  // 설비명
   const [people, setPeople] = useState([]);
   const navigate = useNavigate();
 
   // Json값 가져와서 세팅
   useEffect(() => {
-    function fetchDataWithAxios(masterdataPart, masterdataFacility) {
+    function fetchDataWithAxios(masterdataPart, masterdataId) {
       axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/special/list/${masterdataPart}/${masterdataFacility}`) //세아
-          // .get(`http://localhost:8081/special/list/${masterdataPart}/${masterdataFacility}`)
+          .get(`${process.env.REACT_APP_API_BASE_URL}/user/special/list/${masterdataPart}/${masterdataId}`) //세아
           .then((response) => {
             const dataFromBackend = response.data.listOfFac;
+            const facilityFromBack = response.data.facilityName;
+            setMasterdataFacility(facilityFromBack);
 
             // 백엔드에서 받은 데이터를 가공하여 people 배열 생성
             const peopleData = dataFromBackend.map((item) => {
@@ -48,6 +51,7 @@ export default function Userfrequent() {
               };
             });
             setPeople(peopleData);
+
           })
           .catch((error) => {
             console.error("Error fetching data:", error);
@@ -55,30 +59,9 @@ export default function Userfrequent() {
           });
     }
 
-    fetchDataWithAxios(masterdataPart, masterdataFacility);
-  }, [masterdataPart, masterdataFacility]);
+    fetchDataWithAxios(masterdataPart, masterdataId);
+  }, [masterdataPart, masterdataId]);
 
-  // const people = [
-  //   {
-  //     name: '[2023-07-31 08:00]',
-  //     title: '[김흥돌]',
-  //     department: '',
-  //     email: '',
-  //     inscontent:'브레이크 정밀 점검 필요',
-  //     action: '',
-  //     icon: XCircleIcon ,
-  //   },
-  //   {
-  //     name: '[' + ']',
-  //     title: '[김흥돌]',             // 점검자
-  //     department: '[김안전]',        // 조치자
-  //     email: '[2023-08-02 16:00]',
-  //     inscontent:'브레이크 정밀 점검 필요',
-  //     action: '정밀 점검 수행',
-  //     icon: CheckCircleIcon ,
-  //   },
-  //   // More people...
-  // ]
 
   return (
       <div className="container mx-auto sm:px-6 lg:px-8">
@@ -92,12 +75,12 @@ export default function Userfrequent() {
                 name="output"
                 id="output"
                 className="block w-auto rounded-md border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-4 mr-2"
-                value={`${masterdataPart} / ${masterdataFacility}`}
+                value={`${masterdataPart}/${masterdataFacility}`}
                 readOnly
             />
 
             {/*수시점검 등록하기 클릭 시 등록페이지 이동*/}
-            <Link to={`/special/new/${masterdataPart}/${masterdataFacility}`}>
+            <Link to={`/special/new/${masterdataPart}/${masterdataId}`}>
               <button
                   type="button"
                   className="inline-flex items-center gap-x-2 rounded-md bg-seahColor px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
@@ -108,7 +91,6 @@ export default function Userfrequent() {
             </Link>
           </div>
         </div>
-        {/* <div className="sm:flex sm:items-center"></div> */}
         <div className="mt-8 flow-root">
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">

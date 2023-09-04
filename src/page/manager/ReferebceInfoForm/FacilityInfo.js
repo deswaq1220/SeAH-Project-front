@@ -14,7 +14,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function FacilityInfo() {
+export default function FacilityInfo( { fetchData, handleNewData }) {
   const [selectedArea, setSelectedArea] = useState(null);
   const [status, setStatus] = useState(Status[0]);
   const [facilityName, setFacilityName] = useState(""); // 설비명 관련 상태 추가
@@ -34,7 +34,7 @@ export default function FacilityInfo() {
     async function fetchOptions() {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/master/partdropdown`
+          `${process.env.REACT_APP_API_BASE_URL}/admin/master/partdropdown`
         );
 
         // 문자열 배열을 객체로 변환하여 새로운 배열 생성
@@ -59,7 +59,7 @@ export default function FacilityInfo() {
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_BASE_URL}/master/email`,
+        `${process.env.REACT_APP_API_BASE_URL}/admin/master/email`,
         {
           emailPart: selectedArea.name,
           emailName: name, // 상태로 관리된 이름 값
@@ -67,6 +67,10 @@ export default function FacilityInfo() {
           masterStatus: status.name,
         }
       );
+
+      fetchData();
+      // Add this line to update FacilityTable's state directly
+      handleNewData(response.data);
 
       // API 호출이 성공한 경우에 대한 처리
       console.log("등록 성공:", response.data);

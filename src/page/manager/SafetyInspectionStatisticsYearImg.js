@@ -119,7 +119,7 @@ function SafetyInspectionStatisticsYearImg() {
             //(LineChart) 특정년도의 수시점검과 정기점검 건수
 
             //점검데이터
-            const lineChartResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/statistics/inspectioncount`, {params: {year: selectedYear}});   // 세아
+            const lineChartResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/admin/statistics/inspectioncount`, {params: {year: selectedYear}});   // 세아
             const specialCountData = lineChartResponse.data;
             console.log("첫번째" + JSON.stringify(lineChartResponse.data, null, 2));
 
@@ -137,17 +137,17 @@ function SafetyInspectionStatisticsYearImg() {
 
             //(lineChart) 연간 수시점검/정기점검 건수 표시
             //수시점검
-            const speSpeCountByYearResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/yearcount`, {params: {year: selectedYear}});   // 세아
+            const speSpeCountByYearResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/admin/special/statistics/yearcount`, {params: {year: selectedYear}});   // 세아
             const speSpeCountByYear = speSpeCountByYearResponse.data;
             setSpeCountDataForLine(speSpeCountByYear);
             //정기점검
-            const regCountByYearResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/regular/statistics/yearcount`, {params: {year: selectedYear}});   // 세아
+            const regCountByYearResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/admin/regular/statistics/yearcount`, {params: {year: selectedYear}});   // 세아
             const regCountByYear = regCountByYearResponse.data;
             setRegCountDataForLine(regCountByYear);
 
 
             //(BarChart) 특정년도의 월별 수시점검한 위험분류 건수
-            const barChartResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/special/statistics/detaildanger`, {params: {year: selectedYear}});   // 세아
+            const barChartResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/admin/special/statistics/detaildanger`, {params: {year: selectedYear}});   // 세아
 
             const specialDangerData = barChartResponse.data; //백엔드에서 받아온 데이터
             const dataByMonth = {};

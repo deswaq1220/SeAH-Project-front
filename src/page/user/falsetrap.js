@@ -11,7 +11,7 @@ function classNames(...classes) {
 
 export default function Falsetrap({onFormDataChange}){
   const { masterdataPart } = useParams(); // url 영역 파라미터
-  const { masterdataFacility } = useParams(); // url 설비 파라미터
+  const { masterdataId } = useParams(); // url 설비코드 파라미터
   const [specialTrapList, setSpecialTrapList] = useState([]) // 실수함정List
   const [trapSelected, setTrapSelected] = useState(""); //  실수함정
 
@@ -20,8 +20,7 @@ export default function Falsetrap({onFormDataChange}){
   useEffect(() => {
     function specialTrapFetchDataWithAxios(masterdataPart, masterdataFacility) {
       axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/special/new/${masterdataPart}/${masterdataFacility}`)   // 세아
-          //  .get(`http://localhost:8081/special/new/${masterdataPart}/${masterdataFacility}`)
+          .get(`${process.env.REACT_APP_API_BASE_URL}/user/special/new/${masterdataPart}/${masterdataId}`)   // 세아
           .then((response) => {
             const speTrapListFromBack = response.data.specialTrapList;
             const speTrapData = speTrapListFromBack.map((item) => {
@@ -38,8 +37,8 @@ export default function Falsetrap({onFormDataChange}){
           });
     }
 
-    specialTrapFetchDataWithAxios(masterdataPart, masterdataFacility);
-  }, [masterdataPart, masterdataFacility]);
+    specialTrapFetchDataWithAxios(masterdataPart, masterdataId);
+  }, [masterdataPart, masterdataId]);
 
   // 선택한 값 세팅
   const handleTrapChange = (value) => {
@@ -53,7 +52,6 @@ export default function Falsetrap({onFormDataChange}){
           실수함정
         </span>
         {/* 실수함정 */}
-        {/*<Listbox value={falsetrapSelected} onChange={setFalsetrapSelected}>*/}
         <Listbox value={trapSelected} onChange={handleTrapChange}>
           {({ open }) => (
             <>

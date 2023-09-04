@@ -16,7 +16,7 @@ export default function FacilityTable() {
   const handleDelete = async (masterdataId) => {
     try {
       await axios.delete(
-        `${process.env.REACT_APP_API_BASE_URL}/master/delete/${masterdataId}`
+        `${process.env.REACT_APP_API_BASE_URL}/admin/master/delete/${masterdataId}`
       );
       setFacilityList((prevList) =>
         prevList.filter((facility) => facility.masterdataId !== masterdataId)
@@ -40,7 +40,7 @@ export default function FacilityTable() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}/master/viewfacilities`
+        `${process.env.REACT_APP_API_BASE_URL}/admin/master/viewfacilities`
       );
       setFacilityList(response.data.facilityList);
     } catch (error) {
@@ -177,10 +177,9 @@ export default function FacilityTable() {
                         </td>
                         <td className="whitespace-nowrap p-4 text-sm text-gray-500">
                           {selectedFacility === facility.masterdataId ? (
-                            <Link to={`/special/${facility.masterdataPart}/${facility.masterdataFacility}`}>
+                            <Link to={`/special/${facility.masterdataPart}/${facility.masterdataId}`}>
                               <QRCode
                                  value={`http://172.20.20.252:3000/special/${facility.masterdataPart}/${facility.masterdataFacility}`}
-                                //value={`http://172.20.10.13:3000/special/${facility.masterdataPart}/${facility.masterdataFacility}`}
                               />
                             </Link>
                           ) : (

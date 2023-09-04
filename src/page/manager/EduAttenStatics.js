@@ -48,7 +48,7 @@ function EduAttenStatics() {
     const getLogsForCurrentMonth = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/edustatistics/atten`, {
+          `${process.env.REACT_APP_API_BASE_URL}/admin/edustatistics/atten`, {
           params: {
             year: getYear(currentDate),
             eduCategory: selectedCategory,
@@ -85,7 +85,7 @@ function EduAttenStatics() {
   const handleSearch = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}/edustatistics/atten`, {
+        `${process.env.REACT_APP_API_BASE_URL}/admin/edustatistics/atten`, {
         params: {
           year: getYear(currentDate),
           eduCategory: selectedCategory,
@@ -103,7 +103,7 @@ function EduAttenStatics() {
     }
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}/edustatistics/atten`, {
+        `${process.env.REACT_APP_API_BASE_URL}/admin/edustatistics/atten`, {
         params: {
           year: getYear(currentDate),
           eduCategory: null,
