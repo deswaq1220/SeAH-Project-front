@@ -123,7 +123,7 @@ const handleRadioChange = (index, method) => {
     const updatedActEmail = actForm.regularActEmail;
     const updatedActContent = actForm.regularActContent;
     const updatedFile = actForm.files;
-
+    const  id = actForm.id;
     setRegularcheckList(prevChecklist => {
       const updatedChecklist = [...prevChecklist]; // Copy the previous checklist
       // Update the specific object in the checklist
@@ -133,12 +133,21 @@ const handleRadioChange = (index, method) => {
 
       return updatedChecklist; // Return the new checklist to update the state
     });
-//id: actForm.id,
-    setFiles(prevFiles => {
-        const newFilesState=[...prevFiles];
-        newFilesState.push({file:updatedFile});
-        return newFilesState;
-     });
+//
+//     setFiles(prevFiles => {
+//         const newFilesState=[...prevFiles];
+//         newFilesState.push({file:updatedFile});
+//         return newFilesState;
+//      });
+      setRegularDTO(prevData => ({  ...prevData,
+          file: {
+              ...prevData.file,
+              [id] : updatedFile // '1' is the key and 'updatedFile' should be an array of File or Blob objects.
+          } })); // Update formData with new file array
+//       setRegularDTO({
+//           file: updatedFile, // Update the file property in the formData state
+//       });
+
   };
 
 
@@ -188,10 +197,11 @@ const handleRadioChange = (index, method) => {
 
 
     const handleFormSubmit = async () => {
-
+    console.log(regularDTO.file);
      regularDTO.regularDetailDTOList = JSON.stringify(regularcheckList);
-     regularDTO.file = files;
-    console.log(regularDTO);
+
+    console.log("regularDTO");
+        console.log(regularDTO);
 //        let formData = new FormData();
 
 
