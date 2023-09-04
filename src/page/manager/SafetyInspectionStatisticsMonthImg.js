@@ -88,6 +88,9 @@ function SafetyInspectionStatisticsMonthImg() {
     }
   };
 
+
+
+
   // 이벤트: 정기점검 분석 결과 엑셀로 내보내기
   const regularHandleExport = () => {
     const data = [
@@ -104,7 +107,12 @@ function SafetyInspectionStatisticsMonthImg() {
       },
       {
         sheetName: "위험성평가 분석",
-        data: checkCount.map((item) => ({ 위험분류: item[0], 건수: item[1] })),
+        data: regularCntByNameForExcel.map((item) => ({
+          구분: Object.keys(item)[0],
+          위험성평가: Object.keys(item[]),
+          건수: Object.values
+
+        })),
       },
     ];
 
@@ -186,6 +194,7 @@ function SafetyInspectionStatisticsMonthImg() {
     const [regularCountByPart, setRegularCountByPart] = useState([]); //월간 영역별 정기점검횟수
     const [regularCntByPartForExcel, setRegularCntByPartForExcel] = useState([]); //월간 영역별 정기점검횟수 엑셀용
     const [checkCount, setCheckCount] = useState([]); //백엔드 값
+    const [regularCntByNameForExcel, setRegularCntByNameForExcel] = useState([]); //월간 영역별 정기점검횟수 엑셀용
 
 
   useEffect(() => {
@@ -301,6 +310,33 @@ function SafetyInspectionStatisticsMonthImg() {
         setSelected(optionsArray[0])
       console.log("위험성결과드롭다운 값", optionsArray);
 
+      //(pieChart, 엑셀) 위험성결과 데이터 출력
+/*      await axios
+          .get(`${process.env.REACT_APP_API_BASE_URL}/regular/statistics/nameandmonthforexcel`, {
+            params: {yearmonth: selectedYear}
+          })
+          .then((response) => {
+            let transformedData = response.data.map((item) => {
+              let key = Object.keys(item)[0];
+              let innerData = item[key];
+
+              let Evaluation
+              let value = item[key];
+
+              if (key.includes("BAD")) {
+                key = key.replace("BAD", "불량");
+              } else if (key.includes("GOOD")) {
+                key = key.replace("GOOD", "양호");
+              }
+
+              return {
+                [key]: value
+              };
+            });
+
+            // 데이터 변환 const로 업데이트
+            setRegularCntByNameForExcel(transformedData);
+          });*/
 
 
 
