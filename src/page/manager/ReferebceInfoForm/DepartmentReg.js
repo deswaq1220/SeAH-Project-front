@@ -7,16 +7,20 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function DepartmentReg() {
+export default function DepartmentReg({ fetchData, handleNewData }) {
   const [departmentId, setDepartmentId] = useState("");
   const [departmentName, setDepartmentName] = useState("");
 
   const handleSubmit = async () => {
     try {
-      await axios.post(`${process.env.REACT_APP_API_BASE_URL}/admin/master/department/reg`, {
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/admin/master/department/reg`, {
         departmentId: departmentId,
         departmentName: departmentName,
       });
+  
+      fetchData();
+      // Add this line to update FacilityTable's state directly
+      handleNewData(response.data);
       
     } catch (error) {
       console.error("등록 오류:", error);

@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { PaperClipIcon } from "@heroicons/react/20/solid";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function UserFrequentDetailsTable() {
   const { speId } = useParams(); // URL 파라미터로부터 speId를 가져옵니다.
   const [inspectionData, setInspectionData] = useState(null); // API로부터 받은 데이터를 저장할 상태 변수
+  const navigate = useNavigate();
 
+  const { masterdataPart, masterdataId } = useParams();
   useEffect(() => {
     // API 요청을 보내 데이터를 가져옵니다.
     axios
       .get(`${process.env.REACT_APP_API_BASE_URL}/user/special/detail/${speId}`) // 실제 API 주소로 수정해야합니다.
       .then((response) => {
         setInspectionData(response.data); // 데이터를 상태 변수에 저장합니다.
-        console.log(response.data);
+        console.log("인스팩숀", response.data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -60,6 +62,12 @@ export default function UserFrequentDetailsTable() {
         return "";
     }
   };
+  const handleEditButtonClick = (speId) => {
+    navigate(
+      `/special/new/${inspectionData.specialData.spePart}/${inspectionData.facilityCode}?speId=${speId}`
+    );
+  };
+
   return (
     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 mt-5">
       <div className="px-4 sm:px-0">
@@ -231,6 +239,7 @@ export default function UserFrequentDetailsTable() {
         <button
           type="button"
           className="rounded-md bg-seahColor px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+          onClick={() => handleEditButtonClick(speId)} // speId 값을 넘겨줍니다.
         >
           수정 / 조치완료 등록
         </button>
