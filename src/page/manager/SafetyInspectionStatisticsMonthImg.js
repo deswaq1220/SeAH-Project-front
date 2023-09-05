@@ -135,7 +135,7 @@ function SafetyInspectionStatisticsMonthImg() {
               goodCount += count;
             } else if (evaluationValue === "BAD") {
               badCount += count;
-            } else if (evaluationValue === "N/A"){
+            } else if (evaluationValue === "NA"){
               na += count;
             }
           });
@@ -190,7 +190,7 @@ function SafetyInspectionStatisticsMonthImg() {
       },
       {
         sheetName: "위험원인 분석",
-        data: causeCount.map((item) => ({ 위험원인: item[0], 건수: item[1] })),
+        data: causeCountForExcel.map((item) => ({ 위험원인: item[0], 건수: item[1] })),
       },
     ];
 
@@ -221,6 +221,7 @@ function SafetyInspectionStatisticsMonthImg() {
     const [partCountForExcel, setPartCountForExcel] = useState([]);
     const [dangerCount, setDangerCount] = useState([]);
     const [causeCount, setCauseCount] = useState([]);
+    const [causeCountForExcel, setCauseCountForExcel] = useState([]);
 
     //정기점검
     const [regularCount, setRegularCount] = useState([]); //월간 총 정기점검횟수
@@ -288,6 +289,14 @@ function SafetyInspectionStatisticsMonthImg() {
           )
           .then((response) => {
             setCauseCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
+          });
+      await axios
+          .get(
+              `${process.env.REACT_APP_API_BASE_URL}/admin/special/statistics/causeandmonthforexcel`,
+              { params: { yearmonth: selectedYear } }
+          )
+          .then((response) => {
+            setCauseCountForExcel(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
           });
 
       //정기점검
@@ -774,7 +783,7 @@ function SafetyInspectionStatisticsMonthImg() {
                           data={partCount}
                           keys={['수시점검']}
                           indexBy="sort"
-                          margin={{ top: 43, right: 60, bottom: 40, left: 60 }}
+                          margin={{ top: 43, right: 60, bottom: 42, left: 60 }}
                           borderWidth={0.5}
                           borderColor={{ from: 'color' }}
                           gridLabelOffset={36}
