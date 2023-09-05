@@ -551,7 +551,7 @@ function SafetyInspectionStatisticsMonthImg() {
                           dotBorderWidth={2}
                           enableDotLabel={true}
                           dotLabelYOffset={-8}
-                          colors={'rgba(11,107,8,0.54)'}
+                          colors={'rgba(111,74,241,0.73)'}
                           blendMode="multiply"
                           motionConfig="wobbly"
                           legends={[
@@ -792,7 +792,7 @@ function SafetyInspectionStatisticsMonthImg() {
                           dotBorderWidth={2}
                           enableDotLabel={true}
                           dotLabelYOffset={-8}
-                          colors={'rgba(11,107,8,0.54)'}
+                          colors={'rgba(111,74,241,0.73)'}
                           blendMode="multiply"
                           motionConfig="wobbly"
                           legends={[
