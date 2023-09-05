@@ -31,8 +31,9 @@ import FaultyModal from "./page/user/UserRegularReg/FaultyModal";
 import UserRegularDetails from "./page/user/UserRegularDetails/UserRegularDetails";
 import DetailedModal from "./page/user/UserRegularDetails/DetailedModal";
 //다인 씀
-import SafetyInspectionStatisticsYearImg from "./page/manager/SafetyInspectionStatisticsYearImg";
-import SafetyInspectionStatisticsMonthImg from "./page/manager/SafetyInspectionStatisticsMonthImg";
+import SafetyInspectionStatisticsYear from "./page/manager/SafetyInspectionStatisticsYear";
+import SafetySpecialInspectionStatisticsMonth from "./page/manager/SafetySpecialInspectionStatisticsMonth";
+import SafetyRegularInspectionStatisticsMonth from "./page/manager/SafetyRegularInspectionStatisticsMonth";
 
 
 // axios.defaults.baseURL = "https://localhost:8081";
@@ -79,9 +80,9 @@ function App() {
         
 
         {/*다인 추가함 */}
-        <Route path="/inspection/statistics/yearimg" element={<SafetyInspectionStatisticsYearImg/>}></Route>{/* 관리자 수시점검 연도 상세 분석 통계 대시보드*/}
-        <Route path="/inspection/statistics/monthimg" element={<SafetyInspectionStatisticsMonthImg/>}></Route>{/* 관리자 수시점검 월별통계 대시보드*/}
-
+        <Route path="/inspection/statistics/year" element={<SafetyInspectionStatisticsYear/>}></Route>{/* 관리자 연간분석(정기점검/수시점검) 통계 대시보드*/}
+        <Route path="/inspection/statistics/month/special" element={<SafetySpecialInspectionStatisticsMonth/>}></Route>{/* 관리자 월간분석(수시점검) 대시보드*/}
+        <Route path="/inspection/statistics/month/regular" element={<SafetyRegularInspectionStatisticsMonth/>}></Route>{/* 관리자 월간분석(정기점검) 대시보드*/}
 
         {/* 사용자  */}
         <Route path="/user" element={<UserMain/>}></Route>  {/* 사용자 메인페이지*/}

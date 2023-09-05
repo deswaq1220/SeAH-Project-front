@@ -411,7 +411,7 @@ function SafetyInspectionStatisticsMonthImg() {
                       <div className="hidden lg:ml-6 lg:flex lg:space-x-8 relative group">
                         <div className="relative">
                           <a
-                              href={`${process.env.REACT_APP_API_CERENT_URL}/inspection/statistics/yearimg`}
+                              href={`${process.env.REACT_APP_API_CERENT_URL}/inspection/statistics/year`}
                               className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
                           >
                             연간분석
@@ -441,21 +441,21 @@ function SafetyInspectionStatisticsMonthImg() {
                       <div className="hidden lg:ml-6 lg:flex lg:space-x-8 relative group">
                         <div className="relative">
                           <a
-                              href={`${process.env.REACT_APP_API_CERENT_URL}/inspection/statistics/monthimg`}
+                              href={`${process.env.REACT_APP_API_CERENT_URL}/inspection/statistics/month/special`}
                               className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
                           >
                             월간분석
                           </a>
                           <div className="absolute left-3 hidden group-hover:block mt-2 bg-white border border-gray-300 rounded-lg shadow-lg top-4">
                             <a
-                                href="URL_TO_SUSICHECK1"
-                                className="block px-2 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                                href={`${process.env.REACT_APP_API_CERENT_URL}/inspection/statistics/month/special`}
+                                className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
                             >
                               수시점검
                             </a>
                             <a
-                                href="URL_TO_REGULARCHECK1"
-                                className="block px-2 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                                href={`${process.env.REACT_APP_API_CERENT_URL}/inspection/statistics/month/regular`}
+                                className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
                             >
                               정기점검
                             </a>
@@ -495,14 +495,13 @@ function SafetyInspectionStatisticsMonthImg() {
           <div
               id="safeEdureg"
               className="max-w-screen-lg w-full px-2 flex flex-col items-center mt-4  ring-1 ring-inset rounded-md ring-red-600/10"
+              style={{ height: '1200px' }}
           >
 
 
             <div className="mt-2 mx-2 w-full ">
               <div className="grid grid-rows-7 gap-6">
 
-
-                {/* 위쪽 영역 */}
                 <h1 className="text-3xl font-semibold leading-2 text-gray-900 flex items-center justify-between">
                   <span>정기점검</span>
                   <button
@@ -512,8 +511,8 @@ function SafetyInspectionStatisticsMonthImg() {
                     정기점검 엑셀 저장
                   </button>
                 </h1>
-                <div className="grid grid-cols-1 gap-6 bg-gray-100 bg-opacity-50">
-                  {/*위쪽 영역 1번 - 점검 건수*/}
+                <div className="grid grid-cols-1 gap-6">
+                  {/*영역 1번 - 점검 건수*/}
                   <div>
                     <div className="flex justify-between items-baseline">
                       <h5 className="text-xl font-semibold leading-2 text-gray-900">1. 정기점검 건수</h5>
@@ -524,7 +523,7 @@ function SafetyInspectionStatisticsMonthImg() {
                       </div>
                     </dl>
                   </div>
-                  {/*위쪽 영역 2번 - 영역별*/}
+                  {/*영역 2번 - 영역별*/}
                   <div>
                     <h3 className="text-xl font-semibold leading-2 text-gray-900">2. 점검영역 분석(건)</h3>
                     {/*<dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-3">
@@ -578,7 +577,7 @@ function SafetyInspectionStatisticsMonthImg() {
                       />
                     </div>
                   </div>
-                  {/*위쪽 영역 3번 - 위험성평가분석*/}
+                  {/*영역 3번 - 위험성평가분석*/}
                   <div>
                     <h3 className="text-xl font-semibold leading-2 text-gray-900">3. 위험성평가 분석(건)</h3>
                     <div className="flex flex-col ml-2 z-10">
@@ -729,124 +728,6 @@ function SafetyInspectionStatisticsMonthImg() {
                           ]}
                       />
                       )}
-
-                  </div>
-                </div>
-
-
-                {/*중간선*/}
-                <hr className="border-t  my-6" style={{ borderColor: 'InactiveBorder' }}/>
-
-
-                {/* 아래쪽 영역 */}
-                {/* 제목 */}
-                <h1 className="text-3xl font-semibold leading-2 text-gray-900 flex items-center justify-between">
-                  <span>수시점검</span>
-                  <button
-                      className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-                      onClick={handleExport}
-                  >
-                    수시점검 엑셀 저장
-                  </button>
-                </h1>
-
-                <div className="grid grid-cols-1 gap-6 bg-gray-100 bg-opacity-50">
-                  {/*아래쪽 영역 1번*/}
-                  <div>
-                    <div className="flex justify-between items-baseline">
-                      <h5 className="text-xl font-semibold leading-2 text-gray-900">1. 점검 건수</h5>
-                    </div>
-                    <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-1">
-                      <div className="overflow-hidden rounded-lg bg-amber-100 bg-opacity-50 px-3 py-1 shadow sm:p-3 max-w-screen-xl flex items-center justify-center">
-                        <dd className="mt-3 text-3xl font-semibold tracking-tight text-gray-900">{spcCount}건</dd>
-                      </div>
-                    </dl>
-                  </div>
-                  {/*아래쪽 영역 2번 - 영역별(완료)*/}
-                  <div>
-                    <h3 className="text-xl font-semibold leading-2 text-gray-900">2. 점검영역 분석(건)</h3>
-
-                    {/*영역별 건수 숫자로 보여주는 메소드*/}
-                    {/*                          <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-3">
-                                                              {partCount
-                                                                  .sort((a, b) => b[1] - a[1]) // 배열을 내림차순으로 정렬
-                                                                  .map((item, index) => (
-                                                                      <div key={index} className="overflow-hidden rounded-lg bg-white px-4 py-10 shadow sm:max-w-screen-xl">
-                                                                          <dt className="truncate text-sm font-medium text-gray-900">{item[0]}파트</dt>
-                                                                          <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">{item[1]}건</dd>
-                                                                      </div>
-                                                                  ))}
-                                                          </dl>*/}
-
-                    <div style={{ height: '360px' }}>
-                      <ResponsiveRadar
-                          data={partCount}
-                          keys={['수시점검']}
-                          indexBy="sort"
-                          margin={{ top: 43, right: 60, bottom: 42, left: 60 }}
-                          borderWidth={0.5}
-                          borderColor={{ from: 'color' }}
-                          gridLabelOffset={36}
-                          dotSize={10}
-                          dotColor={'#f4f4f6'}
-                          dotBorderWidth={2}
-                          enableDotLabel={true}
-                          dotLabelYOffset={-8}
-                          colors={'rgba(111,74,241,0.73)'}
-                          blendMode="multiply"
-                          motionConfig="wobbly"
-                          legends={[
-                            {
-                              anchor: 'top-left',
-                              direction: 'column',
-                              translateX: -50,
-                              translateY: -40,
-                              itemWidth: 80,
-                              itemHeight: 20,
-                              itemTextColor: '#999',
-                              symbolSize: 12,
-                              symbolShape: 'circle',
-                              effects: [
-                                {
-                                  on: 'hover',
-                                  style: {
-                                    itemTextColor: '#000'
-                                  }
-                                }
-                              ]
-                            }
-                          ]}
-                      />
-                    </div>
-
-                  </div>
-                  {/*아래쪽 영역 3번 - 위험분류별(완료)*/}
-                  <div>
-                    <h3 className="text-xl font-semibold leading-2 text-gray-900">3. 위험분류 분석(건)</h3>
-                    <dl className="mt-1 grid grid-cols-2 gap-2 sm:grid-cols-5">
-                      {dangerCount
-                          .sort((a, b) => b[1] - a[1]) // 배열을 내림차순으로 정렬
-                          .map((item, index) => (
-                              <div key={index} className="overflow-hidden rounded-lg bg-indigo-100 bg-opacity-90 px-4 py-6 shadow sm:p-10" style={{ padding: 'calc(6% - 0.5rem)' }} >
-                                <dt className=" text-lg font-medium text-gray-900">{item[0]}</dt>
-                                <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">{item[1] !== 0 ? item[1] : '-'}</dd>
-                              </div>
-                          ))}
-                    </dl>
-                  </div>
-                  {/*아래쪽 영역 4번 - 위험원인별(완료)*/}
-                  <div>
-                    <h3 className="text-xl font-semibold leading-2 text-gray-900">4. 위험원인 분석(건)</h3>
-                    <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-4">
-                      {causeCount
-                          .sort((a, b) => b[1] - a[1]) // 배열을 내림차순으로 정렬
-                          .map((item, index) => (
-                              <div key={index} className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:max-w-screen-xl">
-                                <dt className="truncate text-lg font-medium text-gray-900">{item[0]}</dt>
-                                <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">{item[1] !== 0 ? item[1] : '-'}</dd>
-                              </div>
-                          ))}
-                    </dl>
                   </div>
                 </div>
               </div>

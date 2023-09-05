@@ -38,7 +38,7 @@ import {LineChart, Line} from 'recharts';
   }*/
 
 
-function SafetyInspectionStatisticsYearImg() {
+function SafetyInspectionStatisticsYear() {
     //공통: 년도입력, 기본값은 당해로 지정되어 있음
     const seoulTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
     const currentYear = new Date(seoulTime).getFullYear();
@@ -479,7 +479,7 @@ function SafetyInspectionStatisticsYearImg() {
                                     <div className="hidden lg:ml-6 lg:flex lg:space-x-8 relative group">
                                         <div className="relative">
                                             <a
-                                                href="http://localhost:3000/inspection/statistics/yearimg"
+                                                href={`${process.env.REACT_APP_API_CERENT_URL}/inspection/statistics/year`}
                                                 className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
                                             >
                                                 연간분석
@@ -509,21 +509,21 @@ function SafetyInspectionStatisticsYearImg() {
                                     <div className="hidden lg:ml-6 lg:flex lg:space-x-8 relative group">
                                         <div className="relative">
                                             <a
-                                                href="http://localhost:3000/inspection/statistics/monthimg"
+                                                href={`${process.env.REACT_APP_API_CERENT_URL}/inspection/statistics/month/special`}
                                                 className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
                                             >
                                                 월간분석
                                             </a>
                                             <div className="absolute left-3 hidden group-hover:block mt-2 bg-white border border-gray-300 rounded-lg shadow-lg top-4">
                                                 <a
-                                                    href="URL_TO_SUSICHECK1"
-                                                    className="block px-2 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                                                    href={`${process.env.REACT_APP_API_CERENT_URL}/inspection/statistics/month/special`}
+                                                    className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
                                                 >
                                                     수시점검
                                                 </a>
                                                 <a
-                                                    href="URL_TO_REGULARCHECK1"
-                                                    className="block px-2 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                                                    href={`${process.env.REACT_APP_API_CERENT_URL}/inspection/statistics/month/regular`}
+                                                    className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
                                                 >
                                                     정기점검
                                                 </a>
@@ -773,4 +773,4 @@ function SafetyInspectionStatisticsYearImg() {
     );
 }
 
-export default SafetyInspectionStatisticsYearImg;
+export default SafetyInspectionStatisticsYear;
