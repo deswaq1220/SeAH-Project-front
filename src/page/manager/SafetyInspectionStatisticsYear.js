@@ -562,16 +562,16 @@ function SafetyInspectionStatisticsYear() {
             </Disclosure>            {/*네비바 끝*/}
 
             {/*내부영역 설정*/}
-            <div className="flex justify-center bg-gray-100 bg-opacity-50">
+            <div className="flex justify-center bg-gray-100 bg-opacity-50" >
                 <div
                     id="safeEdureg"
                     className="max-w-screen-lg w-full px-2 flex flex-col items-center mt-4  ring-1 ring-inset rounded-md ring-red-600/10"
                 >
 
                     {/*화면분할*/}
-                    <div className="grid grid-rows-2 gap-4 w-full">
+                    <div className="grid grid-rows-3 gap-2 w-full">
                         {/*1/3 화면*/}
-                        <div>
+                        <div className="p-4">
                             <div className="flex justify-between items-center">
                                 <h5 className="text-xl font-semibold leading-2 text-gray-900">연간 수시ㆍ정기점검 건수 분석</h5>
                                 <div className="flex items-center gap-5">
@@ -590,7 +590,7 @@ function SafetyInspectionStatisticsYear() {
                                     엑셀 저장
                                 </button>
                             </div>
-                            <ResponsiveContainer className={`w-${isMobile ? 'full' : '1/2'} sm:w-full`} width="100%" height="48%">
+                            <ResponsiveContainer className={`w-${isMobile ? 'full' : '1/2'} sm:w-full`} width="100%" height="45%">
                                 <LineChart
                                     width={400}
                                     height={800}
@@ -619,7 +619,7 @@ function SafetyInspectionStatisticsYear() {
                                     />
                                 </LineChart>
                             </ResponsiveContainer>
-                            <ResponsiveContainer className={`w-${isMobile ? 'full' : '1/2'} sm:w-full`} width="100%" height="48%">
+                            <ResponsiveContainer className={`w-${isMobile ? 'full' : '1/2'} sm:w-full`} width="100%" height="45%">
                                 <LineChart
                                     width={400}
                                     height={800}
@@ -650,8 +650,6 @@ function SafetyInspectionStatisticsYear() {
                         </div>                {/*1/3 화면 끝*/}
 
 
-                        {/* 2/3번째 화면 - 화면 분할 1/2 */}
-                        <div className="grid grid-rows-2 gap-4 w-full">
                             <div className="p-4">
                                 <div className="flex justify-between items-center">
                                     <h5 className="text-xl font-semibold leading-2 text-gray-900">연간 수시점검 위험분류 분석</h5>
@@ -665,7 +663,7 @@ function SafetyInspectionStatisticsYear() {
                                 </div>
                                 <div style={{height: '500px'}}>
                                     {barChartData.length > 0 ? (
-                                        <ResponsiveContainer width="100%" height="100%">
+                                        <ResponsiveContainer width="100%" height="80%">
                                             <BarChart
                                                 //width={500}
                                                 height={300}
@@ -722,7 +720,7 @@ function SafetyInspectionStatisticsYear() {
                                 </div>
                                 <div style={{height: '500px'}}>
                                     {regularBarChartData.length > 0 ? (
-                                        <ResponsiveContainer width="100%" height="100%">
+                                        <ResponsiveContainer width="100%" height="80%">
                                             <BarChart
                                                 //width={500}
                                                 height={300}
@@ -765,7 +763,6 @@ function SafetyInspectionStatisticsYear() {
                                     )}
                                 </div>
                             </div>                    {/*3/3 화면 끝*/}
-                        </div>
                     </div>             {/*화면분할 끝*/}
                 </div>
             </div>
