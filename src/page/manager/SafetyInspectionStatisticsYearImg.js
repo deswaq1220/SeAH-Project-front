@@ -105,6 +105,12 @@ function SafetyInspectionStatisticsYearImg() {
     const [uniqueDangerKinds, setUniqueDangerKinds] = useState([]); //중복값 제거
 
 
+
+    //(BarChart) 특정년도의 월별 정기점검 점검종류별 건수
+    const [regularBarChartData, setRegularBarChartData] = useState([]);
+    // 모든 dangerKind를 추출하여 하나의 배열로 모으기
+    const [uniqueNameKinds, setUniqueNameKinds] = useState([]); //중복값 제거
+
     useEffect(() => {
 
         if (selectedYear) {
@@ -173,12 +179,44 @@ function SafetyInspectionStatisticsYearImg() {
 
             setBarChartData(barChartDataWithAllMonths);
             console.log("==================체크중" + JSON.stringify(barChartDataWithAllMonths));
+
+
+
+            //(BarChart) 특정년도의 월별 정기점검 종류별 건수
+            const regularBarChartResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/admin/regular/statistics/nameandyear`, {params: {year: selectedYear}});
+
+            const regularNameData = regularBarChartResponse.data; //백엔드에서 받아온 데이터
+            const regularDataByMonth = {};
+            const allregularNameKinds = regularNameData.reduce((acc, data) => {
+                return [...acc, ...Object.keys(data).filter((key) => key !== 'month')];
+            }, []);
+            setUniqueNameKinds([...new Set(allregularNameKinds)]);
+
+
+            regularNameData.forEach((data) => {
+                const month = data.month;
+                delete data.month;
+
+                Object.entries(data).forEach(([nameKind, count]) => {
+                    if (!regularDataByMonth.hasOwnProperty(month)) {
+                        regularDataByMonth[month] = {month: `${month}월`};
+                    }
+                    regularDataByMonth[month][nameKind] = count;
+                });
+            });
+
+            const regularBarChartDataWithAllMonths = regularGenerateDataForAllMonths(regularDataByMonth, allregularNameKinds);
+
+            setRegularBarChartData(regularBarChartDataWithAllMonths);
+            console.log("==================체크중" + JSON.stringify(regularBarChartDataWithAllMonths));
+
         } catch (error) {
             console.error("불러온 데이터에 에러가 발생했습니다:", error);
         }
     };
 
 
+    //수시점검 날짜
     const generateDataForAllMonths = (dataByMonth, uniqueDangerKinds) => {
         const dataForAllMonths = [];
         for (let i = 1; i <= 12; i++) {
@@ -188,6 +226,22 @@ function SafetyInspectionStatisticsYearImg() {
                 dataForAllMonths.push({month: `${month2}월`, ...Object.fromEntries(uniqueDangerKinds.map((kind) => [kind, 0]))});
             } else {
                 dataForAllMonths.push(dataByMonth[month2]);
+            }
+        }
+        return dataForAllMonths;
+
+    };
+
+    //정기점검 날짜
+    const regularGenerateDataForAllMonths = (regularDataByMonth, uniqueNameKinds) => {
+        const dataForAllMonths = [];
+        for (let i = 1; i <= 12; i++) {
+            const month2 = i;
+            if (!regularDataByMonth[month2]) {
+                // 해당 월에 데이터가 없으면 0으로 초기화하여 추가
+                dataForAllMonths.push({month: `${month2}월`, ...Object.fromEntries(uniqueNameKinds.map((kind) => [kind, 0]))});
+            } else {
+                dataForAllMonths.push(regularDataByMonth[month2]);
             }
         }
         return dataForAllMonths;
@@ -294,7 +348,7 @@ function SafetyInspectionStatisticsYearImg() {
     const handleExport2 = () => {
 
         // 엑셀 데이터 생성
-        const data = createDangerExcelData(barChartData, uniqueDangerKinds);
+        const data = createDangerExcelData(regularBarChartData, uniqueNameKinds);
 
         // 엑셀 시트 생성
         const worksheet = XLSX.utils.json_to_sheet(data);
@@ -314,7 +368,78 @@ function SafetyInspectionStatisticsYearImg() {
         saveAs(excelFile, `연간 수시점검 위험분류 분석.xlsx`);
     };
 
+
+
+    //이벤트6: 정기점검 위험분류 엑셀저장
+        //정기점검 종류별 엑셀시트만들 때 월별 데이터 생성 메소드
+        const regularGenerateDataForAllMonthsForExcel = (regularDataByMonth, uniqueNameKinds) => {
+            const dataForAllMonths = [];
+            for (let i = 0; i <= 11; i++) {
+                const month2 = i;
+                if (!regularDataByMonth[month2]) {
+                    // 해당 월에 데이터가 없으면 0으로 초기화하여 추가
+                    dataForAllMonths.push({month: `${month2}월`, ...Object.fromEntries(uniqueNameKinds.map((kind) => [kind, 0]))});
+                } else {
+                    dataForAllMonths.push(regularDataByMonth[month2]);
+                }
+            }
+            return dataForAllMonths;
+        };
+        const createNameExcelData = (regularDataByMonth, uniqueNameKinds) => {
+
+            // 차트 정보를 바탕으로 엑셀 데이터를 생성하는 로직 작성
+            const data = [];
+            const generatedData = generateDataForAllMonthsForExcel(regularDataByMonth, uniqueNameKinds); // 월별 데이터 생성
+
+            for (const monthData of generatedData) {
+                const rowData = {
+                    월: parseInt(monthData.month),
+                };
+
+                let monthlyTotal = 0; // 각 월별 합계를 저장할 변수
+
+                for (const nameValue of uniqueNameKinds) {
+                    rowData[nameValue] = monthData[nameValue] || 0; // 해당 위험분류 값이 없으면 0으로 설정
+                    monthlyTotal += rowData[nameValue]; // 해당 월의 위험분류 값 누적
+                }
+
+                rowData['월별 합계'] = monthlyTotal; // 합계 추가
+                data.push(rowData);
+            }
+            return data;
+        };
+        //정기점검 위험분류 엑셀저장로직
+        const regularHandleExport = () => {
+
+            // 엑셀 데이터 생성
+            const data = createNameExcelData(regularBarChartData, uniqueNameKinds);
+
+            // 엑셀 시트 생성
+            const worksheet = XLSX.utils.json_to_sheet(data);
+
+            // 엑셀 워크북 생성
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+            // 엑셀 파일 저장
+            const excelBuffer = XLSX.write(workbook, {
+                bookType: "xlsx",
+                type: "array",
+            });
+            const excelFile = new Blob([excelBuffer], {
+                type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            });
+            saveAs(excelFile, `연간 정기점검 종류별 분석.xlsx`);
+        };
+
+
+
+
+
+
     const maxCount = Math.max(barChartData.map((data) => Math.max(Object.values(data).filter((val) => typeof val === 'number'))));
+    const regularMaxCount = Math.max(regularBarChartData.map((data) => Math.max(Object.values(data).filter((val) => typeof val === 'number'))));
+
     const colors = ['rgba(130,205,255,0.8)', 'rgba(230,12,239,0.85)', 'rgba(130,202,157,0.89)', 'rgba(156,132,216,0.9)',
         'rgba(255,159,180,0.94)', 'rgba(50,44,140,0.88)', '#84bbd8', 'rgba(237,138,76,0.87)',
         '#f55e5e', 'rgba(150,77,238,0.91)', '#d7549d', 'rgba(121,183,101,0.95)',
@@ -590,18 +715,18 @@ function SafetyInspectionStatisticsYearImg() {
                                     <button
                                         type="button"
                                         className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-                                        onClick={handleExport2}
+                                        onClick={regularHandleExport}
                                     >
                                         엑셀 저장
                                     </button>
                                 </div>
                                 <div style={{height: '500px'}}>
-                                    {barChartData.length > 0 ? (
+                                    {regularBarChartData.length > 0 ? (
                                         <ResponsiveContainer width="100%" height="100%">
                                             <BarChart
                                                 //width={500}
                                                 height={300}
-                                                data={barChartData}
+                                                data={regularBarChartData}
                                                 margin={{
                                                     top: 20,
                                                     right: 30,
@@ -619,16 +744,16 @@ function SafetyInspectionStatisticsYearImg() {
                                                            }
                                                            return '';
                                                        }}/>
-                                                <YAxis domain={[0, maxCount]}
+                                                <YAxis domain={[0, regularMaxCount]}
                                                        tickFormatter={(value) => `${value} 건`} // 여기에 건 추가
                                                 />
                                                 <Tooltip/>
                                                 <Legend/>
 
-                                                {uniqueDangerKinds.map((dangerKind, index) => (
+                                                {uniqueNameKinds.map((nameKind, index) => (
                                                     <Bar
                                                         key={index}
-                                                        dataKey={dangerKind}
+                                                        dataKey={nameKind}
                                                         stackId="a"
                                                         fill={colors[index % colors.length]}
                                                     />
