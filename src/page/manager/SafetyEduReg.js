@@ -23,8 +23,6 @@ import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 // 추가 플러그인을 라이브러리에 등록
 registerPlugin(FilePondPluginImagePreview);
 
-
-
 const people = [
   {
     id: 1,
@@ -171,7 +169,7 @@ function SafetyEduReg() {
 
   } = useSafetyEduForm();
   const [files, setFiles] = useState(null);
-
+  
   return (
     <div>
       <Header />
@@ -347,7 +345,6 @@ function SafetyEduReg() {
                 </div>
               </div>
             </div>
-            {/* 교육시간은 세아측에서 결정 후 알려주기로 했음 아직 미정 */}
             <div
               id="Training_time"
               className="flex items-baseline justify-start"
@@ -366,13 +363,8 @@ function SafetyEduReg() {
                   type="datetime-local"
                   id="starttimepicker"
                   className="block w-56 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
-                  defaultValue={
-                    formData.eduStartTime instanceof Date
-                      ? formData.eduStartTime = new Date(formData.eduStartTime.getTime() + (9 * 60 * 60 * 1000)).toISOString().slice(0, 16)
-                      : formData.eduStartTime
-                  }
+                  defaultValue={formData.eduStartTime}
                   onChange={handleStartTimeChange}
-                  min={new Date().toISOString().slice(0, 16)}
                 />
 
                 {/* <label
@@ -564,7 +556,7 @@ function SafetyEduReg() {
               {formData.eduFileList.map((file, index) => (
                 <div key={index} className="flex items-start mt-2">
                   <div className="text-left">
-                    <TruncatedFileName fileName={file.eduFileOriName} />
+                    <TruncatedFileName fileName={file.eduFileName} />
                   </div>
                   <button
                     onClick={() => handleDeleteFile(index)}

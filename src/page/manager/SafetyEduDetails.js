@@ -68,8 +68,8 @@ export default function SafetyEduDetails() {
         강사: `${eduData.eduInstructor}`,
         작성자: eduData.eduWriter,
         교육대상자: eduData.eduTarget,
-        파일첨부: eduData.eduFiles[0],
         설명: "T는 전체, F는 현장직 O는 사무직입니다",
+        파일첨부: eduData.eduFileList.map(file => file.eduFileName).join(', '),
       },
     ];
 
@@ -253,7 +253,7 @@ export default function SafetyEduDetails() {
                                     />
                                     <div className="ml-4 flex min-w-0 flex-1 gap-2">
                                     <span className="truncate font-medium">
-                                      {eduFiles.eduFileOriName}
+                                      {eduFiles.eduFileName}
                                     </span>
 
                               <span className="flex-shrink-0 text-gray-400">
