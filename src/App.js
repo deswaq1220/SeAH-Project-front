@@ -30,7 +30,7 @@ import UserRegularReg from "./page/user/UserRegularReg/UserRegularReg";
 import FaultyModal from "./page/user/UserRegularReg/FaultyModal";
 import UserRegularDetails from "./page/user/UserRegularDetails/UserRegularDetails";
 import DetailedModal from "./page/user/UserRegularDetails/DetailedModal";
-//다인 씀
+
 import SafetyInspectionStatisticsYear from "./page/manager/SafetyInspectionStatisticsYear";
 import SafetySpecialInspectionStatisticsMonth from "./page/manager/SafetySpecialInspectionStatisticsMonth";
 import SafetyRegularInspectionStatisticsMonth from "./page/manager/SafetyRegularInspectionStatisticsMonth";
@@ -70,19 +70,15 @@ function App() {
         <Route path="/edustatistics" element={<EduStatics/>}></Route>{/* 관리자 안전교육통계*/}
         <Route path="/edustatistics/atten" element={<EduAttenStatics/>}></Route>{/* 관리자 안전교육 참가자통계*/}
 
+        <Route path="/inspection/statistics/year" element={<SafetyInspectionStatisticsYear/>}></Route>{/* 관리자 연간분석(정기점검/수시점검) 통계 대시보드*/}
+        <Route path="/inspection/statistics/month/special" element={<SafetySpecialInspectionStatisticsMonth/>}></Route>{/* 관리자 월간분석(수시점검) 대시보드*/}
+        <Route path="/inspection/statistics/month/regular" element={<SafetyRegularInspectionStatisticsMonth/>}></Route>{/* 관리자 월간분석(정기점검) 대시보드*/}
+
 
         {/* 공통 */}
         <Route path="/frequentinspection" element={<FrequentIns/>}></Route>{/* 공통 수시점검 현황*/}
         <Route path="/all/special/detail/:speId" element={<FrequentDetails/>}></Route>{/* 공통 수시점검 상세페이지 */}
 
-        
-        
-        
-
-        {/*다인 추가함 */}
-        <Route path="/inspection/statistics/year" element={<SafetyInspectionStatisticsYear/>}></Route>{/* 관리자 연간분석(정기점검/수시점검) 통계 대시보드*/}
-        <Route path="/inspection/statistics/month/special" element={<SafetySpecialInspectionStatisticsMonth/>}></Route>{/* 관리자 월간분석(수시점검) 대시보드*/}
-        <Route path="/inspection/statistics/month/regular" element={<SafetyRegularInspectionStatisticsMonth/>}></Route>{/* 관리자 월간분석(정기점검) 대시보드*/}
 
         {/* 사용자  */}
         <Route path="/user" element={<UserMain/>}></Route>  {/* 사용자 메인페이지*/}
