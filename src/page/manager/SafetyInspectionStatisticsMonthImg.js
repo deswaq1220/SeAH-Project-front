@@ -93,8 +93,12 @@ function SafetyInspectionStatisticsMonthImg() {
 
   // 이벤트: 정기점검 분석 결과 엑셀로 내보내기
   const regularHandleExport = () => {
+
+    const transformedData = regularCntByNameForExcel;
+
     // "구분" 값을 중복되지 않게 추출
-    const uniqueKeys = [...new Set(regularCntByNameForExcel.map((item) => item.key))];
+    const uniqueKeys = [...new Set(transformedData.map((item) => item.name))];
+
     const data = [
       {
         sheetName: "정기점검 총 건수",
@@ -115,19 +119,31 @@ function SafetyInspectionStatisticsMonthImg() {
           };
 
           // 해당 키를 가진 항목만 필터링
-          const filteredItems = regularCntByNameForExcel.filter((item) => item.key === key);
+          const filteredItems = transformedData.filter((item) => item.name === key);
 
+          // "GOOD" 및 "BAD"를 위한 카운트 변수를 0으로 초기화
+          let goodCount = 0;
+          let badCount = 0;
+          let na = 0;
+
+          console.log("filteredItems:", filteredItems);
           filteredItems.forEach((item) => {
             const evaluationValue = item.evaluationValue;
             const count = item.count;
-
-            // GOOD 또는 BAD에 따라 키를 동적으로 설정
+            // evaluationValue에 따라 카운트 업데이트
             if (evaluationValue === "GOOD") {
-              transformedItem["양호"] = count;
+              goodCount += count;
             } else if (evaluationValue === "BAD") {
-              transformedItem["불량"] = count;
+              badCount += count;
+            } else if (evaluationValue === "N/A"){
+              na += count;
             }
           });
+
+          // 변환된 항목에 카운트 추가
+          transformedItem["양호"] = goodCount;
+          transformedItem["불량"] = badCount;
+          transformedItem["N/A"] = na;
 
           return transformedItem;
         }),
@@ -326,7 +342,6 @@ function SafetyInspectionStatisticsMonthImg() {
 
         setRegularNameList(optionsArray);
         setSelected(optionsArray[0])
-      console.log("위험성결과드롭다운 값", optionsArray);
 
       //(pieChart, 엑셀) 위험성결과 데이터 출력
       await axios
@@ -334,26 +349,30 @@ function SafetyInspectionStatisticsMonthImg() {
             params: {yearmonth: selectedYear}
           })
           .then((response) => {
-            let transformedData = response.data.map((item) => {
-              let key = Object.keys(item)[0];
-              let innerData = item[key];
+            console.log("서버에서 받은 데이터:", response.data);
+            let transformedData = response.data.flatMap((item) => {
+              return Object.keys(item).map((name) => {
+                console.log("key값", name);
+                let innerData = item[name];
 
-              // 평가값(key) 배열과 개수 배열 생성
-              const evaluationValues = Object.keys(innerData);
-              const counts = evaluationValues.map((value) => innerData[value]);
+                // 평가값(key) 배열과 개수 배열 생성
+                const evaluationValues = Object.keys(innerData);
+                const counts = evaluationValues.map((value) => innerData[value]);
 
-              const rowData = [];
+                const rowData = [];
 
-              // 각 항목을 키 값마다 행으로 나누기
-              for (let i = 0; i < evaluationValues.length; i++) {
-                rowData.push({
-                  key,
-                  evaluationValue: evaluationValues[i],
-                  count: counts[i],
-                });
-              }
+                // 각 항목을 키 값마다 행으로 나누기
+                for (let i = 0; i < evaluationValues.length; i++) {
+                  rowData.push({
+                    name: name,
+                    evaluationValue: evaluationValues[i],
+                    count: counts[i],
+                  });
+                  console.log("name[i]값", name);
+                }
 
-              return rowData;
+                return rowData;
+              });
             });
 
             // 모든 데이터를 단일 배열로 펼치기
@@ -361,6 +380,7 @@ function SafetyInspectionStatisticsMonthImg() {
 
             // 데이터를 state에 저장
             setRegularCntByNameForExcel(transformedData);
+            console.log("결과값:", transformedData);
           });
     } catch (error) {
       console.error("불러온 데이터에 에러가 발생했습니다:", error);
