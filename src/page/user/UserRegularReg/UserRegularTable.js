@@ -134,11 +134,16 @@ const handleRadioChange = (index, method) => {
       return updatedChecklist; // Return the new checklist to update the state
     });
 //id: actForm.id,
-    setFiles(prevFiles => {
-        const newFilesState=[...prevFiles];
-        newFilesState.push({file:updatedFile});
-        return newFilesState;
-     });
+//     setFiles(prevFiles => {
+//         const newFilesState=[...prevFiles];
+//         newFilesState.push({file:updatedFile});
+//         return newFilesState;
+//      });
+      setRegularDTO(prevData => ({ ...prevData, file:'1', updatedFile })); // Update formData with new file array
+//       setRegularDTO({
+//           file: updatedFile, // Update the file property in the formData state
+//       });
+
   };
 
 
@@ -188,10 +193,11 @@ const handleRadioChange = (index, method) => {
 
 
     const handleFormSubmit = async () => {
-
+    console.log(regularDTO.file);
      regularDTO.regularDetailDTOList = JSON.stringify(regularcheckList);
-     regularDTO.file = files;
-    console.log(regularDTO);
+
+    console.log("regularDTO");
+        console.log(regularDTO);
 //        let formData = new FormData();
 
 
