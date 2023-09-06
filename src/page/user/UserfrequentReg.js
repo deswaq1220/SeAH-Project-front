@@ -35,7 +35,11 @@ function UserfrequentReg() {
   const { masterdataId } = useParams(); // url 설비 파라미터
   const [speEmpNum, setSpeEmpNum] = useState("");
   const [spePerson, setSpePerson] = useState("");
-  const [speEmail, setSpeEmail] = useState("");
+  const [speEmail, setSpeEmail] = useState(""); // 조치자 이메일정보
+  const [staticEmailPerson, setStaticEmailPerson] = useState(() => {
+    // 초기값 설정
+    return [];
+  });
   const [speFacility, setSpeFacility] = useState("");
   const [speDanger, setSpeDanger] = useState("");
   const [speInjure, setSpeInjure] = useState("");
@@ -48,8 +52,15 @@ function UserfrequentReg() {
   const [speActEmail, setSpeActEmail] = useState("");
   const [speComplete, setSpeComplete] = useState("");
   const [files, setFiles] = useState(null);
-  const emailTitle = `${spePerson}님의 수시점검 요청메일입니다`;
+  // const formData = new FormData(); // 폼데이터 객체 생성?
 
+  const emailTitle = `${spePerson}님의 수시점검 요청메일입니다`;
+  const [speData, setSpeData] = useState({
+    employeenumber :"",
+    inspectorname: "",
+    inspectoremail: "",
+  });
+ 
   // Inspector 콜백 함수 : 점검자(이름, 이메일, 사원번호)
   const handleInspectorDataChange = (inspectorForm) => {
     setSpeEmpNum(inspectorForm.employeenumber);
@@ -57,9 +68,9 @@ function UserfrequentReg() {
     setSpeEmail(inspectorForm.inspectoremail);
   };
 
-  // Facilityname 콜백 : 완료여부
-  const handleFacilityDatae = (selected) => {
-    setSpeFacility(selected);
+  // Facilityname 콜백 : 설비명
+  const handleFacilityChange = (facility) => {
+    setSpeFacility(facility);
   };
 
   // Danger 콜백함수 : 위험분류
@@ -98,6 +109,25 @@ function UserfrequentReg() {
     setSpeActEmail(data.speActEmail);
   };
 
+  // 고정수신자
+  const handleStaticEmailChange = (staticEmailList) => {
+    // // staticEmailList가 배열인 경우, 각 이메일 주소를 추출하여 배열에 추가
+    const staticEmailAddresses = Array.isArray(staticEmailList)
+      ? staticEmailList.map((item) => item.emailAdd)
+      : [staticEmailList.emailAdd];
+
+    setStaticEmailPerson(staticEmailAddresses);
+    console.log("고정 수신자:", staticEmailAddresses);
+
+    // if (Array.isArray(staticEmailList)) {
+    //   staticEmailList.forEach((item) => {
+    //     if (item.emailAdd) {
+    //       console.log("설정된 이메일 주소:", item.emailAdd);
+    //     }
+    //   });
+    // }
+  };
+
   // 개선대책
   const handleActContChange = (e) => {
     setSpeActContent(e.target.value);
@@ -109,20 +139,74 @@ function UserfrequentReg() {
   };
 
   const navigate = useNavigate();
+  const params = new URLSearchParams(window.location.search);
+  const speId = params.get("speId");
+
+  useEffect(() => {
+    // 서버에서 교육 세부 정보 가져오기 (교육 아이디값 이용)
+    
+    if (speId) {
+     axios
+        .get(`${process.env.REACT_APP_API_BASE_URL}/user/special/detail/${speId}`)
+        //  .get(`http://localhost:8081/edudetails/${eduId}`)
+        .then((response) => {
+          // 가져온 데이터로 상태 업데이트
+          console.log(response.data);
+          // seteduFiles(response.data.eduFileList);
+          
+          setSpeData({
+            employeenumber: response.data.specialData.speEmpNum,
+            inspectorname: response.data.specialData.speActPerson,
+            inspectoremail: response.data.specialData.speActEmail.split('@')[0],
+          });
+
+          setSpeEmpNum(response.data.specialData.speEmpNum);
+          setSpePerson(response.data.specialData.spePerson);
+          setSpeFacility(response.data.specialData.speFacility);
+          setSpeDanger(response.data.specialData.speDanger);
+          setSpeInjure(response.data.specialData.speInjure);
+          setSpeCause(response.data.specialData.speCause);
+          setSpeTrap(response.data.specialData.speTrap);
+          setSpeRiskAssess(response.data.specialData.speRiskAssess);
+          setSpeContent(response.data.specialData.speContent);
+          setSpeActPerson(response.data.specialData.speActPerson);
+          setSpeActEmail(response.data.specialData.speActEmail);
+          setSpeActContent(response.data.specialData.speActContent);
+          setSpeComplete(response.data.specialData.speComplete);
+
+          
+            console.log(speData);
+
+
+          })
+          .catch((error) => {
+            // 에러 처리
+            console.error("교육 세부 정보를 가져오는 중 에러 발생:", error);
+          });
+    }else {
+     alert("speId 값이 없다");
+    }
+  }, [speId]);
+
+
+
+
+
 
   const handleFormSubmit = () => {
-    const formData = new FormData(); // 폼데이터 객체 생성
-
+   
+    let formData = new FormData();
     // 업로드 파일 배열 저장
     if (files !== null) {
       for (let i = 0; i < files.length; i++) {
         formData.append("files", files[i]);
       }
     }
-
+  
     formData.append("speEmpNum", speEmpNum);
     formData.append("spePerson", spePerson);
     formData.append("speEmail", speEmail);
+    formData.append("speFacility", speFacility);
     formData.append("speDanger", speDanger);
     formData.append("speInjure", speInjure);
     formData.append("speCause", speCause);
@@ -134,8 +218,34 @@ function UserfrequentReg() {
     formData.append("speActContent", speActContent);
     formData.append("speComplete", speComplete);
 
-    console.log(formData); // 요청 데이터 콘솔에 출력
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+  }
+   
 
+    if (speId) {
+      // speId 값이 있으면 수정 요청 보내기
+      axios
+        .put(
+          `${process.env.REACT_APP_API_BASE_URL}/user/special/detail/${speId}`,
+          formData
+        )
+        .then((response) => {
+          console.log(response);
+
+          toast.success("수정이 완료되었습니다.", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: true,
+          });
+
+          navigate(`/special/list/${masterdataPart}/${masterdataId}`);
+        })
+        .catch((error) => {
+          console.error(error);
+          alert("수시점검 수정에 실패했습니다. 다시 시도해주세요.");
+        });
+    } else {
     // 수시점검 등록 요청
     axios
       .post(
@@ -218,7 +328,7 @@ function UserfrequentReg() {
 
           const emailData = {
             recipients: speActEmail.split(", "), // 이메일 주소를 수신자로 설정
-            // subject: emailTitle, // 이메일 제목
+            subject: emailTitle, // 이메일 제목
             content: inspectionData, // 이메일 내용 (점검 내용 등)
             // 필요한 다른 속성도 여기에 추가 가능
           };
@@ -259,45 +369,7 @@ function UserfrequentReg() {
         console.error(error);
         alert("수시점검 등록에 실패했습니다. 다시 시도해주세요.");
       });
-
-    /// 수시점검 등록 수정 버튼 눌렀을 경우
-
-    const params = new URLSearchParams(window.location.search);
-    const speId = params.get("speId");
-
-    if (speId) {
-      // speId 값이 있으면 수정 요청 보내기
-      axios
-        .put(
-          `${process.env.REACT_APP_API_BASE_URL}/user/special/detail/${speId}`,
-          formData
-        )
-        .then((response) => {
-          console.log(response);
-
-          toast.success("수정이 완료되었습니다.", {
-            position: "top-center",
-            autoClose: 2000,
-            hideProgressBar: true,
-          });
-
-          navigate(`/special/list/${masterdataPart}/${masterdataId}`);
-        })
-        .catch((error) => {
-          console.error(error);
-          alert("수시점검 수정에 실패했습니다. 다시 시도해주세요.");
-        });
-     } //else {
-    //   // 없으면 새로 등록하기
-    //   axios
-    //     .post(
-    //       `${process.env.REACT_APP_API_BASE_URL}/user/special/new/${masterdataPart}/${masterdataId}`,
-    //       formData,
-    //       {
-    //         headers: { "Content-Type": "multipart/form-data" },
-    //       }
-    //     )
-    // }
+    }
   };
 
   return (
@@ -305,9 +377,10 @@ function UserfrequentReg() {
       <UserHeader />
       <p>수시점검</p>
       <p>수시점검 내용등록</p>
-      <Inspector onFormDataChange={handleInspectorDataChange} /> {/* 점검자 */}
+      <Inspector onFormDataChange={handleInspectorDataChange}
+      defaultState={speData} /> {/* 점검자 */}
       <Inspectionarea /> {/* 점검영역 */}
-      <Facilityname onFormDataChange={handleDangerDataChange} /> {/* 설비명 */}
+      <Facilityname onChange={handleFacilityChange} /> {/* 설비명 */}
       <Danger onFormDataChange={handleDangerDataChange} /> {/* 위험분류 */}
       <Injured onFormDataChange={handleInjuredDataChange} /> {/* 부상부위 */}
       <Dangersource onFormDataChange={handleCauseDataChange} /> {/* 위험원인 */}
