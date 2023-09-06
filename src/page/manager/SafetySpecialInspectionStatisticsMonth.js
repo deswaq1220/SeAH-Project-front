@@ -175,7 +175,7 @@ function SafetySpecialInspectionStatisticsMonth() {
     const data = [
       {
         sheetName: "수시점검 총 건수",
-        data: [{ "이번달 정기점검 총 건수": spcCount }],
+        data: [{ "이번달 수시점검 총 건수": spcCount }],
       },
       {
         sheetName: "점검영역 분석",
