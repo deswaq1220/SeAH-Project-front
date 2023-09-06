@@ -82,7 +82,7 @@ function UserfrequentReg() {
 
   // Injured 콜백함수 : 부상부위
   const handleInjuredDataChange = (speInjuredData) => {
-    setSpeInjure(speInjuredData.injuredMenu);
+    setSpeInjure(speInjuredData);
   };
 
   // Dangersource 콜백함수 : 위험원인
@@ -392,7 +392,8 @@ function UserfrequentReg() {
       <Facilityname onChange={handleFacilityChange} /> {/* 설비명 */}
       <Danger onFormDataChange={handleDangerDataChange}
               defaultState={speDanger}/> {/* 위험분류 */}
-      <Injured onFormDataChange={handleInjuredDataChange} /> {/* 부상부위 */}
+      <Injured onFormDataChange={handleInjuredDataChange}
+               defaultState={speInjure}/> {/* 부상부위 */}
       <Dangersource onFormDataChange={handleCauseDataChange} /> {/* 위험원인 */}
       <Falsetrap onFormDataChange={handleFalsetrapDataChange} />{" "}
       {/* 실수함정 */}

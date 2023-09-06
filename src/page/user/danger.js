@@ -28,21 +28,12 @@ export default function Danger({ onFormDataChange, defaultState }) {
             };
           });
           setSpecialDangerList(speDangerData);
-          console.log("위험분류밖에서확인");
-          console.log(defaultState);
 
+          // defaultState확인 : 수정/완료등록일 경우
           if (defaultState) {
-            setSelectedDanger(defaultState); // defaultState가 있을 때만 setSelectedDanger 호출
-          // }
-          //   onFormDataChange(defaultState); // defaultState를 사용하여 onFormDataChange 호출
-          //   console.log("111111");
-          //   console.log("위험분류확인"+ defaultState);
-          //
+            setSelectedDanger(defaultState);
           } else {
-          //   console.log("22222222222");
             setSelectedDanger(speDangerData[0].dangerMenu); // defaultState가 없을 때 첫 번째 값을 선택
-          //   console.log("디폹트없음:"+speDangerData[0]); // defaultState가 없을 때 첫 번째 값을 선택
-          //   // onFormDataChange(speDangerData[0]); // 첫 번째 값을 사용하여 onFormDataChange 호출
           }
         })
         .catch((error) => {
