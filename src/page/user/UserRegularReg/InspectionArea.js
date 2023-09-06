@@ -25,6 +25,7 @@ export default function InspectionArea() {
             name: name,
           })
         );
+
         setRegularPartList(optionsArray);
         setSelectedArea(optionsArray[0]);
       } catch (error) {
