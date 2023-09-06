@@ -63,6 +63,7 @@ export default function UserRegularTable() {
 ////    setIsEditButtonVisible(newEditButtonState); // 새로운 수정버튼 상태 설정
 //  };
 
+
 const handleRadioChange = (index, method) => {
   if (method === "BAD") {
     isModalOpen[index] = true; // 불량을 선택한 행의 모달을 열기
@@ -117,7 +118,7 @@ const handleRadioChange = (index, method) => {
   };
 
 
-  //bad 상태일때 점검자 이름, 이메일,내용 저장
+  //bad 상태일때 점검자 이름, 이메일,내용 저장 /**/
   const handleActDataChange = (actForm) => {
     const updatedActPerson = actForm.regularActPerson;
     const updatedActEmail = actForm.regularActEmail;
@@ -222,6 +223,36 @@ const handleRadioChange = (index, method) => {
           autoClose: 2000, // 알림이 3초 후에 자동으로 사라짐
           hideProgressBar: true,
         });
+
+
+          // 이메일 보내기
+
+          for(const item of regularcheckList){
+              if(item.regularActEmail){ // 이메일이 기재되어 있다면 실행
+
+                  const actPersonEmails = item.regularActEmail.split(",").map(email => email.trim());
+                  const emailData = {
+                      recipients: [actPersonEmails],
+                      subject: emailTitle,
+                      content: item.regularActContent,
+                  }
+              }
+
+              axios
+                  .post(
+                      `${process.env.REACT_APP_API_BASE_URL}/api/send-email`,
+                      emailData
+                  )
+                  .then((response) => {
+                      console.log("이메일 전송 완료:", response);
+                      // ... (나머지 처리 로직)
+                  })
+                  .catch((error) => {
+                      console.error("이메일 전송 오류: ", error);
+                      // ... (에러 처리 로직)
+                  });
+          } // 반복 끝
+
 
       // 저장성공시 리스트 페이지
       navigate(`/regular`);
