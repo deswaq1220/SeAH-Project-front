@@ -187,7 +187,7 @@ export default function FacilityInfo( { fetchData, handleNewData }) {
               type="text"
               name="name"
               id="name"
-              placeholder="고길동"
+              placeholder="김세아"
               value={name}
               onChange={(e) => setName(e.target.value)}
               autoComplete="family-name"

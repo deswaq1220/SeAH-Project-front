@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { PaperClipIcon } from "@heroicons/react/20/solid";
-import { useParams,useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function UserFrequentDetailsTable() {
@@ -15,7 +15,7 @@ export default function UserFrequentDetailsTable() {
       .get(`${process.env.REACT_APP_API_BASE_URL}/user/special/detail/${speId}`) // 실제 API 주소로 수정해야합니다.
       .then((response) => {
         setInspectionData(response.data); // 데이터를 상태 변수에 저장합니다.
-        console.log("인스팩숀",response.data);
+        console.log("인스팩숀", response.data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -62,6 +62,12 @@ export default function UserFrequentDetailsTable() {
         return "";
     }
   };
+  const handleEditButtonClick = (speId) => {
+    navigate(
+      `/special/new/${inspectionData.specialData.spePart}/${inspectionData.facilityCode}?speId=${speId}`
+    );
+  };
+
   return (
     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 mt-5">
       <div className="px-4 sm:px-0">
@@ -233,8 +239,7 @@ export default function UserFrequentDetailsTable() {
         <button
           type="button"
           className="rounded-md bg-seahColor px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-          onClick={() => navigate(`/special/new/${inspectionData.specialData.spePart}/${inspectionData.specialData.speFacility
-          }`)}
+          onClick={() => handleEditButtonClick(speId)} // speId 값을 넘겨줍니다.
         >
           수정 / 조치완료 등록
         </button>
