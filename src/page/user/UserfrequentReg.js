@@ -60,7 +60,9 @@ function UserfrequentReg() {
     inspectorname: "",
     inspectoremail: "",
   });
- 
+
+  // const [dangerData, setDangerData] = useState("");
+
   // Inspector 콜백 함수 : 점검자(이름, 이메일, 사원번호)
   const handleInspectorDataChange = (inspectorForm) => {
     setSpeEmpNum(inspectorForm.employeenumber);
@@ -75,7 +77,7 @@ function UserfrequentReg() {
 
   // Danger 콜백함수 : 위험분류
   const handleDangerDataChange = (selected) => {
-    setSpeDanger(selected.dangerMenu);
+    setSpeDanger(selected);
   };
 
   // Injured 콜백함수 : 부상부위
@@ -156,12 +158,12 @@ function UserfrequentReg() {
           
           setSpeData({
             employeenumber: response.data.specialData.speEmpNum,
-            inspectorname: response.data.specialData.speActPerson,
-            inspectoremail: response.data.specialData.speActEmail.split('@')[0],
+            inspectorname: response.data.specialData.spePerson,
+            inspectoremail: response.data.specialData.speEmail.split('@')[0],
           });
 
-          setSpeEmpNum(response.data.specialData.speEmpNum);
-          setSpePerson(response.data.specialData.spePerson);
+          // setSpeEmpNum(response.data.specialData.speEmpNum);
+          // setSpePerson(response.data.specialData.spePerson);
           setSpeFacility(response.data.specialData.speFacility);
           setSpeDanger(response.data.specialData.speDanger);
           setSpeInjure(response.data.specialData.speInjure);
@@ -193,7 +195,7 @@ function UserfrequentReg() {
 
 
 
-  const handleFormSubmit = () => {
+  const handleSaveFormSubmit = () => {
    
     let formData = new FormData();
     // 업로드 파일 배열 저장
@@ -372,16 +374,24 @@ function UserfrequentReg() {
     }
   };
 
+  const handleUpdateFormSubmit = () => {        // 업데이트 연결
+    console.log("업데이트");
+  }
+
+  // post인지 updatd인지
+  const connectType = speId ? handleUpdateFormSubmit : handleSaveFormSubmit;
+
   return (
     <>
       <UserHeader />
       <p>수시점검</p>
       <p>수시점검 내용등록</p>
       <Inspector onFormDataChange={handleInspectorDataChange}
-      defaultState={speData} /> {/* 점검자 */}
+                  defaultState={speData} /> {/* 점검자 */}
       <Inspectionarea /> {/* 점검영역 */}
       <Facilityname onChange={handleFacilityChange} /> {/* 설비명 */}
-      <Danger onFormDataChange={handleDangerDataChange} /> {/* 위험분류 */}
+      <Danger onFormDataChange={handleDangerDataChange}
+              defaultState={speDanger}/> {/* 위험분류 */}
       <Injured onFormDataChange={handleInjuredDataChange} /> {/* 부상부위 */}
       <Dangersource onFormDataChange={handleCauseDataChange} /> {/* 위험원인 */}
       <Falsetrap onFormDataChange={handleFalsetrapDataChange} />{" "}
@@ -477,7 +487,7 @@ function UserfrequentReg() {
         <button
           type="submit"
           className="rounded-md bg-seahColor px-7 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus:outline-none"
-          onClick={handleFormSubmit} // 등록 버튼 클릭 시 handleFormSubmit 실행
+          onClick={connectType} // 등록 버튼 클릭 시 handleFormSubmit 실행
         >
           등록
         </button>

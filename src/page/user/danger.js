@@ -8,7 +8,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Danger({ onFormDataChange }) {
+export default function Danger({ onFormDataChange, defaultState }) {
   const { masterdataPart } = useParams(); // url 영역 파라미터
   const { masterdataId } = useParams(); // url 설비코드 파라미터
   const [specialDangerList, setSpecialDangerList] = useState([]); // 위험분류List
@@ -18,7 +18,7 @@ export default function Danger({ onFormDataChange }) {
   useEffect(() => {
     function specialDangerFetchDataWithAxios(masterdataPart, masterdataId) {
       axios
-        .get(`${process.env.REACT_APP_API_BASE_URL}/user/special/new/${masterdataPart}/${masterdataId}`)   // 세아
+        .get(`${process.env.REACT_APP_API_BASE_URL}/user/special/new/${masterdataPart}/${masterdataId}`)
         .then((response) => {
           const speDangerListFromBack = response.data.specialDangerList;
           const speDangerData = speDangerListFromBack.map((item) => {
@@ -28,7 +28,22 @@ export default function Danger({ onFormDataChange }) {
             };
           });
           setSpecialDangerList(speDangerData);
-          setSelectedDanger(speDangerData[0]); // 리스트의 첫번째값으로 세팅
+          console.log("위험분류밖에서확인");
+          console.log(defaultState);
+
+          if (defaultState) {
+            setSelectedDanger(defaultState); // defaultState가 있을 때만 setSelectedDanger 호출
+          // }
+          //   onFormDataChange(defaultState); // defaultState를 사용하여 onFormDataChange 호출
+          //   console.log("111111");
+          //   console.log("위험분류확인"+ defaultState);
+          //
+          } else {
+          //   console.log("22222222222");
+            setSelectedDanger(speDangerData[0].dangerMenu); // defaultState가 없을 때 첫 번째 값을 선택
+          //   console.log("디폹트없음:"+speDangerData[0]); // defaultState가 없을 때 첫 번째 값을 선택
+          //   // onFormDataChange(speDangerData[0]); // 첫 번째 값을 사용하여 onFormDataChange 호출
+          }
         })
         .catch((error) => {
           console.error("Error fetching data: ", error);
@@ -36,7 +51,9 @@ export default function Danger({ onFormDataChange }) {
     }
 
     specialDangerFetchDataWithAxios(masterdataPart, masterdataId);
-  }, [masterdataPart, masterdataId]);
+  }, [masterdataPart, masterdataId, defaultState]);
+
+
 
   // 선택한 값 세팅
   const handleDangerChange = (value) => {
@@ -55,7 +72,7 @@ export default function Danger({ onFormDataChange }) {
             <div className="relative mt-2">
               <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-32 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
                 <span className="block truncate">
-                  {selectedDanger.dangerMenu}
+                  {selectedDanger}
                 </span>
                 <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                   <ChevronUpDownIcon
@@ -82,7 +99,8 @@ export default function Danger({ onFormDataChange }) {
                           "relative cursor-default select-none py-2 pl-3 pr-9"
                         )
                       }
-                      value={specialDangerItem}
+                      value={specialDangerItem.dangerMenu}
+                      onChange={handleDangerChange}
                     >
                       {({ selected, active }) => (
                         <>

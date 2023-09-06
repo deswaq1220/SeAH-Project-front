@@ -101,7 +101,8 @@ export default function UserFrequentDetailsTable() {
               점검자
             </dt>
             <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-              {inspectionData.specialData.spePerson}
+              <dd>이름 : {inspectionData.specialData.spePerson} </dd>
+              <dd>이메일 : {inspectionData.specialData.speEmail}</dd>
             </dd>
           </div>
           <div className="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
