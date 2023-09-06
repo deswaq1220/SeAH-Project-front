@@ -172,8 +172,21 @@ export default function TrainingReport() {
               </td>
             </tr>
             <tr className="flex">
-              <td className=" p-4  border-black  w-[97mm] h-[350px]">
-                <p>{eduDetails && eduDetails.eduFiles}</p>
+              <td className="p-4 border-black w-[97mm] h-auto">
+                {eduDetails && eduDetails.eduimgurls.length > 0 ? (
+                  <div>
+                    {/* <p className="text-lg font-bold">교육사진</p> */}
+                    <ul className="list-disc pl-8">
+                      {eduDetails.eduimgurls.map((file, index) => (
+                        <img
+                          key={index}
+                          src={process.env.REACT_APP_API_BASE_URL + file} alt={eduDetails.eduFileList.eduFileName} />
+                      ))}
+                    </ul>
+                  </div>
+                ) : (
+                  <p>첨부된 파일이 없습니다</p>
+                )}
               </td>
             </tr>
           </table>
