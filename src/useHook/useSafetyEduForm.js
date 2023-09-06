@@ -4,6 +4,8 @@ import { useDropzone } from "react-dropzone";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import NotificationModal from "../components/Notification";
 import safetyEduReg from "../page/manager/SafetyEduReg";
+import { toast } from "react-toastify";
+
 const people = [
   {
     id: 1,
@@ -278,8 +280,13 @@ const useSafetyEduForm = (eduData) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!formData.eduContent || !formData.eduInstructor) {
-      setError("본문 내용 또는 강사를 입력하세요.");
+    if (!formData.eduContent || !formData.eduInstructor 
+      || !formData.eduCategory || !formData.eduPlace || !formData.eduInstructor || !formData.eduWriter) {
+      toast.error("필수 입력값을 확인해주세요.", {
+        position: "top-center",
+        autoClose: 2000, // 알림이 3초 후에 자동으로 사라짐
+        hideProgressBar: true,
+      })
       return;
     }
     console.log("업로드전 담긴 파일");
@@ -288,7 +295,6 @@ const useSafetyEduForm = (eduData) => {
       if (formData.eduId) {
         // 기존 교육 데이터를 수정하는 경우 (PUT 요청)
         formData.eduStartTime = formData.eduStartTime.slice(0, 16);
-//        formData.eduSumTime = selectPeople(formData.eduCategory).time;
         formData.eduFileList = null;
         formData.eduRegTime = null;
         formData.eduUpdateTime = null;
@@ -325,9 +331,21 @@ const useSafetyEduForm = (eduData) => {
         setShowNotification(false);
       }, 3000);
 
-      // 저장 성공 시 처리 로직 추가
-      navigate("/eduMain"); // 저장 성공 후 화면 이동
+      if (formData !== null) {
+        // 등록이 완료되었다는 알림 띄우기
+        toast.success("등록이 완료되었습니다.", {
+          position: "top-center",
+          autoClose: 2000, // 알림이 3초 후에 자동으로 사라짐
+          hideProgressBar: true,
+        })
+      }
+      navigate("/eduMain");
     } catch (error) {
+      toast.error("필수 입력값을 확인해주세요.", {
+        position: "top-center",
+        autoClose: 2000, // 알림이 3초 후에 자동으로 사라짐
+        hideProgressBar: true,
+      })
       console.error("저장/수정 에러:", error);
       // 저장/수정 실패 시 처리 로직 추가
     }

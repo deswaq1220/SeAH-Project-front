@@ -37,8 +37,6 @@ export default function SafetyEduDetails() {
                 'Content-Type': 'application/json'
             },
             }
-
-
         );
 
         setEduData({ ...response.data , eduFileList: response.data.eduFileList });
@@ -127,7 +125,7 @@ export default function SafetyEduDetails() {
 
       if (response.status === 200) {
         console.log('교육 삭제됨');
-        toast.success("교육이 삭제되었습니다.", {
+       toast .success("교육이 삭제되었습니다.", {
           position: "top-center",
           autoClose: 3000,
           hideProgressBar: true,
@@ -135,12 +133,18 @@ export default function SafetyEduDetails() {
         navigate('/eduMain');
       }
     } catch (error) {
+      toast .success("교육이 삭제 중 오류가 생겼습니다.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+      });
       console.error('교육 삭제 에라 에러', error);
     }
   };
 
 //수정하기
   const handleEditClick = () => {
+
     navigate(`/edureg/${eduId}`);
   };
 
