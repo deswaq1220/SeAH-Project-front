@@ -69,6 +69,10 @@ function UserfrequentReg() {
     inspectoremail: "",
   });
 
+  const [compImageUrls, setCompImageUrls] = useState("");
+  const [noCompImageUrls, setNoCompImageUrls] = useState("");
+
+
 
   // Inspector 콜백 함수 : 점검자(이름, 이메일, 사원번호)
   const handleInspectorDataChange = (inspectorForm) => {
@@ -164,7 +168,7 @@ function UserfrequentReg() {
           // 가져온 데이터로 상태 업데이트
           console.log(response.data);
           // seteduFiles(response.data.eduFileList);
-          
+
           setSpeData({
             employeenumber: response.data.specialData.speEmpNum,
             inspectorname: response.data.specialData.spePerson,
@@ -191,9 +195,11 @@ function UserfrequentReg() {
           // setSpeActEmail(response.data.specialData.speActEmail);
           setSpeActContent(response.data.specialData.speActContent);
           setSpeComplete(response.data.specialData.speComplete);
+          setSpeComplete(response.data.specialData.speComplete);
+          setNoCompImageUrls(response.data.specialData.noCmpImageUrls);
 
-          
             console.log(speData);
+            console.log("가져온 파일리스트: "+response.data.noCmpImageUrls);
 
 
           })
@@ -245,9 +251,7 @@ function UserfrequentReg() {
       // speId 값이 있으면 수정 요청 보내기
       axios
         .put(
-          `${process.env.REACT_APP_API_BASE_URL}/user/special/detail/${speId}`,
-          formData
-        )
+          `${process.env.REACT_APP_API_BASE_URL}/user/special/detail/${speId}`, formData)
         .then((response) => {
           console.log(response);
 
