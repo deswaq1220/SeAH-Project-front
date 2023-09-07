@@ -52,6 +52,7 @@ function UserfrequentReg() {
   const [speActEmail, setSpeActEmail] = useState("");
   const [speComplete, setSpeComplete] = useState("");
   const [files, setFiles] = useState(null);
+  // const [speInjureTemp, setSpeInjureTemp] = useState("");
   // const formData = new FormData(); // 폼데이터 객체 생성?
 
   const emailTitle = `${spePerson}님의 수시점검 요청메일입니다`;
@@ -60,8 +61,9 @@ function UserfrequentReg() {
     inspectorname: "",
     inspectoremail: "",
   });
+  const [injuredData, setInjuredData] = useState("");
 
-  // const [dangerData, setDangerData] = useState("");
+
 
   // Inspector 콜백 함수 : 점검자(이름, 이메일, 사원번호)
   const handleInspectorDataChange = (inspectorForm) => {
@@ -83,6 +85,7 @@ function UserfrequentReg() {
   // Injured 콜백함수 : 부상부위
   const handleInjuredDataChange = (speInjuredData) => {
     setSpeInjure(speInjuredData);
+    console.log("레지 댄저: "+speInjuredData);
   };
 
   // Dangersource 콜백함수 : 위험원인
@@ -166,7 +169,7 @@ function UserfrequentReg() {
           // setSpePerson(response.data.specialData.spePerson);
           setSpeFacility(response.data.specialData.speFacility);
           setSpeDanger(response.data.specialData.speDanger);
-          setSpeInjure(response.data.specialData.speInjure);
+          setInjuredData(response.data.specialData.speInjure);
           setSpeCause(response.data.specialData.speCause);
           setSpeTrap(response.data.specialData.speTrap);
           setSpeRiskAssess(response.data.specialData.speRiskAssess);
@@ -204,7 +207,7 @@ function UserfrequentReg() {
         formData.append("files", files[i]);
       }
     }
-  
+
     formData.append("speEmpNum", speEmpNum);
     formData.append("spePerson", spePerson);
     formData.append("speEmail", speEmail);
@@ -393,7 +396,7 @@ function UserfrequentReg() {
       <Danger onFormDataChange={handleDangerDataChange}
               defaultState={speDanger}/> {/* 위험분류 */}
       <Injured onFormDataChange={handleInjuredDataChange}
-               defaultState={speInjure}/> {/* 부상부위 */}
+               defaultState={injuredData} /> {/* 부상부위 */}
       <Dangersource onFormDataChange={handleCauseDataChange} /> {/* 위험원인 */}
       <Falsetrap onFormDataChange={handleFalsetrapDataChange} />{" "}
       {/* 실수함정 */}

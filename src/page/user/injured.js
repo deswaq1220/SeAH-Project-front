@@ -19,7 +19,7 @@ export default function Injured({ onFormDataChange, defaultState }) {
 
   // 부상부위 get
   useEffect(() => {
-    function specialInjureFetchDataWithAxios( masterdataPart,masterdataId) {
+    function specialInjureFetchDataWithAxios( masterdataPart, masterdataId) {
       axios
           .get(`${process.env.REACT_APP_API_BASE_URL}/user/special/new/${masterdataPart}/${masterdataId}`)   // 세아
           .then((response) => {
@@ -35,8 +35,18 @@ export default function Injured({ onFormDataChange, defaultState }) {
 
             // defaultState확인 : 수정/완료등록일 경우
             if (defaultState) {
-              setInjuredSelected(defaultState);
-              console.log("있음: "+ defaultState);
+
+              // const str = "기타(직접입력)/";
+              if(defaultState.indexOf("기타(직접입력)/")===0){
+                const splitArray = defaultState.split('/');
+                const firstPart = splitArray[0]; // "기타(직접입력)"
+                const secondPart = splitArray[1]; // "내용"
+
+                setInjuredSelected(firstPart);    // 셀렉트박스
+                setCustomInjured(secondPart);    // 인풋박스
+              } else {
+                setInjuredSelected(defaultState);
+              }
             } else {
               setInjuredSelected(speInjuredData[0].injuredMenu); // defaultState가 없을 때 첫 번째 값을 선택
             }
@@ -50,20 +60,19 @@ export default function Injured({ onFormDataChange, defaultState }) {
   }, [masterdataPart, masterdataId, defaultState]);
 
   // 기타(직접입력) 선택 시, customInjured 값 업데이트, onFOrmDataChange 호출
-  const handleCustomInjuredChange = (customInjured) => {
-    setCustomInjured(customInjured);
-    onFormDataChange(customInjured);
+  const handleCustomInjuredChange = (e) => {
+    setCustomInjured(e.target.value);
+    onFormDataChange(injuredSelected+"/"+e.target.value);
   };
 
   // 부상부위 선택 시 injuredSelected 값 없데이트, onFormDataChange 호출
   const handleSelectedInjuredChange = (value) => {
     setInjuredSelected(value);
-
+    console.log("선택한 값: " + value);
     // 기타(직접입력)을 제외한 경우 onFormDataChange에 value값 넘김
-    if (injuredSelected !== "기타(직접입력)") {
+    if (value !== "기타(직접입력)") {
       onFormDataChange(value);
-    } else {
-      onFormDataChange(customInjured);
+      console.log("기타 아닐때 값: " + value);
     }
   };
 
@@ -80,9 +89,7 @@ export default function Injured({ onFormDataChange, defaultState }) {
             <>
               <div className="relative mt-2">
                 <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-32 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
-                  <span className="block truncate">
-                    {injuredSelected}
-                  </span>
+                  <span className="block truncate">{injuredSelected}</span>
                   <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                     <ChevronUpDownIcon
                       className="h-5 w-5 text-gray-400"
@@ -99,9 +106,8 @@ export default function Injured({ onFormDataChange, defaultState }) {
                   leaveTo="opacity-0"
                 >
                   <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                    {specialInjuredList.map(
-                      (specialInjuredItem, index) =>
-                        index !== 0 && (
+                    {specialInjuredList.map((specialInjuredItem) =>(
+                      // index !== 0 && (
                           <Listbox.Option
                             key={specialInjuredItem.injuredMenu}
                             className={({ active }) =>
@@ -151,13 +157,12 @@ export default function Injured({ onFormDataChange, defaultState }) {
           )}
         </Listbox>
         {/* Custom Input */}
-        {injuredSelected &&
-          injuredSelected === "기타(직접입력)" && (
+        {injuredSelected === "기타(직접입력)" && (
             <input
               type="text"
               value={customInjured}
               name="speInjure"
-              onChange={ handleCustomInjuredChange}
+              onChange={handleCustomInjuredChange}
               className="block w-40 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5 mt-1"
               placeholder="직접 입력"
             />

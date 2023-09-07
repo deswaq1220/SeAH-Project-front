@@ -30,11 +30,6 @@ export default function Dangersource({onFormDataChange}) {
           causeNum: item.causeNum,
         }));
 
-        const accessToken = response.data.access_token;
-        axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${accessToken}`;
-  
         setSpecialCauseList(speCauseData);
         setSourceSelected(speCauseData[0]);
       } catch (error) {
@@ -140,7 +135,7 @@ export default function Dangersource({onFormDataChange}) {
             </>
           )}
         </Listbox>
-        {sourceSelected && sourceSelected.causeMenu === "[기타(직접입력)]" && (
+        {sourceSelected && sourceSelected.causeMenu === "기타(직접입력)" && (
             <input
                 type="text"
                 value={customSource}
@@ -151,10 +146,6 @@ export default function Dangersource({onFormDataChange}) {
             />
           )}
         </div>
-
-
-
-
       </div>
   )
 }
