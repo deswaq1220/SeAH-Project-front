@@ -30,35 +30,39 @@ export default function ActionRquest({ onFormDataChange, defaultState }) {
         setEmailDataList(emailListFromBack);
 
         // 수정/완료등록일경우
-        if (defaultState) {
+        if (defaultState && defaultState.speActPerson && defaultState.speActEmail) {
           setEmailFormData({
             speActPerson: defaultState.speActPerson,
             speActEmail: defaultState.speEmail,
           });
 
-
-          const defaultStatePersonArray = defaultState.speActPerson.split(", "); // `,`로 구분된 문자열을 배열로 파싱
-          const defaultStateEmailArray = defaultState.speActEmail.split(", ");
-          console.log("배열확인:" + defaultStatePersonArray);
-          console.log("배열확인:" + defaultStateEmailArray);
-
           let initialInstances = [];
-          for(let i=0; i<defaultStatePersonArray.length; i++) {
+
+          // ,로 구분되었을경우(조치자 여러명)
+          if (defaultState.speActPerson.includes(",") && defaultState.speActEmail.includes(",")) {
+            const defaultStatePersonArray = defaultState.speActPerson.split(", "); // `,`로 구분된 문자열을 배열로 파싱
+            const defaultStateEmailArray = defaultState.speActEmail.split(", ");
+            // console.log("배열확인:" + defaultStatePersonArray);
+            // console.log("배열확인:" + defaultStateEmailArray);
+
+            // let initialInstances = [];
+            for(let i=0; i<defaultStatePersonArray.length; i++) {
+              initialInstances.push({
+                selectedEmail: {
+                  emailName: defaultStatePersonArray[i],
+                  emailAdd:  defaultStateEmailArray[i]
+                }
+              });
+            }
+          } else { // `,`로 구분된 문자열이 없는 경우 하나의 요소만 가진 배열 생성
             initialInstances.push({
               selectedEmail: {
-                emailName: defaultStatePersonArray[i],
-                emailAdd:  defaultStateEmailArray[i]
+                emailName: defaultState.speActPerson,
+                emailAdd:  defaultState.speActEmail
               }
             });
           }
-
           setInstances(initialInstances);
-
-          // setInstances({
-          //   speActPerson: defaultState.speActPerson,
-          //   speActEmail: defaultState.speEmail,
-          // });
-
         }
 
 
