@@ -220,7 +220,8 @@ setRegularDTO(prevData => ({  ...prevData,
           }
         )
     .then((response) => {
-     console.log(response);
+        console.log(response);
+        console.log(response.data.regularDate);
 
 
 
@@ -233,19 +234,88 @@ setRegularDTO(prevData => ({  ...prevData,
         });
 
 
-          // 이메일 보내기
-
+          // 이메일 발송기능
           for(const item of regularcheckList){
-              if(item.regularActEmail){ // 이메일이 기재되어 있다면 실행
+          if(item.regularActEmail){ // 이메일이 기재되어 있다면 실행
+
+
+              //원하는 날짜와 시간 형식으로 포맷팅
+               const registerDate = `${response.data.regularDate.toLocaleDateString()}`;
 
                   const actPersonEmails = item.regularActEmail.split(",").map(email => email.trim());
-                  console.log("actPersonEmails===============" + actPersonEmails);
                   const emailData = {
                       recipients: actPersonEmails,
                       subject: emailTitle,
                       content: item.regularActContent,
                   }
                   console.log("emailData===============" + JSON.stringify(emailData, null, 2));
+
+
+                  /*고정수신자 들어오면 넣기*/
+                  const spendForm = `
+                                          <table style="width: 100%; border-collapse: collapse; border: 1px solid #ccc;">
+                                          <tr>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">항목</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">내용</td>
+                                          </tr>
+                                          <tr>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검일시</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${registerDate}</td>
+                                          </tr>
+                                          <tr>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검자</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${regularDTO.regularPerson}</td>
+                                          </tr>
+                                          <tr>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검구역</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${regularDTO.regularPart}</td>
+                                          </tr>
+                                          <tr>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검항목</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${regularDTO.regularInsName}</td>
+                                          </tr>
+                                          <tr>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검 유해위험요인</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${regularDetailDTOList.checklist}</td>
+                                          </tr>
+                                          <tr>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">위험원인</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speTrap}</td>
+                                          </tr>
+                                          <tr>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">부상부위</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speCause}</td>
+                                          </tr>
+                                          <tr>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">위험성평가</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speRiskAssess}</td>
+                                          </tr>
+                                          <tr>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검내용</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"> ${response.data.speContent}</td>
+                                          </tr>
+                                          <tr>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">개선대책</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speActContent}</td>
+                                          </tr>
+                                          <tr>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">담당자</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speActPerson}</td>
+                                          </tr>
+                                          <tr>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">요청기한</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${formattedSpeDeadline}</td>
+                                          </tr>
+                                          </table>
+                                            <p style="font-size:16px;">링크 : <a href="http://localhost:3000/special/detail/${response.data.speId}">상세보기</a></p>`;
+
+
+
+
+
+
+
+
 
                   axios
                       .post(
@@ -258,10 +328,10 @@ setRegularDTO(prevData => ({  ...prevData,
                       .catch((error) => {
                           console.error("이메일 전송 오류: ", error);
                       });
-              }
+              }// 반복 끝
 
 
-          } // 반복 끝
+          }
 
 
       // 저장성공시 리스트 페이지
