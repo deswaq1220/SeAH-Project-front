@@ -94,7 +94,7 @@ function App() {
 
         {/* 정기점검 */}
         <Route path="/regular" element={<RegularMain/>}></Route>{/* 관리자,사용자 정기점검 목록 */}
-        <Route path="/regulardetails" element={<UserRegularDetails/>}></Route>{/* 관리자,사용자 정기점검 목록 */}
+        <Route path="/regulardetails/:regularId" element={<UserRegularDetails/>}></Route>{/* 관리자,사용자 정기점검 목록 */}
 
 
         {/* 사용자 정기점검 */}
