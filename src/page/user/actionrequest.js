@@ -8,14 +8,19 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function ActionRquest({ onFormDataChange }) {
+export default function ActionRquest({ onFormDataChange, defaultState }) {
   const { masterdataPart, masterdataId } = useParams();
   const [emailDataList, setEmailDataList] = useState([]); // 영역별 이메일 리스트
   const [emailYDataList, setEmailYDataList] = useState([]); // 이메일 고정수신자 리스트
   const [instances, setInstances] = useState([{ selectedEmail: null }]); // 선택한 이메일 리스트
+  // defaultState
+  const [emailFormData, setEmailFormData] = useState({
+    speActPerson: "",
+    speActEmail: "",
+  });
 
   useEffect(() => {
-    async function emailFetchDataWithAxios() {
+    async function emailFetchDataWithAxios(masterdataPart, masterdataId) {
       try {
         const response = await axios.get(
           `${process.env.REACT_APP_API_BASE_URL}/user/special/new/${masterdataPart}/${masterdataId}`
@@ -23,6 +28,40 @@ export default function ActionRquest({ onFormDataChange }) {
         // 영역별 이메일리스트(선택)
         const emailListFromBack = response.data["emailList"];
         setEmailDataList(emailListFromBack);
+
+        // 수정/완료등록일경우
+        if (defaultState) {
+          setEmailFormData({
+            speActPerson: defaultState.speActPerson,
+            speActEmail: defaultState.speEmail,
+          });
+
+
+          const defaultStatePersonArray = defaultState.speActPerson.split(", "); // `,`로 구분된 문자열을 배열로 파싱
+          const defaultStateEmailArray = defaultState.speActEmail.split(", ");
+          console.log("배열확인:" + defaultStatePersonArray);
+          console.log("배열확인:" + defaultStateEmailArray);
+
+          let initialInstances = [];
+          for(let i=0; i<defaultStatePersonArray.length; i++) {
+            initialInstances.push({
+              selectedEmail: {
+                emailName: defaultStatePersonArray[i],
+                emailAdd:  defaultStateEmailArray[i]
+              }
+            });
+          }
+
+          setInstances(initialInstances);
+
+          // setInstances({
+          //   speActPerson: defaultState.speActPerson,
+          //   speActEmail: defaultState.speEmail,
+          // });
+
+        }
+
+
 
         // 이메일 고정수신자 리스트
         const emailYListFromBack = response.data["staticEmailList"];
@@ -32,7 +71,7 @@ export default function ActionRquest({ onFormDataChange }) {
       }
     }
     emailFetchDataWithAxios(masterdataPart, masterdataId);
-  }, []);
+  }, [masterdataPart, masterdataId, defaultState]);
 
   // -----------------------------------
   const handleActionChange = (instanceIndex, selectedEmail) => {

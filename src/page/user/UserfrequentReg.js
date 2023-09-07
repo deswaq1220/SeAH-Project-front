@@ -62,7 +62,12 @@ function UserfrequentReg() {
     inspectoremail: "",
   });
   const [injuredData, setInjuredData] = useState("");
-
+  const [causeData, setCauseData] = useState("");
+  const [speActData, setSpeActData] = useState({
+    employeenumber :"",
+    inspectorname: "",
+    inspectoremail: "",
+  });
 
 
   // Inspector 콜백 함수 : 점검자(이름, 이메일, 사원번호)
@@ -85,17 +90,16 @@ function UserfrequentReg() {
   // Injured 콜백함수 : 부상부위
   const handleInjuredDataChange = (speInjuredData) => {
     setSpeInjure(speInjuredData);
-    console.log("레지 댄저: "+speInjuredData);
   };
 
   // Dangersource 콜백함수 : 위험원인
   const handleCauseDataChange = (speCauseData) => {
-    setSpeCause(speCauseData.causeMenu);
+    setSpeCause(speCauseData);
   };
 
   // FalseTrap 콜백함수 : 실수함정
   const handleFalsetrapDataChange = (falsetrapSelected) => {
-    setSpeTrap(falsetrapSelected.trapMenu);
+    setSpeTrap(falsetrapSelected);
   };
 
   // RiskAssessment 콜백 : 위험성평가
@@ -112,6 +116,8 @@ function UserfrequentReg() {
   const handleActionRequestDetailsDataChange = (data) => {
     setSpeActPerson(data.speActPerson);
     setSpeActEmail(data.speActEmail);
+    console.log("*******조치자이름 : "+data.speActPerson);
+    console.log("*******조치자메일 : "+data.speActEmail);
   };
 
   // 고정수신자
@@ -170,12 +176,19 @@ function UserfrequentReg() {
           setSpeFacility(response.data.specialData.speFacility);
           setSpeDanger(response.data.specialData.speDanger);
           setInjuredData(response.data.specialData.speInjure);
-          setSpeCause(response.data.specialData.speCause);
+          setCauseData(response.data.specialData.speCause);
           setSpeTrap(response.data.specialData.speTrap);
           setSpeRiskAssess(response.data.specialData.speRiskAssess);
           setSpeContent(response.data.specialData.speContent);
-          setSpeActPerson(response.data.specialData.speActPerson);
-          setSpeActEmail(response.data.specialData.speActEmail);
+
+          setSpeActData({
+            speActPerson: response.data.specialData.speActPerson,
+            speActEmail: response.data.specialData.speActEmail,
+          });
+
+          //
+          // setSpeActPerson(response.data.specialData.speActPerson);
+          // setSpeActEmail(response.data.specialData.speActEmail);
           setSpeActContent(response.data.specialData.speActContent);
           setSpeComplete(response.data.specialData.speComplete);
 
@@ -397,17 +410,19 @@ function UserfrequentReg() {
               defaultState={speDanger}/> {/* 위험분류 */}
       <Injured onFormDataChange={handleInjuredDataChange}
                defaultState={injuredData} /> {/* 부상부위 */}
-      <Dangersource onFormDataChange={handleCauseDataChange} /> {/* 위험원인 */}
-      <Falsetrap onFormDataChange={handleFalsetrapDataChange} />{" "}
-      {/* 실수함정 */}
-      <RiskAssessment onFormDataChange={handleRiskAssessmentDataChange} />{" "}
-      {/* 위험성평가 */}
+      <Dangersource onFormDataChange={handleCauseDataChange}
+                    defaultState={causeData} /> {/* 위험원인 */}
+      <Falsetrap onFormDataChange={handleFalsetrapDataChange}
+                 defaultState={speTrap}/>{" "} {/* 실수함정 */}
+      <RiskAssessment onFormDataChange={handleRiskAssessmentDataChange}
+                      defaultState={speRiskAssess}/>{" "} {/* 위험성평가 */}
       {/* 위험분류 표 */}
       <div className="flex flex-col justify-center items-center border border-gray-300 px-3 mx-3 ">
         <p className=" font-semibold text-lg">평가표</p>
         <img src={DangerImg} className=" p-3 w-100"></img>
       </div>
-      <InspectionDetails onFormDataChange={handleInspectionDetailsDataChange} />{" "}
+      <InspectionDetails onFormDataChange={handleInspectionDetailsDataChange}
+                         defaultState={speContent}/>{" "}
       {/* 점검내용 */}
       {/* 개선대책 */}
       <div
@@ -437,7 +452,8 @@ function UserfrequentReg() {
         <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 my-4 ml-4 ">
           조치요청
         </span>
-        <ActionRquest onFormDataChange={handleActionRequestDetailsDataChange} />{" "}
+        <ActionRquest onFormDataChange={handleActionRequestDetailsDataChange}
+                      defaultState={speActData}/>{" "}
       </div>
       {/* 조치요청 */}
       {/* 혜영추가-완료여부 */}

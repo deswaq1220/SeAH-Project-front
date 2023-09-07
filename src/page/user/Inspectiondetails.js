@@ -1,6 +1,6 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
-export default function InspectionDetails({onFormDataChange}){
+export default function InspectionDetails({onFormDataChange, defaultState}){
   const [content, setContent] = useState();
 
   const handleContentChange = (e) => {
@@ -8,6 +8,12 @@ export default function InspectionDetails({onFormDataChange}){
       onFormDataChange(e.target.value);
   }
 
+  // 수정/완료등록일 경우
+  useEffect(() => {
+    if (defaultState) {
+      setContent(defaultState);
+    }
+  }, [defaultState]);
 
 
   return(

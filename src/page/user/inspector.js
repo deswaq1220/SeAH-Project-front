@@ -11,7 +11,8 @@ export default function Inspector({ onFormDataChange , defaultState}) {
     });
   
     const [seahDomain, setSeahDomain] = useState("@seah.co.kr");
-  
+
+  // 수정/완료등록일 경우
     useEffect(() => {
       console.log("test"+ defaultState);
       console.log(defaultState);

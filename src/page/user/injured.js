@@ -35,8 +35,6 @@ export default function Injured({ onFormDataChange, defaultState }) {
 
             // defaultState확인 : 수정/완료등록일 경우
             if (defaultState) {
-
-              // const str = "기타(직접입력)/";
               if(defaultState.indexOf("기타(직접입력)/")===0){
                 const splitArray = defaultState.split('/');
                 const firstPart = splitArray[0]; // "기타(직접입력)"
