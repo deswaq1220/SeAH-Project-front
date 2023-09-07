@@ -6,27 +6,26 @@ import UserHeader from "../../../components/UserHeader";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import UserRegularDetailsOutput from "./UserRegularDetailsOutput";
-
+import DetailedModal from"./DetailedModal";
 
 const notificationMethods = [
-  { id: "good", title: "양호", color: "text-blue-600" },
-  { id: "bad", title: "불량", color: "text-red-600" },
+  { id: "GOOD", title: "양호", color: "text-blue-600" },
+  { id: "BAD", title: "불량", color: "text-red-600" },
   { id: "NA", title: "N/A", color: "text-gray-900" },
 ];
 
 
 
 export default function UserRegularDetails() {
-  const [selectedValue, setSelectedValue] = useState('good'); // 기본값 설정
 
-  const handleRadioChange = (event) => {
-  //   const updatedCheck = [...regularDetailDTOList];
-  //   updatedCheck[index]
-    console.log(event.target.value);
-    setSelectedValue(event.target.value);
-  };
-  const [regularDetailDTOList, setRegularDetailDTOList] = useState([]);
-   const {regularId} = useParams();
+const [selectedValue, setSelectedValue] = useState("GOOD");
+
+function handleRadioChange(value) {
+    setSelectedValue(value);
+}
+const [isModalOpen, setIsModalOpen] = useState(false);
+const [regularDetailDTOList, setRegularDetailDTOList] = useState([]);
+const {regularId} = useParams();
  const [regularIns, setRegularIns] = useState([]);
  const [regularData, setRegularData] = useState({
    regularEmpNum:"",
@@ -36,6 +35,10 @@ export default function UserRegularDetails() {
    regularInsName:"",
    regularEmail:"",
  });
+
+ function handleChecklistClick(checklist) {
+       setIsModalOpen(true);
+ }
 
   useEffect(() => {
     const fetchRegularDetail = async () => {
@@ -114,81 +117,68 @@ const dataTest =  ()=>{
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 bg-white">
-              {regularDetailDTOList.map((regularDetail,index) => (
-                <tr key={index}>
-                  <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
-                    {regularDetail.regularCheck}
-                    <dl className="font-normal lg:hidden">
-                      <dt className="sr-only">Title</dt>
-                      <dd className="mt-1 truncate text-gray-700">{regularDetail.checklist}</dd>
-                      <dt className="sr-only sm:hidden">Email</dt>
-                      <dd className="mt-1 truncate text-gray-500 sm:hidden">
-                        <div className="space-x-4 flex">
-                          {notificationMethods.map((notificationMethod) => (
-                              <div
-                                  key={notificationMethod.id}
-                                  className="flex items-center"
-                              >
+              <tbody className="divide-y divide-gray-200 bg-white">
+                {regularDetailDTOList.map((regularDetail, index) => (
+                  <tr key={index }>
+                    <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
+                      {index+1}
+                      <dl className="font-normal lg:hidden">
+                        <dt className="sr-only">Title</dt>
+                        <dd className="mt-1 truncate text-gray-700">{regularDetail.checklist}</dd>
+                        <dt className="sr-only sm:hidden">Email</dt>
+                        <dd className="mt-1 truncate text-gray-500 sm:hidden">
+                          <div className="space-x-4 flex">
+                            {notificationMethods.map((notificationMethod) => (
+                              <div key={notificationMethod.id} className="flex items-center">
                                 <input
-                                    type="radio"
-                                    name={`radio-group-${index}`}
-                                    value={notificationMethod.id}
-                                    checked={selectedValue === notificationMethod.id}
-                                    onChange={handleRadioChange}
-
-
-                                    className="h-4 w-4 border-gray-300 text-seahColor focus:ring-seahColor"
+                                  type="radio"
+                                  name={`radio-group-${index}`}
+                                 defaultChecked={regularDetail.regularCheck === notificationMethod.id}
+//                                    onChange={() => handleRadioChange(notificationMethod.id)}
+                                  className="h-4 w-4 border-gray-300 text-seahColor focus:ring-seahColor"
                                 />
                                 <label
-                                    htmlFor={notificationMethod.id}
-                                    className={`ml-3 block text-sm font-bold leading-6 ${notificationMethod.color}`}
+                                  htmlFor={notificationMethod.id}
+                                  className={`ml-3 block text-sm font-bold leading-6 ${notificationMethod.color}`}
                                 >
                                   {notificationMethod.title}
                                 </label>
                               </div>
-                          ))}
-                        </div>
-                      </dd>
-                    </dl>
-                  </td>
-                  <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
-                    {regularDetail.checklist}
-                  </td>
-                  <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                    <div className="space-x-4 flex">
-                      {notificationMethods.map((notificationMethod) => (
-                        <div
-                          key={notificationMethod.id}
-                          className="flex items-center"
-                        >
-                          <input
-                            name="notification-method"
-                            type="radio"
-                            defaultChecked={'GOOD'}
-                            className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                          />
-                          <label
-                            htmlFor={notificationMethod.id}
-                            className={`ml-3 block text-sm font-bold leading-6 ${notificationMethod.color}`}
-                          >
-                            {notificationMethod.title}
-                          </label>
-                        </div>
-                      ))}
-                    </div>
-                  </td>
-                  <td className="px-3 py-4 text-sm font-bold text-green-600 ">
-                    완료
-                  </td>
-                  {/* <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                    <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                      Edit<span className="sr-only">, {person.name}</span>
-                    </a>
-                  </td> */}
-                </tr>
-              ))}
-            </tbody>
+                            ))}
+                          </div>
+                        </dd>
+                      </dl>
+                    </td>
+                     <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                     onClick={() => handleChecklistClick(regularDetail.checklist)}
+                     >
+                        {regularDetail.checklist}
+                      </td>
+                      <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
+                        <div className="space-x-4 flex">
+                           {notificationMethods.map((notificationMethod) => (
+                             <div key={notificationMethod.id} className="flex items-center">
+                               <input
+                                 type="radio"
+                                 name={`radio-group-${index}`}
+                                defaultChecked={regularDetail.regularCheck === notificationMethod.id}
+//                                    onChange={() => handleRadioChange(notificationMethod.id)}
+                                 className="h-4 w-4 border-gray-300 text-seahColor focus:ring-seahColor"
+                               />
+                               <label
+                                 htmlFor={notificationMethod.id}
+                                 className={`ml-3 block text-sm font-bold leading-6 ${notificationMethod.color}`}
+                               >
+                                 {notificationMethod.title}
+                               </label>
+                             </div>
+                           ))}
+                           <DetailedModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+                     </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
           </table>
         </div>
         <div className="flex justify-end mt-4">

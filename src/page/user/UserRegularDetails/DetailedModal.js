@@ -24,23 +24,6 @@ export default function DetailedModal({ person, closeModal }) {
     setRegularActEmail(data.regularActEmail);
   };
 
-  const handleSaveClick = async () => {
-    try {
-      const dataSave = {
-        regularActEmail,
-        regularActPerson,
-        regularActContent,
-      };
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_BASE_URL}/user/regular/new`,
-        dataSave
-      );
-      //모달창 닫기
-      setOpen(false);
-    } catch (error) {
-      console.error("개선대책 조치 등록 오류", error);
-    }
-  };
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -193,7 +176,7 @@ export default function DetailedModal({ person, closeModal }) {
                     type="button"
                     className="inline-flex w-full justify-center rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor sm:col-start-2"
                     // onClick={() => setOpen(false)}
-                    onClick={handleSaveClick}
+//                    onClick={handleSaveClick}
                   >
                     저장
                   </button>
