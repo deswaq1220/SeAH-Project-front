@@ -235,20 +235,22 @@ setRegularDTO(prevData => ({  ...prevData,
 
           // 이메일 보내기
 
-/*          for(const item of regularcheckList){
+          for(const item of regularcheckList){
               if(item.regularActEmail){ // 이메일이 기재되어 있다면 실행
 
                   const actPersonEmails = item.regularActEmail.split(",").map(email => email.trim());
+                  console.log("actPersonEmails===============" + actPersonEmails);
                   const emailData = {
-                      recipients: [actPersonEmails],
+                      recipients: actPersonEmails,
                       subject: emailTitle,
                       content: item.regularActContent,
                   }
+                  console.log("emailData===============" + JSON.stringify(emailData, null, 2));
 
                   axios
                       .post(
                           `${process.env.REACT_APP_API_BASE_URL}/api/send-email`,
-                          emailData
+                                  emailData
                       )
                       .then((response) => {
                           console.log("이메일 전송 완료:", response);
@@ -259,7 +261,7 @@ setRegularDTO(prevData => ({  ...prevData,
               }
 
 
-          } // 반복 끝*/
+          } // 반복 끝
 
 
       // 저장성공시 리스트 페이지
