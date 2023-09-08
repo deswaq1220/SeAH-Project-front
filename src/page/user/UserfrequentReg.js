@@ -23,31 +23,6 @@ import "filepond/dist/filepond.min.css"; // 스타일링을 위한 CSS
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 
-// 추가 플러그인을 라이브러리에 등록
-// registerPlugin(FilePondPluginImagePreview);
-//
-// function classNames(...classes) {
-//   return classes.filter(Boolean).join(" ");
-// }
-//
-//
-// const MAX_FILENAME_LENGTH = 30;
-// const FILENAME_SUFFIX = "...";
-//
-// const TruncatedFileName = ({ fileName }) => {
-//   if (fileName.length <= MAX_FILENAME_LENGTH) {
-//     return <div>{fileName}</div>;
-//   }
-//
-//   const truncatedFileName = fileName.slice(
-//     0,
-//     MAX_FILENAME_LENGTH - FILENAME_SUFFIX.length
-//   );
-//   const displayedFileName = truncatedFileName + FILENAME_SUFFIX;
-//
-//   return <div>{displayedFileName}</div>;
-// };
-
 
 function UserfrequentReg() {
   const { masterdataPart } = useParams(); // url 영역 파라미터
@@ -70,10 +45,13 @@ function UserfrequentReg() {
   const [speActPerson, setSpeActPerson] = useState("");
   const [speActEmail, setSpeActEmail] = useState("");
   const [speComplete, setSpeComplete] = useState("");
-  const [files, setFiles] = useState(null);
+  const [files, setFiles] = useState("");     // 백으로 넘길 파일
+  const [fileDatas, setFileDatas] = useState({
+      specialFileList:[],     // 백에서 가져온 파일정보(업데이트정보)
+      spcialFileIds: []       // 삭제할 아이디 정보(업데이트정보)
+  });   // 백에서 가져온 파일정보(업데이트정보)
 
-  // const [speInjureTemp, setSpeInjureTemp] = useState("");
-  // const formData = new FormData(); // 폼데이터 객체 생성?
+
 
   const emailTitle = `${spePerson}님의 수시점검 요청메일입니다`;
   const [speData, setSpeData] = useState({
@@ -89,7 +67,6 @@ function UserfrequentReg() {
     inspectoremail: "",
   });
 
-  // const [files, setFiles] = useState("");
 
 
 
@@ -140,8 +117,6 @@ function UserfrequentReg() {
   const handleActionRequestDetailsDataChange = (data) => {
     setSpeActPerson(data.speActPerson);
     setSpeActEmail(data.speActEmail);
-    console.log("*******조치자이름 : "+data.speActPerson);
-    console.log("*******조치자메일 : "+data.speActEmail);
   };
 
   // 고정수신자
@@ -174,12 +149,16 @@ function UserfrequentReg() {
   };
 
   // 파일제거
-  // const handleRemoveFile = (fileIndex) => {
-  //   // 선택된 파일 목록에서 파일을 제거
-  //   const updatedFiles = [...files];
-  //   updatedFiles.splice(fileIndex, 1);
-  //   setFiles(updatedFiles);
-  // };
+  const handleRemoveFile = (index) => {
+    const updatedFileId = fileDatas[index].speFileId;
+
+    setFiles([...files, updatedFileId]);
+
+
+    fileDatas.splice(index, 1);
+    console.log("삭제 확인: "+ fileDatas.splice(index, 1));
+    // formData.eduFileIds= eduFiles;
+  };
 
 
   const navigate = useNavigate();
@@ -232,8 +211,8 @@ function UserfrequentReg() {
           setSpeActContent(response.data.specialData.speActContent);
           setSpeComplete(response.data.specialData.speComplete);
           setSpeComplete(response.data.specialData.speComplete);
-          // 수정할 파일 데이터 업데이트
-          setFiles(response.data.specialData.speFiles);
+          // 수정할 파일 데이터 업데이트  /////////////////////////////////////////////
+          setFileDatas.specialFileList(response.data.specialData.speFiles);
           // setFiles(modifyFiles);
 
 
@@ -254,9 +233,7 @@ function UserfrequentReg() {
 
 
 
-
-
-  const handleSaveFormSubmit = () => {
+  const handleFormSubmit  = () => {
    
     let formData = new FormData();
     // 업로드 파일 배열 저장
@@ -421,7 +398,7 @@ function UserfrequentReg() {
           });
 
           // 저장성공시 해당설비의 리스트 페이지
-          navigate(`/special/list/${masterdataPart}/${masterdataId}`);
+          // navigate(`/special/list/${masterdataPart}/${masterdataId}`);
         }
       })
       .catch((error) => {
@@ -433,16 +410,15 @@ function UserfrequentReg() {
     }
   };
 
-  const handleUpdateFormSubmit = () => {        // 업데이트 연결
-    console.log("업데이트");
-  }
+  // const handleUpdateFormSubmit = () => {        // 업데이트 연결
+  //   console.log("업데이트");
+  // }
 
-  // post인지 updatd인지
-  const connectType = speId ? handleUpdateFormSubmit : handleSaveFormSubmit;
+  // post인지 updat인지
+  // const connectType = speId ? handleUpdateFormSubmit : handleSaveFormSubmit;
 
   return (
     <>
-      {/* EditFileComponent를 렌더링합니다. */}
       <UserHeader />
       <p>수시점검</p>
       <p>수시점검 내용등록</p>
@@ -507,6 +483,7 @@ function UserfrequentReg() {
       <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 my-4 ml-4 ">
         사진첨부
       </span>
+
       <FilePond
         allowMultiple={true} // 다중 파일 업로드 허용
         maxFiles={5} // 최대 파일 수 설정
@@ -540,20 +517,20 @@ function UserfrequentReg() {
         }}
         labelIdle='클릭하거나 <span class="filepond--label-action">파일을 여기에 드롭하여 선택하세요</span>'
       />
-      {/*{files.map((file, index) => (*/}
-      {/*  <div key={index} className="flex items-start mt-2">*/}
-      {/*    <div className="text-left">*/}
-      {/*      <TruncatedFileName fileName={file.speFileOriName} /> /!* 수정된 부분 *!/*/}
-      {/*    </div>*/}
-      {/*    <button*/}
-      {/*      onClick={() => handleRemoveFile(index)}*/}
-      {/*      className="ml-2 text-red-600"*/}
-      {/*      type="button"*/}
-      {/*    >*/}
-      {/*      삭제*/}
-      {/*    </button>*/}
-      {/*  </div>*/}
-      {/*))}*/}
+      {fileDatas.specialFileList.map((fileItem, index) => (
+        <div key={index} className="flex items-start mt-2">
+          <div className="text-left">
+            {fileItem.specialFileList.speFileOriName} /  {fileItem.specialFileList.speFileId} / {index}
+          </div>
+          <button
+            onClick={() => handleRemoveFile(index)}
+            className="ml-2 text-red-600"
+            type="button"
+          >
+            삭제
+          </button>
+        </div>
+      ))}
 
       {/*{uploadedFiles.map((file, index) => (*/}
       {/*  <div key={file.name} className="flex items-start mt-2">*/}
@@ -581,7 +558,7 @@ function UserfrequentReg() {
         <button
           type="submit"
           className="rounded-md bg-seahColor px-7 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus:outline-none"
-          onClick={connectType} // 등록 버튼 클릭 시 handleFormSubmit 실행
+          onClick={handleFormSubmit} // 등록 버튼 클릭 시 handleFormSubmit 실행
         >
           등록
         </button>

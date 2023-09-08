@@ -229,6 +229,7 @@ const useSafetyEduForm = (eduData) => {
     const updatedFileId = formData.eduFileList[index].eduFileId;
 
     setEduFiles([...eduFiles, updatedFileId]);
+
     formData.eduFileList.splice(index, 1);
 
       formData.eduFileIds= eduFiles;
