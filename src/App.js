@@ -70,15 +70,19 @@ function App() {
         {/* <Route path="/inspection" element={<SafetyInspection />}></Route> 관리자 안점점검 페이지 */}
         {/* <Route path="/inspection/statistics/yearimg" element={<SafetyInspectionStatisticsYearImg />}></Route>관리자 수시점검 연도 상세 분석 통계 대시보드 */}
         {/* <Route path="/inspection/statistics/monthimg" element={<SafetyInspectionStatisticsMonthImg />}></Route>관리자 수시점검 월별통계 대시보드 */}
-        {/* <Route path="/regular" element={<RegularMain />}></Route>관리자,사용자 정기점검 목록 */}
-        {/* <Route path="/regulardetails" element={<UserRegularDetails />}></Route>관리자,사용자 정기점검 목록 */}
+        {/* <Route path="/regular" element={<RegularMain />}></Route> */}
+        {/* 관리자,사용자 정기점검 목록 */}
+        {/* <Route path="/regulardetails" element={<UserRegularDetails />}></Route> */}
+        {/* 관리자,사용자 정기점검 목록 */}
 
         <Route path="/managerinspection" element={<Error />}></Route> {/* 관리자 안점점검 페이지 */}
         <Route path="/inspection" element={<Error />}></Route> {/*관리자 안점점검 페이지*/}
         <Route path="/inspection/statistics/yearimg" element={<Error />}></Route>{/* 관리자 수시점검 연도 상세 분석 통계 대시보드*/}
         <Route path="/inspection/statistics/monthimg" element={<Error />}></Route>{/* 관리자 수시점검 월별통계 대시보드*/}
-        <Route path="/regular" element={<Error />}></Route>{/* 관리자,사용자 정기점검 목록 */}
-        <Route path="/regulardetails" element={<Error />}></Route>{/* 관리자,사용자 정기점검 목록 */}
+        {/* <Route path="/regular" element={<Error />}></Route> */}
+        {/* 관리자,사용자 정기점검 목록 */}
+        {/* <Route path="/regulardetails" element={<Error />}></Route> */}
+        {/* 관리자,사용자 정기점검 목록 */}
 
 
         {/* 공통 */}
@@ -101,7 +105,8 @@ function App() {
         {/* <Route path="/special/detail/:speId" element={<UserFrequentDetails />}></Route>수시점검 상세페이지 */}
 
         {/* 사용자 정기점검 */}
-        {/* <Route path="/regularreg" element={<UserRegularReg />}></Route>정기점검 등록페이지 */}
+        {/* <Route path="/regularreg" element={<UserRegularReg />}></Route>  */}
+        {/* 정기점검 등록페이지 */}
         {/* <Route path="/faultymodal" element={<FaultyModal />}></Route>수시점검 상세페이지 */}
 
         {/* 사용자 수시점검 */}

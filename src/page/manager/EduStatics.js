@@ -6,6 +6,7 @@ import Pagination from "../../components/Pagination";
 import { useNavigate } from 'react-router-dom';
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { Link } from "react-router-dom";
 
 function EduStatics() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -122,7 +123,7 @@ function EduStatics() {
     getStartPage();
   }, [currentDate]);
 
-    // 엑셀!!!!!!!!!!!
+    // 엑셀
     const createExcelData = (eduList) => {
 
       // 교육 정보를 바탕으로 엑셀 데이터를 생성하는 로직 작성
@@ -320,7 +321,7 @@ function EduStatics() {
                           </div>
                         </td>
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                          {edu[1]}
+                              {edu[1]}
                         </td>
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
                         {format(new Date(edu[2]), 'yyyy-MM-dd HH시 mm분')}

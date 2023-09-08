@@ -136,7 +136,7 @@ function SafetyEducationMain() {
           <div className="sm:flex sm:items-center">
             <div className="sm:flex-auto">
               <h1 className="text-base font-semibold leading-6 text-gray-900">
-                안전교육 조회목록입니다
+                안전교육 조회목록
               </h1>
               <p className="mt-2 text-sm text-gray-700">
                 {getFormattedDate()} 안전교육 목록입니다
@@ -182,6 +182,19 @@ function SafetyEducationMain() {
                       >
                         교육일
                       </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        교육 시간
+                      </th>
+
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        강사
+                      </th>
 
                       <th
                         scope="col"
@@ -190,18 +203,11 @@ function SafetyEducationMain() {
                         작성자
                       </th>
 
-
                       <th
                         scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
                         첨부파일
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                      >
-                        등록일
                       </th>
                     </tr>
                   </thead>
@@ -239,6 +245,13 @@ function SafetyEducationMain() {
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
                           {format(new Date(edu.eduStartTime), "yyyy-MM-dd HH시 mm분")}
                         </td>
+                        <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                          {edu.eduSumTime} 분
+                        </td>
+
+                        <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                          {edu.eduInstructor}
+                        </td>
 
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
                           {edu.eduWriter}
@@ -252,14 +265,6 @@ function SafetyEducationMain() {
                             </span>
                           )
                             : null}
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-
-                          {edu.eduUpdateTime ? (
-                          format(new Date(edu.eduUpdateTime), "yyyy-MM-dd HH시 mm분") 
-                          )
-                            : format(new Date(edu.eduRegTime), "yyyy-MM-dd HH시 mm분")
-                          }
                         </td>
                       </tr>
                     ))}

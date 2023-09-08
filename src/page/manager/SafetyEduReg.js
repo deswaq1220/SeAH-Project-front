@@ -1,9 +1,9 @@
 import React, { useState, Fragment, useCallback, useEffect } from "react";
 import Header from "../../components/Header";
-// import { format, addMonths, subMonths } from "date-fns";
+import { toast } from 'react-toastify';
 import { Listbox, Transition } from "@headlessui/react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-// import Notification from '../components/Notification'
+
 import {
   CheckIcon,
   ChevronUpDownIcon,
@@ -169,7 +169,7 @@ function SafetyEduReg() {
 
   } = useSafetyEduForm();
   const [files, setFiles] = useState(null);
-  
+
   return (
     <div>
       <Header />
@@ -545,13 +545,28 @@ function SafetyEduReg() {
                       !file.type.includes("image/png")
                     ) {
                       error("업로드할 수 없는 확장자입니다.");
-                      alert("업로드할 수 없는 확장자입니다.");
+                      toast.error(<div>
+                        업로드할 수 없는 확장자입니다.<br />
+                        jpg/jpeg/png 파일만 업로드 가능합니다.
+                      </div>, {
+                        position: "top-center",
+                        autoClose: 2000,
+                        hideProgressBar: true,
+                        style: {
+                          width: "400px",
+                        },
+                      });
+
                       return;
                     }
                   },
                 }}
                 className="dropzone active l w-96"
-                labelIdle='클릭하거나 <span class="filepond--label-action">파일을 여기에 드롭하여 선택하세요</span>'
+                maxFileSizeError="파일 크기가 너무 큽니다. 최대 크기: 총 200MB"
+                labelIdle={
+                  '클릭하거나 <span class="filepond--label-action">파일을 여기에 드롭하여 선택하세요</span>' +
+                  '<br /><span style="font-size: 80%;">최대 5장, 총 200MB 이미지를 업로드할 수 있습니다.</span>'
+                }
               />
               {formData.eduFileList.map((file, index) => (
                 <div key={index} className="flex items-start mt-2">
