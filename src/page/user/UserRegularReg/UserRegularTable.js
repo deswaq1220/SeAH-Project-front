@@ -203,6 +203,8 @@ setRegularDTO(prevData => ({  ...prevData,
 
     const handleFormSubmit = async () => {
     console.log(regularDTO.file);
+    console.log(JSON.stringify(regularcheckList));
+
      regularDTO.regularDetailDTOList = JSON.stringify(regularcheckList);
 
     console.log("regularDTO");
@@ -221,7 +223,6 @@ setRegularDTO(prevData => ({  ...prevData,
         )
     .then((response) => {
         console.log(response);
-        console.log(response.data.regularDate);
 
 
 
@@ -238,21 +239,25 @@ setRegularDTO(prevData => ({  ...prevData,
           for(const item of regularcheckList){
           if(item.regularActEmail){ // 이메일이 기재되어 있다면 실행
 
+              const registerDate = new Date(response.data.regularDate);
+              const options = {
+                  year: 'numeric',
+                  month: 'numeric',
+                  day: 'numeric',
+                  hour: 'numeric',
+                  minute: 'numeric',
+                  second: 'numeric',
+                  hour12: true,
+              };
 
-              //원하는 날짜와 시간 형식으로 포맷팅
-               const registerDate = `${response.data.regularDate.toLocaleDateString()}`;
+              const formattedRegisterDate = registerDate.toLocaleDateString('ko-KR', options)
+              const id = item.id; // 아이템의 ID 가져오기
+              const itemContent = regularcheckList.find((checkItem) => checkItem.id === id);
+              const itemChecklist =itemContent.checklist;
+              console.log("itemContent=============="+formattedRegisterDate, regularDTO.regularPerson, item.regularActPerson, regularDTO.regularPart, regularDTO.regularInsName, itemChecklist, itemContent.regularActContent);
 
-                  const actPersonEmails = item.regularActEmail.split(",").map(email => email.trim());
-                  const emailData = {
-                      recipients: actPersonEmails,
-                      subject: emailTitle,
-                      content: item.regularActContent,
-                  }
-                  console.log("emailData===============" + JSON.stringify(emailData, null, 2));
-
-
-                  /*고정수신자 들어오면 넣기*/
-                  const spendForm = `
+              /*/★!*!/!*!/!*고정수신자 생기면 넣기*!/!*!/!*!/*/
+              const spendForm = `
                                           <table style="width: 100%; border-collapse: collapse; border: 1px solid #ccc;">
                                           <tr>
                                             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">항목</td>
@@ -260,11 +265,15 @@ setRegularDTO(prevData => ({  ...prevData,
                                           </tr>
                                           <tr>
                                             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검일시</td>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${registerDate}</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${formattedRegisterDate}</td>
                                           </tr>
                                           <tr>
                                             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검자</td>
                                             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${regularDTO.regularPerson}</td>
+                                          </tr>
+                                          <tr>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">조치자</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${item.regularActPerson}</td>
                                           </tr>
                                           <tr>
                                             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검구역</td>
@@ -276,45 +285,24 @@ setRegularDTO(prevData => ({  ...prevData,
                                           </tr>
                                           <tr>
                                             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검 유해위험요인</td>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${regularDetailDTOList.checklist}</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">위험원인</td>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speTrap}</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">부상부위</td>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speCause}</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">위험성평가</td>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speRiskAssess}</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검내용</td>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"> ${response.data.speContent}</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${itemChecklist}</td>
                                           </tr>
                                           <tr>
                                             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">개선대책</td>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speActContent}</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">담당자</td>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speActPerson}</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">요청기한</td>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${formattedSpeDeadline}</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${item.regularActContent}</td>
                                           </tr>
                                           </table>
-                                            <p style="font-size:16px;">링크 : <a href="http://localhost:3000/special/detail/${response.data.speId}">상세보기</a></p>`;
+                                            <p style="font-size:16px;">링크 : <a href="http://localhost:3000/regular/detail/${response.data.regularId}">상세보기</a></p>`;/*★이거 정기점검항목의 상세목록-항목별 목록생기면 해당하는 주소로 바꿔야함 */
 
 
 
-
-
-
-
+                  const actPersonEmails = item.regularActEmail.split(",").map(email => email.trim());
+                  const emailData = {
+                      recipients: actPersonEmails,
+                      subject: emailTitle,
+                      content: spendForm,
+                  }
+                  console.log("emailData===============" + JSON.stringify(emailData, null, 2));
 
 
                   axios
@@ -328,7 +316,7 @@ setRegularDTO(prevData => ({  ...prevData,
                       .catch((error) => {
                           console.error("이메일 전송 오류: ", error);
                       });
-              }// 반복 끝
+              }// 반복 끝*/
 
 
           }
