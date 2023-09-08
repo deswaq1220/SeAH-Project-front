@@ -44,6 +44,7 @@ export default function FrequentInseptionTable({ searchResults }) {
 
 
   // 검색 결과 또는 해당월 데이터를 표시할 배열
+
   const displayResults = searchResults.length > 0 ? searchResults : thisMonthResults;
 
 

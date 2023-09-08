@@ -31,28 +31,25 @@ function classNames(...classes) {
 }
 
 function UserfrequentReg() {
-  const { masterdataPart } = useParams(); // url 영역 파라미터
-  const { masterdataId } = useParams(); // url 설비 파라미터
-  const [speEmpNum, setSpeEmpNum] = useState("");
-  const [spePerson, setSpePerson] = useState("");
-  const [speEmail, setSpeEmail] = useState(""); // 조치자 이메일정보
-  const [staticEmailPerson, setStaticEmailPerson] = useState(() => {
-    // 초기값 설정
-    return [];
-  });
-  const [speFacility, setSpeFacility] = useState("");
-  const [speDanger, setSpeDanger] = useState("");
-  const [speInjure, setSpeInjure] = useState("");
-  const [speCause, setSpeCause] = useState("");
-  const [speTrap, setSpeTrap] = useState("");
-  const [speRiskAssess, setSpeRiskAssess] = useState("");
-  const [speContent, setSpeContent] = useState("");
-  const [speActContent, setSpeActContent] = useState("");
-  const [speActPerson, setSpeActPerson] = useState("");
-  const [speActEmail, setSpeActEmail] = useState("");
-  const [speComplete, setSpeComplete] = useState("");
-  const [files, setFiles] = useState(null);
-  const emailTitle = `${spePerson}님의 수시점검 요청메일입니다`;
+ const { masterdataPart } = useParams();           // url 영역 파라미터
+ const { masterdataId } = useParams();       // url 설비 파라미터
+ const [speEmpNum, setSpeEmpNum] = useState("");
+ const [spePerson, setSpePerson] = useState("");
+ const [speEmail, setSpeEmail] = useState("");        // 조치자 이메일정보
+ const [staticEmailPerson, setStaticEmailPerson] = useState([]);
+ const [speFacility, setSpeFacility] = useState("");
+ const [speDanger, setSpeDanger] = useState("");
+ const [speInjure, setSpeInjure] = useState("");
+ const [speCause, setSpeCause] = useState("");
+ const [speTrap, setSpeTrap] = useState("");
+ const [speRiskAssess, setSpeRiskAssess] = useState("");
+ const [speContent, setSpeContent] = useState("");
+ const [speActContent, setSpeActContent] = useState("");
+ const [speActPerson, setSpeActPerson] = useState("");
+ const [speActEmail, setSpeActEmail] = useState("");
+ const [speComplete, setSpeComplete] = useState("");
+ const [files, setFiles] = useState(null);
+ const emailTitle = `${spePerson}님의 수시점검 요청메일입니다`;
 
   // Inspector 콜백 함수 : 점검자(이름, 이메일, 사원번호)
   const handleInspectorDataChange = (inspectorForm) => {
@@ -104,27 +101,14 @@ function UserfrequentReg() {
 
   // 고정수신자
   const handleStaticEmailChange = (staticEmailList) => {
-    // // staticEmailList가 배열인 경우, 각 이메일 주소를 추출하여 배열에 추가
+   // staticEmailList가 배열인 경우, 각 이메일 주소를 추출하여 배열에 추가
     const staticEmailAddresses = Array.isArray(staticEmailList)
       ? staticEmailList.map((item) => item.emailAdd)
       : [staticEmailList.emailAdd];
 
     setStaticEmailPerson(staticEmailAddresses);
-    console.log("고정 수신자:", staticEmailAddresses);
-
-    // if (Array.isArray(staticEmailList)) {
-    //   staticEmailList.forEach((item) => {
-    //     if (item.emailAdd) {
-    //       console.log("설정된 이메일 주소:", item.emailAdd);
-    //     }
-    //   });
-    // }
   };
 
-  // 개선대책
-  const handleActContChange = (e) => {
-    setSpeActContent(e.target.value);
-  };
 
   // IsCompelete 콜백 : 완료여부
   const handleIsCompeleteDataChange = (selected) => {
@@ -132,6 +116,12 @@ function UserfrequentReg() {
   };
 
   const navigate = useNavigate();
+
+ // 개선대책
+ const handleActContChange = (e) => {
+  setSpeActContent(e.target.value);
+ };
+
 
   const handleFormSubmit = () => {
     const formData = new FormData(); // 폼데이터 객체 생성
@@ -189,10 +179,6 @@ function UserfrequentReg() {
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">내용</td>
           </tr>
           <tr>
-            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">고정수신자</td>
-            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.staticEmailPerson}</td>
-          </tr>
-          <tr>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검일시</td>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${formattedSpeDate}</td>
           </tr>
@@ -243,33 +229,32 @@ function UserfrequentReg() {
           </table>
             <p style="font-size:16px;">링크 : <a href="http://localhost:3000/special/detail/${response.data.speId}">상세보기</a></p>`;
 
-          const emailData = {
-            recipients: [
-              ...speActEmail.split(", "),
-              ...staticEmailPerson.map((person) => person.emailAdd),
-            ], // 이메일 주소를 수신자로 설정
-            subject: emailTitle, // 이메일 제목
-            content: inspectionData, // 이메일 내용 (점검 내용 등)
-            // 필요한 다른 속성도 여기에 추가 가능
-          };
+         const emailData = {
+           recipients: [...speActEmail.split(", "), ...staticEmailPerson], // 이메일 주소를 수신자로 설정
+           subject: emailTitle, // 이메일 제목
+           content: inspectionData, // 이메일 내용 (점검 내용 등)
+           // 필요한 다른 속성도 여기에 추가 가능
+         };
 
-          axios
-            .post(
-              `${process.env.REACT_APP_API_BASE_URL}/api/send-email`,
-              emailData
-            )
-            .then((response) => {
-              console.log("이메일 전송 완료:", response);
-              // ... (나머지 처리 로직)
-            })
-            .catch((error) => {
-              console.error("이메일 전송 오류: ", error);
-              // ... (에러 처리 로직)
-            });
-        } else {
-          console.log("이메일 정보가 없습니다. 전송되지 않았습니다.");
-          // ... (이메일 정보가 없을 때 처리 로직)
-        }
+         axios
+           .post(
+             `${process.env.REACT_APP_API_BASE_URL}/api/send-email`,
+             emailData
+           )
+           .then((response) => {
+             console.log("이메일 전송 완료:", response);
+
+             // ... (나머지 처리 로직)
+           })
+           .catch((error) => {
+             console.error("이메일 전송 오류: ", error);
+             console.log("이메일데이터", emailData);
+             // ... (에러 처리 로직)
+           });
+       } else {
+         console.log("이메일 정보가 없습니다. 전송되지 않았습니다.");
+         // ... (이메일 정보가 없을 때 처리 로직)
+       }
 
         if (formData !== null) {
           // 등록이 완료되었다는 알림 띄우기
@@ -283,16 +268,16 @@ function UserfrequentReg() {
           navigate(`/special/list/${masterdataPart}/${masterdataId}`);
         }
       })
-      .catch((error) => {
-        // console.log(requestData);
-        console.log(formData);
-        console.error(error);
-        alert("수시점검 등록에 실패했습니다. 다시 시도해주세요.");
-      });
-  };
+     .catch((error) => {
+       // console.log(requestData);
+       console.log(formData);
+       console.error(error);
+       alert("수시점검 등록에 실패했습니다. 다시 시도해주세요.");
+     });
+ };
 
-  return (
-    <>
+ return (
+     <>
       <UserHeader />
       <div className="sm:flex sm:items-center ml-4">
         <div className="sm:flex-auto">

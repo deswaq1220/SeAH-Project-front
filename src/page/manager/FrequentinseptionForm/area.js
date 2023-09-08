@@ -43,7 +43,6 @@ export default function FrequentInsArea({onFormDataChange}) {
   const handleSelectedPart = (value) => {
     setSelectedPart(value);
     onFormDataChange(value);
-
   };
 
 

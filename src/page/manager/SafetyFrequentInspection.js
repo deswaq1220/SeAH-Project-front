@@ -9,6 +9,13 @@ import axios from "axios";
 import {useState} from "react";
 import { toast } from "react-toastify";
 
+// String -> SpeStatus 형변환
+const SpeStatus = {
+  OK: "OK",
+  NO: "NO"
+};
+
+
 //수시점검 현황
 export default function FrequentIns() {
   const [searchData, setSearchData] = useState([]); // 검색 결과 데이터 저장
@@ -49,6 +56,15 @@ export default function FrequentIns() {
   const handleInspectorDataChange = (selected) => {
     setSpePerson(selected.inspectorName);
     setSpeEmpNum(selected.inspectorNum);
+
+    if(selected.speComplete === "OK"){
+      setSpeComplete(SpeStatus.OK);
+    } else if (selected.speComplete === "NO"){
+      setSpeComplete(SpeStatus.NO);
+    } else {
+      setSpeComplete(null);
+    }
+
   };
 
 
@@ -68,15 +84,17 @@ export default function FrequentIns() {
         })
         .then((response) => {
           const speListFromBack = response.data.searchSpeList.searchSpeDataDTOList;
-          setSearchData(speListFromBack);
+          // setSearchData(speListFromBack);
 
           // 검색 결과가 없는 경우 알림을 표시
           if (speListFromBack.length === 0) {
             toast.info('검색 결과가 없습니다.', {
               position: toast.POSITION.TOP_CENTER,
               autoClose: 1000, // 1초 동안 알림 표시
-
             });
+          } else {
+            // 검색 결과가 있을 경우 searchResults에 세팅
+            setSearchData(speListFromBack);
           }
         })
 
@@ -101,7 +119,7 @@ export default function FrequentIns() {
               <Period onFormDataChange={handleDateDataChange}/> {/* 기간 */}
             </div>
             <div className="flex items-center">
-              <Inspector onFormDataChange={handleInspectorDataChange}/> {/* 점검자 */}
+              <Inspector onFormDataChange={handleInspectorDataChange}/> {/* 점검자, 완료여부 */}
               <button
                 type="button"
                 onClick={handleSearchButtonClick}

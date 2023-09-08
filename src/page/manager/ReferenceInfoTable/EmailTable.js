@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Pagination from "../../../components/Pagination";
 import FacilityInfo from "../ReferebceInfoForm/FacilityInfo";
+import {toast} from "react-toastify";
 export default function EmailTable() {
   const [people, setPeople] = useState({ email: [] });
   const itemsPerPage = 10;
@@ -58,7 +59,15 @@ export default function EmailTable() {
       await axios.delete(
         `${process.env.REACT_APP_API_BASE_URL}/admin/master/email/delete/${emailId}`
       );
-      console.log("이메일이 삭제되었습니다");
+      setEmailList((prevList) =>
+        prevList.filter((email) => email.emailId !== emailId)
+      );
+      toast.success("등록하신 정보가 삭제되었습니다.", {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: true,
+      });
+
       fetchData(); // 데이터 다시 불러오기
     } catch (error) {
       console.error("Error deleting email:", error);
