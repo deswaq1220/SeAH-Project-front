@@ -5,10 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c20fbe9c-9169-4241-9ec0-dff0f7b0e503" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/page/user/UserRegularDetails/temp.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/page/user/UserRegularDetails/DetailedModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserRegularDetails/DetailedModal.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/page/user/UserRegularDetails/UserRegularDetailsTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserRegularDetails/UserRegularDetailsTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/UserRegularReg/FaultyModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserRegularReg/FaultyModal.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,7 +76,7 @@
       <workItem from="1692581271214" duration="3391000" />
       <workItem from="1692662925742" duration="7180000" />
       <workItem from="1692704545169" duration="422000" />
-      <workItem from="1694073289891" duration="8889000" />
+      <workItem from="1694073289891" duration="12875000" />
     </task>
     <servers />
   </component>

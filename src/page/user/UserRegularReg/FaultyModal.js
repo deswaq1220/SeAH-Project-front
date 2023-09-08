@@ -44,18 +44,7 @@ export default function FaultyModal({ index, actForm, id }) {
         regularActContent : content,
         files: files,
       });
-//    try{
-//      const dataSave = {
-//        regularActEmail,
-//        regularActPerson,
-//        regularActContent
-//      };
-//      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/regular/new`, dataSave);
-//      //모달창 닫기
       setOpen(false);
-//    } catch(error){
-//      console.error("개선대책 조치 등록 오류",  error);
-//    }
   }
 
   

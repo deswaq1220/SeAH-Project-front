@@ -35,12 +35,27 @@ const {regularId} = useParams();
    regularInsName:"",
    regularEmail:"",
  });
+  const [selectedIndex, setSelectedIndex] = useState(null); // 선택된 항목의 인덱스
 
- function handleChecklistClick(checklist) {
-       setIsModalOpen(true);
- }
+  const closeModal = () => {
+    setSelectedIndex(null); // 모달을 닫을 때 선택된 인덱스를 초기화
+    setIsModalOpen(false); // 모달을 닫기 위해 상태를 false로 설정
+    console.log("모달을 닫았습니다."); // 로그를 추가하여 함수가 호출되었는지 확인
+  };
+
+  function handleChecklistClick(index) {
+    console.log(regularDetailDTOList[index]);
+    setSelectedIndex(index); // 클릭한 항목의 인덱스를 저장
+    setIsModalOpen(true); // 모달을 열기 위해 상태를 true로 설정
+    console.log("모달을 열었습니다."); // 로그를 추가하여 함수가 호출되었는지 확인
+  }
 
   useEffect(() => {
+    if(isModalOpen){
+      console.log("isModalOpen가 트루" );
+    }else {
+      console.log("isModalOpen가 거짓" );
+    }
     const fetchRegularDetail = async () => {
       try {
         const response = await axios.get(
@@ -150,7 +165,7 @@ const dataTest =  ()=>{
                       </dl>
                     </td>
                      <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
-                     onClick={() => handleChecklistClick(regularDetail.checklist)}
+                     onClick={() => handleChecklistClick(index)}
                      >
                         {regularDetail.checklist}
                       </td>
@@ -173,7 +188,13 @@ const dataTest =  ()=>{
                                </label>
                              </div>
                            ))}
-                           <DetailedModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+                          {isModalOpen ? (
+                              <DetailedModal
+                                  isOpen={true}
+                                  cancel = {closeModal()}
+                                  selectedRowIndex={selectedIndex} // 선택된 항목의 인덱스를 모달로 전달
+                              />
+                          ) : null}
                      </div>
                     </td>
                   </tr>

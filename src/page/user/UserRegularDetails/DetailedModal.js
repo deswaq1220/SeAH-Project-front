@@ -11,20 +11,16 @@ import song from "../../../img/1610879591623－1.jpg";
 // 추가 플러그인을 라이브러리에 등록
 registerPlugin(FilePondPluginImagePreview);
 
-export default function DetailedModal({ person, closeModal }) {
+export default function DetailedModal({cancel}) {
   const [open, setOpen] = useState(true);
   const cancelButtonRef = useRef(null);
-  const [regularActPerson, setRegularActPerson] = useState("");
-  const [regularActEmail, setRegularActEmail] = useState("");
-  const [regularActContent, setRegularActContent] = useState("");
   const [files, setFiles] = useState(null);
+  // const []
   // ActionRquest 콜백 : 조치자(이름, 이메일)
-  const handleActionRequestDetailsDataChange = (data) => {
-    setRegularActPerson(data.regularActPerson);
-    setRegularActEmail(data.regularActEmail);
-  };
 
-
+const  handleCancelClick = () =>{
+  const cancel = false;
+}
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog
@@ -183,7 +179,7 @@ export default function DetailedModal({ person, closeModal }) {
                   <button
                     type="button"
                     className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
-                    onClick={() => setOpen(false)}
+                    onClick={handleCancelClick}
                     ref={cancelButtonRef}
                   >
                     취소
