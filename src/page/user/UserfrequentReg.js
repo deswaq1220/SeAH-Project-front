@@ -24,11 +24,30 @@ import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 
 // 추가 플러그인을 라이브러리에 등록
-registerPlugin(FilePondPluginImagePreview);
+// registerPlugin(FilePondPluginImagePreview);
+//
+// function classNames(...classes) {
+//   return classes.filter(Boolean).join(" ");
+// }
+//
+//
+// const MAX_FILENAME_LENGTH = 30;
+// const FILENAME_SUFFIX = "...";
+//
+// const TruncatedFileName = ({ fileName }) => {
+//   if (fileName.length <= MAX_FILENAME_LENGTH) {
+//     return <div>{fileName}</div>;
+//   }
+//
+//   const truncatedFileName = fileName.slice(
+//     0,
+//     MAX_FILENAME_LENGTH - FILENAME_SUFFIX.length
+//   );
+//   const displayedFileName = truncatedFileName + FILENAME_SUFFIX;
+//
+//   return <div>{displayedFileName}</div>;
+// };
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
 
 function UserfrequentReg() {
   const { masterdataPart } = useParams(); // url 영역 파라미터
@@ -52,6 +71,7 @@ function UserfrequentReg() {
   const [speActEmail, setSpeActEmail] = useState("");
   const [speComplete, setSpeComplete] = useState("");
   const [files, setFiles] = useState(null);
+
   // const [speInjureTemp, setSpeInjureTemp] = useState("");
   // const formData = new FormData(); // 폼데이터 객체 생성?
 
@@ -69,8 +89,8 @@ function UserfrequentReg() {
     inspectoremail: "",
   });
 
-  const [compImageUrls, setCompImageUrls] = useState("");
-  const [noCompImageUrls, setNoCompImageUrls] = useState("");
+  // const [files, setFiles] = useState("");
+
 
 
 
@@ -153,6 +173,15 @@ function UserfrequentReg() {
     setSpeComplete(selected);
   };
 
+  // 파일제거
+  // const handleRemoveFile = (fileIndex) => {
+  //   // 선택된 파일 목록에서 파일을 제거
+  //   const updatedFiles = [...files];
+  //   updatedFiles.splice(fileIndex, 1);
+  //   setFiles(updatedFiles);
+  // };
+
+
   const navigate = useNavigate();
   const params = new URLSearchParams(window.location.search);
   const speId = params.get("speId");
@@ -168,6 +197,13 @@ function UserfrequentReg() {
           // 가져온 데이터로 상태 업데이트
           console.log(response.data);
           // seteduFiles(response.data.eduFileList);
+          // // 이전 파일 데이터를 수정할 데이터로 대체
+          // const modifyFiles = response.data.specialData.speFiles.map((file) => ({
+          //   source: file.url, // 수정할 파일의 URL 또는 경로
+          //   options: {
+          //     type: 'local', // 파일 유형 (로컬 또는 서버 파일)
+          //   },
+          // }));
 
           setSpeData({
             employeenumber: response.data.specialData.speEmpNum,
@@ -196,10 +232,13 @@ function UserfrequentReg() {
           setSpeActContent(response.data.specialData.speActContent);
           setSpeComplete(response.data.specialData.speComplete);
           setSpeComplete(response.data.specialData.speComplete);
-          setNoCompImageUrls(response.data.specialData.noCmpImageUrls);
+          // 수정할 파일 데이터 업데이트
+          setFiles(response.data.specialData.speFiles);
+          // setFiles(modifyFiles);
+
 
             console.log(speData);
-            console.log("가져온 파일리스트: "+response.data.noCmpImageUrls);
+
 
 
           })
@@ -403,6 +442,7 @@ function UserfrequentReg() {
 
   return (
     <>
+      {/* EditFileComponent를 렌더링합니다. */}
       <UserHeader />
       <p>수시점검</p>
       <p>수시점검 내용등록</p>
@@ -471,9 +511,7 @@ function UserfrequentReg() {
         allowMultiple={true} // 다중 파일 업로드 허용
         maxFiles={5} // 최대 파일 수 설정
         acceptedFileTypes={["image/jpeg", "image/jpg", "image/png"]}
-        // 엔드포인트는 백엔드 구현되면 연결요
         onupdatefiles={(fileItems) => {
-          // 파일 정보를 상태에 저장하거나 처리
           const selectedFiles = fileItems.map((fileItem) => fileItem.file);
           setFiles(selectedFiles);
         }}
@@ -497,10 +535,42 @@ function UserfrequentReg() {
               alert("업로드할 수 없는 확장자입니다.");
               return;
             }
+            // 파일이 성공적으로 업로드되면 서버에 저장하는 로직을 여기에 추가할 수 있습니다.
           },
         }}
         labelIdle='클릭하거나 <span class="filepond--label-action">파일을 여기에 드롭하여 선택하세요</span>'
       />
+      {/*{files.map((file, index) => (*/}
+      {/*  <div key={index} className="flex items-start mt-2">*/}
+      {/*    <div className="text-left">*/}
+      {/*      <TruncatedFileName fileName={file.speFileOriName} /> /!* 수정된 부분 *!/*/}
+      {/*    </div>*/}
+      {/*    <button*/}
+      {/*      onClick={() => handleRemoveFile(index)}*/}
+      {/*      className="ml-2 text-red-600"*/}
+      {/*      type="button"*/}
+      {/*    >*/}
+      {/*      삭제*/}
+      {/*    </button>*/}
+      {/*  </div>*/}
+      {/*))}*/}
+
+      {/*{uploadedFiles.map((file, index) => (*/}
+      {/*  <div key={file.name} className="flex items-start mt-2">*/}
+      {/*    <div className="text-left">*/}
+      {/*      <TruncatedFileName fileName={file.name} />*/}
+      {/*    </div>*/}
+      {/*    <button*/}
+      {/*      onClick={() => deleteFile(file.name)}*/}
+      {/*      className="ml-2 text-red-600"*/}
+      {/*      type="button"*/}
+      {/*    >*/}
+      {/*      삭제*/}
+      {/*    </button>*/}
+      {/*  </div>*/}
+      {/*))}*/}
+
+
       <div className="flex justify-center w-full mt-8 mb-10">
         <button
           type="button"
