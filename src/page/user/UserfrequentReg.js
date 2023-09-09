@@ -46,30 +46,24 @@ function UserfrequentReg() {
   const [speActEmail, setSpeActEmail] = useState("");
   const [speComplete, setSpeComplete] = useState("");
   const [files, setFiles] = useState("");     // 백으로 넘길 파일
-  const [fileDatas, setFileDatas] = useState({
-      specialFileList:[],     // 백에서 가져온 파일정보(업데이트정보)
-      spcialFileIds: []       // 삭제할 아이디 정보(업데이트정보)
-  });   // 백에서 가져온 파일정보(업데이트정보)
-
-
-
+  const [fileDatas, setFileDatas] = useState([]);   // 백에서 가져온 파일정보(업데이트정보)
+  const [deleteFileIds, setDeleteFileIds] = useState([]);
   const emailTitle = `${spePerson}님의 수시점검 요청메일입니다`;
+
   const [speData, setSpeData] = useState({
     employeenumber :"",
     inspectorname: "",
     inspectoremail: "",
   });
+
   const [injuredData, setInjuredData] = useState("");
   const [causeData, setCauseData] = useState("");
   const [speActData, setSpeActData] = useState({
-    employeenumber :"",
-    inspectorname: "",
-    inspectoremail: "",
+      speActPerson: "",
+      speActEmail: "",
   });
 
-
-
-
+  // ----------- 콜백 함수
 
   // Inspector 콜백 함수 : 점검자(이름, 이메일, 사원번호)
   const handleInspectorDataChange = (inspectorForm) => {
@@ -149,16 +143,17 @@ function UserfrequentReg() {
   };
 
   // 파일제거
-  const handleRemoveFile = (index) => {
-    const updatedFileId = fileDatas[index].speFileId;
+  const handleRemoveFile = (fileItem, index) => {
+    // 1. 파일 아이디를 저장하는 새로운 배열 생성
+    const updatedFiles = [...fileDatas]; // fileDatas 배열 복사
+    // 2. 화면에서 삭제할 파일 아이템 제거
+    updatedFiles.splice(index, 1);
 
-    setFiles([...files, updatedFileId]);
-
-
-    fileDatas.splice(index, 1);
-    console.log("삭제 확인: "+ fileDatas.splice(index, 1));
-    // formData.eduFileIds= eduFiles;
-  };
+    // 3. 업데이트된 배열을 state로 설정
+    setFileDatas(updatedFiles);
+    // 4. 삭제할 파일 아이디를 state로 설정 (리스트 형태로 저장하려면 여러 아이디를 배열로 관리)
+    setDeleteFileIds((prevIds) => [...prevIds, fileItem.speFileId]);
+  }
 
 
   const navigate = useNavigate();
@@ -167,7 +162,7 @@ function UserfrequentReg() {
 
   useEffect(() => {
     // 서버에서 교육 세부 정보 가져오기 (교육 아이디값 이용)
-    
+
     if (speId) {
      axios
         .get(`${process.env.REACT_APP_API_BASE_URL}/user/special/detail/${speId}`)
@@ -175,28 +170,28 @@ function UserfrequentReg() {
         .then((response) => {
           // 가져온 데이터로 상태 업데이트
           console.log(response.data);
-          // seteduFiles(response.data.eduFileList);
-          // // 이전 파일 데이터를 수정할 데이터로 대체
-          // const modifyFiles = response.data.specialData.speFiles.map((file) => ({
-          //   source: file.url, // 수정할 파일의 URL 또는 경로
-          //   options: {
-          //     type: 'local', // 파일 유형 (로컬 또는 서버 파일)
-          //   },
-          // }));
 
+          // 조치자정보
           setSpeData({
             employeenumber: response.data.specialData.speEmpNum,
             inspectorname: response.data.specialData.spePerson,
             inspectoremail: response.data.specialData.speEmail.split('@')[0],
           });
+          setSpeEmpNum(response.data.specialData.speEmpNum);
+          setSpePerson(response.data.specialData.spePerson);
+          setSpeEmail(response.data.specialData.speEmail);
 
-          // setSpeEmpNum(response.data.specialData.speEmpNum);
-          // setSpePerson(response.data.specialData.spePerson);
           setSpeFacility(response.data.specialData.speFacility);
           setSpeDanger(response.data.specialData.speDanger);
+
           setInjuredData(response.data.specialData.speInjure);
+          setSpeInjure(response.data.specialData.speInjure);
+
           setCauseData(response.data.specialData.speCause);
+          setSpeCause(response.data.specialData.speCause);
+
           setSpeTrap(response.data.specialData.speTrap);
+
           setSpeRiskAssess(response.data.specialData.speRiskAssess);
           setSpeContent(response.data.specialData.speContent);
 
@@ -204,22 +199,17 @@ function UserfrequentReg() {
             speActPerson: response.data.specialData.speActPerson,
             speActEmail: response.data.specialData.speActEmail,
           });
+          setSpeActPerson(response.data.specialData.speActPerson);
+          setSpeActEmail(response.data.specialData.speActEmail);
 
-          //
-          // setSpeActPerson(response.data.specialData.speActPerson);
-          // setSpeActEmail(response.data.specialData.speActEmail);
           setSpeActContent(response.data.specialData.speActContent);
+
           setSpeComplete(response.data.specialData.speComplete);
-          setSpeComplete(response.data.specialData.speComplete);
-          // 수정할 파일 데이터 업데이트  /////////////////////////////////////////////
-          setFileDatas.specialFileList(response.data.specialData.speFiles);
-          // setFiles(modifyFiles);
+          // setSpeComplete(response.data.specialData.speComplete);
+          // 수정할 파일 데이터 업데이트
+          setFileDatas(response.data.specialData.speFiles);
 
-
-            console.log(speData);
-
-
-
+          console.log(speData);
           })
           .catch((error) => {
             // 에러 처리
@@ -234,7 +224,7 @@ function UserfrequentReg() {
 
 
   const handleFormSubmit  = () => {
-   
+
     let formData = new FormData();
     // 업로드 파일 배열 저장
     if (files !== null) {
@@ -243,13 +233,16 @@ function UserfrequentReg() {
       }
     }
 
+    if(speId) {
+        formData.append("speDeleteFileIds", deleteFileIds);
+    }
     formData.append("speEmpNum", speEmpNum);
     formData.append("spePerson", spePerson);
     formData.append("speEmail", speEmail);
     formData.append("speFacility", speFacility);
     formData.append("speDanger", speDanger);
     formData.append("speInjure", speInjure);
-    formData.append("speCause", speCause);
+    formData.append("speCause", speCause)
     formData.append("speTrap", speTrap);
     formData.append("speRiskAssess", speRiskAssess);
     formData.append("speContent", speContent);
@@ -261,7 +254,7 @@ function UserfrequentReg() {
     for (let [key, value] of formData.entries()) {
       console.log(`${key}: ${value}`);
   }
-   
+
 
     if (speId) {
       // speId 값이 있으면 수정 요청 보내기
@@ -398,7 +391,7 @@ function UserfrequentReg() {
           });
 
           // 저장성공시 해당설비의 리스트 페이지
-          // navigate(`/special/list/${masterdataPart}/${masterdataId}`);
+          navigate(`/special/list/${masterdataPart}/${masterdataId}`);
         }
       })
       .catch((error) => {
@@ -410,12 +403,6 @@ function UserfrequentReg() {
     }
   };
 
-  // const handleUpdateFormSubmit = () => {        // 업데이트 연결
-  //   console.log("업데이트");
-  // }
-
-  // post인지 updat인지
-  // const connectType = speId ? handleUpdateFormSubmit : handleSaveFormSubmit;
 
   return (
     <>
@@ -512,18 +499,17 @@ function UserfrequentReg() {
               alert("업로드할 수 없는 확장자입니다.");
               return;
             }
-            // 파일이 성공적으로 업로드되면 서버에 저장하는 로직을 여기에 추가할 수 있습니다.
           },
         }}
         labelIdle='클릭하거나 <span class="filepond--label-action">파일을 여기에 드롭하여 선택하세요</span>'
       />
-      {fileDatas.specialFileList.map((fileItem, index) => (
+      {fileDatas.map((fileItem, index) => (
         <div key={index} className="flex items-start mt-2">
           <div className="text-left">
-            {fileItem.specialFileList.speFileOriName} /  {fileItem.specialFileList.speFileId} / {index}
+            {fileItem.speFileOriName} /  {fileItem.speFileId} / {index}
           </div>
           <button
-            onClick={() => handleRemoveFile(index)}
+            onClick={() => handleRemoveFile(fileItem, index)}
             className="ml-2 text-red-600"
             type="button"
           >
