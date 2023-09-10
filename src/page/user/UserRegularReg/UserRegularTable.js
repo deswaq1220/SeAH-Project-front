@@ -42,41 +42,19 @@ export default function UserRegularTable() {
     const [regularcheckList, setRegularcheckList] = useState([]);
     const [files, setFiles] = useState([]);
     const formData = new FormData();
-    //  const handleRadioChange = (index, method) => {
-    //    let newModalState = [...isModalOpen]; // 현재의 모달 상태 복사
-    ////    let newEditButtonState = [...isEditButtonVisible]; // 현재의 수정 버튼 상태 복사
-    ////
-    //    if (method === "bad") {
-    //      isModalOpen[index] = true; // 불량을 선택한 행의 모달을 열기
-    ////
-    ////      newEditButtonState[index] = true; // 불량을 선택한 행의 수정 버튼 보이기
-    //    } else {
-    //      isModalOpen[index] = false; // 그 외에는 모달 닫기
-    ////      newEditButtonState[index] = false; // 그 외에는 수정버튼 숨기기
-    //    }
-    //
-    //    regularcheckList[index].regularcheck = method; //해당 행의 상태 입력
-    ////
-    //    setIsModalOpen(newModalState); // 새로운 모달 상태 설정
-    ////    setIsEditButtonVisible(newEditButtonState); // 새로운 수정버튼 상태 설정
-    //  };
 
     const handleRadioChange = (index, method) => {
-        if (method === "BAD") {
-            isModalOpen[index] = true; // 불량을 선택한 행의 모달을 열기
-        } else {
-            isModalOpen[index] = false; // 그 외에는 모달 닫기
-        }
+//        if (method === "BAD") {
+//            isModalOpen[index] = true; // 불량을 선택한 행의 모달을 열기
+//        } else {
+//            isModalOpen[index] = false; // 그 외에는 모달 닫기
+//        }
 
         regularcheckList[index].regularCheck = method; // 해당 행의 상태 입력
 
         setIsModalOpen([...isModalOpen]); // 새로운 모달 상태 설정
     };
 
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-        setSelectedItemIndex(null); // 모달을 닫을 때 선택된 항목 인덱스 초기화
-    };
 
     const [regularDTO, setRegularDTO] = useState({
         regularPerson: "", // 관찰자 이름

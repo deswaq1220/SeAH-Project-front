@@ -1,7 +1,7 @@
 import React from "react";
 import {useEffect, useState} from "react";
 import axios from "axios";
-
+import FaultyModal from "../UserRegularReg/FaultyModal";
 import UserHeader from "../../../components/UserHeader";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -18,12 +18,12 @@ const notificationMethods = [
 
 export default function UserRegularDetails() {
 
-const [selectedValue, setSelectedValue] = useState("GOOD");
+const [selectedValue, setSelectedValue] = useState();
 
 function handleRadioChange(value) {
     setSelectedValue(value);
 }
-const [isModalOpen, setIsModalOpen] = useState(false);
+
 const [regularDetailDTOList, setRegularDetailDTOList] = useState([]);
 const {regularId} = useParams();
  const [regularIns, setRegularIns] = useState([]);
@@ -35,27 +35,33 @@ const {regularId} = useParams();
    regularInsName:"",
    regularEmail:"",
  });
-  const [selectedIndex, setSelectedIndex] = useState(null); // 선택된 항목의 인덱스
+const [isModalOpen, setIsModalOpen] = useState(false); // 각 행마다 모달 상태 저장
 
-  const closeModal = () => {
-    setSelectedIndex(null); // 모달을 닫을 때 선택된 인덱스를 초기화
-    setIsModalOpen(false); // 모달을 닫기 위해 상태를 false로 설정
-    console.log("모달을 닫았습니다."); // 로그를 추가하여 함수가 호출되었는지 확인
-  };
-
+  // handleChecklistClick 함수 정의
   function handleChecklistClick(index) {
-    console.log(regularDetailDTOList[index]);
-    setSelectedIndex(index); // 클릭한 항목의 인덱스를 저장
-    setIsModalOpen(true); // 모달을 열기 위해 상태를 true로 설정
-    console.log("모달을 열었습니다."); // 로그를 추가하여 함수가 호출되었는지 확인
+  console.log(regularDetailDTOList[index]);
+
+    regularDetailDTOList[index].isModalState = "open";
+
+    setIsModalOpen(true);
   }
 
+    const handleActDataChange = (actForm) => {
+        console.log("actForm");
+        console.log(actForm);
+
+        regularDetailDTOList[actForm.index].isModalState = "close";
+        regularDetailDTOList[actForm.index].regularActContent = actForm.regularActContent;
+
+
+
+        setIsModalOpen(false);
+    };
+
+
+
   useEffect(() => {
-    if(isModalOpen){
-      console.log("isModalOpen가 트루" );
-    }else {
-      console.log("isModalOpen가 거짓" );
-    }
+
     const fetchRegularDetail = async () => {
       try {
         const response = await axios.get(
@@ -69,6 +75,7 @@ const {regularId} = useParams();
 
         setRegularData(response.data.regularDTO );
         setRegularDetailDTOList([...response.data.regularDetailDTOList])
+
 
         console.log("파일이름 찾기");
         console.log(response.data);
@@ -165,7 +172,7 @@ const dataTest =  ()=>{
                       </dl>
                     </td>
                      <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
-                     onClick={() => handleChecklistClick(index)}
+                        onClick={() => handleChecklistClick(index)}
                      >
                         {regularDetail.checklist}
                       </td>
@@ -188,21 +195,23 @@ const dataTest =  ()=>{
                                </label>
                              </div>
                            ))}
-                          {isModalOpen ? (
-                              <DetailedModal
-                                  isOpen={true}
-                                  cancel = {closeModal()}
-                                  selectedRowIndex={selectedIndex} // 선택된 항목의 인덱스를 모달로 전달
-                              />
-                          ) : null}
+                        {regularDetail.isModalState === "open" ? (
+                             <DetailedModal
+                                 actForm={handleActDataChange}
+                                 fetchData={regularDetail}
+                                 index={index}
+                             />
+                           ):null}
                      </div>
                     </td>
                   </tr>
+
                 ))}
               </tbody>
           </table>
         </div>
         <div className="flex justify-end mt-4">
+
           <button
             type="button"
             className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"

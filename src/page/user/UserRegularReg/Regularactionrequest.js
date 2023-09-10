@@ -8,7 +8,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Regularactionrequest({ onFormDataChange }) {
+export default function Regularactionrequest({ onFormDataChange,fetchEmail }) {
   const { masterdataPart, masterdataId } = useParams();
   const [emailDataList, setEmailDataList] = useState([]);
   const [instances, setInstances] = useState([{ selectedEmail: null }]);
@@ -21,7 +21,12 @@ export default function Regularactionrequest({ onFormDataChange }) {
         );
 
         const emailListFromBack = response.data["emailList"];
-        setEmailDataList(emailListFromBack);
+        if(fetchEmail===null){
+            setEmailDataList(fetchEmail);
+        }else{
+            setEmailDataList(emailListFromBack);
+        }
+
       } catch (error) {
         console.error("데이터 가져오기 오류: ", error);
       }
