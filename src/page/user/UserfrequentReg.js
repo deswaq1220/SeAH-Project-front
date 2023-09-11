@@ -27,7 +27,6 @@ import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 function UserfrequentReg() {
   const { masterdataPart } = useParams(); // url 영역 파라미터
   const { masterdataId } = useParams(); // url 설비 파라미터
-  // const [complete, setComplete] = useState(false);  // 완료처리확인
   const [speEmpNum, setSpeEmpNum] = useState("");
   const [spePerson, setSpePerson] = useState("");
   const [speEmail, setSpeEmail] = useState(""); // 조치자 이메일정보
@@ -124,13 +123,7 @@ function UserfrequentReg() {
     setStaticEmailPerson(staticEmailAddresses);
     console.log("고정 수신자:", staticEmailAddresses);
 
-    // if (Array.isArray(staticEmailList)) {
-    //   staticEmailList.forEach((item) => {
-    //     if (item.emailAdd) {
-    //       console.log("설정된 이메일 주소:", item.emailAdd);
-    //     }
-    //   });
-    // }
+
   };
 
   // 개선대책

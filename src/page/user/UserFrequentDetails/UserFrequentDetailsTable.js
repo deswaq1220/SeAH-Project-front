@@ -7,7 +7,6 @@ export default function UserFrequentDetailsTable() {
   const { speId } = useParams(); // URL 파라미터로부터 speId를 가져옵니다.
   const [inspectionData, setInspectionData] = useState(null); // API로부터 받은 데이터를 저장할 상태 변수
   const navigate = useNavigate();
-  const [showAlert, setShowAlert] = useState(false);
 
   const { masterdataPart, masterdataId } = useParams();
   useEffect(() => {
@@ -63,14 +62,9 @@ export default function UserFrequentDetailsTable() {
         return "";
     }
   };
-  // const handleEditButtonClick = (speId) => {
-  //   navigate(
-  //     `/special/new/${inspectionData.specialData.spePart}/${inspectionData.facilityCode}?speId=${speId}`
-  //   );
-  // };
 
+  // 수정버튼
   const handleEditButtonClick = (speId) => {
-    console.log("여기확인 :"+inspectionData.specialData.speComplete);
     if (inspectionData.specialData.speComplete === "OK") {
       alert("완료된 내역은 수정이 불가합니다.");
     } else {
@@ -80,6 +74,7 @@ export default function UserFrequentDetailsTable() {
     }
   };
 
+  // 완료버튼
   const handleEditCompleteButtonClick = (speId) => {
     navigate(
       `/special/complete/${inspectionData.specialData.spePart}/${inspectionData.facilityCode}?speId=${speId}`
@@ -94,7 +89,7 @@ export default function UserFrequentDetailsTable() {
           수시점검
         </h3>
         <p className="mt-1 max-w-2xl text-base leading-6 text-gray-500">
-          등록한 해당 수시점검을 수정 및 조회가 가능합니다
+          등록한 해당 수시점검의 조회 및 수정, 완료등록이 가능합니다
         </p>
         <div className="flex justify-end mt-1">
           <button
