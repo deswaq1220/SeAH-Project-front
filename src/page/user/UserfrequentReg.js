@@ -56,11 +56,11 @@ function UserfrequentReg() {
 
   const emailTitle = `${spePerson}님의 수시점검 요청메일입니다`;
   const [speData, setSpeData] = useState({
-    employeenumber :"",
+    employeenumber: "",
     inspectorname: "",
     inspectoremail: "",
   });
- 
+
   // Inspector 콜백 함수 : 점검자(이름, 이메일, 사원번호)
   const handleInspectorDataChange = (inspectorForm) => {
     setSpeEmpNum(inspectorForm.employeenumber);
@@ -130,7 +130,17 @@ function UserfrequentReg() {
 
   // 개선대책
   const handleActContChange = (e) => {
-    setSpeActContent(e.target.value);
+    const value = e.target.value;
+    if (value.length > 300) {
+      toast.warn("개선대책은 최대 300자까지 입력 가능합니다.", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: true,
+      });
+      setSpeActContent(value.slice(0, 300));
+    } else {
+      setSpeActContent(value);
+    }
   };
 
   // IsCompelete 콜백 : 완료여부
@@ -144,20 +154,22 @@ function UserfrequentReg() {
 
   useEffect(() => {
     // 서버에서 교육 세부 정보 가져오기 (교육 아이디값 이용)
-    
+
     if (speId) {
-     axios
-        .get(`${process.env.REACT_APP_API_BASE_URL}/user/special/detail/${speId}`)
+      axios
+        .get(
+          `${process.env.REACT_APP_API_BASE_URL}/user/special/detail/${speId}`
+        )
         //  .get(`http://localhost:8081/edudetails/${eduId}`)
         .then((response) => {
           // 가져온 데이터로 상태 업데이트
           console.log(response.data);
           // seteduFiles(response.data.eduFileList);
-          
+
           setSpeData({
             employeenumber: response.data.specialData.speEmpNum,
             inspectorname: response.data.specialData.speActPerson,
-            inspectoremail: response.data.specialData.speActEmail.split('@')[0],
+            inspectoremail: response.data.specialData.speActEmail.split("@")[0],
           });
 
           setSpeEmpNum(response.data.specialData.speEmpNum);
@@ -174,27 +186,17 @@ function UserfrequentReg() {
           setSpeActContent(response.data.specialData.speActContent);
           setSpeComplete(response.data.specialData.speComplete);
 
-          
-            console.log(speData);
-
-
-          })
-          .catch((error) => {
-            // 에러 처리
-            console.error("교육 세부 정보를 가져오는 중 에러 발생:", error);
-          });
-    }else {
-     alert("speId 값이 없다");
+          console.log(speData);
+        })
+        .catch((error) => {
+          // 에러 처리
+          console.error("교육 세부 정보를 가져오는 중 에러 발생:", error);
+        });
+    } else {
     }
   }, [speId]);
 
-
-
-
-
-
   const handleFormSubmit = () => {
-   
     let formData = new FormData();
     // 업로드 파일 배열 저장
     if (files !== null) {
@@ -202,7 +204,7 @@ function UserfrequentReg() {
         formData.append("files", files[i]);
       }
     }
-  
+
     formData.append("speEmpNum", speEmpNum);
     formData.append("spePerson", spePerson);
     formData.append("speEmail", speEmail);
@@ -220,8 +222,7 @@ function UserfrequentReg() {
 
     for (let [key, value] of formData.entries()) {
       console.log(`${key}: ${value}`);
-  }
-   
+    }
 
     if (speId) {
       // speId 값이 있으면 수정 요청 보내기
@@ -243,32 +244,36 @@ function UserfrequentReg() {
         })
         .catch((error) => {
           console.error(error);
-          alert("수시점검 수정에 실패했습니다. 다시 시도해주세요.");
+          toast.error("수시점검 수정에 실패했습니다. 다시 시도해주세요.", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: true,
+          });
         });
     } else {
-    // 수시점검 등록 요청
-    axios
-      .post(
-        `${process.env.REACT_APP_API_BASE_URL}/user/special/new/${masterdataPart}/${masterdataId}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response);
+      // 수시점검 등록 요청
+      axios
+        .post(
+          `${process.env.REACT_APP_API_BASE_URL}/user/special/new/${masterdataPart}/${masterdataId}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response);
 
-        const speDate = new Date(response.data.speDate);
-        const speDeadline = new Date(response.data.speDeadline);
+          const speDate = new Date(response.data.speDate);
+          const speDeadline = new Date(response.data.speDeadline);
 
-        // 원하는 날짜와 시간 형식으로 포맷팅
-        const formattedSpeDate = `${speDate.toLocaleDateString()} ${speDate.toLocaleTimeString()}`;
-        const formattedSpeDeadline = `${speDeadline.toLocaleDateString()} ${speDeadline.toLocaleTimeString()}`;
+          // 원하는 날짜와 시간 형식으로 포맷팅
+          const formattedSpeDate = `${speDate.toLocaleDateString()} ${speDate.toLocaleTimeString()}`;
+          const formattedSpeDeadline = `${speDeadline.toLocaleDateString()} ${speDeadline.toLocaleTimeString()}`;
 
-        if (speActPerson && speActEmail) {
-          const inspectionData = `
+          if (speActPerson && speActEmail) {
+            const inspectionData = `
           <table style="width: 100%; border-collapse: collapse; border: 1px solid #ccc;">
           <tr>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">항목</td>
@@ -326,59 +331,78 @@ function UserfrequentReg() {
             <p style="font-size:16px;">링크 : <a href="http://localhost:3000/special/detail/${response.data.speId}">상세보기</a></p>
     `;
 
-          const emailData = {
-            recipients: speActEmail.split(", "), // 이메일 주소를 수신자로 설정
-            subject: emailTitle, // 이메일 제목
-            content: inspectionData, // 이메일 내용 (점검 내용 등)
-            // 필요한 다른 속성도 여기에 추가 가능
-          };
+            const emailData = {
+              recipients: speActEmail.split(", "), // 이메일 주소를 수신자로 설정
+              subject: emailTitle, // 이메일 제목
+              content: inspectionData, // 이메일 내용 (점검 내용 등)
+              // 필요한 다른 속성도 여기에 추가 가능
+            };
 
-          axios
-            .post(
-              `${process.env.REACT_APP_API_BASE_URL}/api/send-email`,
-              emailData
-            )
-            .then((response) => {
-              console.log("이메일 전송 완료:", response);
-              // ... (나머지 처리 로직)
-            })
-            .catch((error) => {
-              console.error("이메일 전송 오류: ", error);
-              // ... (에러 처리 로직)
+            axios
+              .post(
+                `${process.env.REACT_APP_API_BASE_URL}/api/send-email`,
+                emailData
+              )
+              .then((response) => {
+                console.log("이메일 전송 완료:", response);
+                // ... (나머지 처리 로직)
+              })
+              .catch((error) => {
+                console.error("이메일 전송 오류: ", error);
+                // ... (에러 처리 로직)
+              });
+          } else {
+            console.log("이메일 정보가 없습니다. 전송되지 않았습니다.");
+            // ... (이메일 정보가 없을 때 처리 로직)
+          }
+
+          if (formData !== null) {
+            // 등록이 완료되었다는 알림 띄우기
+            toast.success("등록이 완료되었습니다.", {
+              position: "top-center",
+              autoClose: 2000, // 알림이 3초 후에 자동으로 사라짐
+              hideProgressBar: true,
             });
-        } else {
-          console.log("이메일 정보가 없습니다. 전송되지 않았습니다.");
-          // ... (이메일 정보가 없을 때 처리 로직)
-        }
 
-        if (formData !== null) {
-          // 등록이 완료되었다는 알림 띄우기
-          toast.success("등록이 완료되었습니다.", {
+            // 저장성공시 해당설비의 리스트 페이지
+            navigate(`/special/list/${masterdataPart}/${masterdataId}`);
+          }
+        })
+        .catch((error) => {
+          // console.log(requestData);
+          console.log(formData);
+          console.error(error);
+          toast.error("수시점검 등록에 실패했습니다. 다시 시도해주세요.", {
             position: "top-center",
-            autoClose: 2000, // 알림이 3초 후에 자동으로 사라짐
+            autoClose: 2000,
             hideProgressBar: true,
           });
-
-          // 저장성공시 해당설비의 리스트 페이지
-          navigate(`/special/list/${masterdataPart}/${masterdataId}`);
-        }
-      })
-      .catch((error) => {
-        // console.log(requestData);
-        console.log(formData);
-        console.error(error);
-        alert("수시점검 등록에 실패했습니다. 다시 시도해주세요.");
-      });
+        });
     }
   };
 
   return (
     <>
       <UserHeader />
-      <p>수시점검</p>
-      <p>수시점검 내용등록</p>
-      <Inspector onFormDataChange={handleInspectorDataChange}
-      defaultState={speData} /> {/* 점검자 */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="sm:flex sm:items-center">
+        <div className="sm:flex-auto">
+          <h1 className="text-base font-semibold leading-6 text-gray-900">
+            수시점검 등록
+          </h1>
+          <p className="mt-2 text-sm text-gray-700">
+          {masterdataPart}/{masterdataId}에 관한 수시 점검을 하고 등록할 수 있습니다.
+          </p>
+        </div>
+        <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+         
+        </div>
+      </div>
+      <Inspector
+        onFormDataChange={handleInspectorDataChange}
+        defaultState={speData}
+      />{" "}
+      {/* 점검자 */}
       <Inspectionarea /> {/* 점검영역 */}
       <Facilityname onChange={handleFacilityChange} /> {/* 설비명 */}
       <Danger onFormDataChange={handleDangerDataChange} /> {/* 위험분류 */}
@@ -410,7 +434,7 @@ function UserfrequentReg() {
             name="comment"
             id="comment"
             className="block w-72 rounded-md border-0  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 border-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 p-2 mr-3 ml-4"
-            placeholder={"개선대책을 입력하세요"}
+            placeholder={"개선대책을 입력하세요 300자 이내 작성"}
             value={speActContent}
             onChange={handleActContChange}
           />
@@ -481,6 +505,7 @@ function UserfrequentReg() {
         >
           등록
         </button>
+      </div>
       </div>
     </>
   );

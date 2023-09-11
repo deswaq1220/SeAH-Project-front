@@ -2,7 +2,7 @@ import { Fragment, useState, useEffect } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import axios from "axios"; // axios를 임포트]
-
+import { toast } from "react-toastify";
 
 
 function classNames(...classes) {
@@ -58,7 +58,14 @@ export default function FacilityReg({ fetchData, handleNewData }) {
       handleNewData(response.data);
     } catch (error) {
       console.error("서버 요청 오류:", error);
-      alert("기존 코드 정보와 중복됩니다. 다른 코드를 사용하세요.");
+      toast.error("기존 코드 정보와 중복됩니다. 다른 코드를 사용하세요.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        style: {
+          marginTop: "5rem", // 원하는 세로 위치로 조정
+        },
+      });
     }
   };
 

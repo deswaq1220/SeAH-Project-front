@@ -417,7 +417,7 @@ function EduAttenStatics() {
               setCurrentPage={setCurrentPage}
             />
           ) : (
-            <p className="flex justify-center">해당 월의 교육은 없습니다.</p>
+            <p className="flex justify-center">해당 월에는 교육이 예정되어 있지 않습니다.</p>
           )}
         </div>
       </div>

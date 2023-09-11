@@ -184,7 +184,7 @@ function SafetyInspectionStatisticsMonthImg() {
                           <div className="absolute left-3 hidden group-hover:block mt-2 bg-white border border-gray-300 rounded-lg shadow-lg top-4">
                             <a
                                 href="URL_TO_SUSICHECK1"
-                                className="block px-0 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                                className="block px-2 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
                             >
                               수시/정기점검
                             </a>

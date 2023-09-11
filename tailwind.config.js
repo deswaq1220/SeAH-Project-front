@@ -12,7 +12,7 @@ module.exports = {
         '100'  : '500px'
       },
       screens :{
-        'ssm' : {'raw':'(min-width:450px)'}
+        'ssm' : {'raw':'(min-width:300px)'}
       }
     },
   },

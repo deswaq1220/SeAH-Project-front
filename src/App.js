@@ -25,7 +25,7 @@ import FrequentDetails from "./page/manager/FrequentDetails/FrequentDetails"
 import TrainingReport from "./components/TrainingReport";
 import SafetyManagerInspection from "./page/manager/SafetyManagerInspection";
 import RegularMain from "./page/user/RegularMain";
-
+import UserRegularInspectionStatus from "./page/user/UserRegularInspectionStatus/UserRegularInspectionStatus";
 import UserRegularReg from "./page/user/UserRegularReg/UserRegularReg";
 import FaultyModal from "./page/user/UserRegularReg/FaultyModal";
 import UserRegularDetails from "./page/user/UserRegularDetails/UserRegularDetails";
@@ -94,7 +94,7 @@ function App() {
         <Route path="/special/new/:masterdataPart/:masterdataId" element={<UserfrequentReg/>}></Route>{/* 사용자 수시점검등록페이지 */}
 
         <Route path="/userfrequentreg" element={<UserfrequentReg/>}></Route>{/* 수시점검 등록페이지 */}
-        <Route path="/special/detail/:speId" element={<UserFrequentDetails/>}></Route>{/* 수시점검 상세페이지 */}
+        <Route path="/special/detail/:speId" element={<UserFrequentDetails/>}></Route>{/* 수시점검 상세페이지 */}managerinspection
 
         {/* 정기점검 */}
         <Route path="/regular" element={<RegularMain/>}></Route>{/* 관리자,사용자 정기점검 목록 */}
@@ -105,6 +105,7 @@ function App() {
 
         <Route path="/regularreg" element={<UserRegularReg/>}></Route>{/* 정기점검 등록페이지 */}
         <Route path="/faultymodal" element={<FaultyModal/>}></Route>{/* 수시점검 상세페이지 */}
+        <Route path="/regularinsstatus" element={<UserRegularInspectionStatus/>}></Route>{/* 정기점검 현황 */}
 
 
         <Route path="/404" element={<Error/>}></Route> {/* 에러 */}

@@ -1,4 +1,5 @@
 import Header from "../../components/Header";
+import UserHeader from "../../components/UserHeader";
 import Breadcrumbs from "./Breadcrumbs";
 import FrequentInseptionTable from "./FrequentInseptionTable";
 import FrequentInsArea from "./FrequentinseptionForm/area";
@@ -8,6 +9,7 @@ import Inspector from "./FrequentinseptionForm/inspector";
 import axios from "axios";
 import {useState} from "react";
 import { toast } from "react-toastify";
+import DangerousType from "./FrequentinseptionForm/DangerousType";
 
 //수시점검 현황
 export default function FrequentIns() {
@@ -46,6 +48,10 @@ export default function FrequentIns() {
     setSpeEmpNum(selected.inspectorNum);
   };
 
+  // 세션스토리지 값 비교
+  const isLoggedIn = sessionStorage.getItem('username','admin') !== null;
+
+
 
   // 검색 조건을 이용하여 서버로 요청 보내고 검색 결과를 받아옴
   const handleSearchButtonClick = () => {
@@ -82,17 +88,18 @@ export default function FrequentIns() {
 
   return (
     <>
-      <Header />
+       {isLoggedIn ? <Header /> : <UserHeader />}
       <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
         {/* 탭 */}
         <Breadcrumbs />
         {/* 여기는 검색폼 좌리*/}
-        <form className="flex">
+        <form className="flex mb-8">
           <div className="flex flex-wrap">
             <div className="flex flex-wrap">
               <FrequentInsArea onFormDataChange={handlePartDataChange}/> {/* 영역 */}
               <EquipmentName onFormDataChange={handleFacilityDataChange}
                              selectedPart={spePart}/> {/* 설비명 */}
+              <DangerousType ></DangerousType>
               <Period onFormDataChange={handleDateDataChange}/> {/* 기간 */}
             </div>
             <div className="flex items-center">
@@ -108,7 +115,7 @@ export default function FrequentIns() {
           </div>
         </form>
         {/* 테이블 */}
-        <FrequentInseptionTable searchResults={searchData} />
+        <FrequentInseptionTable searchResults={searchData}  />
       </div>
     </>
   );

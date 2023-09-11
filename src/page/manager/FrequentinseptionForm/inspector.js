@@ -31,7 +31,8 @@ export default function Inspector({onFormDataChange}) {
         <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
           점검자
         </span>
-        <div className="sm:col-span-3">
+        <div className="flex flex-wrap">
+        <div className="sm:col-span-3 mr-2">
           <div className="mt-2">
             <input
               type="text"
@@ -45,7 +46,7 @@ export default function Inspector({onFormDataChange}) {
             />
           </div>
         </div>
-        <div className="sm:col-span-3 ml-2">
+        <div className="sm:col-span-3">
           <div className="mt-2">
             <input
               type="text"
@@ -58,6 +59,7 @@ export default function Inspector({onFormDataChange}) {
               onChange={handleInputChange}
             />
           </div>
+        </div>
         </div>
       </div>
     </>

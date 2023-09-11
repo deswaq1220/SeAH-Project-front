@@ -19,7 +19,7 @@ function Mainmanager() {
     {
       id: 2,
       name: '안전점검',
-      href: '/inspection',
+      href: '/managerinspection',
       imageSrc: worker,
       imageAlt: '안전점검',
     },
