@@ -44,6 +44,7 @@ export default function UserRegularTable() {
   const [regularcheckList, setRegularcheckList] = useState([]);
   const [files, setFiles] = useState([]);
       const formData = new FormData();
+  const [staticEmailPerson, setStaticEmailPerson] = useState([]); //고정수신자
 //  const handleRadioChange = (index, method) => {
 //    let newModalState = [...isModalOpen]; // 현재의 모달 상태 복사
 ////    let newEditButtonState = [...isEditButtonVisible]; // 현재의 수정 버튼 상태 복사
@@ -153,6 +154,8 @@ setRegularDTO(prevData => ({  ...prevData,
 //           file: updatedFile, // Update the file property in the formData state
 //       });
 
+      const staticEmailPerson = actForm.staticEmailPerson;    //고정수신자
+      setStaticEmailPerson(staticEmailPerson);
   };
 
 
@@ -199,6 +202,9 @@ setRegularDTO(prevData => ({  ...prevData,
     // formData.file = [...regularcheckList.files];
     // formData.regularDTO = JSON.stringify(regularDTO);// EduDTO 객체를 문자열로 변환하여 추가
     // saveFormData.append('file', regularcheckList.files); // 파일 추가
+
+
+
 
 
     const handleFormSubmit = async () => {
@@ -255,7 +261,7 @@ setRegularDTO(prevData => ({  ...prevData,
               const itemContent = regularcheckList.find((checkItem) => checkItem.id === id);
               const itemChecklist =itemContent.checklist;
               console.log("itemContent=============="+formattedRegisterDate, regularDTO.regularPerson, item.regularActPerson, regularDTO.regularPart, regularDTO.regularInsName, itemChecklist, itemContent.regularActContent);
-
+              console.log(staticEmailPerson);
               /*/★!*!/!*!/!*고정수신자 생기면 넣기*!/!*!/!*!/*/
               const spendForm = `
                                           <table style="width: 100%; border-collapse: collapse; border: 1px solid #ccc;">
@@ -297,8 +303,12 @@ setRegularDTO(prevData => ({  ...prevData,
 
 
                   const actPersonEmails = item.regularActEmail.split(",").map(email => email.trim());
+                  const finalEmailList = [...actPersonEmails, ...staticEmailPerson];
+                  const uniqueRecipientsSet = new Set(finalEmailList); //이메일 중복제거
+                  const uniqueRecipientsArray = Array.from(uniqueRecipientsSet); // Set을 다시 배열로 변환
+
                   const emailData = {
-                      recipients: actPersonEmails,
+                      recipients: uniqueRecipientsArray,
                       subject: emailTitle,
                       content: spendForm,
                   }

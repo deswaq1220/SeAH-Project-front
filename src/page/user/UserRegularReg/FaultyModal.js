@@ -19,6 +19,7 @@ export default function FaultyModal({ index, actForm, id }) {
   const [regularActContent, setRegularActContent] = useState("");
   const [files, setFiles] = useState(null);
   const [content, setContent] = useState(""); // content 상태 초기화
+  const [staticEmailPerson, setStaticEmailPerson] = useState([]);
 
 
   const handleContentChange = (e) => {
@@ -34,6 +35,17 @@ export default function FaultyModal({ index, actForm, id }) {
     setRegularActEmail(data.speActEmail);
   };
 
+  // 고정수신자
+  const handleStaticEmailChange = (staticEmailList) => {
+
+    // staticEmailList가 배열인 경우, 각 이메일 주소를 추출하여 배열에 추가
+    const staticEmailAddresses = Array.isArray(staticEmailList)
+        ? staticEmailList.map((item) => item.emailAdd)
+        : [staticEmailList.emailAdd];
+
+    setStaticEmailPerson(staticEmailAddresses);
+  };
+
   const handleSaveClick = async()=> {
 // actForm 함수 호출
       actForm({
@@ -43,6 +55,7 @@ export default function FaultyModal({ index, actForm, id }) {
         regularActEmail: regularActEmail,
         regularActContent : content,
         files: files,
+        staticEmailPerson: staticEmailPerson,
       });
 //    try{
 //      const dataSave = {
@@ -119,6 +132,7 @@ export default function FaultyModal({ index, actForm, id }) {
                       </Dialog.Title>
                       <Regularactionrequest
                         onFormDataChange={handleActionRequestDetailsDataChange}
+                        onChange={handleStaticEmailChange}
                       />
                     </div>
                     <div className="mt-10">

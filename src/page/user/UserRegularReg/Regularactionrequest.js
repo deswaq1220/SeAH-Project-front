@@ -8,9 +8,9 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Regularactionrequest({ onFormDataChange }) {
-  const { masterdataPart, masterdataId } = useParams();
+export default function Regularactionrequest({ onFormDataChange, onChange}) {
   const [emailDataList, setEmailDataList] = useState([]);
+  const [emailYDataList, setEmailYDataList] = useState([]);
   const [instances, setInstances] = useState([{ selectedEmail: null }]);
 
   useEffect(() => {
@@ -22,12 +22,18 @@ export default function Regularactionrequest({ onFormDataChange }) {
 
         const emailListFromBack = response.data["emailList"];
         setEmailDataList(emailListFromBack);
+
+        // 이메일 고정수신자 리스트
+        const emailYListFromBack = response.data.staticEmailList;
+        setEmailYDataList(emailYListFromBack);
+        onChange(emailYListFromBack);
+
       } catch (error) {
         console.error("데이터 가져오기 오류: ", error);
       }
     }
     emailFetchDataWithAxios();
-  }, [masterdataPart, masterdataId]);
+  });
 
   // -----------------------------------
   const handleActionChange = (instanceIndex, selectedEmail) => {
