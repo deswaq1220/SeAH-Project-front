@@ -76,6 +76,8 @@ function App() {
 
 
         {/* 공통 */}
+        <Route path="/regular" element={<RegularMain/>}></Route>{/* 관리자,사용자 정기점검 목록 */}
+        <Route path="/regulardetails" element={<UserRegularDetails/>}></Route>{/* 관리자,사용자 정기점검 상세페이지 */}
         <Route path="/frequentinspection" element={<FrequentIns/>}></Route>{/* 공통 수시점검 현황*/}
         <Route path="/all/special/detail/:speId" element={<FrequentDetails/>}></Route>{/* 공통 수시점검 상세페이지 */}
 
@@ -92,15 +94,10 @@ function App() {
         <Route path="/userfrequentreg" element={<UserfrequentReg/>}></Route>{/* 수시점검 등록페이지 */}
         <Route path="/special/detail/:speId" element={<UserFrequentDetails/>}></Route>{/* 수시점검 상세페이지 */}
 
-        {/* 정기점검 */}
-        <Route path="/regular" element={<RegularMain/>}></Route>{/* 관리자,사용자 정기점검 목록 */}
-        <Route path="/regulardetails" element={<UserRegularDetails/>}></Route>{/* 관리자,사용자 정기점검 목록 */}
-
 
         {/* 사용자 정기점검 */}
-
         <Route path="/regularreg" element={<UserRegularReg/>}></Route>{/* 정기점검 등록페이지 */}
-        <Route path="/faultymodal" element={<FaultyModal/>}></Route>{/* 수시점검 상세페이지 */}
+        <Route path="/faultymodal" element={<FaultyModal/>}></Route>{/* 오류 모달창 */}
 
 
         <Route path="/404" element={<Error/>}></Route> {/* 에러 */}

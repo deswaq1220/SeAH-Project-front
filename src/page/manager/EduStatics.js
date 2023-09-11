@@ -6,6 +6,7 @@ import Pagination from "../../components/Pagination";
 import { useNavigate } from 'react-router-dom';
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { Link } from "react-router-dom";
 
 function EduStatics() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -122,7 +123,7 @@ function EduStatics() {
     getStartPage();
   }, [currentDate]);
 
-    // 엑셀!!!!!!!!!!!
+    // 엑셀
     const createExcelData = (eduList) => {
 
       // 교육 정보를 바탕으로 엑셀 데이터를 생성하는 로직 작성
