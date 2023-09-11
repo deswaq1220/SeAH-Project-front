@@ -1,23 +1,12 @@
 import {useState} from "react";
-import { toast } from "react-toastify";
 
 export default function InspectionDetails({onFormDataChange}){
   const [content, setContent] = useState();
 
   const handleContentChange = (e) => {
-    const value = e.target.value;
-    if (value.length > 300) {
-      toast.warn("점검내용은 최대 300자까지 입력 가능합니다.", {
-        position: "top-center",
-        autoClose: 2000,
-        hideProgressBar: true,
-      });
-      setContent(value.slice(0, 300));
-    } else {
-      setContent(value);
-    }
-    onFormDataChange(value);
-  };
+      setContent(e.target.value);
+      onFormDataChange(e.target.value);
+  }
 
 
 
@@ -35,7 +24,7 @@ export default function InspectionDetails({onFormDataChange}){
           id="comment"
           className="block w-72 rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 border-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 p-2 mr-3 ml-4"
           defaultValue={''}
-          placeholder={"내용을 입력하세요 300자 이내 작성"}
+          placeholder={"내용을 입력하세요"}
           value={content}
           required
           onChange={handleContentChange}

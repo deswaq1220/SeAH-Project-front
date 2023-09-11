@@ -3,7 +3,7 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import QRCode from "qrcode.react"; // QR 코드 라이브러리 추가
 import axios from "axios"; // axios를 임포트]
-import { toast } from "react-toastify";
+
 const Status = [
   { id: 1, name: "선택" },
   { id: 2, name: "Y" },
@@ -71,27 +71,11 @@ export default function FacilityInfo( { fetchData, handleNewData }) {
       fetchData();
       // Add this line to update FacilityTable's state directly
       handleNewData(response.data);
-      toast.success("이메일 등록이 정상적으로 완료되었습니다.", {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: true,
-        style: {
-          marginTop: "5rem", // 원하는 세로 위치로 조정
-        },
-      });
+
       // API 호출이 성공한 경우에 대한 처리
       console.log("등록 성공:", response.data);
-      
     } catch (error) {
-      // console.error("등록 오류:", error);
-      toast.error("이메일 등록에 실패하였습니다. 다시 시도해주세요.", {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: true,
-        style: {
-          marginTop: "5rem", // 원하는 세로 위치로 조정
-        },
-      });
+      console.error("등록 오류:", error);
     }
   };
 

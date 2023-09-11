@@ -2,7 +2,7 @@ import { Fragment, useState, useEffect } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import axios from "axios";
-import { toast } from "react-toastify";
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -21,14 +21,6 @@ export default function DepartmentReg({ fetchData, handleNewData }) {
       fetchData();
       // Add this line to update FacilityTable's state directly
       handleNewData(response.data);
-      toast.success("부서 등록이 정상적으로 완료되었습니다.", {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: true,
-        style: {
-          marginTop: "5rem", // 원하는 세로 위치로 조정
-        },
-      });
       
     } catch (error) {
       console.error("등록 오류:", error);

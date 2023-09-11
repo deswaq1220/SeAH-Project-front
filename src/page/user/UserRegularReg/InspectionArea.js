@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState,useEffect } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import axios from "axios";
@@ -7,24 +7,24 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function InspectionArea({ handleInspectionAreaChange }) {
+export default function InspectionArea({handleInspectionAreaChange}) {
   const [regularPartList, setRegularPartList] = useState([]); // 설비영역
   const [selectedArea, setSelectedArea] = useState(null);
-  const [customInputVisible, setCustomInputVisible] = useState(false); // 직접입력 인풋창 가시성 상태
-  const [customInputValue, setCustomInputValue] = useState(""); // 새로운 상태 변수 추가
 
   const handleInputChange = (name) => {
-    const regularPart = name;
+    const regularPart  = name;
     console.log(regularPart);
-  };
-  useEffect(() => {
-    if (selectedArea !== null) {
-      handleInputChange(selectedArea.name);
-      handleInspectionAreaChange({
-        regularPart: selectedArea.name,
-      });
-    }
-  }, [selectedArea]);
+    };
+    useEffect(() => {
+      if (selectedArea !== null) {
+        handleInputChange(selectedArea.name);
+        handleInspectionAreaChange({
+          regularPart:selectedArea.name,
+        })
+
+      }
+      
+    }, [selectedArea]);
 
   useEffect(() => {
     async function fetchOptions() {
@@ -50,35 +50,11 @@ export default function InspectionArea({ handleInspectionAreaChange }) {
 
     fetchOptions();
   }, []);
-
-  // 영역 선택 시 selectedPart 값 업데이트하고 onFormDataChange 호출
-  const handleSelectedArea = (value) => {
-    setSelectedArea(value);
-    if (value.name === "기타(직접입력)") {
-      setCustomInputVisible(true);
-    } else {
-      setCustomInputVisible(false);
-      handleInputChange(value.name);
-      handleInspectionAreaChange({
-        regularPart: value.name,
-      });
-    }
-  };
-
-  // 직접 입력 값을 업데이트하고 onFormDataChange 호출
-  const handleCustomInputChange = (event) => {
-    const value = event.target.value;
-    setCustomInputValue(value);
-    handleInspectionAreaChange({
-      regularPart: value,
-    });
-  };
-
   return (
     <>
       <div id="charge" className="flex  items-baseline justify-start">
         <div className="flex flex-col">
-          <Listbox value={selectedArea} onChange={handleSelectedArea}>
+          <Listbox value={selectedArea} onChange={setSelectedArea}>
             {({ open }) => (
               <>
                 <div className="relative mt-2">
@@ -149,15 +125,6 @@ export default function InspectionArea({ handleInspectionAreaChange }) {
               </>
             )}
           </Listbox>
-          {customInputVisible && (
-            <input
-              type="text"
-              value={customInputValue}
-              onChange={handleCustomInputChange}
-              placeholder="직접 입력"
-              className="cursor-default rounded-md bg-white py-1.5 px-3 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6 my-2 border-0"
-            />
-          )}
         </div>
       </div>
     </>
