@@ -247,6 +247,19 @@ export default function UserFrequentDetailsTable() {
                 : "첨부된 사진이 없습니다"}
             </dd>
           </div>
+
+          <div className="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
+            <dt className="text-base font-bold leading-6 text-gray-900">
+              완료일시
+            </dt>
+            <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+              {inspectionData.specialData.speActDate
+                ? formatDate(inspectionData.specialData.speActDate)
+                : ''}
+            </dd>
+          </div>
+
+
         </dl>
       </div>
       <div className="flex justify-center my-4">

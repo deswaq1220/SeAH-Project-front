@@ -49,7 +49,7 @@ function UserfrequentCompleteReg() {
   const [files, setFiles] = useState("");     // 백으로 넘길 파일
   const [fileDatas, setFileDatas] = useState([]);   // 백에서 가져온 파일정보(업데이트정보)
   const [deleteFileIds, setDeleteFileIds] = useState([]);
-  const emailTitle = `${spePerson}님의 수시점검 요청메일입니다`;
+  const emailActTitle = `${spePerson}님께서 요청하신 수시점검이 처리완료되었습니다`;
 
   const [speData, setSpeData] = useState({
     employeenumber :"",
@@ -265,15 +265,95 @@ function UserfrequentCompleteReg() {
         .put(
           `${process.env.REACT_APP_API_BASE_URL}/user/special/complete/${speId}`, formData)
         .then((response) => {
+
+
+
           console.log(response);
 
-          toast.success("완료등록이 완료되었습니다.", {
-            position: "top-center",
-            autoClose: 1000,
-            hideProgressBar: true,
-          });
+          const speDate = new Date(response.data.speDate);
+          const speActDate = new Date(response.data.speActDate);
+          // const speDeadline = new Date(response.data.speDeadline);
+          //
+          // 원하는 날짜와 시간 형식으로 포맷팅
+          const formattedSpeDate = `${speDate.toLocaleDateString()} ${speDate.toLocaleTimeString()}`;
+          const formattedSpeActDate = `${speActDate.toLocaleDateString()} ${speActDate.toLocaleTimeString()}`;
+          // const formattedSpeDeadline = `${speDeadline.toLocaleDateString()} ${speDeadline.toLocaleTimeString()}`;
 
-          navigate(`/special/list/${masterdataPart}/${masterdataId}`);
+          if (speActPerson && speActEmail) {
+            const inspectionData = `
+            <table style="width: 100%; border-collapse: collapse; border: 1px solid #ccc;">
+            <tr>
+              <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">항목</td>
+              <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">내용</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검일시</td>
+              <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${formattedSpeDate}</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검영역</td>
+              <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.spePart}</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검설비</td>
+              <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speFacility}</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검내용</td>
+              <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"> ${response.data.speContent}</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">개선대책</td>
+              <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speActContent}</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">조치자</td>
+              <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speActPerson}</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">조치완료일</td>
+              <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${formattedSpeActDate}</td>
+            </tr>
+            </table>
+              <p style="font-size:16px;">링크 : <a href="http://localhost:3000/special/detail/${response.data.speId}">상세보기</a></p>
+      `;
+
+            const emailData = {
+              recipients: speEmail.split(", "), // 이메일 주소를 수신자로 설정
+              subject: emailActTitle, // 이메일 제목
+              content: inspectionData, // 이메일 내용 (점검 내용 등)
+              // 필요한 다른 속성도 여기에 추가 가능
+            };
+
+            axios
+              .post(
+                `${process.env.REACT_APP_API_BASE_URL}/api/send-email`,
+                emailData
+              )
+              .then((response) => {
+                console.log("이메일 전송 완료:", response);
+                // ... (나머지 처리 로직)
+              })
+              .catch((error) => {
+                console.error("이메일 전송 오류: ", error);
+                // ... (에러 처리 로직)
+              });
+          } else {
+            console.log("이메일 정보가 없습니다. 전송되지 않았습니다.");
+            // ... (이메일 정보가 없을 때 처리 로직)
+          }
+
+          if (formData !== null) {
+            // 등록이 완료되었다는 알림 띄우기
+            toast.success("등록이 완료되었습니다.", {
+              position: "top-center",
+              autoClose: 1000, // 알림이 1초 후에 자동으로 사라짐
+              hideProgressBar: true,
+            });
+
+
+            navigate(`/special/list/${masterdataPart}/${masterdataId}`);
+          }
         })
         .catch((error) => {
           console.error(error);
