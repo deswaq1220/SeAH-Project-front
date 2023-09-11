@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import axios from "axios";
@@ -7,84 +7,64 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function InspectionArea({ handleInspectionAreaChange }) {
-  const [regularPartList, setRegularPartList] = useState([]); // 설비영역
-  const [selectedArea, setSelectedArea] = useState(null);
+export default function InsArea({ onFormDataChange }) {
+  const [regularPartList, setRegularPartList] = useState([]);
+  const [selectedPart, setSelectedPart] = useState(""); // 선택영역
   const [customInputVisible, setCustomInputVisible] = useState(false); // 직접입력 인풋창 가시성 상태
-  const [customInputValue, setCustomInputValue] = useState(""); // 새로운 상태 변수 추가
-
-  const handleInputChange = (name) => {
-    const regularPart = name;
-    console.log(regularPart);
-  };
-  useEffect(() => {
-    if (selectedArea !== null) {
-      handleInputChange(selectedArea.name);
-      handleInspectionAreaChange({
-        regularPart: selectedArea.name,
-      });
-    }
-  }, [selectedArea]);
+  // 새로운 상태 변수 추가
+  const [customInputValue, setCustomInputValue] = useState("");
 
   useEffect(() => {
-    async function fetchOptions() {
-      try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/user/regularpart`
-        );
-
-        // 문자열 배열을 객체로 변환하여 새로운 배열 생성
-        const optionsArray = response.data.regularPartList.map(
-          (name, index) => ({
-            id: index + 1,
-            name: name,
-          })
-        );
-        console.log(response.data);
-        setRegularPartList(optionsArray);
-        setSelectedArea(optionsArray[0]);
-      } catch (error) {
-        console.error("서버 요청 오류:", error);
-      }
-    }
-
-    fetchOptions();
+    fetchData();
   }, []);
 
-  // 영역 선택 시 selectedPart 값 업데이트하고 onFormDataChange 호출
-  const handleSelectedArea = (value) => {
-    setSelectedArea(value);
-    if (value.name === "기타(직접입력)") {
-      setCustomInputVisible(true);
-    } else {
-      setCustomInputVisible(false);
-      handleInputChange(value.name);
-      handleInspectionAreaChange({
-        regularPart: value.name,
-      });
+  async function fetchData() {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_BASE_URL}/user/regularpart`
+      );
+
+      setRegularPartList(response.data.regularPartList);
+      // console.log(response.data.regularPartList);
+    } catch (error) {
+      console.error("데이터 로딩 오류:", error);
     }
-  };
+  }
 
   // 직접 입력 값을 업데이트하고 onFormDataChange 호출
   const handleCustomInputChange = (event) => {
     const value = event.target.value;
     setCustomInputValue(value);
-    handleInspectionAreaChange({
-      regularPart: value,
-    });
+    onFormDataChange(value);
+  };
+
+  // 영역 선택 시 selectedPart 값 업데이트하고 onFormDataChange 호출
+  const handleSelectedPart = (value) => {
+    if (value === "기타(직접입력)") {
+      setCustomInputVisible(true);
+      setSelectedPart(value); // 기타(직접입력) 선택 시에만 selectedPart 업데이트
+      onFormDataChange(customInputValue); // 기타(직접입력) 선택 시 customInputValue를 전달함.
+    } else {
+      setCustomInputVisible(false);
+      setSelectedPart(value);
+      onFormDataChange(value);
+    }
   };
 
   return (
     <>
-      <div id="charge" className="flex  items-baseline justify-start">
-        <div className="flex flex-col">
-          <Listbox value={selectedArea} onChange={handleSelectedArea}>
+      <div className="flex flex-col flex-wrap">
+        <div className="flex items-center">
+          <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
+            영역
+          </span>
+          <Listbox value={selectedPart} onChange={handleSelectedPart}>
             {({ open }) => (
               <>
                 <div className="relative mt-2">
-                  <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-32 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
+                  <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-20 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
                     <span className="block truncate">
-                      {selectedArea ? selectedArea.name : "선택"}
+                      {selectedPart ? selectedPart : "선택"}
                     </span>
                     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                       <ChevronUpDownIcon
@@ -102,9 +82,9 @@ export default function InspectionArea({ handleInspectionAreaChange }) {
                     leaveTo="opacity-0"
                   >
                     <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                      {regularPartList.map((option) => (
+                      {regularPartList.map((item) => (
                         <Listbox.Option
-                          key={option.id}
+                          key={item}
                           className={({ active }) =>
                             classNames(
                               active
@@ -113,7 +93,7 @@ export default function InspectionArea({ handleInspectionAreaChange }) {
                               "relative cursor-default select-none py-2 pl-3 pr-9"
                             )
                           }
-                          value={option}
+                          value={item}
                         >
                           {({ selected, active }) => (
                             <>
@@ -123,7 +103,7 @@ export default function InspectionArea({ handleInspectionAreaChange }) {
                                   "block truncate"
                                 )}
                               >
-                                [{option.name}]
+                                {item}
                               </span>
 
                               {selected ? (
@@ -155,7 +135,7 @@ export default function InspectionArea({ handleInspectionAreaChange }) {
               value={customInputValue}
               onChange={handleCustomInputChange}
               placeholder="직접 입력"
-              className="cursor-default rounded-md bg-white py-1.5 px-3 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6 my-2 border-0"
+              className="cursor-default rounded-md bg-white py-1.5 px-3 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6 ml-2 mt-2 border-0"
             />
           )}
         </div>

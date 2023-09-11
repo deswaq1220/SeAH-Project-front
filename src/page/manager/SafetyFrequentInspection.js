@@ -1,4 +1,5 @@
 import Header from "../../components/Header";
+import UserHeader from "../../components/UserHeader";
 import Breadcrumbs from "./Breadcrumbs";
 import FrequentInseptionTable from "./FrequentInseptionTable";
 import FrequentInsArea from "./FrequentinseptionForm/area";
@@ -8,13 +9,7 @@ import Inspector from "./FrequentinseptionForm/inspector";
 import axios from "axios";
 import {useState} from "react";
 import { toast } from "react-toastify";
-
-// String -> SpeStatus 형변환
-const SpeStatus = {
-  OK: "OK",
-  NO: "NO"
-};
-
+import DangerousType from "./FrequentinseptionForm/DangerousType";
 
 //수시점검 현황
 export default function FrequentIns() {
@@ -38,12 +33,7 @@ export default function FrequentIns() {
 
   // 설비 콜백
   const handleFacilityDataChange = (selected) => {
-    if(selected.masterdataFacility === "전체"){
-      setSpeFacility(null);
-    } else {
-      setSpeFacility(selected.masterdataFacility);
-    }
-
+    setSpeFacility(selected.masterdataFacility);
   };
 
   // 기간 콜백
@@ -56,16 +46,11 @@ export default function FrequentIns() {
   const handleInspectorDataChange = (selected) => {
     setSpePerson(selected.inspectorName);
     setSpeEmpNum(selected.inspectorNum);
-
-    if(selected.speComplete === "OK"){
-      setSpeComplete(SpeStatus.OK);
-    } else if (selected.speComplete === "NO"){
-      setSpeComplete(SpeStatus.NO);
-    } else {
-      setSpeComplete(null);
-    }
-
   };
+
+  // 세션스토리지 값 비교
+  const isLoggedIn = sessionStorage.getItem('username','admin') !== null;
+
 
 
   // 검색 조건을 이용하여 서버로 요청 보내고 검색 결과를 받아옴
@@ -84,17 +69,15 @@ export default function FrequentIns() {
         })
         .then((response) => {
           const speListFromBack = response.data.searchSpeList.searchSpeDataDTOList;
-          // setSearchData(speListFromBack);
+          setSearchData(speListFromBack);
 
           // 검색 결과가 없는 경우 알림을 표시
           if (speListFromBack.length === 0) {
             toast.info('검색 결과가 없습니다.', {
               position: toast.POSITION.TOP_CENTER,
               autoClose: 1000, // 1초 동안 알림 표시
+
             });
-          } else {
-            // 검색 결과가 있을 경우 searchResults에 세팅
-            setSearchData(speListFromBack);
           }
         })
 
@@ -105,21 +88,22 @@ export default function FrequentIns() {
 
   return (
     <>
-      <Header />
+       {isLoggedIn ? <Header /> : <UserHeader />}
       <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
         {/* 탭 */}
         <Breadcrumbs />
         {/* 여기는 검색폼 좌리*/}
-        <form className="flex">
+        <form className="flex mb-8">
           <div className="flex flex-wrap">
             <div className="flex flex-wrap">
               <FrequentInsArea onFormDataChange={handlePartDataChange}/> {/* 영역 */}
               <EquipmentName onFormDataChange={handleFacilityDataChange}
                              selectedPart={spePart}/> {/* 설비명 */}
+              <DangerousType ></DangerousType>
               <Period onFormDataChange={handleDateDataChange}/> {/* 기간 */}
             </div>
             <div className="flex items-center">
-              <Inspector onFormDataChange={handleInspectorDataChange}/> {/* 점검자, 완료여부 */}
+              <Inspector onFormDataChange={handleInspectorDataChange}/> {/* 점검자 */}
               <button
                 type="button"
                 onClick={handleSearchButtonClick}
@@ -131,7 +115,7 @@ export default function FrequentIns() {
           </div>
         </form>
         {/* 테이블 */}
-        <FrequentInseptionTable searchResults={searchData} />
+        <FrequentInseptionTable searchResults={searchData}  />
       </div>
     </>
   );
