@@ -301,7 +301,7 @@ const useSafetyEduForm = (eduData) => {
       if (formData.eduId) {
         // 기존 교육 데이터를 수정하는 경우 (PUT 요청)
         formData.eduStartTime = formData.eduStartTime.slice(0, 16);
-        formData.eduSumTime = selectPeople(formData.eduCategory).time;
+//        formData.eduSumTime = selectPeople(formData.eduCategory).time;
         formData.eduFileList = null;
         const response = await axios.post(
           //  `http://localhost:8081/edudetails/${formData.eduId}`,
@@ -326,7 +326,7 @@ const useSafetyEduForm = (eduData) => {
               headers: {
                 "Content-Type": "multipart/form-data",
               },
-              withCredentials: true,
+                  withCredentials: true,
             }
         );
         console.log("등록 결과:", response.data);
@@ -354,7 +354,8 @@ const useSafetyEduForm = (eduData) => {
       return `총 교육시간: ${selectedEtcTime}분`;
     } else {
       formData.eduSumTime = selected.time;
-      return `총 교육시간: ${selectPeople(formData.eduCategory).time || 0}분`;
+      return `총 교육시간: ${selectedEtcTime} || 0}분`;
+//      return `총 교육시간: ${selectPeople(formData.eduCategory).time || 0}분`;
     }
   };
 

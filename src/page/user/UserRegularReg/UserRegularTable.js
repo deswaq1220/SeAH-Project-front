@@ -12,8 +12,8 @@ import { useNavigate, useParams } from "react-router-dom";
 
 
 const notificationMethods = [
-  { id: "good", title: "양호", color: "text-blue-600" },
-  { id: "bad", title: "불량", color: "text-red-600" },
+  { id: "GOOD", title: "양호", color: "text-blue-600" },
+  { id: "BAD", title: "불량", color: "text-red-600" },
   { id: "NA", title: "N/A", color: "text-gray-900" },
 ];
 
@@ -41,55 +41,104 @@ export default function UserRegularTable() {
   const [regularNum, setRegularNum] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState([]); // 각 행마다 모달 상태 저장
   const [isEditButtonVisible, setIsEditButtonVisible] = useState([]); // 각 행마다 수정 버튼 상태 저장
+  const [regularcheckList, setRegularcheckList] = useState([]);
+  const [files, setFiles] = useState([]);
+      const formData = new FormData();
+//  const handleRadioChange = (index, method) => {
+//    let newModalState = [...isModalOpen]; // 현재의 모달 상태 복사
+////    let newEditButtonState = [...isEditButtonVisible]; // 현재의 수정 버튼 상태 복사
+////
+//    if (method === "bad") {
+//      isModalOpen[index] = true; // 불량을 선택한 행의 모달을 열기
+////
+////      newEditButtonState[index] = true; // 불량을 선택한 행의 수정 버튼 보이기
+//    } else {
+//      isModalOpen[index] = false; // 그 외에는 모달 닫기
+////      newEditButtonState[index] = false; // 그 외에는 수정버튼 숨기기
+//    }
+//
+//    regularcheckList[index].regularcheck = method; //해당 행의 상태 입력
+////
+//    setIsModalOpen(newModalState); // 새로운 모달 상태 설정
+////    setIsEditButtonVisible(newEditButtonState); // 새로운 수정버튼 상태 설정
+//  };
 
-  const handleRadioChange = (index, method) => {
-    let newModalState = [...isModalOpen]; // 현재의 모달 상태 복사
-    let newEditButtonState = [...isEditButtonVisible]; // 현재의 수정 버튼 상태 복사
+const handleRadioChange = (index, method) => {
+  if (method === "BAD") {
+    isModalOpen[index] = true; // 불량을 선택한 행의 모달을 열기
+  } else {
+    isModalOpen[index] = false; // 그 외에는 모달 닫기
+  }
 
-    if (method === "bad") {
-      newModalState[index] = true; // 불량을 선택한 행의 모달을 열기
-      newEditButtonState[index] = true; // 불량을 선택한 행의 수정 버튼 보이기
-    } else {
-      newModalState[index] = false; // 그 외에는 모달 닫기
-      newEditButtonState[index] = false; // 그 외에는 수정버튼 숨기기
-    }
+  regularcheckList[index].regularCheck = method; // 해당 행의 상태 입력
 
-    setIsModalOpen(newModalState); // 새로운 모달 상태 설정
-    setIsEditButtonVisible(newEditButtonState); // 새로운 수정버튼 상태 설정
-  };
+  setIsModalOpen([...isModalOpen]); // 새로운 모달 상태 설정
+};
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedItemIndex(null); // 모달을 닫을 때 선택된 항목 인덱스 초기화
   };
 
-  const [formData, setFormData] = useState({
+  const [regularDTO, setRegularDTO] = useState({
     regularPerson: "", // 관찰자 이름
     regularEmail:"", //관찰자 이메일
     regularEmpNum: "", // 관찰자 사원번호
     regularPart: "", // 점검구역(주조, 압출 등)
-    regularInsName: "", //점검항목(중대재해, LOTO 등 )
-  });
+    regularInsName: "중대재해예방 일반점검", //점검항목(중대재해, LOTO 등 )
+    file : null,
+   });
 
  // Inspector 항목 저장 : 관찰자(이름, 이메일, 사원번호)
  const handleInspectorDataChange = (inspectorForm) => {
-  setFormData(() => ({
-    
-    regularPerson: inspectorForm.inspectorname, //
-    regularEmail:inspectorForm.inspectoremail,
+   setRegularDTO((prevData) => ({
+    ...prevData,
+    regularPerson: inspectorForm.name, //
+    regularEmail:inspectorForm.email,
     regularEmpNum:inspectorForm.employeenumber,
   }));
-  console.log(inspectorForm);
  };
+
+ const handleRegularPartDataChange =(form)=>{
+   setRegularDTO((prevData) => ({
+    ...prevData,
+    regularPart: form.regularPart,
+  }));
+ }
 
   //점검항목 저장
   const handleRegularInsNameChange = (value) => {
     setSelectedArea(value);
-    setFormData((prevData) => ({
+    setRegularDTO((prevData) => ({
       ...prevData,
-      regularInsName: value, //
+      regularInsName: value.name, //
     }));
     console.log(value);
+  };
+
+
+  //bad 상태일때 점검자 이름, 이메일,내용 저장
+  const handleActDataChange = (actForm) => {
+    const updatedActPerson = actForm.regularActPerson;
+    const updatedActEmail = actForm.regularActEmail;
+    const updatedActContent = actForm.regularActContent;
+    const updatedFile = actForm.files;
+
+    setRegularcheckList(prevChecklist => {
+      const updatedChecklist = [...prevChecklist]; // Copy the previous checklist
+      // Update the specific object in the checklist
+      updatedChecklist[actForm.index].regularActPerson = updatedActPerson;
+      updatedChecklist[actForm.index].regularActEmail = updatedActEmail;
+      updatedChecklist[actForm.index].regularActContent = updatedActContent;
+
+      return updatedChecklist; // Return the new checklist to update the state
+    });
+//id: actForm.id,
+    setFiles(prevFiles => {
+        const newFilesState=[...prevFiles];
+        newFilesState.push({file:updatedFile});
+        return newFilesState;
+     });
   };
 
 
@@ -104,119 +153,61 @@ export default function UserRegularTable() {
       if (selectedPosition !== -1) {
         //  regularNum = selectedPosition + 1;
         const newRegularNum = selectedPosition + 1;
-        console.log("안쪽난바", newRegularNum); // 새로운 값을 먼저 로그에 출력
+
         setRegularNum(newRegularNum);
 
         const response = await axios.get(
           `${process.env.REACT_APP_API_BASE_URL}/user/regularcheck`,
           {
+
             params: {
               regularNum: newRegularNum,
             },
           }
         );
-        setCheckList(response.data.checklist);
+
+        setRegularcheckList(response.data);
         console.log("초기화 된다..");
+        console.log(response.data);
       }
     } catch (error) {
       console.error("점검리스트 조회 오류", error);
     }
   };
 
-  const handleFormSubmit = () => {
-    console.log(formData);
-    axios
-    .post(`${process.env.REACT_APP_API_BASE_URL}/user/regular/new`, formData, {
-     headers: {
-      "Content-Type": "multipart/form-data",
-     },
-    })
+    // console.log(regularcheckList);
+
+
+    // formData.regularDetailDTOList= [...regularcheckList];
+    // regularDTO.regularDetailDTOList = JSON.stringify(regularcheckList);
+
+
+    // formData.file = [...regularcheckList.files];
+    // formData.regularDTO = JSON.stringify(regularDTO);// EduDTO 객체를 문자열로 변환하여 추가
+    // saveFormData.append('file', regularcheckList.files); // 파일 추가
+
+
+    const handleFormSubmit = async () => {
+
+     regularDTO.regularDetailDTOList = JSON.stringify(regularcheckList);
+     regularDTO.file = files;
+    console.log(regularDTO);
+//        let formData = new FormData();
+
+
+        const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/regular/new`,
+
+        regularDTO,
+         {
+            headers: {
+              "Content-Type": "multipart/form-data"
+            },
+          }
+        )
     .then((response) => {
      console.log(response);
 
-  //     if (speActPerson && speActEmail) {
-  //       const inspectionData = `
-  //       <table style="width: 100%; border-collapse: collapse; border: 1px solid #ccc;">
-  //       <tr>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">항목</td>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">내용</td>
-  //       </tr>
-  //       <tr>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검일시</td>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${formattedSpeDate}</td>
-  //       </tr>
-  //       <tr>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검자</td>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.spePerson}</td>
-  //       </tr>
-  //       <tr>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검영역</td>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.spePart}</td>
-  //       </tr>
-  //       <tr>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검설비</td>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speFacility}</td>
-  //       </tr>
-  //       <tr>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">위험분류</td>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speDanger}</td>
-  //       </tr>
-  //       <tr>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">위험원인</td>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speTrap}</td>
-  //       </tr>
-  //       <tr>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">부상부위</td>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speCause}</td>
-  //       </tr>
-  //       <tr>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">위험성평가</td>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speRiskAssess}</td>
-  //       </tr>
-  //       <tr>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검내용</td>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"> ${response.data.speContent}</td>
-  //       </tr>
-  //       <tr>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">개선대책</td>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speActContent}</td>
-  //       </tr>
-  //       <tr>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">담당자</td>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speActPerson}</td>
-  //       </tr>
-  //       <tr>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">요청기한</td>
-  //         <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${formattedSpeDeadline}</td>
-  //       </tr>
-  //       </table>
-  //         <p style="font-size:16px;">링크 : <a href="http://localhost:3000/special/detail/${response.data.speId}">상세보기</a></p>
-  // `;
 
-  //       const emailData = {
-  //         recipients: speActEmail.split(", "), // 이메일 주소를 수신자로 설정
-  //         // subject: emailTitle, // 이메일 제목
-  //         content: inspectionData, // 이메일 내용 (점검 내용 등)
-  //         // 필요한 다른 속성도 여기에 추가 가능
-  //       };
-
-  //       axios
-  //         .post(
-  //           `${process.env.REACT_APP_API_BASE_URL}/api/send-email`,
-  //           emailData
-  //         )
-  //         .then((response) => {
-  //           console.log("이메일 전송 완료:", response);
-  //           // ... (나머지 처리 로직)
-  //         })
-  //         .catch((error) => {
-  //           console.error("이메일 전송 오류: ", error);
-  //           // ... (에러 처리 로직)
-  //         });
-  //     } else {
-  //       console.log("이메일 정보가 없습니다. 전송되지 않았습니다.");
-  //       // ... (이메일 정보가 없을 때 처리 로직)
-  //     }
 
       if (formData !== null) {
         // 등록이 완료되었다는 알림 띄우기
@@ -227,7 +218,7 @@ export default function UserRegularTable() {
         });
 
       // 저장성공시 리스트 페이지
-      navigate(`/regularlist`);
+      navigate(`/regular`);
      }
 
     })
@@ -279,7 +270,7 @@ export default function UserRegularTable() {
         <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
           점검구역
         </span>
-        <InspectionArea />
+        <InspectionArea handleInspectionAreaChange={handleRegularPartDataChange}/>
       </div>
       <div id="ReformMeasures" className="flex items-center flex-wrap">
         <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4">
@@ -414,84 +405,49 @@ export default function UserRegularTable() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white">
-              {checkList.map((item, index) => (
-                <tr key={index}>
-                  <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
-                    {index + 1}
-                    <dl className="font-normal lg:hidden">
-                      <dt className="sr-only">Title</dt>
-                      <dd className="mt-1 truncate text-gray-700">{item}</dd>
-                      <dt className="sr-only sm:hidden">Email</dt>
-                      <dd className="mt-1 truncate text-gray-500 sm:hidden">
-                        <div className="space-x-4 flex">
-                          {notificationMethods.map((notificationMethod) => (
-                            <div
-                              key={notificationMethod.id}
-                              className="flex items-center"
-                            >
-                              <input
-                                type="radio"
-                                name={`radio-group-${index}`}
-                                value={item}
-                                onChange={() =>
-                                  handleRadioChange(
-                                    index,
-                                    notificationMethod.id
-                                  )
-                                }
-                                className="h-4 w-4 border-gray-300 text-seahColor focus:ring-seahColor"
-                              />
-                              <label
-                                htmlFor={notificationMethod.id}
-                                className={`ml-3 block text-sm font-bold leading-6 ${notificationMethod.color}`}
-                              >
-                                {notificationMethod.title}
-                              </label>
-                            </div>
-                          ))}
-                        </div>
-                      </dd>
-                    </dl>
-                  </td>
-                  <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
-                  {item}
-                  </td>
-                  <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                    {/* {item} */}
-                  </td>
-                  <td className=" hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                    <div className="space-x-4 flex">
-                      {notificationMethods.map((notificationMethod) => (
-                        <div
-                          key={notificationMethod.id}
-                          className="flex items-center"
-                        >
-                          <input
-                            type="radio"
-                            name={`radio-group-${index}`}
-                            value={item}
-                            onChange={() =>
-                              handleRadioChange(index, notificationMethod.id)
-                            }
-                            className="h-4 w-4 border-gray-300 text-seahColor focus:ring-seahColor"
-                          />
-                          <label
-                            htmlFor={notificationMethod.id}
-                            className={`ml-3 block text-sm font-bold leading-6 ${notificationMethod.color}`}
-                          >
-                            {notificationMethod.title}
-                          </label>
-                        </div>
-                      ))}
-                    </div>
-                  </td>
-                  <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                    {isEditButtonVisible[index] && (
-                      <button type="button">수정</button>
-                    )}
-                  </td>
-                </tr>
-              ))}
+             {regularcheckList.map((item, index) => (
+               <tr key={index}>
+                 <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
+                   {index + 1}
+                 </td>
+                 <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
+                   {item.checklist}
+                 </td>
+                 <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
+                   <div className="space-x-4 flex">
+                     {notificationMethods.map((notificationMethod) => (
+                       <div key={notificationMethod.id} className="flex items-center">
+                         <input
+                           type="radio"
+                           name={`radio-group-${index}`}
+                           value={item.id}
+                           onChange={() =>
+                             handleRadioChange(index, notificationMethod.id)
+                           }
+                           className="h-4 w-4 border-gray-300 text-seahColor focus:ring-seahColor"
+                         />
+                         <label
+                           htmlFor={notificationMethod.id}
+                           className={`ml-3 block text-sm font-bold leading-6 ${notificationMethod.color}`}
+                         >
+                           {notificationMethod.title}
+                         </label>
+                       </div>
+                     ))}
+                   </div>
+                   {item.regularCheck === 'BAD' ? (
+                     <FaultyModal
+                    actForm={handleActDataChange}
+                       index={index}
+                       id ={item.id}
+                     />
+                   ) : null}
+                 </td>
+                 <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                   {isEditButtonVisible[index] && <button type="button">수정</button>}
+                 </td>
+               </tr>
+             ))}
             </tbody>
           </table>
         </div>
@@ -504,15 +460,6 @@ export default function UserRegularTable() {
             저장
           </button>
         </div>
-        {checkList.map((item, index) =>
-          isModalOpen[index] ? (
-            <FaultyModal
-              person={selectedPerson}
-              closeModal={() => handleRadioChange(index, "good")}
-              key={index}
-            />
-          ) : null
-        )}
       </div>
     </div>
   );

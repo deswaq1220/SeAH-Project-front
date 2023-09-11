@@ -209,7 +209,7 @@ function RegularMain() {
                             </Link>
                           </div>
                         </td>
-                        <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                       <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
                           {format(new Date(regular.regularDate), "yyyy-MM-dd HH시 mm분")}
                         </td>
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
