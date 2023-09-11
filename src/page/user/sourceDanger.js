@@ -9,7 +9,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Dangersource({onFormDataChange, defaultState}) {
+export default function Dangersource({onFormDataChange, defaultState, complete}) {
   const { masterdataPart } = useParams(); // url 영역 파라미터
   const { masterdataId } = useParams(); // url 설비 파라미터
   const [specialCauseList, setSpecialCauseList] = useState([]);       // 위험원인List
@@ -112,6 +112,7 @@ export default function Dangersource({onFormDataChange, defaultState}) {
                         }
                         value={specialCauseItem.causeMenu}
                         onChange={handleSelectedChange}
+                        disabled={complete}
                       >
                         {({ selected, active }) => (
                           <>
@@ -155,6 +156,7 @@ export default function Dangersource({onFormDataChange, defaultState}) {
                 onChange={handleCustomSourceChange}
                 className="block w-40 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5 mt-1"
                 placeholder="직접 입력"
+                readOnly={complete}
             />
           )}
         </div>

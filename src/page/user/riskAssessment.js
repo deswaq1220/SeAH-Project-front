@@ -16,7 +16,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function RiskAssessment({onFormDataChange, defaultState}) {
+export default function RiskAssessment({onFormDataChange, defaultState, complete}) {
   const [riskAssessmentSelected, setRiskAssessmentSelected] = useState(riskAssessment[0]); //  위험성평가
   const handleRiskAssessmentChange = (riskAssessmentSelected) => {
     setRiskAssessmentSelected(riskAssessmentSelected);
@@ -75,6 +75,7 @@ export default function RiskAssessment({onFormDataChange, defaultState}) {
                         }
                         value={person}
                         onChange={handleRiskAssessmentChange}
+                        disabled={complete}
                       >
                         {({ selected, active }) => (
                           <>

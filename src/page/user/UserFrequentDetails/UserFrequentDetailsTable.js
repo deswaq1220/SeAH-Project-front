@@ -7,6 +7,7 @@ export default function UserFrequentDetailsTable() {
   const { speId } = useParams(); // URL 파라미터로부터 speId를 가져옵니다.
   const [inspectionData, setInspectionData] = useState(null); // API로부터 받은 데이터를 저장할 상태 변수
   const navigate = useNavigate();
+  const [showAlert, setShowAlert] = useState(false);
 
   const { masterdataPart, masterdataId } = useParams();
   useEffect(() => {
@@ -62,11 +63,29 @@ export default function UserFrequentDetailsTable() {
         return "";
     }
   };
+  // const handleEditButtonClick = (speId) => {
+  //   navigate(
+  //     `/special/new/${inspectionData.specialData.spePart}/${inspectionData.facilityCode}?speId=${speId}`
+  //   );
+  // };
+
   const handleEditButtonClick = (speId) => {
+    console.log("여기확인 :"+inspectionData.specialData.speComplete);
+    if (inspectionData.specialData.speComplete === "OK") {
+      alert("완료된 내역은 수정이 불가합니다.");
+    } else {
+      navigate(
+        `/special/new/${inspectionData.specialData.spePart}/${inspectionData.facilityCode}?speId=${speId}`
+      );
+    }
+  };
+
+  const handleEditCompleteButtonClick = (speId) => {
     navigate(
-      `/special/new/${inspectionData.specialData.spePart}/${inspectionData.facilityCode}?speId=${speId}`
+      `/special/complete/${inspectionData.specialData.spePart}/${inspectionData.facilityCode}?speId=${speId}`
     );
   };
+
 
   return (
     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 mt-5">
@@ -233,6 +252,13 @@ export default function UserFrequentDetailsTable() {
       <div className="flex justify-center my-4">
         <button
           type="button"
+          className="rounded-md bg-seahColor px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+          onClick={() => handleEditButtonClick(speId)} // speId 값을 넘겨줍니다.
+        >
+          수정
+        </button>
+        <button
+          type="button"
           className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mr-2"
         >
           확인
@@ -240,9 +266,9 @@ export default function UserFrequentDetailsTable() {
         <button
           type="button"
           className="rounded-md bg-seahColor px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-          onClick={() => handleEditButtonClick(speId)} // speId 값을 넘겨줍니다.
+          onClick={() => handleEditCompleteButtonClick(speId)} // speId 값을 넘겨줍니다.
         >
-          수정 / 조치완료 등록
+          조치완료 등록
         </button>
       </div>
     </div>

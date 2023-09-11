@@ -9,7 +9,7 @@ function classNames(...classes) {
 }
 
 
-export default function Falsetrap({onFormDataChange, defaultState}){
+export default function Falsetrap({onFormDataChange, defaultState, complete}){
   const { masterdataPart } = useParams(); // url 영역 파라미터
   const { masterdataId } = useParams(); // url 설비코드 파라미터
   const [specialTrapList, setSpecialTrapList] = useState([]) // 실수함정List
@@ -95,6 +95,7 @@ export default function Falsetrap({onFormDataChange, defaultState}){
                         }
                         value={specialTrapItem.trapMenu}
                         onChange={handleTrapChange}
+                        disabled={complete}
                       >
                         {({ selected, active }) => (
                           <>

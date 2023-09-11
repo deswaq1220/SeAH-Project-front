@@ -8,7 +8,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function ActionRquest({ onFormDataChange, defaultState }) {
+export default function ActionRquest({ onFormDataChange, defaultState, complete }) {
   const { masterdataPart, masterdataId } = useParams();
   const [emailDataList, setEmailDataList] = useState([]); // 영역별 이메일 리스트
   const [emailYDataList, setEmailYDataList] = useState([]); // 이메일 고정수신자 리스트
@@ -185,6 +185,7 @@ export default function ActionRquest({ onFormDataChange, defaultState }) {
                               )
                             }
                             value={emailListItem}
+                            disabled={complete}
                           >
                             {({ selected, active }) => (
                               <>

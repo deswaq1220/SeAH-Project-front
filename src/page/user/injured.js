@@ -9,7 +9,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Injured({ onFormDataChange, defaultState }) {
+export default function Injured({ onFormDataChange, defaultState, complete }) {
   const { masterdataPart } = useParams(); // url 영역 파라미터
   const { masterdataId } = useParams(); // url 설비코드 파라미터
   const [specialInjuredList, setSpecialInjuredList] = useState([]); // 부상부위List
@@ -118,6 +118,7 @@ export default function Injured({ onFormDataChange, defaultState }) {
                             }
                             value={specialInjuredItem.injuredMenu}
                             onChange={handleSelectedInjuredChange}
+                            disabled={complete}
                           >
                             {({ selected, active }) => (
                               <>
@@ -163,6 +164,7 @@ export default function Injured({ onFormDataChange, defaultState }) {
               onChange={handleCustomInjuredChange}
               className="block w-40 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5 mt-1"
               placeholder="직접 입력"
+              readOnly={complete}
             />
           )}
       </div>

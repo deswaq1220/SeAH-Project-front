@@ -8,7 +8,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Danger({ onFormDataChange, defaultState }) {
+export default function Danger({ onFormDataChange, defaultState, complete }) {
   const { masterdataPart } = useParams(); // url 영역 파라미터
   const { masterdataId } = useParams(); // url 설비코드 파라미터
   const [specialDangerList, setSpecialDangerList] = useState([]); // 위험분류List
@@ -57,11 +57,12 @@ export default function Danger({ onFormDataChange, defaultState }) {
       <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
         위험분류
       </span>
-      <Listbox value={selectedDanger} onChange={handleDangerChange}>
+      <Listbox value={selectedDanger} onChange={handleDangerChange} >
         {({ open }) => (
           <>
             <div className="relative mt-2">
-              <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-32 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
+              <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-32 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6"
+                              >
                 <span className="block truncate">
                   {selectedDanger}
                 </span>
@@ -92,6 +93,7 @@ export default function Danger({ onFormDataChange, defaultState }) {
                       }
                       value={specialDangerItem.dangerMenu}
                       onChange={handleDangerChange}
+                      disabled={complete}
                     >
                       {({ selected, active }) => (
                         <>

@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 
-export default function InspectionDetails({onFormDataChange, defaultState}){
+export default function InspectionDetails({onFormDataChange, defaultState ,complete}){
   const [content, setContent] = useState();
 
   const handleContentChange = (e) => {
@@ -34,6 +34,7 @@ export default function InspectionDetails({onFormDataChange, defaultState}){
           value={content}
           required
           onChange={handleContentChange}
+          readOnly={complete}
         />
       </div>
     </div>
