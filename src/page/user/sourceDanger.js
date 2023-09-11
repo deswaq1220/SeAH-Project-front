@@ -25,7 +25,13 @@ export default function Dangersource({onFormDataChange, defaultState, complete})
       .then((response) => {
         const speCauseListFromBack = response.data.specialCauseList;
 
-        
+        const speCauseData = speCauseListFromBack.map((item) => {
+          return {
+            causeMenu : item.causeMenu,
+            causeNum: item.causeNum,
+          };
+        });
+
 
 // <<<<<<< HEAD
         setSpecialCauseList(speCauseData);
@@ -47,11 +53,12 @@ export default function Dangersource({onFormDataChange, defaultState, complete})
         }
       })
       .catch((error) => {
-                console.error("Error fetching data: ", error);
+         console.error("Error fetching data: ", error);
       });
     }
   
-    fetchData();
+    // fetchData();
+     specialCauseFetchDataWithAxios(masterdataPart, masterdataId);
   }, [masterdataPart, masterdataId, defaultState]);
 
 

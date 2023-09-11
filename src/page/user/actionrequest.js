@@ -21,27 +21,6 @@ export default function ActionRquest({ onFormDataChange, defaultState, onChange,
 
 
 
-
-
-// <<<<<<< HEAD
-// export default function ActionRquest({ onFormDataChange, defaultState, complete }) {
-//   const { masterdataPart, masterdataId } = useParams();
-//   const [emailDataList, setEmailDataList] = useState([]); // 영역별 이메일 리스트
-//   const [emailYDataList, setEmailYDataList] = useState([]); // 이메일 고정수신자 리스트
-//   const [instances, setInstances] = useState([{ selectedEmail: null }]); // 선택한 이메일 리스트
-//   // defaultState
-//   const [emailFormData, setEmailFormData] = useState({
-//     speActPerson: "",
-//     speActEmail: "",
-//   });
-// =======
-// export default function ActionRquest({ onFormDataChange, onChange }) {
-//   const { masterdataPart, masterdataId } = useParams();
-//   const [emailDataList, setEmailDataList] = useState([]);                     // 영역별 이메일 리스트
-//   const [emailYDataList, setEmailYDataList] = useState([]);   // 이메일 고정수신자 리스트
-//   const [instances, setInstances] = useState([{ selectedEmail: null }]);    // 선택한 이메일 리스트
-// >>>>>>> ly_9
-
   useEffect(() => {
     async function emailFetchDataWithAxios(masterdataPart, masterdataId) {
       try {
@@ -100,7 +79,7 @@ export default function ActionRquest({ onFormDataChange, defaultState, onChange,
       }
     }
     emailFetchDataWithAxios(masterdataPart, masterdataId);
-  }, [masterdataPart, masterdataId, defaultState]);
+  }, [defaultState]);
 
   // -----------------------------------
   const handleActionChange = (instanceIndex, selectedEmail) => {

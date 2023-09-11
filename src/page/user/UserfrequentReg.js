@@ -34,6 +34,7 @@ function UserfrequentReg() {
     // 초기값 설정
     return [];
   });
+  // const [staticEmailPerson, setStaticEmailPerson] = useState([]);
   const [speFacility, setSpeFacility] = useState("");
   const [speDanger, setSpeDanger] = useState("");
   const [speInjure, setSpeInjure] = useState("");
@@ -46,6 +47,7 @@ function UserfrequentReg() {
   const [speActEmail, setSpeActEmail] = useState("");
   const [speComplete, setSpeComplete] = useState("");
   const [files, setFiles] = useState("");     // 백으로 넘길 파일
+  // const [files, setFiles] = useState(null);
   const [fileDatas, setFileDatas] = useState([]);   // 백에서 가져온 파일정보(업데이트정보)
   const [deleteFileIds, setDeleteFileIds] = useState([]);
   const emailTitle = `${spePerson}님의 수시점검 요청메일입니다`;
@@ -115,15 +117,13 @@ function UserfrequentReg() {
 
   // 고정수신자
   const handleStaticEmailChange = (staticEmailList) => {
-    // // staticEmailList가 배열인 경우, 각 이메일 주소를 추출하여 배열에 추가
+    // staticEmailList가 배열인 경우, 각 이메일 주소를 추출하여 배열에 추가
     const staticEmailAddresses = Array.isArray(staticEmailList)
       ? staticEmailList.map((item) => item.emailAdd)
       : [staticEmailList.emailAdd];
 
     setStaticEmailPerson(staticEmailAddresses);
     console.log("고정 수신자:", staticEmailAddresses);
-
-
   };
 
   // 개선대책
@@ -142,7 +142,6 @@ function UserfrequentReg() {
     const updatedFiles = [...fileDatas]; // fileDatas 배열 복사
     // 2. 화면에서 삭제할 파일 아이템 제거
     updatedFiles.splice(index, 1);
-
     // 3. 업데이트된 배열을 state로 설정
     setFileDatas(updatedFiles);
     // 4. 삭제할 파일 아이디를 state로 설정 (리스트 형태로 저장하려면 여러 아이디를 배열로 관리)
@@ -219,7 +218,7 @@ function UserfrequentReg() {
 
   const handleFormSubmit  = () => {
 
-    let formData = new FormData();
+    const formData = new FormData();
     // 업로드 파일 배열 저장
     if (files !== null) {
       for (let i = 0; i < files.length; i++) {
@@ -245,9 +244,9 @@ function UserfrequentReg() {
     formData.append("speActContent", speActContent);
     formData.append("speComplete", speComplete);
 
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-  }
+  //   for (let [key, value] of formData.entries()) {
+  //     console.log(`${key}: ${value}`);
+  // }
 
 
     if (speId) {
@@ -268,20 +267,18 @@ function UserfrequentReg() {
         })
         .catch((error) => {
           console.error(error);
+          console.log(formData);
           alert("수시점검 수정에 실패했습니다. 다시 시도해주세요.");
         });
     } else {
     // 수시점검 등록 요청
     axios
       .post(
-        `${process.env.REACT_APP_API_BASE_URL}/user/special/new/${masterdataPart}/${masterdataId}`,
-        formData,
-        {
+        `${process.env.REACT_APP_API_BASE_URL}/user/special/new/${masterdataPart}/${masterdataId}`, formData,{
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        }
-      )
+        })
       .then((response) => {
         console.log(response);
 
@@ -352,7 +349,7 @@ function UserfrequentReg() {
     `;
 
           const emailData = {
-            recipients: speActEmail.split(", "), // 이메일 주소를 수신자로 설정
+            recipients: [...speActEmail.split(", "), ...staticEmailPerson], // 이메일 주소를 수신자로 설정
             subject: emailTitle, // 이메일 제목
             content: inspectionData, // 이메일 내용 (점검 내용 등)
             // 필요한 다른 속성도 여기에 추가 가능
@@ -369,6 +366,7 @@ function UserfrequentReg() {
             })
             .catch((error) => {
               console.error("이메일 전송 오류: ", error);
+              console.log("이메일데이터", emailData);
               // ... (에러 처리 로직)
             });
         } else {
@@ -454,7 +452,7 @@ function UserfrequentReg() {
           조치요청
         </span>
         <ActionRquest onFormDataChange={handleActionRequestDetailsDataChange}
-                      defaultState={speActData}/>{" "}
+                      onChange={handleStaticEmailChange} defaultState={speActData}/>{" "}
       </div>
       {/* 조치요청 */}
       {/* 혜영추가-완료여부 */}
