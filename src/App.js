@@ -34,7 +34,7 @@ import DetailedModal from "./page/user/UserRegularDetails/DetailedModal";
 import SafetyInspectionStatisticsYear from "./page/manager/SafetyInspectionStatisticsYear";
 import SafetySpecialInspectionStatisticsMonth from "./page/manager/SafetySpecialInspectionStatisticsMonth";
 import SafetyRegularInspectionStatisticsMonth from "./page/manager/SafetyRegularInspectionStatisticsMonth";
-
+import UserRegularInspectionStatus from "./page/user/UserRegularInspectionStatus/UserRegularInspectionStatus";
 
 // axios.defaults.baseURL = "https://localhost:8081";
 // axios.defaults.withCredentials = true;
@@ -80,7 +80,7 @@ function App() {
         <Route path="/regulardetails" element={<UserRegularDetails/>}></Route>{/* 관리자,사용자 정기점검 상세페이지 */}
         <Route path="/frequentinspection" element={<FrequentIns/>}></Route>{/* 공통 수시점검 현황*/}
         <Route path="/all/special/detail/:speId" element={<FrequentDetails/>}></Route>{/* 공통 수시점검 상세페이지 */}
-
+        <Route path="/regularinsstatus" element={<UserRegularInspectionStatus/>}></Route>{/* 정기점검 현황 */}
 
         {/* 사용자  */}
         <Route path="/user" element={<UserMain/>}></Route>  {/* 사용자 메인페이지*/}
