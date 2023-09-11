@@ -173,14 +173,16 @@ export default function TrainingReport() {
             </tr>
             <tr className="flex">
               <td className="p-4 border-black w-[97mm] h-auto">
-                {eduDetails && eduDetails.eduimgurls.length > 0 ? (
+              {eduDetails && eduDetails.eduimgurls && eduDetails.eduimgurls.length > 0 ? (
                   <div>
-                    {/* <p className="text-lg font-bold">교육사진</p> */}
                     <ul className="list-disc pl-8">
                       {eduDetails.eduimgurls.map((file, index) => (
+                        <div key={index} className="flex justify-between">
                         <img
-                          key={index}
-                          src={process.env.REACT_APP_API_BASE_URL + file} alt={eduDetails.eduFileList.eduFileName} />
+                          src={process.env.REACT_APP_API_BASE_URL + file}
+                          className="mb-4"
+                        />
+                      </div>
                       ))}
                     </ul>
                   </div>

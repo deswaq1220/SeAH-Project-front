@@ -244,7 +244,7 @@ function EduAttenStatics() {
       {/* 달력  */}
       <div className="flex flex-col justify-center items-center text-3xl mt-28">
         <h1 className="text-base font-semibold leading-6 text-gray-900">
-          월별 교육 참가자 명단</h1>
+          월별 교육 참석자 명단</h1>
         <div className="flex items-center">
           <button onClick={goToPreviousMonth} className="mr-2">
             <svg
@@ -432,7 +432,7 @@ function EduAttenStatics() {
       </div>
       <div className="flex justify-center">
         <div className="px-4 sm:px-6 lg:px-8 max-w-screen-xl w-full">
-          {attenList ? (
+        {attenList.length > 0 ? (
             <Pagination
               currentPage={currentPage}
               itemsPerPage={itemsPerPage}
@@ -440,7 +440,7 @@ function EduAttenStatics() {
               setCurrentPage={setCurrentPage}
             />
           ) : (
-            <p className="flex justify-center">해당 월의 교육은 없습니다.</p>
+            <p className="flex justify-center">해당 월의 교육 및 참석자는 없습니다.</p>
           )}
         </div>
       </div>
