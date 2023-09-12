@@ -24,7 +24,6 @@ export default function Dangersource({onFormDataChange, defaultState, complete})
       .get(`${process.env.REACT_APP_API_BASE_URL}/user/special/new/${masterdataPart}/${masterdataId}`)  // 세아
       .then((response) => {
         const speCauseListFromBack = response.data.specialCauseList;
-
         const speCauseData = speCauseListFromBack.map((item) => {
           return {
             causeMenu : item.causeMenu,
@@ -32,8 +31,6 @@ export default function Dangersource({onFormDataChange, defaultState, complete})
           };
         });
 
-
-// <<<<<<< HEAD
         setSpecialCauseList(speCauseData);
 
         // defaultState확인 : 수정/완료등록일 경우
@@ -59,27 +56,9 @@ export default function Dangersource({onFormDataChange, defaultState, complete})
   
     // fetchData();
      specialCauseFetchDataWithAxios(masterdataPart, masterdataId);
-  }, [masterdataPart, masterdataId, defaultState]);
+  }, [defaultState]);
 
 
-// =======
-//         const speCauseData = speCauseListFromBack.map((item) => {
-//           return {
-//             causeMenu : item.causeMenu,
-//             causeNum: item.causeNum,
-//           };
-//         });
-//         setSpecialCauseList(speCauseData);
-//         setSourceSelected(speCauseData[0]);
-//       })
-//       .catch((error) => {
-//         console.error("Error fetching data: ", error);
-//       });
-//   }
-// >>>>>>> ly_9
-
-//   specialCauseFetchDataWithAxios(masterdataPart, masterdataId);
-// }, [masterdataPart, masterdataId]);
 
   // 기타(직접입력) 선택 시, customSource 값을 업데이트하고 onFormDataChange를 호출
   const handleCustomSourceChange = (e) => {
@@ -91,9 +70,6 @@ export default function Dangersource({onFormDataChange, defaultState, complete})
   const handleSelectedChange = (value) => {
     setSourceSelected(value);
     // 기타(직접입력)을 제외한 경우 onFormDataChange에 value값 넘김
-// <<<<<<< HEAD
-//     if (value !== "기타(직접입력)") {
-// =======
     if (value.causeMenu !== "기타(직접입력)") {
       onFormDataChange(value);
     }

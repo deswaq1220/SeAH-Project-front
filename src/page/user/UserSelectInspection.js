@@ -93,7 +93,7 @@ export default function UserSelectInspection() {
           setMonthlyAll(data.monthlyAll);
           setMonthlyComplete(data.monthlyComplete);
           setMonthlyNoComplete(data.monthlyNoComplete);
-          console.log(data); // JSON 데이터가 출력됩니다.
+          console.log(data.monthlyAll); // JSON 데이터가 출력됩니다.
 
         })
         .catch((error) => {
@@ -103,7 +103,7 @@ export default function UserSelectInspection() {
     }
 
     fetchDataWithAxios(masterdataPart, masterdataId);
-  }, [masterdataPart, masterdataId]);
+  }, );
 
   const frequent = [
     {
@@ -127,9 +127,6 @@ export default function UserSelectInspection() {
       current: false,
       iconForeground: "text-red-600",
     },
-    // { name: 'Calendar', href: '#', icon: CalendarIcon, count: '20+', current: false },
-    // { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
-    // { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
   ];
 
   const goToPreviousMonth = () => {

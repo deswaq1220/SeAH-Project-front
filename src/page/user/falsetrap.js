@@ -44,7 +44,7 @@ export default function Falsetrap({onFormDataChange, defaultState, complete}){
     }
 
     specialTrapFetchDataWithAxios(masterdataPart, masterdataId);
-  }, [masterdataPart, masterdataId, defaultState]);
+  }, [defaultState]);
 
   // 선택한 값 세팅
   const handleTrapChange = (value) => {

@@ -279,7 +279,8 @@ function UserfrequentCompleteReg() {
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${formattedSpeActDate}</td>
           </tr>
           </table>
-            <p style="font-size:16px;">링크 : <a href="http://localhost:3000/special/detail/${response.data.speId}">상세보기</a></p>
+<!--            <p style="font-size:16px;">링크 : <a href="http://localhost:3000/special/detail/${response.data.speId}">상세보기</a></p>-->
+            <p style="font-size:16px;">링크 : <a href="http://172.20.10.13/:3000/special/detail/${response.data.speId}">상세보기</a></p>
     `;
 
           const emailData = {

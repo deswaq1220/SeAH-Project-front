@@ -41,7 +41,7 @@ export default function InspectionDetails({onFormDataChange, defaultState ,compl
           id="comment"
           className="block w-72 rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 border-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 p-2 mr-3 ml-4"
           defaultValue={''}
-          placeholder={"내용을 입력하세요 300자 이내 작성"}
+          placeholder={"내용을 입력하세요. 300자 이내 작성"}
           value={content}
           required
           onChange={handleContentChange}

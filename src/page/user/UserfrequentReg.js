@@ -221,7 +221,7 @@ function UserfrequentReg() {
           console.error("교육 세부 정보를 가져오는 중 에러 발생:", error);
         });
     }
-  }, [speId]);
+  }, []);
 
 
 
@@ -363,7 +363,8 @@ function UserfrequentReg() {
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${formattedSpeDeadline}</td>
           </tr>
           </table>
-            <p style="font-size:16px;">링크 : <a href="http://localhost:3000/special/detail/${response.data.speId}">상세보기</a></p>
+<!--            <p style="font-size:16px;">링크 : <a href="http://localhost:3000/special/detail/${response.data.speId}">상세보기</a></p>-->
+            <p style="font-size:16px;">링크 : <a href="http://172.20.10.13/:3000/special/detail/${response.data.speId}">상세보기</a></p>
     `;
 
             const emailData = {
@@ -473,7 +474,7 @@ function UserfrequentReg() {
             name="comment"
             id="comment"
             className="block w-72 rounded-md border-0  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 border-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 p-2 mr-3 ml-4"
-            placeholder={"개선대책을 입력하세요"}
+            placeholder={"개선대책을 입력하세요. 300자 이내 작성"}
             value={speActContent}
             onChange={handleActContChange}
           />
