@@ -84,7 +84,7 @@ export default function FrequentIns() {
         })
         .then((response) => {
           const speListFromBack = response.data.searchSpeList.searchSpeDataDTOList;
-          // setSearchData(speListFromBack);
+          setSearchData(speListFromBack);
 
           // 검색 결과가 없는 경우 알림을 표시
           if (speListFromBack.length === 0) {
@@ -92,6 +92,7 @@ export default function FrequentIns() {
               position: toast.POSITION.TOP_CENTER,
               autoClose: 1000, // 1초 동안 알림 표시
             });
+
           } else {
             // 검색 결과가 있을 경우 searchResults에 세팅
             setSearchData(speListFromBack);
