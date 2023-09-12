@@ -80,9 +80,13 @@ export default function UserFrequentDetailsTable() {
 
   // 완료버튼
   const handleEditCompleteButtonClick = (speId) => {
-    navigate(
-      `/special/complete/${inspectionData.specialData.spePart}/${inspectionData.facilityCode}?speId=${speId}`
-    );
+    if (inspectionData.specialData.speComplete === "OK") {
+      alert("이미 조치완료된 내역입니다.");
+    } else {
+      navigate(
+        `/special/complete/${inspectionData.specialData.spePart}/${inspectionData.facilityCode}?speId=${speId}`
+      );
+    }
   };
 
 
