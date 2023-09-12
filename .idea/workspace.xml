@@ -5,12 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c20fbe9c-9169-4241-9ec0-dff0f7b0e503" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/ReferenceInfoTable/FacilityTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/ReferenceInfoTable/FacilityTable.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/page/user/UserfrequentReg.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserfrequentReg.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/page/user/danger.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/danger.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/falsetrap.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/falsetrap.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/riskAssessment.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/riskAssessment.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/sourceDanger.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/sourceDanger.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/injured.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/injured.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,6 +48,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.sourceCode.Markdown",
     "ts.external.directory.path": "C:\\Program Files\\JetBrains\\IntelliJ IDEA 2023.1.1\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
   }
@@ -78,10 +79,15 @@
       <workItem from="1692581271214" duration="3391000" />
       <workItem from="1692662925742" duration="7180000" />
       <workItem from="1692704545169" duration="422000" />
+      <workItem from="1694533538994" duration="17937000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

@@ -9,59 +9,60 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Injured({ onFormDataChange, defaultState, complete }) {
+export default function Injured({ onFormDataChange, defaultState, complete, specialInjuredList, speFormData }) {
   const { masterdataPart } = useParams(); // url 영역 파라미터
   const { masterdataId } = useParams(); // url 설비코드 파라미터
-  const [specialInjuredList, setSpecialInjuredList] = useState([]); // 부상부위List
+  // const [specialInjuredList, setSpecialInjuredList] = useState([]); // 부상부위List
   const [injuredSelected, setInjuredSelected] = useState(""); //  부상부위
   const [customInjured, setCustomInjured] = useState(""); // 기타[직접선택] 입력된 값
   const [showErrorMessage, setShowErrorMessage] = useState(false); // 해당 셀렉박스 미설정시 알람
 
   // 부상부위 get
-  useEffect(() => {
-    function specialInjureFetchDataWithAxios( masterdataPart, masterdataId) {
-      axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/user/special/new/${masterdataPart}/${masterdataId}`)   // 세아
-          .then((response) => {
-            // 백에서 보내주는 부상부위 리스트
-            const speInjuredListFromBack = response.data.specialInjuredList;
-            const speInjuredData = speInjuredListFromBack.map((item) => {
-              return {
-                injuredMenu: item.injuredMenu,
-                injuredNum: item.injuredNum,
-              };
-            });
-            setSpecialInjuredList(speInjuredData);
-
-            // defaultState확인 : 수정/완료등록일 경우
-            if (defaultState) {
-              if(defaultState.indexOf("기타(직접입력)/")===0){
-                const splitArray = defaultState.split('/');
-                const firstPart = splitArray[0]; // "기타(직접입력)"
-                const secondPart = splitArray[1]; // "내용"
-
-                setInjuredSelected(firstPart);    // 셀렉트박스
-                setCustomInjured(secondPart);    // 인풋박스
-              } else {
-                setInjuredSelected(defaultState);
-              }
-            } else {
-              setInjuredSelected(speInjuredData[0].injuredMenu); // defaultState가 없을 때 첫 번째 값을 선택
-            }
-          })
-          .catch((error) => {
-            console.error("Error fetching data: ", error);
-        });
-    }
-
-    specialInjureFetchDataWithAxios(masterdataPart, masterdataId);
-  }, [defaultState]);
+  // useEffect(() => {
+  //   function specialInjureFetchDataWithAxios( masterdataPart, masterdataId) {
+  //     axios
+  //         .get(`${process.env.REACT_APP_API_BASE_URL}/user/special/new/${masterdataPart}/${masterdataId}`)   // 세아
+  //         .then((response) => {
+  //           // 백에서 보내주는 부상부위 리스트
+  //           const speInjuredListFromBack = response.data.specialInjuredList;
+  //           const speInjuredData = speInjuredListFromBack.map((item) => {
+  //             return {
+  //               injuredMenu: item.injuredMenu,
+  //               injuredNum: item.injuredNum,
+  //             };
+  //           });
+  //           setSpecialInjuredList(speInjuredData);
+  //
+  //           // defaultState확인 : 수정/완료등록일 경우
+  //           if (defaultState) {
+  //             if(defaultState.indexOf("기타(직접입력)/")===0){
+  //               const splitArray = defaultState.split('/');
+  //               const firstPart = splitArray[0]; // "기타(직접입력)"
+  //               const secondPart = splitArray[1]; // "내용"
+  //
+  //               setInjuredSelected(firstPart);    // 셀렉트박스
+  //               setCustomInjured(secondPart);    // 인풋박스
+  //             } else {
+  //               setInjuredSelected(defaultState);
+  //             }
+  //           } else {
+  //             setInjuredSelected(speInjuredData[0].injuredMenu); // defaultState가 없을 때 첫 번째 값을 선택
+  //           }
+  //         })
+  //         .catch((error) => {
+  //           console.error("Error fetching data: ", error);
+  //       });
+  //   }
+  //
+  //   specialInjureFetchDataWithAxios(masterdataPart, masterdataId);
+  // }, [defaultState]);
 
 
   // 기타(직접입력) 선택 시, customInjured 값 업데이트, onFOrmDataChange 호출
   const handleCustomInjuredChange = (e) => {
     setCustomInjured(e.target.value);
-    onFormDataChange(injuredSelected+"/"+e.target.value);
+    console.log("직접입력확인: "+injuredSelected+"/"+e.target.value);
+    onFormDataChange(`기타(직접입력)/${e.target.value}`);
   };
 
   // 부상부위 선택 시 injuredSelected 값 없데이트, onFormDataChange 호출
@@ -69,7 +70,7 @@ export default function Injured({ onFormDataChange, defaultState, complete }) {
     setInjuredSelected(value);
     console.log("선택한 값: " + value);
     // 기타(직접입력)을 제외한 경우 onFormDataChange에 value값 넘김
-    if (value !== "기타(직접입력)") {
+    if (value.injuredMenu !== "기타(직접입력)") {
       onFormDataChange(value);
       console.log("기타 아닐때 값: " + value);
     }
@@ -83,12 +84,12 @@ export default function Injured({ onFormDataChange, defaultState, complete }) {
       </span>
       <div className="flex flex-col">
         {/* 부상부위 */}
-        <Listbox value={injuredSelected} onChange={handleSelectedInjuredChange}>
+        <Listbox value={speFormData} onChange={handleSelectedInjuredChange} >
           {({ open }) => (
             <>
               <div className="relative mt-2">
                 <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-32 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
-                  <span className="block truncate">{injuredSelected}</span>
+                  <span className="block truncate">{speFormData}</span>
                   <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                     <ChevronUpDownIcon
                       className="h-5 w-5 text-gray-400"
@@ -157,7 +158,7 @@ export default function Injured({ onFormDataChange, defaultState, complete }) {
           )}
         </Listbox>
         {/* Custom Input */}
-        {injuredSelected === "기타(직접입력)" && (
+        {speFormData.startsWith("기타(직접입력)","") && (
             <input
               type="text"
               value={customInjured}
@@ -167,7 +168,7 @@ export default function Injured({ onFormDataChange, defaultState, complete }) {
               placeholder="직접 입력"
               readOnly={complete}
             />
-          )}
+        )}
       </div>
     </div>
   );

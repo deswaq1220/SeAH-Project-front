@@ -8,47 +8,47 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Danger({ onFormDataChange, defaultState, complete }) {
+export default function Danger({ onFormDataChange, defaultState, complete, specialDangerList, speFormData}) {
   const { masterdataPart } = useParams(); // url 영역 파라미터
   const { masterdataId } = useParams(); // url 설비코드 파라미터
-  const [specialDangerList, setSpecialDangerList] = useState([]); // 위험분류List
-  const [selectedDanger, setSelectedDanger] = useState(""); // 위험분류
+  // const [specialDangerList, setSpecialDangerList] = useState([]); // 위험분류List
+  // const [selectedDanger, setSelectedDanger] = useState(""); // 위험분류
 
-  // 위험분류 get
-  useEffect(() => {
-    function specialDangerFetchDataWithAxios(masterdataPart, masterdataId) {
-      axios
-        .get(`${process.env.REACT_APP_API_BASE_URL}/user/special/new/${masterdataPart}/${masterdataId}`)
-        .then((response) => {
-          const speDangerListFromBack = response.data.specialDangerList;
-          const speDangerData = speDangerListFromBack.map((item) => {
-            return {
-              dangerMenu: item.dangerMenu,
-              dangerNum: item.dangerNum,
-            };
-          });
-          setSpecialDangerList(speDangerData);
-
-          // defaultState확인 : 수정/완료등록일 경우
-          if (defaultState) {
-            setSelectedDanger(defaultState.speDanger);
-          } else {
-            setSelectedDanger(speDangerData[0].dangerMenu); // defaultState가 없을 때 첫 번째 값을 선택
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching data: ", error);
-        });
-    }
-
-    specialDangerFetchDataWithAxios(masterdataPart, masterdataId);
-  }, [defaultState]);
+  // // 위험분류 get
+  // useEffect(() => {
+  //   function specialDangerFetchDataWithAxios(masterdataPart, masterdataId) {
+  //     axios
+  //       .get(`${process.env.REACT_APP_API_BASE_URL}/user/special/new/${masterdataPart}/${masterdataId}`)
+  //       .then((response) => {
+  //         const speDangerListFromBack = response.data.specialDangerList;
+  //         const speDangerData = speDangerListFromBack.map((item) => {
+  //           return {
+  //             dangerMenu: item.dangerMenu,
+  //             dangerNum: item.dangerNum,
+  //           };
+  //         });
+  //         setSpecialDangerList(speDangerData);
+  //
+  //         // defaultState확인 : 수정/완료등록일 경우
+  //         if (defaultState) {
+  //           setSelectedDanger(defaultState.speDanger);
+  //         } else {
+  //           setSelectedDanger(speDangerData[0].dangerMenu); // defaultState가 없을 때 첫 번째 값을 선택
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error fetching data: ", error);
+  //       });
+  //   }
+  //
+  //   specialDangerFetchDataWithAxios(masterdataPart, masterdataId);
+  // }, [defaultState]);
 
 
 
   // 선택한 값 세팅
   const handleDangerChange = (value) => {
-    setSelectedDanger(value);
+    // setSpeFormData(value);
     onFormDataChange(value);
   };
 
@@ -57,14 +57,14 @@ export default function Danger({ onFormDataChange, defaultState, complete }) {
       <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
         위험분류
       </span>
-      <Listbox value={selectedDanger} onChange={handleDangerChange} >
+      <Listbox value={speFormData} onChange={handleDangerChange} >
         {({ open }) => (
           <>
             <div className="relative mt-2">
               <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-32 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6"
                               >
                 <span className="block truncate">
-                  {selectedDanger}
+                  {speFormData}
                 </span>
                 <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                   <ChevronUpDownIcon
