@@ -224,6 +224,35 @@ function UserfrequentReg() {
       console.log(`${key}: ${value}`);
     }
 
+    const requiredFields = [
+      { value: speEmpNum, name: "사원번호" },
+      { value: spePerson, name: "이름" },
+      { value: speEmail, name: "이메일" },
+      { value: speFacility, name: "설비명" },
+      { value: speDanger, name: "위험분류" },
+      { value: speInjure, name: "부상부위" },
+      { value: speCause, name:"위험원인"},
+      { value: speTrap, name:"실수함정"},
+      { value: speRiskAssess, name:"위험성평가"},
+      { value: speContent, name:"점검내용"},
+      { value: speActEmail, name:"조치요청"},
+      { value: speContent, name:"점검내용"},
+      // ... 나머지 필요한 필드 추가 ...
+    ];
+  
+    for (let field of requiredFields) {
+        if (!field.value) {
+          toast.warn(`${field.name} 항목이 작성되지 않았습니다.`, {
+            position:"top-center",
+            autoClose :2000,
+            hideProgressBar:true,
+          });
+          return;
+        }
+     }
+
+
+
     if (speId) {
       // speId 값이 있으면 수정 요청 보내기
       axios

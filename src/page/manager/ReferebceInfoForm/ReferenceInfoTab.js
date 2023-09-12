@@ -1,10 +1,7 @@
 import { useState } from "react";
-import FacilityInfo from "./FacilityInfo";
 import EmailTable
  from "../ReferenceInfoTable/EmailTable";
- import FacilityReg from "./FacilityReg";
  import FacilityTable from "../ReferenceInfoTable/FacilityTable";
-import DepartmentReg from "./DepartmentReg";
 import DepartmentTable from "../ReferenceInfoTable/DepartmentTable";
  
 const tabs = [
@@ -27,7 +24,6 @@ export default function InfoTab() {
         <label htmlFor="tabs" className="sr-only">
           Select a tab
         </label>
-        {/* Use an "onChange" listener to redirect the user to the selected tab URL. */}
         <select
           id="tabs"
           name="tabs"

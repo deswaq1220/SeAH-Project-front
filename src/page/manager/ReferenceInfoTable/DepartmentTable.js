@@ -77,7 +77,6 @@ export default function DepartmentTable() {
           marginTop: "5rem", // 원하는 세로 위치로 조정
         },
       });
-      // console.error("부서 삭제 오류:", error);
     }
   };
 
