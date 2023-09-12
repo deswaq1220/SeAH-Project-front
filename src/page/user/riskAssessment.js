@@ -28,7 +28,7 @@ export default function RiskAssessment({onFormDataChange, defaultState, complete
     console.log("test"+ defaultState);
     console.log(defaultState);
     if (defaultState) {
-      const defaultRisk = riskAssessment.find((item) => item.value === defaultState);
+      const defaultRisk = riskAssessment.find((item) => item.value === defaultState.speRiskAssess);
       setRiskAssessmentSelected(defaultRisk);
     }
   }, [defaultState]);

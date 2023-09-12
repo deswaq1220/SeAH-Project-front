@@ -48,10 +48,43 @@ function UserfrequentReg() {
   const [speActEmail, setSpeActEmail] = useState("");
   const [speComplete, setSpeComplete] = useState("");
   const [files, setFiles] = useState("");     // 백으로 넘길 파일
-  // const [files, setFiles] = useState(null);
   const [fileDatas, setFileDatas] = useState([]);   // 백에서 가져온 파일정보(업데이트정보)
   const [deleteFileIds, setDeleteFileIds] = useState([]);
   const emailTitle = `${spePerson}님의 수시점검 요청메일입니다`;
+
+
+  const [speFormData, setSpeFormData] = useState({
+    employeenumber :"",
+    inspectorname: "",
+    inspectoremail: "",
+    speFacility: "",
+    speDanger: "",
+    speInjure: "",
+    speCause: "",
+    speTrap: "",
+    speRiskAssess: "",
+    speContent: "",
+    speActPerson: "",
+    speActEmail: "",
+    speActContent: "",
+    speComplete: "",
+    fileDatas: [],
+    updateSpeId: "",
+
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   const [speData, setSpeData] = useState({
     employeenumber :"",
@@ -148,16 +181,16 @@ function UserfrequentReg() {
   };
 
   // 파일제거
-  const handleRemoveFile = (fileItem, index) => {
-    // 1. 파일 아이디를 저장하는 새로운 배열 생성
-    const updatedFiles = [...fileDatas]; // fileDatas 배열 복사
-    // 2. 화면에서 삭제할 파일 아이템 제거
-    updatedFiles.splice(index, 1);
-    // 3. 업데이트된 배열을 state로 설정
-    setFileDatas(updatedFiles);
-    // 4. 삭제할 파일 아이디를 state로 설정 (리스트 형태로 저장하려면 여러 아이디를 배열로 관리)
-    setDeleteFileIds((prevIds) => [...prevIds, fileItem.speFileId]);
-  }
+  // const handleRemoveFile = (fileItem, index) => {
+  //   // 1. 파일 아이디를 저장하는 새로운 배열 생성
+  //   const updatedFiles = [...speFormData.fileDatas]; // fileDatas 배열 복사
+  //   // 2. 화면에서 삭제할 파일 아이템 제거
+  //   updatedFiles.splice(index, 1);
+  //   // 3. 업데이트된 배열을 state로 설정
+  //   setSpeFormData.fileDatas(updatedFiles);
+  //   // 4. 삭제할 파일 아이디를 state로 설정 (리스트 형태로 저장하려면 여러 아이디를 배열로 관리)
+  //   setDeleteFileIds((prevIds) => [...prevIds, fileItem.speFileId]);
+  // }
 
 
   const navigate = useNavigate();
@@ -173,46 +206,73 @@ function UserfrequentReg() {
         //  .get(`http://localhost:8081/edudetails/${eduId}`)
         .then((response) => {
           // 가져온 데이터로 상태 업데이트
-          console.log(response.data);
+          console.log("확인"+response.data);
+          console.log("employeenumber"+response.data.specialData.speEmpNum);
+          console.log("inspectorname"+response.data.specialData.spePerson);
+          console.log("inspectoremail"+response.data.specialData.speEmail.split('@')[0]);
+          console.log("speFacility"+response.data.specialData.speFacility);
+          console.log("speDanger"+response.data.specialData.speDanger);
+          console.log("speInjure"+response.data.specialData.speInjure);
+          console.log("speCause"+response.data.specialData.speCause);
+          console.log("fileDatas"+response.data.specialData.speFiles);
 
           // 조치자정보
-          setSpeData({
-            employeenumber: response.data.specialData.speEmpNum,
+          setSpeFormData({
+            employeenumber:response.data.specialData.speEmpNum,
             inspectorname: response.data.specialData.spePerson,
             inspectoremail: response.data.specialData.speEmail.split('@')[0],
+            speFacility: response.data.specialData.speFacility,
+            speDanger: response.data.specialData.speDanger,
+            speInjure: response.data.specialData.speInjure,
+            speCause: response.data.specialData.speCause,
+            speTrap: response.data.specialData.speTrap,
+            speRiskAssess: response.data.specialData.speRiskAssess,
+            speContent: response.data.specialData.speContent,
+            speActPerson: response.data.specialData.speActPerson,
+            speActEmail: response.data.specialData.speActEmail,
+            speActContent: response.data.specialData.speActContent,
+            speComplete: response.data.specialData.speComplete,
+            fileDatas: response.data.specialData.speFiles,
+            // updateSpeId: speId,
           });
+
+          // setSpeData({
+          //   employeenumber: response.data.specialData.speEmpNum,
+          //   inspectorname: response.data.specialData.spePerson,
+          //   inspectoremail: response.data.specialData.speEmail.split('@')[0],
+          // });
           setSpeEmpNum(response.data.specialData.speEmpNum);
           setSpePerson(response.data.specialData.spePerson);
           setSpeEmail(response.data.specialData.speEmail);
-
+          //
           setSpeFacility(response.data.specialData.speFacility);
           setSpeDanger(response.data.specialData.speDanger);
-
-          setInjuredData(response.data.specialData.speInjure);
+          //
+          // // setInjuredData(response.data.specialData.speInjure);
           setSpeInjure(response.data.specialData.speInjure);
-
-          setCauseData(response.data.specialData.speCause);
+          //
+          // // setCauseData(response.data.specialData.speCause);
           setSpeCause(response.data.specialData.speCause);
-
+          //
           setSpeTrap(response.data.specialData.speTrap);
-
+          //
           setSpeRiskAssess(response.data.specialData.speRiskAssess);
           setSpeContent(response.data.specialData.speContent);
-
-          setSpeActData({
-            speActPerson: response.data.specialData.speActPerson,
-            speActEmail: response.data.specialData.speActEmail,
-          });
+          //
+          // setSpeActData({
+          //   speActPerson: response.data.specialData.speActPerson,
+          //   speActEmail: response.data.specialData.speActEmail,
+          // });
           setSpeActPerson(response.data.specialData.speActPerson);
           setSpeActEmail(response.data.specialData.speActEmail);
-
+          //
           setSpeActContent(response.data.specialData.speActContent);
-
+          //
           setSpeComplete(response.data.specialData.speComplete);
-          // setSpeComplete(response.data.specialData.speComplete);
-          // 수정할 파일 데이터 업데이트
+          // // setSpeComplete(response.data.specialData.speComplete);
+          // // 수정할 파일 데이터 업데이트
           setFileDatas(response.data.specialData.speFiles);
-
+          //
           setUpdateSpeId(speId);
           console.log(speData);
         })
@@ -438,26 +498,26 @@ function UserfrequentReg() {
           </div>
         </div>
       <Inspector onFormDataChange={handleInspectorDataChange}
-                 defaultState={speData} /> {/* 점검자 */}
+                 defaultState={speFormData} /> {/* 점검자 */}
       <Inspectionarea /> {/* 점검영역 */}
       <Facilityname onChange={handleFacilityChange} /> {/* 설비명 */}
       <Danger onFormDataChange={handleDangerDataChange}
-              defaultState={speDanger}/> {/* 위험분류 */}
+              defaultState={speFormData}/> {/* 위험분류 */}
       <Injured onFormDataChange={handleInjuredDataChange}
-               defaultState={injuredData} /> {/* 부상부위 */}
+               defaultState={speFormData.speInjure} /> {/* 부상부위 */}
       <Dangersource onFormDataChange={handleCauseDataChange}
-                    defaultState={causeData} /> {/* 위험원인 */}
+                    defaultState={speFormData} /> {/* 위험원인 */}
       <Falsetrap onFormDataChange={handleFalsetrapDataChange}
-                 defaultState={speTrap}/>{" "} {/* 실수함정 */}
+                 defaultState={speFormData}/>{" "} {/* 실수함정 */}
       <RiskAssessment onFormDataChange={handleRiskAssessmentDataChange}
-                      defaultState={speRiskAssess} updateSpeId={updateSpeId}/>{" "} {/* 위험성평가 */}
+                      defaultState={speFormData} updateSpeId={updateSpeId}/>{" "} {/* 위험성평가 */}
       {/* 위험분류 표 */}
       <div className="flex flex-col justify-center items-center border border-gray-300 px-3 mx-3 ">
         <p className=" font-semibold text-lg">평가표</p>
         <img src={DangerImg} className=" p-3 w-100"></img>
       </div>
       <InspectionDetails onFormDataChange={handleInspectionDetailsDataChange}
-                         defaultState={speContent}/>{" "}
+                         defaultState={speFormData.speContent}/>{" "}
       {/* 점검내용 */}
       {/* 개선대책 */}
       <div
@@ -488,7 +548,7 @@ function UserfrequentReg() {
           조치요청
         </span>
         <ActionRquest onFormDataChange={handleActionRequestDetailsDataChange}
-                      onChange={handleStaticEmailChange} defaultState={speActData} updateSpeId={updateSpeId}/>{" "}
+                      onChange={handleStaticEmailChange} defaultState={speFormData} updateSpeId={updateSpeId}/>{" "}
       </div>
       {/* 조치요청 */}
       {/* 혜영추가-완료여부 */}
@@ -531,13 +591,13 @@ function UserfrequentReg() {
         }}
         labelIdle='클릭하거나 <span class="filepond--label-action">파일을 여기에 드롭하여 선택하세요</span>'
       />
-      {fileDatas.map((fileItem, index) => (
+      {speFormData.fileDatas.map((fileItem, index) => (
         <div key={index} className="flex items-start mt-2">
           <div className="text-left">
             {fileItem.speFileOriName}
           </div>
           <button
-            onClick={() => handleRemoveFile(fileItem, index)}
+            // onClick={() => handleRemoveFile(fileItem, index)}
             className="ml-2 text-red-600"
             type="button"
           >

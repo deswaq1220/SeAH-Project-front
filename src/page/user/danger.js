@@ -31,7 +31,7 @@ export default function Danger({ onFormDataChange, defaultState, complete }) {
 
           // defaultState확인 : 수정/완료등록일 경우
           if (defaultState) {
-            setSelectedDanger(defaultState);
+            setSelectedDanger(defaultState.speDanger);
           } else {
             setSelectedDanger(speDangerData[0].dangerMenu); // defaultState가 없을 때 첫 번째 값을 선택
           }

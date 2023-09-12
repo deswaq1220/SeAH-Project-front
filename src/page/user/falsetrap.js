@@ -33,7 +33,7 @@ export default function Falsetrap({onFormDataChange, defaultState, complete}){
 
             // defaultState확인 : 수정/완료등록일 경우
             if (defaultState) {
-              setTrapSelected(defaultState);
+              setTrapSelected(defaultState.speTrap);
             } else {
               setTrapSelected(speTrapData[0].trapMenu); // defaultState가 없을 때 첫 번째 값을 선택
             }

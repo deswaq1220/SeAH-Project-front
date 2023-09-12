@@ -35,15 +35,15 @@ export default function Dangersource({onFormDataChange, defaultState, complete})
 
         // defaultState확인 : 수정/완료등록일 경우
         if (defaultState) {
-          if(defaultState.indexOf("기타(직접입력)/")===0){
-            const splitArray = defaultState.split('/');
+          if(defaultState.speCause.indexOf("기타(직접입력)/")===0){
+            const splitArray = defaultState.speCause.split('/');
             const firstPart = splitArray[0]; // "기타(직접입력)"
             const secondPart = splitArray[1]; // "내용"
 
             setSourceSelected(firstPart);    // 셀렉트박스
             setCustomSource(secondPart);    // 인풋박스
           } else {
-            setSourceSelected(defaultState);
+            setSourceSelected(defaultState.speCause);
           }
         } else {
           setSourceSelected(speCauseData[0].causeMenu); // defaultState가 없을 때 첫 번째 값을 선택
