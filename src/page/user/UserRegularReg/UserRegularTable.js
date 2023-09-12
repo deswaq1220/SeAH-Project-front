@@ -1,18 +1,18 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, {Fragment, useState, useEffect} from "react";
 import FaultyModal from "./FaultyModal";
 import InspectionItem from "./InspectionItem";
 import InspectionArea from "./InspectionArea";
 import axios from "axios";
-import { Listbox, Transition } from "@headlessui/react";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import {Listbox, Transition} from "@headlessui/react";
+import {CheckIcon, ChevronUpDownIcon} from "@heroicons/react/20/solid";
 import Inspector from "./Inspector";
-import { toast } from "react-toastify";
-import { useNavigate, useParams } from "react-router-dom";
+import {toast} from "react-toastify";
+import {useNavigate, useParams} from "react-router-dom";
 
 const notificationMethods = [
-    { id: "GOOD", title: "양호", color: "text-blue-600" },
-    { id: "BAD", title: "불량", color: "text-red-600" },
-    { id: "NA", title: "N/A", color: "text-gray-900" },
+    {id: "GOOD", title: "양호", color: "text-blue-600"},
+    {id: "BAD", title: "불량", color: "text-red-600"},
+    {id: "NA", title: "N/A", color: "text-gray-900"},
 ];
 
 const people = [
@@ -110,22 +110,14 @@ export default function UserRegularTable() {
 
             return updatedChecklist; // Return the new checklist to update the state
         });
-        //id: actForm.id,
-        //     setFiles(prevFiles => {
-        //         const newFilesState=[...prevFiles];
-        //         newFilesState.push({file:updatedFile});
-        //         return newFilesState;
-        //      });
+
         setRegularDTO((prevData) => ({
             ...prevData,
             file: {
                 ...prevData.file,
                 [id]: updatedFile, // '1' is the key and 'updatedFile' should be an array of File or Blob objects.
             },
-        })); // Update formData with new file array
-        //       setRegularDTO({
-        //           file: updatedFile, // Update the file property in the formData state
-        //       });
+        }));
     };
 
     //점검리스트 조회
@@ -159,15 +151,6 @@ export default function UserRegularTable() {
             console.error("점검리스트 조회 오류", error);
         }
     };
-
-    // console.log(regularcheckList);
-
-    // formData.regularDetailDTOList= [...regularcheckList];
-    // regularDTO.regularDetailDTOList = JSON.stringify(regularcheckList);
-
-    // formData.file = [...regularcheckList.files];
-    // formData.regularDTO = JSON.stringify(regularDTO);// EduDTO 객체를 문자열로 변환하여 추가
-    // saveFormData.append('file', regularcheckList.files); // 파일 추가
 
     const handleFormSubmit = async () => {
         console.log(regularDTO.file);
@@ -211,13 +194,6 @@ export default function UserRegularTable() {
             });
     };
 
-    // useEffect(() => {
-    //   setSelectedItemIndex(null);
-    //   console.log("여기가 넘버일세", regularNum);
-    // }, [regularNum])
-
-    useEffect(() => {}, [checkList]);
-
     useEffect(() => {
         async function fetchOptions() {
             try {
@@ -247,7 +223,8 @@ export default function UserRegularTable() {
     return (
         <div className="flex flex-col ">
             <div id="ReformMeasures" className="flex items-center">
-        <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
+        <span
+            className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
           점검구역
         </span>
                 <InspectionArea
@@ -255,27 +232,31 @@ export default function UserRegularTable() {
                 />
             </div>
             <div id="ReformMeasures" className="flex items-center flex-wrap">
-        <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4">
+        <span
+            className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4">
           점검자
         </span>
-                <Inspector onFormDataChange={handleInspectorDataChange} />
+                <Inspector onFormDataChange={handleInspectorDataChange}/>
             </div>
             <div className="flex items-center  ml-4">
-        <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 mr-4 my-4 ">
+        <span
+            className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 mr-4 my-4 ">
           점검항목
         </span>
                 <Listbox
                     value={selectedArea}
                     onChange={(value) => handleRegularInsNameChange(value)}
                 >
-                    {({ open }) => (
+                    {({open}) => (
                         <>
                             <div className="relative mt-2">
-                                <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
+                                <Listbox.Button
+                                    className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
                   <span className="block truncate">
                     {selectedArea ? selectedArea.name : "선택"}
                   </span>
-                                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                                    <span
+                                        className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                     <ChevronUpDownIcon
                         className="h-5 w-5 text-gray-400"
                         aria-hidden="true"
@@ -290,11 +271,12 @@ export default function UserRegularTable() {
                                     leaveFrom="opacity-100"
                                     leaveTo="opacity-0"
                                 >
-                                    <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                                    <Listbox.Options
+                                        className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                                         {regularNameList.map((regularName) => (
                                             <Listbox.Option
                                                 key={regularName.id}
-                                                className={({ active }) =>
+                                                className={({active}) =>
                                                     classNames(
                                                         active
                                                             ? "bg-seahColor text-white"
@@ -304,7 +286,7 @@ export default function UserRegularTable() {
                                                 }
                                                 value={regularName}
                                             >
-                                                {({ selected, active }) => (
+                                                {({selected, active}) => (
                                                     <>
                             <span
                                 className={classNames(
@@ -377,7 +359,8 @@ export default function UserRegularTable() {
                             <th
                                 scope="col"
                                 className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
-                            >확인결과</th>
+                            >확인결과
+                            </th>
                             <th
                                 scope="col"
                                 className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"

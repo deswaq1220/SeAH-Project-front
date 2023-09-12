@@ -42,19 +42,24 @@ const [isModalOpen, setIsModalOpen] = useState(false); // 각 행마다 모달 �
   console.log(regularDetailDTOList[index]);
 
     regularDetailDTOList[index].isModalState = "open";
-
+    console.log(regularDetailDTOList[index].isModalState);
+    setIsModalOpen(false);
     setIsModalOpen(true);
+
+    // setTimeout(() => { // setTimeout 사용
+    //
+    //   setIsModalOpen(false);
+    //
+    // }, 1000)
   }
 
     const handleActDataChange = (actForm) => {
-        console.log("actForm");
+
         console.log(actForm);
 
         regularDetailDTOList[actForm.index].isModalState = "close";
         regularDetailDTOList[actForm.index].regularActContent = actForm.regularActContent;
-
-
-
+      console.log(regularDetailDTOList[actForm.index].isModalState);
         setIsModalOpen(false);
     };
 
@@ -156,7 +161,7 @@ const dataTest =  ()=>{
                                   type="radio"
                                   name={`radio-group-${index}`}
                                  defaultChecked={regularDetail.regularCheck === notificationMethod.id}
-//                                    onChange={() => handleRadioChange(notificationMethod.id)}
+                                disabled
                                   className="h-4 w-4 border-gray-300 text-seahColor focus:ring-seahColor"
                                 />
                                 <label
@@ -185,7 +190,9 @@ const dataTest =  ()=>{
                                  name={`radio-group-${index}`}
                                 defaultChecked={regularDetail.regularCheck === notificationMethod.id}
 //                                    onChange={() => handleRadioChange(notificationMethod.id)}
+                                 disabled
                                  className="h-4 w-4 border-gray-300 text-seahColor focus:ring-seahColor"
+
                                />
                                <label
                                  htmlFor={notificationMethod.id}
