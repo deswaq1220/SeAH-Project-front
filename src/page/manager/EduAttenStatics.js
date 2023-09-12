@@ -6,26 +6,24 @@ import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { format, addMonths, subMonths, getMonth, getYear } from "date-fns";
 import { async } from "q";
-// 부서 드롭다운
-const department = [
-  { id: null, name: "부서" },
-  { id: 1, name: "소형압연팀" },
-  { id: 2, name: "압출팀" },
-  { id: 3, name: "주조팀" },
-];
+
 
 function EduAttenStatics() {
   const [currentDate, setCurrentDate] = useState(new Date());
+  //페이지 처리
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
+  
   const [selectedMonth, setSelectedMonth] = useState("");
   const [attenList, setAttenList] = useState([]);
-
   const [selectedCategory, setSelectedCategory] = useState("");
 
+  const [department, setDepartment] = useState(["부서"]);
   const [searchDepartment, setSearchDepartment] = useState("부서");
-  const [searchName, setSearchName] = useState("");
 
+  const [filteredAttenList, setFilteredAttenList] = useState([]);
+
+  const [searchName, setSearchName] = useState("");
   const [monthlyEduTime, setMonthlyEduTime] = useState({
     total: 0,
     CREW: 0,
@@ -42,6 +40,30 @@ function EduAttenStatics() {
     { name: '관리감독', value: `${monthlyEduTime.MANAGE} 분`, category: 'MANAGE' },
     { name: '기타', value: `${monthlyEduTime.ETC} 분`, category: 'ETC' },
   ];
+
+  //페이지
+  const getCurrentPageItems = () => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return attenList.slice(startIndex, endIndex);
+  };
+
+
+  const fetchDepartments = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_BASE_URL}/admin/edustatistics/attendepart`
+      );
+      const { attenDepartList } = response.data;
+      setDepartment([...department, ...attenDepartList]);
+      console.log(attenDepartList);
+    } catch (error) {
+      console.error("부서 리스트를 불러오는 데 실패했습니다.", error);
+    }
+  };
+  useEffect(() => {
+    fetchDepartments();
+  }, []);
 
 
   useEffect(() => {
@@ -72,13 +94,14 @@ function EduAttenStatics() {
         }
 
         setAttenList(data.eduStatisticsDTO);
+        // setFilteredAttenList(attenListData.slice(0, itemsPerPage));
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
       }
     };
 
     getLogsForCurrentMonth();
-  }, [selectedCategory, currentDate]);
+  }, [selectedCategory, currentDate, searchDepartment, searchName]);
 
 
   //검색
@@ -221,7 +244,7 @@ function EduAttenStatics() {
       {/* 달력  */}
       <div className="flex flex-col justify-center items-center text-3xl mt-28">
         <h1 className="text-base font-semibold leading-6 text-gray-900">
-          월별 교육 참가자 명단</h1>
+          월별 교육 참석자 명단</h1>
         <div className="flex items-center">
           <button onClick={goToPreviousMonth} className="mr-2">
             <svg
@@ -271,8 +294,8 @@ function EduAttenStatics() {
           >
             {department.map((dept) => (
 
-              <option key={dept.id} value={dept.name}>
-                {dept.name}
+              <option value={dept}>
+                {dept}
               </option>
             ))}
           </select>
@@ -377,7 +400,7 @@ function EduAttenStatics() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
-                    {attenList.map((item, index) => (
+                  {getCurrentPageItems().map((item, index) => (
                       <tr key={index}>
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           {item.eduTitle}
@@ -409,7 +432,7 @@ function EduAttenStatics() {
       </div>
       <div className="flex justify-center">
         <div className="px-4 sm:px-6 lg:px-8 max-w-screen-xl w-full">
-          {attenList ? (
+        {attenList.length > 0 ? (
             <Pagination
               currentPage={currentPage}
               itemsPerPage={itemsPerPage}
@@ -417,7 +440,7 @@ function EduAttenStatics() {
               setCurrentPage={setCurrentPage}
             />
           ) : (
-            <p className="flex justify-center">해당 월의 교육은 없습니다.</p>
+            <p className="flex justify-center">해당 월의 교육 및 참석자는 없습니다.</p>
           )}
         </div>
       </div>

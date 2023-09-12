@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 function SafetyEducationMain() {
   const [currentDate, setCurrentDate] = useState(new Date()); // 년,월
   const [eduList, setEduList] = useState([]); // 안전교육 데이터를 담을 상태 변수
-  
+
   const itemsPerPage = 10; // 한 페이지당 보여줄 항목 개수
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 번호
 
@@ -30,21 +30,6 @@ function SafetyEducationMain() {
     return index !== -1 ? index + 1 : ""; // 인덱스를 1부터 시작하도록 +1 해줍니다.
   };
 
-  // useEffect(() => {
-  //   const fetchEduList = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `http://localhost:8081/edumain`); 
-  //         // `http://172.20.20.252:8081/edumain`); 
-  //       setEduList(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-
-  //   fetchEduList();
-  // }, []);
-
 
   useEffect(() => {
     const getLogsForCurrentMonth = async () => {
@@ -52,26 +37,22 @@ function SafetyEducationMain() {
         const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
         const currentYear = getYear(currentDate);
         const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/admin/edumain`, {
-            // 세아
-        // const response = await axios.get(`http://localhost:8081/edumain, {
+          // 세아
+          // const response = await axios.get(`http://localhost:8081/edumain, {
           params: {
             year: currentYear,
             month: currentMonth,
           },
           headers: {
-              'Content-Type': 'application/json',
-              // 'Authorization' : `Bearer ${TK}`,
+            'Content-Type': 'application/json',
           },
-          
-          
+
+
         });
-        const sortedEduList = response.data.sort((a, b) => {
-          // eduStartTime을 기준으로 오름차순 정렬
-          return new Date(a.eduStartTime) - new Date(b.eduStartTime);
-        });
-        // console.log(response.data[0].eduFiles[0]);
+        const sortedEduList = response.data;
         setEduList(sortedEduList);
         setSelectedMonth(currentMonth);
+        console.log(response.data);
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
       }
@@ -155,7 +136,7 @@ function SafetyEducationMain() {
           <div className="sm:flex sm:items-center">
             <div className="sm:flex-auto">
               <h1 className="text-base font-semibold leading-6 text-gray-900">
-                안전교육 조회목록입니다
+                안전교육 조회목록
               </h1>
               <p className="mt-2 text-sm text-gray-700">
                 {getFormattedDate()} 안전교육 목록입니다
@@ -205,7 +186,13 @@ function SafetyEducationMain() {
                         scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
-                        첨부파일
+                        교육시간
+                      </th>                
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        강사
                       </th>
                       <th
                         scope="col"
@@ -215,9 +202,9 @@ function SafetyEducationMain() {
                       </th>
                       <th
                         scope="col"
-                        className="relative py-3.5 pl-3 pr-4 sm:pr-0"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
-                        <span className="sr-only">Edit</span>
+                        첨부파일
                       </th>
                     </tr>
                   </thead>
@@ -255,18 +242,28 @@ function SafetyEducationMain() {
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
                           {format(new Date(edu.eduStartTime), "yyyy-MM-dd HH시 mm분")}
                         </td>
+
+                        <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                          {edu.eduSumTime} 분
+                        </td>
+
+                        <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                          {edu.eduInstructor}
+                        </td>
+
+                        
+                        <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                          {edu.eduWriter}
+                        </td>
+
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
 
                           {edu.eduFileList.length > 0 ? (
                             <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                             첨부
+                              첨부
                             </span>
-                          ) 
-                          : null}
-                        </td>
-
-                        <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                          {edu.eduWriter}
+                          )
+                            : null}
                         </td>
                       </tr>
                     ))}
@@ -286,7 +283,7 @@ function SafetyEducationMain() {
               totalItems={eduList.length}
               setCurrentPage={setCurrentPage}
             />
-          ) : ( <p className="flex justify-center">해당 월의 교육은 없습니다.</p>)}
+          ) : (<p className="flex justify-center">해당 월의 교육은 없습니다.</p>)}
         </div>
       </div>
     </div>

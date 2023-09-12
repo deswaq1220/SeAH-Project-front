@@ -31,10 +31,11 @@ import UserRegularReg from "./page/user/UserRegularReg/UserRegularReg";
 import FaultyModal from "./page/user/UserRegularReg/FaultyModal";
 import UserRegularDetails from "./page/user/UserRegularDetails/UserRegularDetails";
 import DetailedModal from "./page/user/UserRegularDetails/DetailedModal";
-//다인 씀
-import SafetyInspectionStatisticsYearImg from "./page/manager/SafetyInspectionStatisticsYearImg";
-import SafetyInspectionStatisticsMonthImg from "./page/manager/SafetyInspectionStatisticsMonthImg";
 
+import SafetyInspectionStatisticsYear from "./page/manager/SafetyInspectionStatisticsYear";
+import SafetySpecialInspectionStatisticsMonth from "./page/manager/SafetySpecialInspectionStatisticsMonth";
+import SafetyRegularInspectionStatisticsMonth from "./page/manager/SafetyRegularInspectionStatisticsMonth";
+import UserRegularInspectionStatus from "./page/user/UserRegularInspectionStatus/UserRegularInspectionStatus";
 
 // axios.defaults.baseURL = "https://localhost:8081";
 // axios.defaults.withCredentials = true;
@@ -70,16 +71,17 @@ function App() {
         <Route path="/edustatistics" element={<EduStatics/>}></Route>{/* 관리자 안전교육통계*/}
         <Route path="/edustatistics/atten" element={<EduAttenStatics/>}></Route>{/* 관리자 안전교육 참가자통계*/}
 
+        <Route path="/inspection/statistics/year" element={<SafetyInspectionStatisticsYear/>}></Route>{/* 관리자 연간분석(정기점검/수시점검) 통계 대시보드*/}
+        <Route path="/inspection/statistics/month/special" element={<SafetySpecialInspectionStatisticsMonth/>}></Route>{/* 관리자 월간분석(수시점검) 대시보드*/}
+        <Route path="/inspection/statistics/month/regular" element={<SafetyRegularInspectionStatisticsMonth/>}></Route>{/* 관리자 월간분석(정기점검) 대시보드*/}
+
 
         {/* 공통 */}
+        <Route path="/regular" element={<RegularMain/>}></Route>{/* 관리자,사용자 정기점검 목록 */}
+        <Route path="/regulardetails" element={<UserRegularDetails/>}></Route>{/* 관리자,사용자 정기점검 상세페이지 */}
         <Route path="/frequentinspection" element={<FrequentIns/>}></Route>{/* 공통 수시점검 현황*/}
         <Route path="/all/special/detail/:speId" element={<FrequentDetails/>}></Route>{/* 공통 수시점검 상세페이지 */}
-
-
-        {/*다인 추가함 */}
-        <Route path="/inspection/statistics/yearimg" element={<SafetyInspectionStatisticsYearImg/>}></Route>{/* 관리자 수시점검 연도 상세 분석 통계 대시보드*/}
-        <Route path="/inspection/statistics/monthimg" element={<SafetyInspectionStatisticsMonthImg/>}></Route>{/* 관리자 수시점검 월별통계 대시보드*/}
-
+        <Route path="/regularinsstatus" element={<UserRegularInspectionStatus/>}></Route>{/* 정기점검 현황 */}
 
         {/* 사용자  */}
         <Route path="/user" element={<UserMain/>}></Route>  {/* 사용자 메인페이지*/}
@@ -95,15 +97,10 @@ function App() {
         <Route path="/userfrequentreg" element={<UserfrequentReg/>}></Route>{/* 수시점검 등록페이지 */}
         <Route path="/special/detail/:speId" element={<UserFrequentDetails/>}></Route>{/* 수시점검 상세페이지 */}
 
-        {/* 정기점검 */}
-        <Route path="/regular" element={<RegularMain/>}></Route>{/* 관리자,사용자 정기점검 목록 */}
-        <Route path="/regulardetails" element={<UserRegularDetails/>}></Route>{/* 관리자,사용자 정기점검 목록 */}
-
 
         {/* 사용자 정기점검 */}
-
         <Route path="/regularreg" element={<UserRegularReg/>}></Route>{/* 정기점검 등록페이지 */}
-        <Route path="/faultymodal" element={<FaultyModal/>}></Route>{/* 수시점검 상세페이지 */}
+        <Route path="/faultymodal" element={<FaultyModal/>}></Route>{/* 오류 모달창 */}
 
 
         <Route path="/404" element={<Error/>}></Route> {/* 에러 */}

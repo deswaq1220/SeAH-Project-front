@@ -36,7 +36,7 @@ export default function UserSelectInspection() {
     {
       title: "정기점검",
       sub: "안전점검 영역에 대한 정기점검을 할 수 있습니다.",
-      href: "/regulardetails",
+      href: "/regular",
       icon: ClipboardDocumentListIcon,
       iconForeground: "text-teal-700",
       iconBackground: "bg-teal-50",
@@ -248,8 +248,9 @@ export default function UserSelectInspection() {
           <button
             type="button"
             className="rounded-md bg-seahColor px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor my-4"
+            onClick={() => navigate("/regularinsstatus")}
           >
-            정기점검 점검현황 보기
+            정기점검 현황
           </button>
           <p className="text-lg font-semibold">수시점검</p>
           <ul role="list" className="-mx-2 space-y-1">
@@ -292,7 +293,7 @@ export default function UserSelectInspection() {
             onClick={() => navigate("/frequentinspection")}
             className="rounded-md bg-seahColor px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mt-4"
           >
-            수시점검 점검현황 보기
+            수시점검 현황
           </button>
         </nav>
       </div>

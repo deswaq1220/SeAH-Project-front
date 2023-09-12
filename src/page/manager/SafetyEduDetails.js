@@ -8,8 +8,11 @@ import axios from "axios";
 import useSafetyEduForm from "../../useHook/useSafetyEduForm";
 import QRCode from "qrcode.react";
 import { CheckCircleIcon } from "@heroicons/react/20/solid";
-import { format } from "date-fns";
+import { format, parseISO } from 'date-fns';
 import { toast } from "react-toastify";
+import DeleteEduModal from "../../components/DeleteEduModal ";
+
+
 
 export default function SafetyEduDetails() {
   const { eduId } = useParams(); // useParams 훅을 사용하여 URL 파라미터에서 eduId 가져오기
@@ -17,76 +20,42 @@ export default function SafetyEduDetails() {
   const { isCompleted, handleCreate, qrValue, formData, setFormData } =
     useSafetyEduForm(eduData);
   const apiUrl = process.env.REACT_APP_API_BASE_URL;
-
   const [uploadedFiles, setUploadedFiles] = useState([]);
-
   const [updatedData, setUpdatedData] = useState({});
 
   const navigate = useNavigate();
 
-  // const [education, setEducation] = useState({
-  //   selected: null,
-  //   selectedDuty: null,
-  //   isCompleted: false,
-  //   uploadedFiles: [],
-  //   error: null,
-  //   formData: {
-  //     eduTitle: "",
-  //     eduInstructor: "",
-  //     eduPlace: "",
-  //     eduCategory: "", // 교육
-  //     eduStartTime: new Date(), // 시작시간
-  //     // eduEndTime: new Date(), // 끝나는 시간
-  //     eduSumTime: "", // 총시간
-  //     eduTarget: "", // 대상자
-  //     eduContent: "", // 교육내용
-  //     eduWriter: "",
-  //     eduId: "",
-  //   },
-  // });
+  const [showDeleteModal, setShowDeleteModal] = useState(false); // 삭제 모달의 상태
+  const [currentEduId, setCurrentEduId] = useState(null); // 현재 선택된 출석자 ID
+
+
 
   useEffect(() => {
     const fetchEduDetail = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/admin/edudetails/${eduId}`
+          `${process.env.REACT_APP_API_BASE_URL}/admin/edudetails/${eduId}`,        // 세아
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            },
+          }
         );
-        setEduData({
-          ...response.data,
-          eduFileList: response.data.eduFileList,
-        });
 
-        console.log("파일이름 낸하", eduData);
+        setEduData({ ...response.data, eduFileList: response.data.eduFileList });
+        console.log("파일이름 찾기");
+        console.log(response.data);
+
       } catch (error) {
         console.error("Error fetching data:", error);
-        toast.error("교육 상세 정보를 불러오는 데 실패했습니다.");
       }
     };
 
     fetchEduDetail();
   }, [eduId]);
 
-  //
-  // useEffect(() => {
-  //   if (eduData) {
-  //     // eduData가 유효한 경우, 해당 값을 formData에 설정합니다.
-  //     setFormData({
-  //       eduCategory: eduData.eduCategory,
-  //       eduTitle: eduData.eduTitle,
-  //       eduInstructor: eduData.eduInstructor,
-  //       eduPlace: eduData.eduPlace,
-  //       eduStartTime: new Date(eduData.eduStartTime),
-  //       eduSumTime: eduData.eduSumTime,
-  //       eduTarget: eduData.eduTarget,
-  //       eduContent: eduData.eduContent,
-  //       eduWriter: eduData.eduWriter,
-  //       files: null, // 파일 관련 데이터는 여기서 설정하지 않음
-  //       eduId: eduData.eduId,
-  //     });
-  //   }
-  // }, [eduData, setFormData]);
 
-  // 엑셀!!!!!!!!!!!
+  // 엑셀
 
   const createExcelData = (eduData) => {
     // 교육 정보를 바탕으로 엑셀 데이터를 생성하는 로직 작성
@@ -100,8 +69,8 @@ export default function SafetyEduDetails() {
         강사: `${eduData.eduInstructor}`,
         작성자: eduData.eduWriter,
         교육대상자: eduData.eduTarget,
-        파일첨부: eduData.eduFileList.map(file => file.eduFileName).join(', '),
         설명: "T는 전체, F는 현장직 O는 사무직입니다",
+        파일첨부: eduData.eduFileList.map(file => file.eduFileName).join(', '),
       },
     ];
 
@@ -133,9 +102,8 @@ export default function SafetyEduDetails() {
   };
 
   if (!eduData) {
-    return <div>Loading...</div>; // 데이터가 로딩되기 전에는 null을 반환하거나 로딩 스피너를 추가할 수 있습니다.
+    return <div>Loading...</div>;
   }
-  // const { title, time, duration, content, attachments } = eduData;
 
   const mapDutyName = (duty) => {
     switch (duty) {
@@ -158,21 +126,27 @@ export default function SafetyEduDetails() {
       );
 
       if (response.status === 200) {
-        console.log("교육 삭제됨");
+        console.log('교육 삭제됨');
         toast.success("교육이 삭제되었습니다.", {
           position: "top-center",
           autoClose: 3000,
           hideProgressBar: true,
         });
-        navigate("/eduMain");
+        navigate('/eduMain');
       }
     } catch (error) {
-      console.error("교육 삭제 에라 에러", error);
+      toast.error("교육이 삭제 중 오류가 생겼습니다.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+      });
+      console.error('교육 삭제 에러', error);
     }
   };
 
+  //수정하기
   const handleEditClick = () => {
-    // educationId는 해당 교육의 아이디 값입니다.
+
     navigate(`/edureg/${eduId}`);
   };
 
@@ -186,12 +160,6 @@ export default function SafetyEduDetails() {
               <h3 className="text-base font-semibold leading-7 text-gray-900">
                 {eduData.eduTitle}
               </h3>
-              {/* <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
-              {eduData.eduStartTime}
-            </p>
-            <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
-              {eduData.eduEndTime}
-            </p> */}
             </div>
             <div>
               <button
@@ -204,7 +172,7 @@ export default function SafetyEduDetails() {
               <button
                 type="submit"
                 className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-                onClick={handleDelete}
+                onClick={() => { setCurrentEduId(eduData.eduId); setShowDeleteModal(true); }}
               >
                 삭제하기
               </button>
@@ -218,7 +186,7 @@ export default function SafetyEduDetails() {
                   교육시간
                 </dt>
                 <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                  {eduData.eduStartTime}
+                  {eduData.eduStartTime ? format(parseISO(eduData.eduStartTime), 'yyyy-MM-dd HH시mm분') : ''}
                 </dd>
                 <dt className="text-base font-bold leading-6 text-gray-900">
                   총 교육시간
@@ -291,7 +259,7 @@ export default function SafetyEduDetails() {
                             />
                             <div className="ml-4 flex min-w-0 flex-1 gap-2">
                               <span className="truncate font-medium">
-                                {eduFiles.eduFileOriName}
+                                {eduFiles.eduFileName}
                               </span>
 
                               <span className="flex-shrink-0 text-gray-400">
@@ -317,7 +285,6 @@ export default function SafetyEduDetails() {
 
                   <Link to={`/userattendance/register/${eduData.eduId}`}>
                     <QRCode
-                      // value={`http://10.200.18.185:3000/userattendance/register/${eduData.eduId}`}
                       value={`http://localhost:3000/userattendance/register/${eduData.eduId}`}
                     />
                   </Link>
@@ -357,14 +324,15 @@ export default function SafetyEduDetails() {
                 onClick={() => navigate(`/training/${eduId}`)}
                 className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor ml-1"
               >
-                공적증빙
+                공적 증빙
               </button>
             </div>
           </div>
         </div>
       ) : (
-        <div>Loading...</div> // eduData가 유효하지 않은 경우 로딩 상태를 나타내는 메시지 또는 스피너를 렌더링
+        <div>Loading...</div>
       )}
+      {showDeleteModal && <DeleteEduModal open={showDeleteModal} setOpen={setShowDeleteModal} onConfirm={() => handleDelete(currentEduId)} />}
     </div>
   );
 }

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Pagination from "../../../components/Pagination";
 import DepartmentReg from "../ReferebceInfoForm/DepartmentReg";
+import { toast } from "react-toastify";
+import DeleteRegInfoModal from "../../../components/DeleteRegInfoModal";
 
 export default function DepartmentTable() {
   const [departments, setDepartments] = useState([]);
@@ -9,6 +11,22 @@ export default function DepartmentTable() {
   const itemsPerPage = 10;
   const [editingId, setEditingId] = useState(null);
   const [newName, setNewName] = useState("");
+  const [newId, setNewId] = useState("");
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+
+  const handleDeleteConfirm = async () => {
+    if (deleteId) {
+      await deleteDepartment(deleteId);
+    }
+    setDeleteId(null);
+    setIsDeleteModalOpen(false);
+  };
+
+  const handleShowConfirmDialog = (departmentId) => {
+    setDeleteId(departmentId);
+    setIsDeleteModalOpen(true);
+  };
 
   const fetchData = async () => {
     try {
@@ -42,11 +60,67 @@ export default function DepartmentTable() {
         `${process.env.REACT_APP_API_BASE_URL}/admin/master/department/del/${departmentId}`
       );
       fetchData(); // 데이터 다시 불러오기
+      toast.success("부서 정보가 정상적으로 삭제되었습니다.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        style: {
+          marginTop: "5rem", // 원하는 세로 위치로 조정
+        },
+      });
     } catch (error) {
-      console.error("부서 삭제 오류:", error);
+      toast.error("부서 정보 삭제에 실패하였습니다. 다시 시도해주세요.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        style: {
+          marginTop: "5rem", // 원하는 세로 위치로 조정
+        },
+      });
+      // console.error("부서 삭제 오류:", error);
     }
   };
 
+  const handleEdit = (departmentId) => {
+    setEditingId(departmentId); // 수정할 부서의 ID 설정
+    const department = departments.find(
+      (dept) => dept.departmentId === departmentId
+    );
+    setNewName(department.departmentName); // 수정할 부서의 이름 설정
+    setNewId(department.departmentId); // 수정할 부서의 ID 설정
+  };
+
+  const handleSave = async (departmentId) => {
+    try {
+      await axios.put(
+        `${process.env.REACT_APP_API_BASE_URL}/admin/master/department/update/${departmentId}`,
+        {
+          departmentName: newName,
+          departmentId: newId,
+        }
+      );
+      fetchData(); // 데이터 다시 불러오기
+      setEditingId(null); // 편집 모드 종료
+      toast.success("부서 정보가 정상적으로 수정되었습니다.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        style: {
+          marginTop: "5rem", // 원하는 세로 위치로 조정
+        },
+      });
+    } catch (error) {
+      toast.error("부서 정보 수정에 실패하였습니다. 다시 시도해주세요.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        style: {
+          marginTop: "5rem", // 원하는 세로 위치로 조정
+        },
+      });
+      console.error("부서 수정 오류:", error);
+    }
+  };
   return (
     <>
       <DepartmentReg fetchData={fetchData} handleNewData={handleNewData} />
@@ -108,25 +182,54 @@ export default function DepartmentTable() {
                       <input
                         value={newName}
                         onChange={(e) => setNewName(e.target.value)}
+                        className="block w-auto rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
                       />
                     ) : (
                       department.departmentName
                     )}
                   </td>
                   <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
-                    {department.departmentId}
+                    {editingId === department.departmentId ? (
+                      <input
+                        value={newId}
+                        onChange={(e) => setNewId(e.target.value)}
+                        className="block w-auto rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
+                      />
+                    ) : (
+                      department.departmentId
+                    )}
                   </td>
                   <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"></td>
                   <td className="px-3 py-4 text-sm text-gray-500">
-                    <span className="text-green-700 hover:text-green-900 cursor-pointer">
-                      수정
-                    </span>
+                    {editingId === department.departmentId ? (
+                      <>
+                        {/* 저장 버튼 */}
+                        <button
+                          onClick={() => handleSave(department.departmentId)}
+                          className="text-blue-700 hover:text-blue-900 cursor-pointer"
+                        >
+                          저장
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        {/* 수정 버튼 */}
+                        <span
+                          className="text-green-700 hover:text-green-900 cursor-pointer"
+                          onClick={() => handleEdit(department.departmentId)}
+                        >
+                          수정
+                        </span>
+                      </>
+                    )}
                   </td>
                   <td className="py-4 pl-3 pr-4 text-left text-sm font-medium sm:pr-0">
                     <button
                       type="button"
                       className="text-seahColor hover:text-seahDeep"
-                      onClick={() => deleteDepartment(department.departmentId)}
+                      onClick={() =>
+                        handleShowConfirmDialog(department.departmentId)
+                      }
                     >
                       삭제
                     </button>
@@ -141,6 +244,11 @@ export default function DepartmentTable() {
           itemsPerPage={itemsPerPage}
           totalItems={departments.length}
           setCurrentPage={setCurrentPage}
+        />
+        <DeleteRegInfoModal
+          open={isDeleteModalOpen}
+          setOpen={setIsDeleteModalOpen}
+          onConfirm={handleDeleteConfirm}
         />
       </div>
     </>
