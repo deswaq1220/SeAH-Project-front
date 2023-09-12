@@ -413,6 +413,8 @@ function UserfrequentReg() {
     }
   };
 
+  // 등록취소 버튼 클릭 시 바로 이전페이지 이동
+  const backBtn = () => { navigate(-1); };
 
   return (
     <>
@@ -424,7 +426,7 @@ function UserfrequentReg() {
               수시점검 등록
             </h1>
             <p className="mt-2 text-sm text-gray-700">
-              {masterdataPart}/{masterdataId}에 관한 수시 점검을 하고 등록할 수 있습니다.
+              {masterdataPart}/{speFacility}에 관한 수시 점검을 하고 등록할 수 있습니다.
             </p>
           </div>
           <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -559,6 +561,7 @@ function UserfrequentReg() {
         <button
           type="button"
           className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mr-2"
+          onClick={backBtn}
         >
           등록취소
         </button>

@@ -74,12 +74,17 @@ export default function UserFrequentDetailsTable() {
     }
   };
 
+  // 확인버튼 클릭 시 바로 이전페이지 이동
+  const backBtn = () => { navigate(-1); };
+
+
   // 완료버튼
   const handleEditCompleteButtonClick = (speId) => {
     navigate(
       `/special/complete/${inspectionData.specialData.spePart}/${inspectionData.facilityCode}?speId=${speId}`
     );
   };
+
 
 
   return (
@@ -268,6 +273,7 @@ export default function UserFrequentDetailsTable() {
         <button
           type="button"
           className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mr-2"
+          onClick={backBtn}
         >
           확인
         </button>
