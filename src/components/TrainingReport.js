@@ -45,7 +45,6 @@ export default function TrainingReport() {
     // 교육 아이디에 맞는 출석목록 데이터를 받아오는 API 호출
     axios
       .get(`${process.env.REACT_APP_API_BASE_URL}/admin/list/${eduId}`) //세아
-      // axios.get(`http://localhost:8081/usereduatten/list/${eduId}`)
       .then((response) => {
         // 받아온 출석목록 데이터를 attendanceList 상태에 저장
         setAttendanceList(response.data);
