@@ -46,7 +46,7 @@ function EduStatics() {
       console.error("데이터 가져오기 오류:", error);
     }
   
-    console.log(`Clicked on category: ${category}`);
+    console.log(`선택한 카테고리: ${category}`);
   };
 
 
@@ -54,7 +54,7 @@ function EduStatics() {
   const getCurrentPageItems = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    console.log("검색 리스트2?"  + eduList);
+    console.log("검색 리스트--------?"  + eduList);
     
     return eduList.slice(startIndex, endIndex);
   };
@@ -320,9 +320,17 @@ function EduStatics() {
                             </div>
                           </div>
                         </td>
-                        <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                        {/* <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
                               {edu[1]}
-                        </td>
+                        </td> */}
+                        <td>
+                        <Link
+                              to={`/edudetails/${edu[4]}`} // 해당 아이디 디테일 페이지로 이동하는 경로 설정
+                              className="font-medium text-seahColor hover:text-seahDeep "
+                            >
+                              {edu[1]}
+                            </Link>
+                            </td>
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
                         {format(new Date(edu[2]), 'yyyy-MM-dd HH시 mm분')}
                         </td>
