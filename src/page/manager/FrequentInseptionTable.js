@@ -26,17 +26,13 @@ export default function FrequentInseptionTable({ searchResults }) {
       axios
         .get(`${process.env.REACT_APP_API_BASE_URL}/user/frequentinspection`) // 세아
         .then((response) => {
-          const speListFromBack =
-            response.data.searchSpeList.searchSpeDataDTOList;
+          const speListFromBack = response.data.searchSpeList.searchSpeDataDTOList;
 
           // 해당 월 데이터 세팅
-          const thisMonthData = speListFromBack.filter(
-            (item) => item.speDate.substring(0, 7) === dateString
-          );
+          const thisMonthData = speListFromBack.filter((item) => item.speDate.substring(0, 7) === dateString);
           setThisMonthResults(thisMonthData);
-          console.log("데이터 다 불러와", speListFromBack);
+          // console.log("데이터 다 불러와", speListFromBack);
         })
-
         .catch((error) => {
           console.error("Error fetching data: ", error);
         });
@@ -46,8 +42,7 @@ export default function FrequentInseptionTable({ searchResults }) {
   }, []);
 
   // 검색 결과 또는 해당월 데이터를 표시할 배열
-  const displayResults =
-    searchResults.length > 0 ? searchResults : thisMonthResults;
+  const displayResults = searchResults.length > 0 ? searchResults : thisMonthResults;
 
   // 점검 일자 포맷팅 함수 추가
 

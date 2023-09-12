@@ -1,7 +1,7 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import { toast } from "react-toastify";
 
-export default function InspectionDetails({onFormDataChange}){
+export default function InspectionDetails({onFormDataChange, defaultState ,complete}){
   const [content, setContent] = useState();
 
   const handleContentChange = (e) => {
@@ -19,6 +19,12 @@ export default function InspectionDetails({onFormDataChange}){
     onFormDataChange(value);
   };
 
+  // 수정/완료등록일 경우
+  useEffect(() => {
+    if (defaultState) {
+      setContent(defaultState);
+    }
+  }, [defaultState]);
 
 
   return(
@@ -39,6 +45,7 @@ export default function InspectionDetails({onFormDataChange}){
           value={content}
           required
           onChange={handleContentChange}
+          readOnly={complete}
         />
       </div>
     </div>

@@ -9,7 +9,7 @@ function classNames(...classes) {
 }
 
 
-export default function Falsetrap({onFormDataChange}){
+export default function Falsetrap({onFormDataChange, defaultState, complete}){
   const { masterdataPart } = useParams(); // url 영역 파라미터
   const { masterdataId } = useParams(); // url 설비코드 파라미터
   const [specialTrapList, setSpecialTrapList] = useState([]) // 실수함정List
@@ -18,7 +18,7 @@ export default function Falsetrap({onFormDataChange}){
 
   // 실수함정 get
   useEffect(() => {
-    function specialTrapFetchDataWithAxios(masterdataPart, masterdataFacility) {
+    function specialTrapFetchDataWithAxios(masterdataPart, masterdataId) {
       axios
           .get(`${process.env.REACT_APP_API_BASE_URL}/user/special/new/${masterdataPart}/${masterdataId}`)   // 세아
           .then((response) => {
@@ -30,7 +30,13 @@ export default function Falsetrap({onFormDataChange}){
               };
             });
             setSpecialTrapList(speTrapData);
-            setTrapSelected(speTrapData[0]);
+
+            // defaultState확인 : 수정/완료등록일 경우
+            if (defaultState) {
+              setTrapSelected(defaultState);
+            } else {
+              setTrapSelected(speTrapData[0].trapMenu); // defaultState가 없을 때 첫 번째 값을 선택
+            }
           })
           .catch((error) => {
             console.error("Error fetching data: ", error);
@@ -38,7 +44,7 @@ export default function Falsetrap({onFormDataChange}){
     }
 
     specialTrapFetchDataWithAxios(masterdataPart, masterdataId);
-  }, [masterdataPart, masterdataId]);
+  }, [masterdataPart, masterdataId, defaultState]);
 
   // 선택한 값 세팅
   const handleTrapChange = (value) => {
@@ -58,7 +64,7 @@ export default function Falsetrap({onFormDataChange}){
               <div className="relative mt-2">
                 <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-32 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
                   <span className="block truncate">
-                    {trapSelected.trapMenu}
+                    {trapSelected}
                   </span>
                   <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                     <ChevronUpDownIcon
@@ -87,7 +93,9 @@ export default function Falsetrap({onFormDataChange}){
                             "relative cursor-default select-none py-2 pl-3 pr-9"
                           )
                         }
-                        value={specialTrapItem}
+                        value={specialTrapItem.trapMenu}
+                        onChange={handleTrapChange}
+                        disabled={complete}
                       >
                         {({ selected, active }) => (
                           <>

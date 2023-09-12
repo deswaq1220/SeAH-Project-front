@@ -11,11 +11,20 @@ import {useState} from "react";
 import { toast } from "react-toastify";
 import DangerousType from "./FrequentinseptionForm/DangerousType";
 
+// String -> SpeStatus 형변환
+const SpeStatus = {
+  OK: "OK",
+  NO: "NO"
+};
+
+
+
 //수시점검 현황
 export default function FrequentIns() {
   const [searchData, setSearchData] = useState([]); // 검색 결과 데이터 저장
   const [spePart, setSpePart] = useState(null);            // 영역
   const [speFacility, setSpeFacility] = useState("");   // 설비명
+  const [speDanger, setSpeDanger] = useState(null);            // 영역
   const [speStartDate, setSpeStartDate] = useState(null);   // 시작기간
   const [speEndDate, setSpeEndDate] = useState(null);       // 끝기간
   const [spePerson, setSpePerson] = useState(null);       // 점검자 사번
@@ -31,9 +40,28 @@ export default function FrequentIns() {
     }
   };
 
+  // // 설비 콜백
+  // const handleFacilityDataChange = (selected) => {
+  //   setSpeFacility(selected.masterdataFacility);
+  // };
+
   // 설비 콜백
   const handleFacilityDataChange = (selected) => {
-    setSpeFacility(selected.masterdataFacility);
+    if(selected.masterdataFacility === "전체"){
+      setSpeFacility(null);
+    } else {
+      setSpeFacility(selected.masterdataFacility);
+    }
+
+  };
+
+  // 위험분류 콜백
+  const handleDangerDataChange = (selected) => {
+    if(selected.dangerMenu === "선택"){
+      setSpeDanger(null);
+    } else {
+      setSpeDanger(selected.dangerMenu);
+    }
   };
 
   // 기간 콜백
@@ -42,11 +70,28 @@ export default function FrequentIns() {
     setSpeEndDate(value.endDate);
   };
 
+  // // 점검자 콜백
+  // const handleInspectorDataChange = (selected) => {
+  //   setSpePerson(selected.inspectorName);
+  //   setSpeEmpNum(selected.inspectorNum);
+  // };
+
   // 점검자 콜백
   const handleInspectorDataChange = (selected) => {
     setSpePerson(selected.inspectorName);
     setSpeEmpNum(selected.inspectorNum);
+
+    if(selected.speComplete === "OK"){
+      setSpeComplete(SpeStatus.OK);
+    } else if (selected.speComplete === "NO"){
+      setSpeComplete(SpeStatus.NO);
+    } else {
+      setSpeComplete(null);
+    }
+
   };
+
+
 
   // 세션스토리지 값 비교
   const isLoggedIn = sessionStorage.getItem('username','admin') !== null;
@@ -60,6 +105,7 @@ export default function FrequentIns() {
           params: {
             spePart,
             speFacility,
+            speDanger,
             speStartDate,
             speEndDate,
             speComplete,
@@ -78,6 +124,9 @@ export default function FrequentIns() {
               autoClose: 1000, // 1초 동안 알림 표시
 
             });
+          } else {
+            // 검색 결과가 있을 경우 searchResults에 세팅
+            setSearchData(speListFromBack);
           }
         })
 
@@ -99,7 +148,7 @@ export default function FrequentIns() {
               <FrequentInsArea onFormDataChange={handlePartDataChange}/> {/* 영역 */}
               <EquipmentName onFormDataChange={handleFacilityDataChange}
                              selectedPart={spePart}/> {/* 설비명 */}
-              <DangerousType ></DangerousType>
+              <DangerousType onFormDataChange={handleDangerDataChange}></DangerousType>   {/* 위험분류 */}
               <Period onFormDataChange={handleDateDataChange}/> {/* 기간 */}
             </div>
             <div className="flex items-center">
