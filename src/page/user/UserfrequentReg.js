@@ -27,6 +27,7 @@ import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 function UserfrequentReg() {
   const { masterdataPart } = useParams(); // url 영역 파라미터
   const { masterdataId } = useParams(); // url 설비 파라미터
+  const [updateSpeId, setUpdateSpeId] = useState("");
   const [speEmpNum, setSpeEmpNum] = useState("");
   const [spePerson, setSpePerson] = useState("");
   const [speEmail, setSpeEmail] = useState(""); // 조치자 이메일정보
@@ -202,6 +203,7 @@ function UserfrequentReg() {
           // 수정할 파일 데이터 업데이트
           setFileDatas(response.data.specialData.speFiles);
 
+          setUpdateSpeId(speId);
           console.log(speData);
           })
           .catch((error) => {
@@ -318,11 +320,11 @@ function UserfrequentReg() {
           </tr>
           <tr>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">위험원인</td>
-            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speTrap}</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speCause}</td>
           </tr>
           <tr>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">부상부위</td>
-            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speCause}</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speTrap}</td>
           </tr>
           <tr>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">위험성평가</td>
@@ -414,7 +416,7 @@ function UserfrequentReg() {
       <Falsetrap onFormDataChange={handleFalsetrapDataChange}
                  defaultState={speTrap}/>{" "} {/* 실수함정 */}
       <RiskAssessment onFormDataChange={handleRiskAssessmentDataChange}
-                      defaultState={speRiskAssess}/>{" "} {/* 위험성평가 */}
+                      defaultState={speRiskAssess} updateSpeId={updateSpeId}/>{" "} {/* 위험성평가 */}
       {/* 위험분류 표 */}
       <div className="flex flex-col justify-center items-center border border-gray-300 px-3 mx-3 ">
         <p className=" font-semibold text-lg">평가표</p>
@@ -452,7 +454,7 @@ function UserfrequentReg() {
           조치요청
         </span>
         <ActionRquest onFormDataChange={handleActionRequestDetailsDataChange}
-                      onChange={handleStaticEmailChange} defaultState={speActData}/>{" "}
+                      onChange={handleStaticEmailChange} defaultState={speActData} updateSpeId={updateSpeId}/>{" "}
       </div>
       {/* 조치요청 */}
       {/* 혜영추가-완료여부 */}

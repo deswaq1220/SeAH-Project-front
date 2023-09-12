@@ -147,7 +147,6 @@ function UserfrequentCompleteReg() {
     if (speId) {
      axios
         .get(`${process.env.REACT_APP_API_BASE_URL}/user/special/detail/${speId}`)
-        //  .get(`http://localhost:8081/edudetails/${eduId}`)
         .then((response) => {
           // 가져온 데이터로 상태 업데이트
           console.log(response.data);
@@ -186,11 +185,9 @@ function UserfrequentCompleteReg() {
           setSpeActContent(response.data.specialData.speActContent);
 
           setSpeComplete(response.data.specialData.speComplete);
-          // setSpeComplete(response.data.specialData.speComplete);
+
           // 수정할 파일 데이터 업데이트
           setFileDatas(response.data.specialData.speFiles);
-
-          // setComplete(ture);
 
           console.log(speData);
           })

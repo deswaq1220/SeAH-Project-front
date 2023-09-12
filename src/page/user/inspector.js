@@ -10,8 +10,7 @@ export default function Inspector({ onFormDataChange , defaultState, complete}) 
       inspectoremail: "",
     });
   
-    // const [seahDomain, setSeahDomain] = useState("@seah.co.kr");
-    const [seahDomain, setSeahDomain] = useState("@naver.com");
+    const [seahDomain, setSeahDomain] = useState("@seah.co.kr");
 
   // 수정/완료등록일 경우
     useEffect(() => {
