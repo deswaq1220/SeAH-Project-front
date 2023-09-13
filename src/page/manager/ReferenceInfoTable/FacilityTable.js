@@ -5,6 +5,7 @@ import FacilityReg from "../ReferebceInfoForm/FacilityReg";
 import { toast, ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
 import DeleteRegInfoModal from "../../../components/DeleteRegInfoModal";
+import "../../../style/reset.css";
 
 export default function FacilityTable() {
   const [facilityList, setFacilityList] = useState([]);
@@ -186,9 +187,15 @@ export default function FacilityTable() {
                         key={facility.masterdataId}
                         className="divide-x divide-gray-200"
                       >
-                        <td className="whitespace-nowrap text-sm font-medium text-gray-900 sm:pl-4 px-4">
-                          {facility.masterdataFacility}
-                        </td>
+                        <td
+                          className="whitespace-nowrap text-sm font-medium text-gray-900 sm:pl-4 px-4"
+                          dangerouslySetInnerHTML={{
+                            __html: facility.masterdataFacility.replace(
+                              /퀜/g,
+                              '<span class="special-font">퀜</span>'
+                            ),
+                          }}
+                        />
                         <td className="whitespace-nowrap text-sm font-medium text-gray-900 sm:pl-4 px-4">
                           {facility.masterdataPart}
                         </td>

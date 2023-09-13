@@ -4,7 +4,6 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import axios from "axios"; // axios를 임포트]
 import { toast } from "react-toastify";
 
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -21,57 +20,87 @@ export default function FacilityReg({ fetchData, handleNewData }) {
         const response = await axios.get(
           `${process.env.REACT_APP_API_BASE_URL}/admin/master/partdropdown`
         );
-        
+
         // 문자열 배열을 객체로 변환하여 새로운 배열 생성
-        const optionsArray = response.data.specialPartList.map((name, index) => ({
-          id: index + 1,
-          name: name,
-        }));
-        
+        const optionsArray = response.data.specialPartList.map(
+          (name, index) => ({
+            id: index + 1,
+            name: name,
+          })
+        );
+
         setSpecialPartList(optionsArray);
-        setSelected(optionsArray[0])
+        setSelected(optionsArray[0]);
         console.log(response.data);
       } catch (error) {
         console.error("서버 요청 오류:", error);
       }
     }
-  
+
     fetchOptions();
   }, []);
 
   const handleRegister = async () => {
+    // 필수 항목 확인
+    const requiredFields = [
+      { value: facilityCode, name: "설비코드" },
+      { value: facilityName, name: "설비명" },
+      { value: selected?.name, name: "영역" },
+    ];
+
+    for (let field of requiredFields) {
+      if (!field.value || field.value.trim() === "") {
+        toast.warn(`${field.name} 항목이 작성되지 않았습니다.`, {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: true,
+        });
+        return;
+      }
+    }
+
+    if (selected?.name === "선택") {
+      // 선택된 값이 '선택'인 경우
+      toast.warn(`영역 항목이 선택되지 않았습니다.`, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: true,
+      });
+      return;
+    }
+
     const requestData = {
       masterdataFacility: facilityName,
       masterdataPart: selected.name,
-      masterdataId : facilityCode
+      masterdataId: facilityCode,
     };
 
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_BASE_URL}/admin/master`,
         requestData
-      ); //세아
-      // const response = await axios.post("http://localhost:8081/master", requestData); // POST 요청 보내기
+      );
+
       console.log("서버 응답:", response.data);
+
       fetchData();
-      // Add this line to update FacilityTable's state directly
+
       handleNewData(response.data);
+
+      // 등록 후 입력 필드 초기화
+      setFacilityCode("");
+      setFacilityName("");
+      setSelected(null);
     } catch (error) {
       console.error("서버 요청 오류:", error);
+
       toast.error("기존 코드 정보와 중복됩니다. 다른 코드를 사용하세요.", {
         position: "top-center",
         autoClose: 3000,
         hideProgressBar: true,
-        style: {
-          marginTop: "5rem", // 원하는 세로 위치로 조정
-        },
       });
     }
   };
-
-
-
-
 
   return (
     <div className="px-8">
@@ -81,40 +110,40 @@ export default function FacilityReg({ fetchData, handleNewData }) {
       <div id="charge" className="flex  items-baseline justify-start">
         <div className="sm:col-span-3">
           <label
-              htmlFor="FacilityCode"
-              className="block text-sm font-medium leading-6 text-gray-900"
+            htmlFor="FacilityCode"
+            className="block text-sm font-medium leading-6 text-gray-900"
           >
             설비코드
           </label>
 
-            <div className="mt-2">
-              <input
-                  type="text"
-                  name="FacilityCode"
-                  id="FacilityCode"
-                  value={facilityCode}
-                  onChange={(e) => setFacilityCode(e.target.value)} // 입력 값 변경 시 설비명 상태 업데이트
-                  autoComplete="family-name"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
-              />
-            </div>
+          <div className="mt-2">
+            <input
+              type="text"
+              name="FacilityCode"
+              id="FacilityCode"
+              value={facilityCode}
+              onChange={(e) => setFacilityCode(e.target.value)} // 입력 값 변경 시 설비명 상태 업데이트
+              autoComplete="family-name"
+              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
+            />
           </div>
+        </div>
         <div className="sm:col-span-3 ml-2">
           <label
-              htmlFor="Facilityname"
-              className="block text-sm font-medium leading-6 text-gray-900"
+            htmlFor="Facilityname"
+            className="block text-sm font-medium leading-6 text-gray-900"
           >
             설비명
           </label>
           <div className="mt-2">
             <input
-                type="text"
-                name="Facilityname"
-                id="Facilityname"
-                value={facilityName}
-                onChange={(e) => setFacilityName(e.target.value)} // 입력 값 변경 시 설비명 상태 업데이트
-                autoComplete="family-name"
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
+              type="text"
+              name="Facilityname"
+              id="Facilityname"
+              value={facilityName}
+              onChange={(e) => setFacilityName(e.target.value)} // 입력 값 변경 시 설비명 상태 업데이트
+              autoComplete="family-name"
+              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
             />
           </div>
         </div>
