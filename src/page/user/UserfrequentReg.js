@@ -52,7 +52,7 @@ function UserfrequentReg() {
   const [fileDatas, setFileDatas] = useState([]);   // 백에서 가져온 파일정보(업데이트정보)
   const [deleteFileIds, setDeleteFileIds] = useState([]);
   const emailTitle = `${spePerson}님의 수시점검 요청메일입니다`;
-
+  const [isLoading, setIsLoading] = useState(true);
   const [speData, setSpeData] = useState({
     employeenumber :"",
     inspectorname: "",
@@ -215,16 +215,23 @@ function UserfrequentReg() {
 
           setUpdateSpeId(speId);
           console.log(speData);
+          
+          setIsLoading(false);
         })
         .catch((error) => {
           // 에러 처리
           console.error("교육 세부 정보를 가져오는 중 에러 발생:", error);
         });
-    }
-  }, [speId]);
+      } else {
+        // speId 값이 없으면 로딩 상태 업데이트
+        setIsLoading(false);
+      }
+    }, [speId]);
 
 
-
+  if (isLoading) {
+    return <div>Loading...</div>; // or return null; or a loading spinner;
+  }
 
   const handleFormSubmit  = () => {
 

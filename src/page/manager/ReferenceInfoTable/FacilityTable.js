@@ -198,7 +198,7 @@ export default function FacilityTable() {
                               to={`/special/${facility.masterdataPart}/${facility.masterdataId}`}
                             >
                               <QRCode
-                                value={`http://172.20.20.252:3000/special/${facility.masterdataPart}/${facility.masterdataFacility}`}
+                                value={`http://172.20.20.252:3000/special/${facility.masterdataPart}/${facility.masterdataId}`}
                               />
                             </Link>
                           ) : (
