@@ -103,7 +103,7 @@ export default function UserSelectInspection() {
     }
 
     fetchDataWithAxios(masterdataPart, masterdataId);
-  }, );
+  },[] );
 
   const frequent = [
     {
