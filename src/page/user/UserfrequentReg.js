@@ -52,7 +52,7 @@ function UserfrequentReg() {
   const [fileDatas, setFileDatas] = useState([]);   // 백에서 가져온 파일정보(업데이트정보)
   const [deleteFileIds, setDeleteFileIds] = useState([]);
   const emailTitle = `${spePerson}님의 수시점검 요청메일입니다`;
-
+  const [isLoading, setIsLoading] = useState(true);
   const [speData, setSpeData] = useState({
     employeenumber :"",
     inspectorname: "",
@@ -215,16 +215,25 @@ function UserfrequentReg() {
 
           setUpdateSpeId(speId);
           console.log(speData);
+          
+          setIsLoading(false);
         })
         .catch((error) => {
           // 에러 처리
           console.error("교육 세부 정보를 가져오는 중 에러 발생:", error);
         });
-    }
-  }, []);
+      } else {
+        // speId 값이 없으면 로딩 상태 업데이트
+        setIsLoading(false);
+      }
+    }, [speId]);
 
+  {/*  }*/}
+  {/*}, []);*/}
 
-
+  if (isLoading) {
+    return <div>Loading...</div>; // or return null; or a loading spinner;
+  }
 
   const handleFormSubmit  = () => {
 
@@ -257,6 +266,33 @@ function UserfrequentReg() {
     //   for (let [key, value] of formData.entries()) {
     //     console.log(`${key}: ${value}`);
     // }
+
+    const requiredFields = [
+      { value: speEmpNum, name: "사원번호" },
+      { value: spePerson, name: "이름" },
+      { value: speEmail, name: "이메일" },
+      { value: speFacility, name: "설비명" },
+      { value: speDanger, name: "위험분류" },
+      { value: speInjure, name: "부상부위" },
+      { value: speCause, name:"위험원인"},
+      { value: speTrap, name:"실수함정"},
+      { value: speRiskAssess, name:"위험성평가"},
+      { value: speContent, name:"점검내용"},
+      { value: speActEmail, name:"조치요청"},
+      { value: speContent, name:"점검내용"},
+      // ... 나머지 필요한 필드 추가 ...
+    ];
+  
+    for (let field of requiredFields) {
+        if (!field.value) {
+          toast.warn(`${field.name} 항목이 작성되지 않았습니다.`, {
+            position:"top-center",
+            autoClose :2000,
+            hideProgressBar:true,
+          });
+          return;
+        }
+     }
 
 
     if (speId) {
