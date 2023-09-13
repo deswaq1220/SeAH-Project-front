@@ -31,7 +31,7 @@ function EduStatics() {
       const currentMonth = getMonth(currentDate) + 1;
       const currentYear = getYear(currentDate);
       // 월&카테고리 별 교육시간 총 합계
-      const response = await  axios.get(
+      const response = await axios.get(
         `${process.env.REACT_APP_API_BASE_URL}/admin/edustatistics/getmonthlyedulist`, {
         params: {
           year: currentYear,
@@ -45,7 +45,7 @@ function EduStatics() {
     } catch (error) {
       console.error("데이터 가져오기 오류:", error);
     }
-  
+
     console.log(`선택한 카테고리: ${category}`);
   };
 
@@ -54,8 +54,8 @@ function EduStatics() {
   const getCurrentPageItems = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    console.log("검색 리스트--------?"  + eduList);
-    
+    console.log("검색 리스트--------?" + eduList);
+
     return eduList.slice(startIndex, endIndex);
   };
 
@@ -72,7 +72,7 @@ function EduStatics() {
       try {
         const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
         const currentYear = getYear(currentDate);
-        
+
         // 월&카테고리 별 교육시간 총 합계
         const response = await axios.get(
           `${process.env.REACT_APP_API_BASE_URL}/admin/edustatistics/getmonthlyruntime`, {   // 세아
@@ -99,7 +99,7 @@ function EduStatics() {
   }, [currentDate]);
 
   useEffect(() => {
-    const  getStartPage =async  () => {
+    const getStartPage = async () => {
       try {
         const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
         const currentYear = getYear(currentDate);
@@ -113,7 +113,7 @@ function EduStatics() {
           },
         });
         const data = response.data;
-    
+
         setEduList(data);
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
@@ -123,46 +123,46 @@ function EduStatics() {
     getStartPage();
   }, [currentDate]);
 
-    // 엑셀
-    const createExcelData = (eduList) => {
+  // 엑셀
+  const createExcelData = (eduList) => {
 
-      // 교육 정보를 바탕으로 엑셀 데이터를 생성하는 로직 작성
-      const data = eduList.map((item) => ({
-        제목: `${item[1]}`,
-        교육일정: `${item[2]}`,
-        교육시간: `${item[3]} 분`,
-      }));
-        
-      return data;
-    };
-    
-    const handleExport = () => {
-      
-      if (!eduList || eduList.length === 0) {
-        console.log("데이터가 없습니다.");
-        return;
-      }
-      // 엑셀 데이터 생성
-      const data = createExcelData(eduList);
-      
-      console.log("저장");
-      // 엑셀 시트 생성
-      const worksheet = XLSX.utils.json_to_sheet(data);
-  
-      // 엑셀 워크북 생성
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-  
-      // 엑셀 파일 저장
-      const excelBuffer = XLSX.write(workbook, {
-        bookType: "xlsx",
-        type: "array",
-      });
-      const excelFile = new Blob([excelBuffer], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      });
-      saveAs(excelFile, `안전교육시간.xlsx`);
-    };
+    // 교육 정보를 바탕으로 엑셀 데이터를 생성하는 로직 작성
+    const data = eduList.map((item) => ({
+      제목: `${item[1]}`,
+      교육일정: `${item[2]}`,
+      교육시간: `${item[3]} 분`,
+    }));
+
+    return data;
+  };
+
+  const handleExport = () => {
+
+    if (!eduList || eduList.length === 0) {
+      console.log("데이터가 없습니다.");
+      return;
+    }
+    // 엑셀 데이터 생성
+    const data = createExcelData(eduList);
+
+    console.log("저장");
+    // 엑셀 시트 생성
+    const worksheet = XLSX.utils.json_to_sheet(data);
+
+    // 엑셀 워크북 생성
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+    // 엑셀 파일 저장
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+    const excelFile = new Blob([excelBuffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    saveAs(excelFile, `안전교육시간.xlsx`);
+  };
 
 
 
@@ -269,12 +269,12 @@ function EduStatics() {
                 {getFormattedDate()} 안전교육 목록입니다
               </h1>
               <button
-              type="button"
-              className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-              onClick={handleExport}
-            >
-              엑셀 저장
-            </button>
+                type="button"
+                className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                onClick={handleExport}
+              >
+                엑셀 저장
+              </button>
             </div>
           </div>
           <div className="mt-8 flow-root">
@@ -324,15 +324,15 @@ function EduStatics() {
                               {edu[1]}
                         </td> */}
                         <td>
-                        <Link
-                              to={`/edudetails/${edu[4]}`} // 해당 아이디 디테일 페이지로 이동하는 경로 설정
-                              className="font-medium text-seahColor hover:text-seahDeep "
-                            >
-                              {edu[1]}
-                            </Link>
-                            </td>
+                          <Link
+                            to={`/edudetails/${edu[4]}`} // 해당 아이디 디테일 페이지로 이동하는 경로 설정
+                            className="font-medium text-seahColor hover:text-seahDeep "
+                          >
+                            {edu[1]}
+                          </Link>
+                        </td>
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                        {format(new Date(edu[2]), 'yyyy-MM-dd HH시 mm분')}
+                          {format(new Date(edu[2]), 'yyyy-MM-dd HH시 mm분')}
                         </td>
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
                           {edu[3]} 분

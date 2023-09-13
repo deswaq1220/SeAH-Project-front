@@ -154,7 +154,7 @@ function EduAttenStatics() {
   };
 
 
-  // 엑셀!!!!!!!!!!!
+  // 엑셀
   const createExcelData = (attenList, attenNameSumEduTimeList) => {
     const categoryHeaders = {
       전체_수강시간: attenNameSumEduTimeList[0]+"분",
