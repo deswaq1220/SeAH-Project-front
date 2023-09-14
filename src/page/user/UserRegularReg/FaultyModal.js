@@ -132,7 +132,7 @@ export default function FaultyModal({ index, actForm, id }) {
                       </Dialog.Title>
                       <Regularactionrequest
                         onFormDataChange={handleActionRequestDetailsDataChange}
-                        onChange={handleStaticEmailChange}
+                        dataChange={handleStaticEmailChange}
                       />
                     </div>
                     <div className="mt-10">
