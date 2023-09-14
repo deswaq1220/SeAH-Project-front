@@ -3,28 +3,27 @@ import UserfrequentReg from "./UserfrequentReg";
 import { useState, useEffect } from "react";
 export default function Inspector({ onFormDataChange , defaultState, complete}) {
   // 상태설정
+  const [formData, setFormData] = useState({
+    employeenumber: "",
+    inspectorname: "",
+    inspectoremail: "",
+  });
 
-    const [formData, setFormData] = useState({
-      employeenumber: "",
-      inspectorname: "",
-      inspectoremail: "",
-    });
-  
-    const [seahDomain, setSeahDomain] = useState("@seah.co.kr");
-    // const [seahDomain, setSeahDomain] = useState("@naver.com");
+  // const [seahDomain, setSeahDomain] = useState("@seah.co.kr");
+  const [seahDomain, setSeahDomain] = useState("@naver.com");
 
-  // 수정/완료등록일 경우
-    useEffect(() => {
-      console.log("test"+ defaultState);
-      console.log(defaultState);
-      if (defaultState) {
-        setFormData({
-          employeenumber: defaultState.employeenumber,
-          inspectorname: defaultState.inspectorname,
-          inspectoremail: defaultState.inspectoremail,
-        });
-      }
-    }, [defaultState]);
+// 수정/완료등록일 경우
+  useEffect(() => {
+    console.log("test"+ defaultState);
+    console.log(defaultState);
+    if (defaultState) {
+      setFormData({
+        employeenumber: defaultState.employeenumber,
+        inspectorname: defaultState.inspectorname,
+        inspectoremail: defaultState.inspectoremail,
+      });
+    }
+  }, [defaultState]);
 
   // 입력란 변경 시 상태 업데이트 함수
   const handleInputChange = (e) => {

@@ -1,8 +1,8 @@
 import React, { useState, Fragment, useCallback, useEffect } from "react";
 import Header from "../../components/Header";
-import { Listbox, Transition } from "@headlessui/react";
-import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from 'react-toastify';
+import { Listbox, Transition } from "@headlessui/react";
+
 import {
   CheckIcon,
   ChevronUpDownIcon,
@@ -18,6 +18,7 @@ import { FilePond, registerPlugin } from "react-filepond";
 import "filepond/dist/filepond.min.css"; // 스타일링을 위한 CSS
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 // 추가 플러그인을 라이브러리에 등록
 registerPlugin(FilePondPluginImagePreview);
@@ -129,6 +130,7 @@ const handleFileUpload = (acceptedFiles) => {
   // console.log(acceptedFiles);
 };
 
+
 //교육일지 등록
 function SafetyEduReg() {
   const {
@@ -168,6 +170,11 @@ function SafetyEduReg() {
 
   } = useSafetyEduForm();
   const [files, setFiles] = useState(null);
+
+  const handleCancelClick = () => {
+    // 취소하기 버튼을 눌렀을 때 /eduMain으로 이동
+    navigate('/eduMain');
+  };
   
   return (
     <div>
@@ -555,6 +562,7 @@ function SafetyEduReg() {
                           width: "400px",
                         },
                       });
+
                       return;
                     }
                   },
@@ -624,6 +632,7 @@ function SafetyEduReg() {
               <button
                 type="button"
                 className="text-sm font-semibold leading-6 text-gray-900"
+                onClick={handleCancelClick}
               >
                 취소하기
               </button>

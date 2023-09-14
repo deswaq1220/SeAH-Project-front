@@ -257,6 +257,7 @@ export default function ActionRquest({ onFormDataChange, defaultState, onChange,
                 <button
                   className="px-4 py-2 text-black border rounded-full hover:bg-seahColor hover:text-white ml-1"
                   onClick={handleAddInstance}
+                  disabled={complete || updateSpeId}
                 >
                   +
                 </button>
@@ -264,6 +265,7 @@ export default function ActionRquest({ onFormDataChange, defaultState, onChange,
                 <button
                   className="px-4 py-2 text-black border rounded-full hover:bg-seahColor hover:text-white ml-1"
                   onClick={() => handleDeleteInstance(index)}
+                  disabled={complete || updateSpeId}
                 >
                   -
                 </button>

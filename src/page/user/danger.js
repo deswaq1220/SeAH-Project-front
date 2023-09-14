@@ -42,7 +42,7 @@ export default function Danger({ onFormDataChange, defaultState, complete }) {
     }
 
     specialDangerFetchDataWithAxios(masterdataPart, masterdataId);
-  }, [masterdataPart, masterdataId, defaultState]);
+  }, [defaultState]);
 
 
 
