@@ -244,7 +244,7 @@ export default function UserSelectInspection() {
                   </span>
                   <span
                     className={
-                      item.current ? "text-green-600" : "text-gray-700"
+                      item.current ? "text-blue-600" : "text-gray-700"
                     }
                   >
                     {item.name}
