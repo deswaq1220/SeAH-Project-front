@@ -97,6 +97,10 @@ function App() {
         <Route path="/userfrequentreg" element={<UserfrequentReg/>}></Route>{/* 수시점검 등록페이지 */}
         <Route path="/special/detail/:speId" element={<UserFrequentDetails/>}></Route>{/* 수시점검 상세페이지 */}
 
+        {/* 정기점검 */}
+        <Route path="/regular" element={<RegularMain/>}></Route>{/* 관리자,사용자 정기점검 목록 */}
+        <Route path="/regulardetails/:regularId" element={<UserRegularDetails/>}></Route>{/* 관리자,사용자 정기점검 목록 */}
+
 
         {/* 사용자 정기점검 */}
         <Route path="/regularreg" element={<UserRegularReg/>}></Route>{/* 정기점검 등록페이지 */}
