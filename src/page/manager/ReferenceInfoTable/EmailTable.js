@@ -2,10 +2,15 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Pagination from "../../../components/Pagination";
 import FacilityInfo from "../ReferebceInfoForm/FacilityInfo";
+import { toast } from "react-toastify";
+import DeleteRegInfoModal from "../../../components/DeleteRegInfoModal";
+
 export default function EmailTable() {
   const [people, setPeople] = useState({ email: [] });
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
   const [editingRow, setEditingRow] = useState(null);
   const [editedValues, setEditedValues] = useState({
@@ -16,6 +21,19 @@ export default function EmailTable() {
   });
 
   const [emailList, setEmailList] = useState([]);
+
+  const handleDeleteConfirm = async () => {
+    if (deleteId) {
+      await deleteEmail(deleteId);
+    }
+    setDeleteId(null);
+    setIsDeleteModalOpen(false);
+  };
+
+  const handleShowConfirmDialog = (emailId) => {
+    setDeleteId(emailId);
+    setIsDeleteModalOpen(true);
+  };
 
   useEffect(() => {
     fetchData();
@@ -39,7 +57,15 @@ export default function EmailTable() {
         `${process.env.REACT_APP_API_BASE_URL}/admin/master/email/update/${emailId}`,
         editedValues
       );
-      console.log("이메일이 수정되었습니다");
+      toast.success("이메일 정보가 정상적으로 수정되었습니다.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        style: {
+          marginTop: "5rem", // 원하는 세로 위치로 조정
+        },
+      });
+
       setEditingRow(null);
       setEditedValues({
         emailPart: "",
@@ -49,6 +75,14 @@ export default function EmailTable() {
       });
       fetchData();
     } catch (error) {
+      toast.error("이메일 정보 수정에 실패하였습니다. 다시 시도해주세요.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        style: {
+          marginTop: "5rem", // 원하는 세로 위치로 조정
+        },
+      });
       console.error("Error updating email:", error);
     }
   }
@@ -58,7 +92,14 @@ export default function EmailTable() {
       await axios.delete(
         `${process.env.REACT_APP_API_BASE_URL}/admin/master/email/delete/${emailId}`
       );
-      console.log("이메일이 삭제되었습니다");
+      toast.success("이메일 정보가 정상적으로 삭제되었습니다.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        style: {
+          marginTop: "5rem", // 원하는 세로 위치로 조정
+        },
+      });
       fetchData(); // 데이터 다시 불러오기
     } catch (error) {
       console.error("Error deleting email:", error);
@@ -250,7 +291,9 @@ export default function EmailTable() {
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-left text-sm font-medium sm:pr-6 lg:pr-8">
                         <button
                           className="text-seahColor hover:text-seahDeep"
-                          onClick={() => deleteEmail(person.emailId)}
+                          onClick={() =>
+                            handleShowConfirmDialog(person.emailId)
+                          }
                         >
                           삭제
                         </button>
@@ -267,6 +310,11 @@ export default function EmailTable() {
           itemsPerPage={itemsPerPage}
           totalItems={people.email.length}
           setCurrentPage={setCurrentPage}
+        />
+        <DeleteRegInfoModal
+          open={isDeleteModalOpen}
+          setOpen={setIsDeleteModalOpen}
+          onConfirm={handleDeleteConfirm}
         />
       </div>
     </>

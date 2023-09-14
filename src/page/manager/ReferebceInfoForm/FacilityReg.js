@@ -2,7 +2,7 @@ import { Fragment, useState, useEffect } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import axios from "axios"; // axios를 임포트]
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -41,6 +41,34 @@ export default function FacilityReg({ fetchData, handleNewData }) {
   }, []);
 
   const handleRegister = async () => {
+    // 필수 항목 확인
+    const requiredFields = [
+      { value: facilityCode, name: "설비코드" },
+      { value: facilityName, name: "설비명" },
+      { value: selected?.name, name: "영역" },
+    ];
+
+    for (let field of requiredFields) {
+      if (!field.value || field.value.trim() === "") {
+        toast.warn(`${field.name} 항목이 작성되지 않았습니다.`, {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: true,
+        });
+        return;
+      }
+    }
+
+    if (selected?.name === "선택") {
+      // 선택된 값이 '선택'인 경우
+      toast.warn(`영역 항목이 선택되지 않았습니다.`, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: true,
+      });
+      return;
+    }
+
     const requestData = {
       masterdataFacility: facilityName,
       masterdataPart: selected.name,
@@ -51,20 +79,26 @@ export default function FacilityReg({ fetchData, handleNewData }) {
       const response = await axios.post(
         `${process.env.REACT_APP_API_BASE_URL}/admin/master`,
         requestData
-      ); //세아
-      // const response = await axios.post("http://localhost:8081/master", requestData); // POST 요청 보내기
+      );
+
       console.log("서버 응답:", response.data);
+
       fetchData();
-      // Add this line to update FacilityTable's state directly
+
       handleNewData(response.data);
+
+      // 등록 후 입력 필드 초기화
+      setFacilityCode("");
+      setFacilityName("");
+      setSelected(null);
     } catch (error) {
       console.error("서버 요청 오류:", error);
+
       toast.error("기존 코드 정보와 중복됩니다. 다른 코드를 사용하세요.", {
         position: "top-center",
         autoClose: 3000,
         hideProgressBar: true,
       });
-    
     }
   };
 

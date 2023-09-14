@@ -13,19 +13,32 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function IsCompelete({ onFormDataChange }) {
- const [completionStatusSelected, setCompletionStatusSelected] = useState(completionStatusOptions[0]);
+export default function IsCompelete({ onFormDataChange, complete }) {
+ // const [completionStatusSelected, setCompletionStatusSelected] = useState(completionStatusOptions[0]);
+  const [completionStatusSelected, setCompletionStatusSelected] = useState(
+    completionStatusOptions.find((option) => option.id === (complete ? 2 : 1))
+  );
 
- // 선택 시 값 업데이트, onFormDataChange 호출
+
+  // 선택 시 값 업데이트, onFormDataChange 호출
  const handleCompletionStatusChange  = (completionStatusSelected) => {
   setCompletionStatusSelected(completionStatusSelected);
   onFormDataChange(completionStatusSelected.value);
  };
 
+  // 처음 세팅된 값을 onFormDataChange로 보내기
+  useEffect(() => {
+    onFormDataChange(completionStatusSelected.value);
+  }, [completionStatusSelected, onFormDataChange]);
+
  // 처음 세팅된 미완료 선택 안해도 그 값으로 업데이트되게
- useEffect(() => {
-  handleCompletionStatusChange(completionStatusOptions[0]);
- }, []); // 초기화될 때 한 번만 실행하도록 빈 배열 전달
+ // useEffect(() => {
+ //  handleCompletionStatusChange(completionStatusOptions[0]);
+ // }, []); // 초기화될 때 한 번만 실행하도록 빈 배열 전달
+  useEffect(() => {
+    setCompletionStatusSelected(completionStatusOptions.find((option) => option.id === (complete ? 2 : 1)));
+  }, [complete]); // 'complete' prop이 변경될 때마다 실행
+
 
   return (
     <div id="injured" className="flex items-baseline justify-start">
@@ -64,7 +77,8 @@ export default function IsCompelete({ onFormDataChange }) {
                     {completionStatusOptions.map((option) => (
                       <Listbox.Option
                         key={option.id}
-                        disabled={option.id === 2}
+                        // disabled={option.id === 2}
+                        disabled={option.id === (complete ? 1 : 2)}
                         className={({ active, disabled }) =>
                             classNames(
                                 active

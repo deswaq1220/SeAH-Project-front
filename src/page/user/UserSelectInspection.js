@@ -93,7 +93,7 @@ export default function UserSelectInspection() {
           setMonthlyAll(data.monthlyAll);
           setMonthlyComplete(data.monthlyComplete);
           setMonthlyNoComplete(data.monthlyNoComplete);
-          console.log(data); // JSON 데이터가 출력됩니다.
+          console.log(data.monthlyAll); // JSON 데이터가 출력됩니다.
 
         })
         .catch((error) => {
@@ -103,7 +103,7 @@ export default function UserSelectInspection() {
     }
 
     fetchDataWithAxios(masterdataPart, masterdataId);
-  }, [masterdataPart, masterdataId]);
+  },[] );
 
   const frequent = [
     {
@@ -127,9 +127,6 @@ export default function UserSelectInspection() {
       current: false,
       iconForeground: "text-red-600",
     },
-    // { name: 'Calendar', href: '#', icon: CalendarIcon, count: '20+', current: false },
-    // { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
-    // { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
   ];
 
   const goToPreviousMonth = () => {
@@ -248,8 +245,9 @@ export default function UserSelectInspection() {
           <button
             type="button"
             className="rounded-md bg-seahColor px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor my-4"
+            onClick={() => navigate("/regularinsstatus")}
           >
-            정기점검 점검현황 보기
+            정기점검 현황
           </button>
           <p className="text-lg font-semibold">수시점검</p>
           <ul role="list" className="-mx-2 space-y-1">
@@ -292,7 +290,7 @@ export default function UserSelectInspection() {
             onClick={() => navigate("/frequentinspection")}
             className="rounded-md bg-seahColor px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mt-4"
           >
-            수시점검 점검현황 보기
+            수시점검 현황
           </button>
         </nav>
       </div>

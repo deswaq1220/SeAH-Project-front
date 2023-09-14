@@ -19,6 +19,7 @@ export default function FaultyModal({ index, actForm, id }) {
   const [regularActContent, setRegularActContent] = useState("");
   const [files, setFiles] = useState(null);
   const [content, setContent] = useState(""); // content 상태 초기화
+  const [staticEmailPerson, setStaticEmailPerson] = useState([]);
 
 
   const handleContentChange = (e) => {
@@ -34,6 +35,17 @@ export default function FaultyModal({ index, actForm, id }) {
     setRegularActEmail(data.speActEmail);
   };
 
+  // 고정수신자
+  const handleStaticEmailChange = (staticEmailList) => {
+
+    // staticEmailList가 배열인 경우, 각 이메일 주소를 추출하여 배열에 추가
+    const staticEmailAddresses = Array.isArray(staticEmailList)
+        ? staticEmailList.map((item) => item.emailAdd)
+        : [staticEmailList.emailAdd];
+
+    setStaticEmailPerson(staticEmailAddresses);
+  };
+
   const handleSaveClick = async()=> {
 // actForm 함수 호출
       actForm({
@@ -43,20 +55,18 @@ export default function FaultyModal({ index, actForm, id }) {
         regularActEmail: regularActEmail,
         regularActContent : content,
         files: files,
+        staticEmailPerson: staticEmailPerson,
       });
-//    try{
-//      const dataSave = {
-//        regularActEmail,
-//        regularActPerson,
-//        regularActContent
-//      };
-//      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/regular/new`, dataSave);
-//      //모달창 닫기
       setOpen(false);
-//    } catch(error){
-//      console.error("개선대책 조치 등록 오류",  error);
-//    }
   }
+
+   const handleCancelClick = async()=> {
+  // actForm 함수 호출
+//        actForm({
+//            isModal
+//        });
+        setOpen(false);
+    }
 
   
 
@@ -119,6 +129,7 @@ export default function FaultyModal({ index, actForm, id }) {
                       </Dialog.Title>
                       <Regularactionrequest
                         onFormDataChange={handleActionRequestDetailsDataChange}
+                        onChange={handleStaticEmailChange}
                       />
                     </div>
                     <div className="mt-10">
@@ -183,7 +194,7 @@ export default function FaultyModal({ index, actForm, id }) {
                   <button
                     type="button"
                     className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
-                    onClick={() => setOpen(false)}
+                    onClick={handleCancelClick}
                     ref={cancelButtonRef}
                   >
                     취소

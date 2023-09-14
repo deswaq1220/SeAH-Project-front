@@ -7,21 +7,22 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const status = [
-  { id: 1, name: '선택' },
-  { id: 2, name: '완료' },
-  { id: 3, name: '미완료' },
 
+const status = [
+  { id: 1, name: '선택', value:'00'},
+  { id: 2, name: '완료', value:'OK' },
+  { id: 3, name: '미완료', value:'NO' },
 ]
 // 점검자
 export default function Inspector({onFormDataChange}) {
+
   // 점검자정보
   const [inspectorData, setInspectorData] = useState({
     inspectorName: null,
     inspectorNum: null,
   });
 
-  const [selected, setSelected] = useState(status[0])
+  const [selected, setSelected] = useState(status[0]);
   // 입력란 변경 시 상태 업데이트 함수
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -30,14 +31,25 @@ export default function Inspector({onFormDataChange}) {
       ...inspectorData,
       [name]: value || null, // 빈 문자열이면 null로 설정
     }
+
     setInspectorData(updatedInspecFormDate);
+
     // 폼 데이터 업데이트 후에 콜백 호출
     onFormDataChange({
       inspectorName: updatedInspecFormDate.inspectorName,
       inspectorNum: updatedInspecFormDate.inspectorNum,
+      speComplete: selected.value,
     });
   };
 
+  const handleSelected = (selectedData) => {
+    setSelected(selectedData);
+    onFormDataChange({
+      inspectorName: inspectorData.inspectorName,
+      inspectorNum: inspectorData.inspectorNum,
+   speComplete: selectedData.value,
+    });
+  };
 
   return (
     <>
@@ -77,7 +89,7 @@ export default function Inspector({onFormDataChange}) {
           <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
           완료 여부
         </span>
-          <Listbox value={selected} onChange={setSelected}>
+          <Listbox value={selected} onChange={handleSelected}>
             {({ open }) => (
               <>
                 <div className="relative mt-2">

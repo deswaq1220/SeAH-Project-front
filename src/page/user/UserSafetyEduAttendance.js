@@ -1,7 +1,5 @@
 import { useState, Fragment, useCallback, useEffect } from "react";
-// import { format, addMonths, subMonths } from "date-fns";
 import { Listbox, Transition } from "@headlessui/react";
-// import { Link } from "react-router-dom";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import UserHeader from "../../components/UserHeader";
 import axios from "axios";
@@ -23,7 +21,6 @@ function UserSafetyEduAttendance() {
   const { eduId } = useParams();
   const [eduList, setEduList] = useState([]); // 안전교육 데이터를 담을 상태 변수
   const [eduData, setEduData] = useState(null);
-  // const [eduTitle, setEduTitle] = useState(null);
   const [eduTitle, setEduTitle] = useState("");
   const [isAttendanceCompleted, setIsAttendanceCompleted] = useState(false); // 출석 완료 여부 상태 변수
   const today = new Date();
@@ -51,10 +48,8 @@ function UserSafetyEduAttendance() {
     axios
       .post(
         `${process.env.REACT_APP_API_BASE_URL}/user/register/${eduId}`, // 세아
-        //  `http://localhost:8081/usereduatten/register/${eduId}`,
         requestData,
         {
-          //http://localhost:8081/usereduatten/register 이거는 진짜 사용할때
           headers: {
             "Content-Type": "application/json",
           },
@@ -100,7 +95,6 @@ function UserSafetyEduAttendance() {
       try {
         const response = await axios.get(
           `${process.env.REACT_APP_API_BASE_URL}/admin/edudetails/${eduId}` // 세아
-          //  `http://localhost:8081/edudetails/${eduId}`
         );
         console.log(response.data); // 서버로부터 받은 데이터 확인
         setEduList(response.data); // 해당 아이디에 해당하는 데이터를 상태 변수에 저장
@@ -111,7 +105,7 @@ function UserSafetyEduAttendance() {
     // GET 요청을 통해 eduTitle 가져오기
     axios
       .get(`${process.env.REACT_APP_API_BASE_URL}/user/register/${eduId}`) // 세아
-      // `http://localhost:8081/usereduatten/register/${eduId}`)
+    
       .then((response) => {
         // 응답 데이터에서 eduTitle 값을 추출하여 상태 업데이트
         setEduTitle(response.data.eduTitle);
@@ -122,7 +116,7 @@ function UserSafetyEduAttendance() {
       });
 
     fetchEduList(); // 데이터 가져오기 함수 호출
-  }, [eduId]); // eduId를 두 번째 인자로 넣어줌으로써 eduId가 변경될 때마다 useEffect가 실행되도록 함
+  }, [eduId]);
 
   useEffect(() => {
     axios
@@ -149,7 +143,7 @@ function UserSafetyEduAttendance() {
       .catch((error) => {
         console.error("Error fetching department data:", error);
       });
-  }, []); // 빈 배열을 두 번째 인자로 넣어줌으로써 컴포넌트가 마운트될 때만 useEffect가 실행되도록 함
+  }, []);
 
   return (
     <div>

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Pagination from "../../../components/Pagination";
 import DepartmentReg from "../ReferebceInfoForm/DepartmentReg";
+import { toast } from "react-toastify";
+import DeleteRegInfoModal from "../../../components/DeleteRegInfoModal";
 
 export default function DepartmentTable() {
   const [departments, setDepartments] = useState([]);
@@ -10,6 +12,21 @@ export default function DepartmentTable() {
   const [editingId, setEditingId] = useState(null);
   const [newName, setNewName] = useState("");
   const [newId, setNewId] = useState("");
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+
+  const handleDeleteConfirm = async () => {
+    if (deleteId) {
+      await deleteDepartment(deleteId);
+    }
+    setDeleteId(null);
+    setIsDeleteModalOpen(false);
+  };
+
+  const handleShowConfirmDialog = (departmentId) => {
+    setDeleteId(departmentId);
+    setIsDeleteModalOpen(true);
+  };
 
   const fetchData = async () => {
     try {
@@ -43,8 +60,24 @@ export default function DepartmentTable() {
         `${process.env.REACT_APP_API_BASE_URL}/admin/master/department/del/${departmentId}`
       );
       fetchData(); // 데이터 다시 불러오기
+      toast.success("부서 정보가 정상적으로 삭제되었습니다.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        style: {
+          marginTop: "5rem", // 원하는 세로 위치로 조정
+        },
+      });
     } catch (error) {
-      console.error("부서 삭제 오류:", error);
+      toast.error("부서 정보 삭제에 실패하였습니다. 다시 시도해주세요.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        style: {
+          marginTop: "5rem", // 원하는 세로 위치로 조정
+        },
+      });
+      // console.error("부서 삭제 오류:", error);
     }
   };
 
@@ -68,7 +101,23 @@ export default function DepartmentTable() {
       );
       fetchData(); // 데이터 다시 불러오기
       setEditingId(null); // 편집 모드 종료
+      toast.success("부서 정보가 정상적으로 수정되었습니다.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        style: {
+          marginTop: "5rem", // 원하는 세로 위치로 조정
+        },
+      });
     } catch (error) {
+      toast.error("부서 정보 수정에 실패하였습니다. 다시 시도해주세요.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        style: {
+          marginTop: "5rem", // 원하는 세로 위치로 조정
+        },
+      });
       console.error("부서 수정 오류:", error);
     }
   };
@@ -178,7 +227,9 @@ export default function DepartmentTable() {
                     <button
                       type="button"
                       className="text-seahColor hover:text-seahDeep"
-                      onClick={() => deleteDepartment(department.departmentId)}
+                      onClick={() =>
+                        handleShowConfirmDialog(department.departmentId)
+                      }
                     >
                       삭제
                     </button>
@@ -193,6 +244,11 @@ export default function DepartmentTable() {
           itemsPerPage={itemsPerPage}
           totalItems={departments.length}
           setCurrentPage={setCurrentPage}
+        />
+        <DeleteRegInfoModal
+          open={isDeleteModalOpen}
+          setOpen={setIsDeleteModalOpen}
+          onConfirm={handleDeleteConfirm}
         />
       </div>
     </>

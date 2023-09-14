@@ -126,17 +126,17 @@ export default function UserHeader() {
             </Transition>
           </Popover> */}
 
-          <Link to="/#"
+          {/* <Link to="/#"
             className="text-lg font-semibold leading-6 text-gray-900 hover:bg-slate-100"
           >
             수시점검
           </Link>
           <Link
-            to="/#"
+            to="/regular"
             className="text-lg font-semibold leading-6 text-gray-900 hover:bg-slate-100"
           >
             정기점검
-          </Link>
+          </Link> */}
 
         </Popover.Group>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
@@ -195,7 +195,7 @@ export default function UserHeader() {
                     </>
                   )}
                 </Disclosure> */}
-                <Link to="/inspection"
+                {/* <Link to="/inspection"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
                   수시점검
@@ -204,7 +204,7 @@ export default function UserHeader() {
                   className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
                   정기점검
-                </Link>
+                </Link> */}
                 
                 {/* <Link to="/reinfo"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"

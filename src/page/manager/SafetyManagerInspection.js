@@ -13,20 +13,20 @@ import {
   ShieldCheckIcon,
   ShieldExclamationIcon,
   XCircleIcon,
+  ExclamationCircleIcon
 } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams,useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { format, addMonths, subMonths } from "date-fns";
-
-
+import { toast } from "react-toastify";
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function SafetyManagerInspection() {
   const { masterdataPart } = useParams(); // url 영역 파라미터
-  const { masterdataId } = useParams(); // url 설비 파라미터
+  const { masterdataFacility } = useParams(); // url 설비 파라미터
 
   const [currentDate, setCurrentDate] = useState(new Date()); // 년,월
   const navigate = useNavigate();
@@ -44,32 +44,42 @@ export default function SafetyManagerInspection() {
     {
       title: "수시점검",
       sub: "영역 및 설비에 따른 수시점검을 할 수 있습니다.",
-      href: `/special/list/${masterdataPart}/${masterdataId}`,
+      href: `/special/list/${masterdataPart}/${masterdataFacility}`,
       icon: ClipboardDocumentCheckIcon,
       iconForeground: "text-purple-700",
       iconBackground: "bg-purple-50",
+
+      // 새로운 onClick 속성 추가
+      onClick(e) {
+        e.preventDefault();
+        toast.error("QR 코드 인식 후 접속 바랍니다.", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: true,
+        });
+      },
     },
   ];
 
   const regular = [
     // { name: '정기점검', href: '#', icon: UsersIcon, current: false },
     {
-      name: "점검완료",
+      name: "조치완료",
       icon: ShieldCheckIcon,
       count: "5",
       current: true,
       iconForeground: "text-green-600",
     },
     {
-      name: "미점검",
+      name: "점검실시",
       icon: XCircleIcon,
       count: "12",
       current: false,
       iconForeground: "text-yellow-600",
     },
     {
-      name: "조치필요",
-      icon: ShieldExclamationIcon,
+      name: "불량건수",
+      icon: ExclamationCircleIcon,
       count: "20+",
       current: false,
       iconForeground: "text-red-600",
@@ -82,11 +92,12 @@ export default function SafetyManagerInspection() {
 
   useEffect(() => {
     // Json값 가져와서 세팅
-    function fetchDataWithAxios(masterdataPart, masterdataId) {
+    function fetchDataWithAxios(masterdataPart, masterdataFacility) {
       axios
         .get(
-          `${process.env.REACT_APP_API_BASE_URL}/user/special/${masterdataPart}/${masterdataId}`
-        )
+          `${process.env.REACT_APP_API_BASE_URL}/user/special/${masterdataPart}/${masterdataFacility}`
+        ) // 세아
+        //  .get(`http://localhost:8081/special/${masterdataPart}/${masterdataFacility}`)
         .then((response) => {
           const data = response.data;
           // 가져온 데이터로 상태 변수 업데이트
@@ -101,8 +112,8 @@ export default function SafetyManagerInspection() {
         });
     }
 
-    fetchDataWithAxios(masterdataPart, masterdataId);
-  }, [masterdataPart, masterdataId]);
+    fetchDataWithAxios(masterdataPart, masterdataFacility);
+  }, [masterdataPart, masterdataFacility]);
 
   const frequent = [
     {
@@ -180,7 +191,7 @@ export default function SafetyManagerInspection() {
             </div>
             <div className="mt-8">
               <h3 className="text-base font-semibold leading-6 text-gray-900">
-                <a href={action.href} className="focus:outline-none">
+                <a href={action.href} className="focus:outline-none"  onClick={action.onClick}>
                   {/* Extend touch target to entire panel */}
                   <span className="absolute inset-0" aria-hidden="true" />
                   {action.title}
@@ -249,8 +260,9 @@ export default function SafetyManagerInspection() {
           <button
             type="button"
             className="rounded-md bg-seahColor px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor my-4"
+            onClick={() => navigate("/regularinsstatus")}
           >
-            정기점검 점검현황 보기
+            정기점검 현황
           </button>
           <p className="text-lg font-semibold">수시점검</p>
           <ul role="list" className="-mx-2 space-y-1">
@@ -293,7 +305,7 @@ export default function SafetyManagerInspection() {
             onClick={() => navigate("/frequentinspection")}
             className="rounded-md bg-seahColor px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mt-4"
           >
-            수시점검 점검현황 보기
+            수시점검 현황 
           </button>
         </nav>
       </div>

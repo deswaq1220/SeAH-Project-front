@@ -3,15 +3,30 @@ import axios from "axios";
 import QRCode from "qrcode.react";
 import FacilityReg from "../ReferebceInfoForm/FacilityReg";
 import { toast, ToastContainer } from "react-toastify";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import DeleteRegInfoModal from "../../../components/DeleteRegInfoModal";
+import "../../../style/reset.css";
 
 export default function FacilityTable() {
   const [facilityList, setFacilityList] = useState([]);
   const [selectedFacility, setSelectedFacility] = useState(null);
   const [selectedFacilityData, setSelectedFacilityData] = useState(null);
   const [selectedPart, setSelectedPart] = useState("");
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
+  const handleDeleteConfirm = async () => {
+    if (deleteId) {
+      await handleDelete(deleteId);
+    }
+    setDeleteId(null);
+    setIsDeleteModalOpen(false);
+  };
 
+  const handleShowConfirmDialog = (masterdataId) => {
+    setDeleteId(masterdataId);
+    setIsDeleteModalOpen(true);
+  };
 
   const handleDelete = async (masterdataId) => {
     try {
@@ -21,13 +36,18 @@ export default function FacilityTable() {
       setFacilityList((prevList) =>
         prevList.filter((facility) => facility.masterdataId !== masterdataId)
       );
-      toast.success("등록하신 정보가 삭제되었습니다.", {
+      toast.success("설비 정보가 성공적으로 삭제되었습니다.", {
         position: "top-center",
         autoClose: 3000,
         hideProgressBar: true,
       });
     } catch (error) {
       console.error("Error deleting data:", error);
+      toast.error("설비 정보 삭제에 실패하였습니다. 다시 시도해주세요.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+      });
     }
   };
 
@@ -65,8 +85,6 @@ export default function FacilityTable() {
     setFacilityList((prevList) => [...prevList, newData]);
   };
 
-
-
   return (
     <div>
       <FacilityReg fetchData={fetchData} handleNewData={handleNewData} />
@@ -77,7 +95,7 @@ export default function FacilityTable() {
               설비
             </h1>
             <p className="mt-2 text-sm text-gray-700">
-              해당 설비에 생성된 큐알코드를 열람할 수 있습니다
+              해당 설비에 생성된 QR 코드를 확인하실 수 있습니다.
             </p>
             <div className="flex justify-end">
               <button
@@ -169,17 +187,25 @@ export default function FacilityTable() {
                         key={facility.masterdataId}
                         className="divide-x divide-gray-200"
                       >
-                        <td className="whitespace-nowrap text-sm font-medium text-gray-900 sm:pl-4 px-4">
-                          {facility.masterdataFacility}
-                        </td>
+                        <td
+                          className="whitespace-nowrap text-sm font-medium text-gray-900 sm:pl-4 px-4"
+                          dangerouslySetInnerHTML={{
+                            __html: facility.masterdataFacility.replace(
+                              /퀜/g,
+                              '<span class="special-font">퀜</span>'
+                            ),
+                          }}
+                        />
                         <td className="whitespace-nowrap text-sm font-medium text-gray-900 sm:pl-4 px-4">
                           {facility.masterdataPart}
                         </td>
                         <td className="whitespace-nowrap p-4 text-sm text-gray-500">
                           {selectedFacility === facility.masterdataId ? (
-                            <Link to={`/special/${facility.masterdataPart}/${facility.masterdataId}`}>
+                            <Link
+                              to={`/special/${facility.masterdataPart}/${facility.masterdataId}`}
+                            >
                               <QRCode
-                                 value={`http://172.20.20.252:3000/special/${facility.masterdataPart}/${facility.masterdataFacility}`}
+                                value={`http://172.20.10.13:3000/special/${facility.masterdataPart}/${facility.masterdataId}`}
                               />
                             </Link>
                           ) : (
@@ -192,10 +218,15 @@ export default function FacilityTable() {
                               보기
                             </button>
                           )}
-
                         </td>
                         <td className="whitespace-nowrap text-sm font-medium text-gray-900 sm:pl-4 px-4">
-                          <button onClick={() => handleDelete(facility.masterdataId)}>삭제</button>
+                          <button
+                            onClick={() =>
+                              handleShowConfirmDialog(facility.masterdataId)
+                            }
+                          >
+                            삭제
+                          </button>
                         </td>
                       </tr>
                     ))}
@@ -205,6 +236,11 @@ export default function FacilityTable() {
           </div>
         </div>
       </div>
+      <DeleteRegInfoModal
+        open={isDeleteModalOpen}
+        setOpen={setIsDeleteModalOpen}
+        onConfirm={handleDeleteConfirm}
+      />
     </div>
   );
 }

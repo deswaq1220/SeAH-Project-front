@@ -1,28 +1,29 @@
 // import { useState } from "react";
 import UserfrequentReg from "./UserfrequentReg";
 import { useState, useEffect } from "react";
-export default function Inspector({ onFormDataChange , defaultState}) {
+export default function Inspector({ onFormDataChange , defaultState, complete}) {
   // 상태설정
+  const [formData, setFormData] = useState({
+    employeenumber: "",
+    inspectorname: "",
+    inspectoremail: "",
+  });
 
-    const [formData, setFormData] = useState({
-      employeenumber: "",
-      inspectorname: "",
-      inspectoremail: "",
-    });
-  
-    const [seahDomain, setSeahDomain] = useState("@seah.co.kr");
-  
-    useEffect(() => {
-      console.log("test"+ defaultState);
-      console.log(defaultState);
-      if (defaultState) {
-        setFormData({
-          employeenumber: defaultState.employeenumber,
-          inspectorname: defaultState.inspectorname,
-          inspectoremail: defaultState.inspectoremail,
-        });
-      }
-    }, [defaultState]);
+  // const [seahDomain, setSeahDomain] = useState("@seah.co.kr");
+  const [seahDomain, setSeahDomain] = useState("@naver.com");
+
+// 수정/완료등록일 경우
+  useEffect(() => {
+    console.log("test"+ defaultState);
+    console.log(defaultState);
+    if (defaultState) {
+      setFormData({
+        employeenumber: defaultState.employeenumber,
+        inspectorname: defaultState.inspectorname,
+        inspectoremail: defaultState.inspectoremail,
+      });
+    }
+  }, [defaultState]);
 
   // 입력란 변경 시 상태 업데이트 함수
   const handleInputChange = (e) => {
@@ -62,6 +63,7 @@ export default function Inspector({ onFormDataChange , defaultState}) {
             // value={formData.employeenumber} // 상태 value로 설정
             defaultValue={formData.employeenumber}
             onChange={handleInputChange} // 입력란 변경 시 상태업데이트
+            readOnly={complete}
           />
         </div>
         <div>
@@ -74,6 +76,7 @@ export default function Inspector({ onFormDataChange , defaultState}) {
             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5 mb-2"
             value={formData.inspectorname} // 상태 value로 설정
             onChange={handleInputChange} // 입력란 변경 시 상태업데이트
+            readOnly={complete}
           />
           <input
             type="email"
@@ -84,6 +87,7 @@ export default function Inspector({ onFormDataChange , defaultState}) {
             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
             value={formData.inspectoremail} // 상태 value로 설정
             onChange={handleInputChange} // 입력란 변경 시 상태업데이트
+            readOnly={complete}
           />
           <input
             type="text"
@@ -91,7 +95,7 @@ export default function Inspector({ onFormDataChange , defaultState}) {
             id="emailDomain"
             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
             value={seahDomain}
-            readOnly
+            readOnly={complete}
           />
         </div>
       </div>

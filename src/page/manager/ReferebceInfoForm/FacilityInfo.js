@@ -1,9 +1,8 @@
 import { Fragment, useState, useEffect } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
-import QRCode from "qrcode.react"; // QR 코드 라이브러리 추가
 import axios from "axios"; // axios를 임포트]
-
+import { toast } from "react-toastify";
 const Status = [
   { id: 1, name: "선택" },
   { id: 2, name: "Y" },
@@ -14,7 +13,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function FacilityInfo( { fetchData, handleNewData }) {
+export default function FacilityInfo({ fetchData, handleNewData }) {
   const [selectedArea, setSelectedArea] = useState(null);
   const [status, setStatus] = useState(Status[0]);
   const [facilityName, setFacilityName] = useState(""); // 설비명 관련 상태 추가
@@ -57,6 +56,39 @@ export default function FacilityInfo( { fetchData, handleNewData }) {
   }, []);
 
   const handleSubmit = async () => {
+    const requiredFields = [
+      { value: selectedArea?.name, name: "영역" },
+      { value: name, name: "성명" },
+      { value: email, name: "이메일" },
+      { value: status?.name, name: "수신여부" },
+    ];
+
+    for (let field of requiredFields) {
+      if (!field.value || field.value.trim() === "") {
+        toast.warn(`${field.name} 항목이 작성되지 않았습니다.`, {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: true,
+          style: {
+            marginTop: "5rem", // 원하는 세로 위치로 조정
+          },
+        });
+        return;
+      }
+    }
+
+    if (selectedArea?.name === "선택" || status?.name === "선택") {
+      toast.warn(`올바른 영역 또는 수신여부를 선택해주세요.`, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: true,
+        style: {
+          marginTop: "5rem", // 원하는 세로 위치로 조정
+        },
+      });
+      return;
+    }
+
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_BASE_URL}/admin/master/email`,
@@ -71,11 +103,26 @@ export default function FacilityInfo( { fetchData, handleNewData }) {
       fetchData();
       // Add this line to update FacilityTable's state directly
       handleNewData(response.data);
-
+      toast.success("이메일 등록이 정상적으로 완료되었습니다.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        style: {
+          marginTop: "5rem", // 원하는 세로 위치로 조정
+        },
+      });
       // API 호출이 성공한 경우에 대한 처리
       console.log("등록 성공:", response.data);
     } catch (error) {
-      console.error("등록 오류:", error);
+      // console.error("등록 오류:", error);
+      toast.error("이메일 등록에 실패하였습니다. 다시 시도해주세요.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        style: {
+          marginTop: "5rem", // 원하는 세로 위치로 조정
+        },
+      });
     }
   };
 
@@ -256,7 +303,7 @@ export default function FacilityInfo( { fetchData, handleNewData }) {
                                 "relative cursor-default select-none py-2 pl-3 pr-9"
                               )
                             }
-                            value={person} 
+                            value={person}
                           >
                             {({ selected, active }) => (
                               <>

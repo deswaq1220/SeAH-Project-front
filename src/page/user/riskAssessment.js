@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import {Fragment, useEffect, useState} from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import {id} from "date-fns/locale";
@@ -16,25 +16,28 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function RiskAssessment({onFormDataChange}) {
-
+export default function RiskAssessment({onFormDataChange, defaultState, complete, updateSpeId}) {
   const [riskAssessmentSelected, setRiskAssessmentSelected] = useState(riskAssessment[0]); //  위험성평가
-  const handleRiskAssessmentChange = (riskAssessmentSelected)  => {
-      setRiskAssessmentSelected(riskAssessmentSelected);
-      onFormDataChange(riskAssessmentSelected.value);
-  }
+  const handleRiskAssessmentChange = (riskAssessmentSelected) => {
+    setRiskAssessmentSelected(riskAssessmentSelected);
+    onFormDataChange(riskAssessmentSelected.value);
+  };
 
+  // 수정/완료등록시 세팅
+  useEffect(() => {
+    console.log("test"+ defaultState);
+    console.log(defaultState);
+    if (defaultState) {
+      const defaultRisk = riskAssessment.find((item) => item.value === defaultState);
+      setRiskAssessmentSelected(defaultRisk);
+    }
+  }, [defaultState]);
 
   return(
     <div id="riskAssessment" className="flex items-baseline justify-start">
         <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
           위험성평가
         </span>
-        {/* 위험성 평가 */}
-        {/*<Listbox*/}
-        {/*  value={riskAssessmentSelected}*/}
-        {/*  onChange={setRiskAssessmentSelected}*/}
-        {/*>        */}
         <Listbox value={riskAssessmentSelected} onChange={handleRiskAssessmentChange}>
           {({ open }) => (
             <>
@@ -71,6 +74,8 @@ export default function RiskAssessment({onFormDataChange}) {
                           )
                         }
                         value={person}
+                        onChange={handleRiskAssessmentChange}
+                        disabled={updateSpeId || complete}
                       >
                         {({ selected, active }) => (
                           <>

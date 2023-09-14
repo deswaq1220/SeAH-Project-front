@@ -45,7 +45,6 @@ export default function TrainingReport() {
     // 교육 아이디에 맞는 출석목록 데이터를 받아오는 API 호출
     axios
       .get(`${process.env.REACT_APP_API_BASE_URL}/admin/list/${eduId}`) //세아
-      // axios.get(`http://localhost:8081/usereduatten/list/${eduId}`)
       .then((response) => {
         // 받아온 출석목록 데이터를 attendanceList 상태에 저장
         setAttendanceList(response.data);
@@ -173,14 +172,16 @@ export default function TrainingReport() {
             </tr>
             <tr className="flex">
               <td className="p-4 border-black w-[97mm] h-auto">
-                {eduDetails && eduDetails.eduimgurls.length > 0 ? (
+              {eduDetails && eduDetails.eduimgurls && eduDetails.eduimgurls.length > 0 ? (
                   <div>
-                    {/* <p className="text-lg font-bold">교육사진</p> */}
                     <ul className="list-disc pl-8">
                       {eduDetails.eduimgurls.map((file, index) => (
+                        <div key={index} className="flex justify-between">
                         <img
-                          key={index}
-                          src={process.env.REACT_APP_API_BASE_URL + file} alt={eduDetails.eduFileList.eduFileName} />
+                          src={process.env.REACT_APP_API_BASE_URL + file}
+                          className="mb-4"
+                        />
+                      </div>
                       ))}
                     </ul>
                   </div>

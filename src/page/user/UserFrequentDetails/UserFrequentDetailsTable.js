@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { PaperClipIcon } from "@heroicons/react/20/solid";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import {toast} from "react-toastify";
 
 export default function UserFrequentDetailsTable() {
   const { speId } = useParams(); // URL 파라미터로부터 speId를 가져옵니다.
@@ -62,11 +63,43 @@ export default function UserFrequentDetailsTable() {
         return "";
     }
   };
+
+  // 수정버튼
   const handleEditButtonClick = (speId) => {
-    navigate(
-      `/special/new/${inspectionData.specialData.spePart}/${inspectionData.facilityCode}?speId=${speId}`
-    );
+    if (inspectionData.specialData.speComplete === "OK") {
+      toast.warn("완료된 내역은 수정이 불가합니다.", {
+        position: "top-center",
+        autoClose: 2000, // 알림이 3초 후에 자동으로 사라짐
+        hideProgressBar: true,
+      });
+    } else {
+      navigate(
+        `/special/new/${inspectionData.specialData.spePart}/${inspectionData.facilityCode}?speId=${speId}`
+      );
+    }
   };
+
+  // 확인버튼 클릭 시 바로 이전페이지 이동
+  const backBtn = () => { navigate(-1); };
+
+
+  // 완료버튼
+  const handleEditCompleteButtonClick = (speId) => {
+    if (inspectionData.specialData.speComplete === "OK") {
+      // alert("이미 조치완료된 내역입니다.");
+      toast.warn("이미 조치완료된 내역입니다.", {
+        position: "top-center",
+        autoClose: 2000, // 알림이 3초 후에 자동으로 사라짐
+        hideProgressBar: true,
+      });
+    } else {
+      navigate(
+        `/special/complete/${inspectionData.specialData.spePart}/${inspectionData.facilityCode}?speId=${speId}`
+      );
+    }
+  };
+
+
 
   return (
     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 mt-5">
@@ -75,16 +108,16 @@ export default function UserFrequentDetailsTable() {
           수시점검
         </h3>
         <p className="mt-1 max-w-2xl text-base leading-6 text-gray-500">
-          등록한 해당 수시점검을 수정 및 조회가 가능합니다
+          등록한 해당 수시점검의 조회 및 수정, 완료등록이 가능합니다
         </p>
-        <div className="flex justify-end mt-1">
-          <button
-            type="button"
-            className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mr-2"
-          >
-            삭제
-          </button>
-        </div>
+        {/*<div className="flex justify-end mt-1">*/}
+        {/*  <button*/}
+        {/*    type="button"*/}
+        {/*    className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mr-2"*/}
+        {/*  >*/}
+        {/*    삭제*/}
+        {/*  </button>*/}
+        {/*</div>*/}
       </div>
       <div className="mt-6 border-t border-gray-100">
         <dl className="divide-y divide-gray-100">
@@ -101,7 +134,8 @@ export default function UserFrequentDetailsTable() {
               점검자
             </dt>
             <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-              {inspectionData.specialData.spePerson}
+              <dd>이름 : {inspectionData.specialData.spePerson} </dd>
+              <dd>이메일 : {inspectionData.specialData.speEmail}</dd>
             </dd>
           </div>
           <div className="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
@@ -227,21 +261,42 @@ export default function UserFrequentDetailsTable() {
                 : "첨부된 사진이 없습니다"}
             </dd>
           </div>
+
+          <div className="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
+            <dt className="text-base font-bold leading-6 text-gray-900">
+              완료일시
+            </dt>
+            <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+              {inspectionData.specialData.speActDate
+                ? formatDate(inspectionData.specialData.speActDate)
+                : ''}
+            </dd>
+          </div>
+
+
         </dl>
       </div>
       <div className="flex justify-center my-4">
         <button
           type="button"
+          className="rounded-md bg-seahColor px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+          onClick={() => handleEditButtonClick(speId)} // speId 값을 넘겨줍니다.
+        >
+          수정
+        </button>
+        <button
+          type="button"
           className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mr-2"
+          onClick={backBtn}
         >
           확인
         </button>
         <button
           type="button"
           className="rounded-md bg-seahColor px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-          onClick={() => handleEditButtonClick(speId)} // speId 값을 넘겨줍니다.
+          onClick={() => handleEditCompleteButtonClick(speId)} // speId 값을 넘겨줍니다.
         >
-          수정 / 조치완료 등록
+          조치완료 등록
         </button>
       </div>
     </div>
