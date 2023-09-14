@@ -9,8 +9,6 @@ import Inspector from "./Inspector";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 
-
-
 const notificationMethods = [
   { id: "GOOD", title: "양호", color: "text-blue-600" },
   { id: "BAD", title: "불량", color: "text-red-600" },
@@ -43,38 +41,38 @@ export default function UserRegularTable() {
   const [isEditButtonVisible, setIsEditButtonVisible] = useState([]); // 각 행마다 수정 버튼 상태 저장
   const [regularcheckList, setRegularcheckList] = useState([]);
   const [files, setFiles] = useState([]);
-      const formData = new FormData();
-//  const handleRadioChange = (index, method) => {
-//    let newModalState = [...isModalOpen]; // 현재의 모달 상태 복사
-////    let newEditButtonState = [...isEditButtonVisible]; // 현재의 수정 버튼 상태 복사
-////
-//    if (method === "bad") {
-//      isModalOpen[index] = true; // 불량을 선택한 행의 모달을 열기
-////
-////      newEditButtonState[index] = true; // 불량을 선택한 행의 수정 버튼 보이기
-//    } else {
-//      isModalOpen[index] = false; // 그 외에는 모달 닫기
-////      newEditButtonState[index] = false; // 그 외에는 수정버튼 숨기기
-//    }
-//
-//    regularcheckList[index].regularcheck = method; //해당 행의 상태 입력
-////
-//    setIsModalOpen(newModalState); // 새로운 모달 상태 설정
-////    setIsEditButtonVisible(newEditButtonState); // 새로운 수정버튼 상태 설정
-//  };
+  const formData = new FormData();
+  const [staticEmailPerson, setStaticEmailPerson] = useState([]); //고정수신자
+  //  const handleRadioChange = (index, method) => {
+  //    let newModalState = [...isModalOpen]; // 현재의 모달 상태 복사
+  ////    let newEditButtonState = [...isEditButtonVisible]; // 현재의 수정 버튼 상태 복사
+  ////
+  //    if (method === "bad") {
+  //      isModalOpen[index] = true; // 불량을 선택한 행의 모달을 열기
+  ////
+  ////      newEditButtonState[index] = true; // 불량을 선택한 행의 수정 버튼 보이기
+  //    } else {
+  //      isModalOpen[index] = false; // 그 외에는 모달 닫기
+  ////      newEditButtonState[index] = false; // 그 외에는 수정버튼 숨기기
+  //    }
+  //
+  //    regularcheckList[index].regularcheck = method; //해당 행의 상태 입력
+  ////
+  //    setIsModalOpen(newModalState); // 새로운 모달 상태 설정
+  ////    setIsEditButtonVisible(newEditButtonState); // 새로운 수정버튼 상태 설정
+  //  };
 
+  const handleRadioChange = (index, method) => {
+    if (method === "BAD") {
+      isModalOpen[index] = true; // 불량을 선택한 행의 모달을 열기
+    } else {
+      isModalOpen[index] = false; // 그 외에는 모달 닫기
+    }
 
-const handleRadioChange = (index, method) => {
-  if (method === "BAD") {
-    isModalOpen[index] = true; // 불량을 선택한 행의 모달을 열기
-  } else {
-    isModalOpen[index] = false; // 그 외에는 모달 닫기
-  }
+    regularcheckList[index].regularCheck = method; // 해당 행의 상태 입력
 
-  regularcheckList[index].regularCheck = method; // 해당 행의 상태 입력
-
-  setIsModalOpen([...isModalOpen]); // 새로운 모달 상태 설정
-};
+    setIsModalOpen([...isModalOpen]); // 새로운 모달 상태 설정
+  };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -83,32 +81,31 @@ const handleRadioChange = (index, method) => {
 
   const [regularDTO, setRegularDTO] = useState({
     regularPerson: "", // 관찰자 이름
-    regularEmail:"", //관찰자 이메일
+    regularEmail: "", //관찰자 이메일
     regularEmpNum: "", // 관찰자 사원번호
     regularPart: "", // 점검구역(주조, 압출 등)
     regularInsName: "중대재해예방 일반점검", //점검항목(중대재해, LOTO 등 )
-    file : null,
-   });
-
+    file: null,
+  });
 
   const emailTitle = `${regularDTO.regularPerson}님의 정기점검 요청메일입니다`;
 
- // Inspector 항목 저장 : 관찰자(이름, 이메일, 사원번호)
- const handleInspectorDataChange = (inspectorForm) => {
-   setRegularDTO((prevData) => ({
-    ...prevData,
-    regularPerson: inspectorForm.name, //
-    regularEmail:inspectorForm.email,
-    regularEmpNum:inspectorForm.employeenumber,
-  }));
- };
+  // Inspector 항목 저장 : 관찰자(이름, 이메일, 사원번호)
+  const handleInspectorDataChange = (inspectorForm) => {
+    setRegularDTO((prevData) => ({
+      ...prevData,
+      regularPerson: inspectorForm.name, //
+      regularEmail: inspectorForm.email,
+      regularEmpNum: inspectorForm.employeenumber,
+    }));
+  };
 
- const handleRegularPartDataChange =(form)=>{
-   setRegularDTO((prevData) => ({
-    ...prevData,
-    regularPart: form.regularPart,
-  }));
- }
+  const handleRegularPartDataChange = (form) => {
+    setRegularDTO((prevData) => ({
+      ...prevData,
+      regularPart: form.regularPart,
+    }));
+  };
 
   //점검항목 저장
   const handleRegularInsNameChange = (value) => {
@@ -120,16 +117,15 @@ const handleRadioChange = (index, method) => {
     console.log(value);
   };
 
-
   //bad 상태일때 점검자 이름, 이메일,내용 저장 /**/
   const handleActDataChange = (actForm) => {
     const updatedActPerson = actForm.regularActPerson;
     const updatedActEmail = actForm.regularActEmail;
     const updatedActContent = actForm.regularActContent;
     const updatedFile = actForm.files;
-    const  id = actForm.id;
+    const id = actForm.id;
     console.log(id);
-    setRegularcheckList(prevChecklist => {
+    setRegularcheckList((prevChecklist) => {
       const updatedChecklist = [...prevChecklist]; // Copy the previous checklist
       // Update the specific object in the checklist
       updatedChecklist[actForm.index].regularActPerson = updatedActPerson;
@@ -138,23 +134,26 @@ const handleRadioChange = (index, method) => {
 
       return updatedChecklist; // Return the new checklist to update the state
     });
-//id: actForm.id,
-//     setFiles(prevFiles => {
-//         const newFilesState=[...prevFiles];
-//         newFilesState.push({file:updatedFile});
-//         return newFilesState;
-//      });
-setRegularDTO(prevData => ({  ...prevData,
-  file: {
-      ...prevData.file,
-      [id] : updatedFile // '1' is the key and 'updatedFile' should be an array of File or Blob objects.
-  } })); // Update formData with new file array
-//       setRegularDTO({
-//           file: updatedFile, // Update the file property in the formData state
-//       });
+    //id: actForm.id,
+    //     setFiles(prevFiles => {
+    //         const newFilesState=[...prevFiles];
+    //         newFilesState.push({file:updatedFile});
+    //         return newFilesState;
+    //      });
+    setRegularDTO((prevData) => ({
+      ...prevData,
+      file: {
+        ...prevData.file,
+        [id]: updatedFile, // '1' is the key and 'updatedFile' should be an array of File or Blob objects.
+      },
+    })); // Update formData with new file array
+    //       setRegularDTO({
+    //           file: updatedFile, // Update the file property in the formData state
+    //       });
 
+    const staticEmailPerson = actForm.staticEmailPerson; //고정수신자
+    setStaticEmailPerson(staticEmailPerson);
   };
-
 
   //점검리스트 조회
   const handleSearchClick = async () => {
@@ -173,7 +172,6 @@ setRegularDTO(prevData => ({  ...prevData,
         const response = await axios.get(
           `${process.env.REACT_APP_API_BASE_URL}/user/regularcheck`,
           {
-
             params: {
               regularNum: newRegularNum,
             },
@@ -189,70 +187,84 @@ setRegularDTO(prevData => ({  ...prevData,
     }
   };
 
-    // console.log(regularcheckList);
+  // console.log(regularcheckList);
 
+  // formData.regularDetailDTOList= [...regularcheckList];
+  // regularDTO.regularDetailDTOList = JSON.stringify(regularcheckList);
 
-    // formData.regularDetailDTOList= [...regularcheckList];
-    // regularDTO.regularDetailDTOList = JSON.stringify(regularcheckList);
+  // formData.file = [...regularcheckList.files];
+  // formData.regularDTO = JSON.stringify(regularDTO);// EduDTO 객체를 문자열로 변환하여 추가
+  // saveFormData.append('file', regularcheckList.files); // 파일 추가
 
-
-    // formData.file = [...regularcheckList.files];
-    // formData.regularDTO = JSON.stringify(regularDTO);// EduDTO 객체를 문자열로 변환하여 추가
-    // saveFormData.append('file', regularcheckList.files); // 파일 추가
-
-
-    const handleFormSubmit = async () => {
+  const handleFormSubmit = async () => {
     console.log(regularDTO.file);
-     regularDTO.regularDetailDTOList = JSON.stringify(regularcheckList);
+    console.log(JSON.stringify(regularcheckList));
+
+    regularDTO.regularDetailDTOList = JSON.stringify(regularcheckList);
 
     console.log("regularDTO");
-        console.log(regularDTO);
-//        let formData = new FormData();
+    console.log(regularDTO);
+    //        let formData = new FormData();
 
-
-        const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/regular/new`,
+    const response = await axios
+      .post(
+        `${process.env.REACT_APP_API_BASE_URL}/user/regular/new`,
 
         regularDTO,
-         {
-            headers: {
-              "Content-Type": "multipart/form-data"
-            },
-          }
-        )
-    .then((response) => {
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
+      .then((response) => {
         console.log(response);
-        console.log(response.data.regularDate);
 
-
-
-      if (formData !== null) {
-        // 등록이 완료되었다는 알림 띄우기
-        toast.success("등록이 완료되었습니다.", {
-          position: "top-center",
-          autoClose: 2000, // 알림이 3초 후에 자동으로 사라짐
-          hideProgressBar: true,
-        });
-
+        if (formData !== null) {
+          // 등록이 완료되었다는 알림 띄우기
+          toast.success("등록이 완료되었습니다.", {
+            position: "top-center",
+            autoClose: 2000, // 알림이 3초 후에 자동으로 사라짐
+            hideProgressBar: true,
+          });
 
           // 이메일 발송기능
-          for(const item of regularcheckList){
-          if(item.regularActEmail){ // 이메일이 기재되어 있다면 실행
+          for (const item of regularcheckList) {
+            if (item.regularActEmail) {
+              // 이메일이 기재되어 있다면 실행
 
+              const registerDate = new Date(response.data.regularDate);
+              const options = {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+                second: "numeric",
+                hour12: true,
+              };
 
-              //원하는 날짜와 시간 형식으로 포맷팅
-               const registerDate = `${response.data.regularDate.toLocaleDateString()}`;
-
-                  const actPersonEmails = item.regularActEmail.split(",").map(email => email.trim());
-                  const emailData = {
-                      recipients: actPersonEmails,
-                      subject: emailTitle,
-                      content: item.regularActContent,
-                  }
-                  console.log("emailData===============" + JSON.stringify(emailData, null, 2));
-
-
-                  /*고정수신자 들어오면 넣기*/
-                  const spendForm = `
+              const formattedRegisterDate = registerDate.toLocaleDateString(
+                "ko-KR",
+                options
+              );
+              const id = item.id; // 아이템의 ID 가져오기
+              const itemContent = regularcheckList.find(
+                (checkItem) => checkItem.id === id
+              );
+              const itemChecklist = itemContent.checklist;
+              console.log(
+                "itemContent==============" + formattedRegisterDate,
+                regularDTO.regularPerson,
+                item.regularActPerson,
+                regularDTO.regularPart,
+                regularDTO.regularInsName,
+                itemChecklist,
+                itemContent.regularActContent
+              );
+              console.log(staticEmailPerson);
+              /*/★!*!/!*!/!*고정수신자 생기면 넣기*!/!*!/!*!/*/
+              const spendForm = `
                                           <table style="width: 100%; border-collapse: collapse; border: 1px solid #ccc;">
                                           <tr>
                                             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">항목</td>
@@ -260,11 +272,15 @@ setRegularDTO(prevData => ({  ...prevData,
                                           </tr>
                                           <tr>
                                             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검일시</td>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${registerDate}</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${formattedRegisterDate}</td>
                                           </tr>
                                           <tr>
                                             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검자</td>
                                             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${regularDTO.regularPerson}</td>
+                                          </tr>
+                                          <tr>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">조치자</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${item.regularActPerson}</td>
                                           </tr>
                                           <tr>
                                             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검구역</td>
@@ -276,77 +292,56 @@ setRegularDTO(prevData => ({  ...prevData,
                                           </tr>
                                           <tr>
                                             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검 유해위험요인</td>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${regularDetailDTOList.checklist}</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">위험원인</td>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speTrap}</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">부상부위</td>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speCause}</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">위험성평가</td>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speRiskAssess}</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검내용</td>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"> ${response.data.speContent}</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${itemChecklist}</td>
                                           </tr>
                                           <tr>
                                             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">개선대책</td>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speActContent}</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">담당자</td>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speActPerson}</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">요청기한</td>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${formattedSpeDeadline}</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${item.regularActContent}</td>
                                           </tr>
                                           </table>
-                                            <p style="font-size:16px;">링크 : <a href="http://localhost:3000/special/detail/${response.data.speId}">상세보기</a></p>`;
+                                            <p style="font-size:16px;">링크 : <a href="http://localhost:3000/regular/detail/${response.data.regularId}">상세보기</a></p>`; /*★이거 정기점검항목의 상세목록-항목별 목록생기면 해당하는 주소로 바꿔야함 */
 
+              const actPersonEmails = item.regularActEmail
+                .split(",")
+                .map((email) => email.trim());
+              const finalEmailList = [...actPersonEmails, ...staticEmailPerson];
+              const uniqueRecipientsSet = new Set(finalEmailList); //이메일 중복제거
+              const uniqueRecipientsArray = Array.from(uniqueRecipientsSet); // Set을 다시 배열로 변환
 
+              const emailData = {
+                recipients: uniqueRecipientsArray,
+                subject: emailTitle,
+                content: spendForm,
+              };
+              console.log(
+                "emailData===============" + JSON.stringify(emailData, null, 2)
+              );
 
-
-
-
-
-
-
-                  axios
-                      .post(
-                          `${process.env.REACT_APP_API_BASE_URL}/api/send-email`,
-                                  emailData
-                      )
-                      .then((response) => {
-                          console.log("이메일 전송 완료:", response);
-                      })
-                      .catch((error) => {
-                          console.error("이메일 전송 오류: ", error);
-                      });
-              }// 반복 끝
-
-
+              axios
+                .post(
+                  `${process.env.REACT_APP_API_BASE_URL}/api/send-email`,
+                  emailData
+                )
+                .then((response) => {
+                  console.log("이메일 전송 완료:", response);
+                })
+                .catch((error) => {
+                  console.error("이메일 전송 오류: ", error);
+                });
+            } // 반복 끝*/
           }
 
-
-      // 저장성공시 리스트 페이지
-      navigate(`/regular`);
-     }
-
-    })
-    .catch((error) => {
-     // console.log(requestData);
-     console.log(formData);
-     console.error(error);
-     toast.error("정기점검 등록에 실패했습니다. 다시 시도해주세요.");
-    });
-
-};
+          // 저장성공시 리스트 페이지
+          navigate(`/regular`);
+        }
+      })
+      .catch((error) => {
+        // console.log(requestData);
+        console.log(formData);
+        console.error(error);
+        toast.error("정기점검 등록에 실패했습니다. 다시 시도해주세요.");
+      });
+  };
 
   // useEffect(() => {
   //   setSelectedItemIndex(null);
@@ -387,13 +382,15 @@ setRegularDTO(prevData => ({  ...prevData,
         <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
           점검구역
         </span>
-        <InspectionArea handleInspectionAreaChange={handleRegularPartDataChange}/>
+        <InspectionArea
+          handleInspectionAreaChange={handleRegularPartDataChange}
+        />
       </div>
       <div id="ReformMeasures" className="flex items-center flex-wrap">
         <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4">
           점검자
         </span>
-        <Inspector onFormDataChange={handleInspectorDataChange}/>
+        <Inspector onFormDataChange={handleInspectorDataChange} />
       </div>
       <div className="flex items-center  ml-4">
         <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 mr-4 my-4 ">
@@ -522,49 +519,54 @@ setRegularDTO(prevData => ({  ...prevData,
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white">
-             {regularcheckList.map((item, index) => (
-               <tr key={index}>
-                 <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
-                   {index + 1}
-                 </td>
-                 <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
-                   {item.checklist}
-                 </td>
-                 <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                   <div className="space-x-4 flex">
-                     {notificationMethods.map((notificationMethod) => (
-                       <div key={notificationMethod.id} className="flex items-center">
-                         <input
-                           type="radio"
-                           name={`radio-group-${index}`}
-                           value={item.id}
-                           onChange={() =>
-                             handleRadioChange(index, notificationMethod.id)
-                           }
-                           className="h-4 w-4 border-gray-300 text-seahColor focus:ring-seahColor"
-                         />
-                         <label
-                           htmlFor={notificationMethod.id}
-                           className={`ml-3 block text-sm font-bold leading-6 ${notificationMethod.color}`}
-                         >
-                           {notificationMethod.title}
-                         </label>
-                       </div>
-                     ))}
-                   </div>
-                   {item.regularCheck === 'BAD' ? (
-                     <FaultyModal
-                    actForm={handleActDataChange}
-                       index={index}
-                       id ={item.id}
-                     />
-                   ) : null}
-                 </td>
-                 <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                   {isEditButtonVisible[index] && <button type="button">수정</button>}
-                 </td>
-               </tr>
-             ))}
+              {regularcheckList.map((item, index) => (
+                <tr key={index}>
+                  <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
+                    {index + 1}
+                  </td>
+                  <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
+                    {item.checklist}
+                  </td>
+                  <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
+                    <div className="space-x-4 flex">
+                      {notificationMethods.map((notificationMethod) => (
+                        <div
+                          key={notificationMethod.id}
+                          className="flex items-center"
+                        >
+                          <input
+                            type="radio"
+                            name={`radio-group-${index}`}
+                            value={item.id}
+                            onChange={() =>
+                              handleRadioChange(index, notificationMethod.id)
+                            }
+                            className="h-4 w-4 border-gray-300 text-seahColor focus:ring-seahColor"
+                          />
+                          <label
+                            htmlFor={notificationMethod.id}
+                            className={`ml-3 block text-sm font-bold leading-6 ${notificationMethod.color}`}
+                          >
+                            {notificationMethod.title}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                    {item.regularCheck === "BAD" ? (
+                      <FaultyModal
+                        actForm={handleActDataChange}
+                        index={index}
+                        id={item.id}
+                      />
+                    ) : null}
+                  </td>
+                  <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                    {isEditButtonVisible[index] && (
+                      <button type="button">수정</button>
+                    )}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
