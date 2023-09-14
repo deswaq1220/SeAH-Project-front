@@ -38,7 +38,7 @@ export default function DetailedModal({fetchData, actForm, index}) {
         actForm({
             regularActPerson: regularActPerson,
             regularActEmail: regularActEmail,
-            regularActContent: content.current.value,
+            // regularActContent: content.current.value,
             files: newFiles.length > 0 ? [...newFiles,...files] : [...files],
             index: index,
         });
@@ -106,6 +106,7 @@ export default function DetailedModal({fetchData, actForm, index}) {
                                         <Dialog.Title
                                             as="h3"
                                             className="text-base font-semibold leading-6 text-gray-900"
+
                                         >
                                             개선대책
                                         </Dialog.Title>
@@ -117,6 +118,7 @@ export default function DetailedModal({fetchData, actForm, index}) {
                               id="comment"
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6"
                               defaultValue={regularActContent}
+                              disabled
 
                           />
                                         </div>

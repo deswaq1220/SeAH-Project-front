@@ -100,6 +100,7 @@ export default function UserRegularTable() {
         const updatedActContent = actForm.regularActContent;
         const updatedFile = actForm.files;
         const id = actForm.id;
+
         console.log(id);
         setRegularcheckList((prevChecklist) => {
             const updatedChecklist = [...prevChecklist]; // Copy the previous checklist
