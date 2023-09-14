@@ -1,4 +1,4 @@
-import {Fragment, useRef, useState, useEffect} from "react";
+import React, {Fragment, useRef, useState, useEffect} from "react";
 import {Dialog, Transition} from "@headlessui/react";
 import {CheckIcon} from "@heroicons/react/24/outline";
 import Regularactionrequest from "../UserRegularReg/Regularactionrequest";
@@ -18,30 +18,28 @@ export default function DetailedModal({fetchData, actForm, index}) {
     const [regularActPerson, setRegularActPerson] = useState("");
     const [regularActEmail, setRegularActEmail] = useState("");
     const [regularActContent, setRegularActContent] = useState("");
-    const [files, setFiles] = useState(null);
-    const [content, setContent] = useState(""); // content 상태 초기화
-    const [isModalOpen, setIsModalOpen] = useState();
+    const [files, setFiles] = useState([]);
     const [filePath, setFilePath] = useState();
-    const handleContentChange = (e) => {
-        // textarea 값이 변경될 때마다 content 상태 업데이트
-        setContent(e.target.value);
+    const content = useRef();
+    const [newFiles, setNewFiles] = useState([]);
 
+    //파일 삭제
+    const deleteFile = (index) => {
+
+        const updatedFiles = [...files];
+        updatedFiles.splice(index, 1);
+        setFiles(updatedFiles); // Update formData with new file array
     };
 
-
-    // ActionRquest 콜백 : 조치자(이름, 이메일)
-    const handleActionRequestDetailsDataChange = (data) => {
-        setRegularActPerson(data.speActPerson);
-        setRegularActEmail(data.speActEmail);
-    };
-
+    //등록버튼
     const handleSaveClick = async () => {
+
         // actForm 함수 호출
         actForm({
             regularActPerson: regularActPerson,
             regularActEmail: regularActEmail,
-            regularActContent: content,
-            files: files,
+            regularActContent: content.current.value,
+            files: newFiles.length > 0 ? [...newFiles,...files] : [...files],
             index: index,
         });
         setOpen(false);
@@ -52,14 +50,11 @@ export default function DetailedModal({fetchData, actForm, index}) {
             regularActPerson: fetchData.regularActPerson,
             regularActEmail: fetchData.regularActEmail,
             regularActContent: fetchData.regularActContent,
-            // filePath: fetchData.filePath,
-            files: files,
+            files: fetchData.files,
             index: index,
         });
-
         setOpen(false);
     };
-
 
     useEffect(() => {
         const fetchRegularDetail = () => {
@@ -67,12 +62,12 @@ export default function DetailedModal({fetchData, actForm, index}) {
             setRegularActEmail(fetchData.regularActEmail);
             setRegularActPerson(fetchData.regularActPerson);
             setFilePath(fetchData.filePath);
-
+            setFiles(fetchData.files || []);
+            // fetchData.files가 존재하면 해당 값을 사용하고, 그렇지 않으면 빈 배열을 사용합니다.
         }
-
-
         fetchRegularDetail();
-    }, []);
+    }, [fetchData]);
+
     return (
         <Transition.Root show={open} as={Fragment}>
             <Dialog
@@ -116,11 +111,13 @@ export default function DetailedModal({fetchData, actForm, index}) {
                                         </Dialog.Title>
                                         <div className="mt-2">
                           <textarea
+                              ref={content}
                               rows={4}
                               name="comment"
                               id="comment"
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6"
                               defaultValue={regularActContent}
+
                           />
                                         </div>
                                         <div className="mt-10">
@@ -164,65 +161,61 @@ export default function DetailedModal({fetchData, actForm, index}) {
                                             </Dialog.Title>
                                             <div
                                                 className="group aspect-h-7 aspect-w-10 block w-full overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100">
-                                                {fetchData.filePath ? (
-                                                    fetchData.filePath.map((file, index) => (
-                                                        <img
-                                                            key={index} // 각 이미지에 고유한 key를 지정해야 합니다.
-                                                            src={process.env.REACT_APP_API_BASE_URL + file}
-                                                            alt=""
-                                                            className="pointer-events-none object-cover group-hover:opacity-75"
-                                                        />
-                                                    ))
-                                                ) : null}
+                                                {fetchData?.filePath?.map((file, index) => (
+                                                    <img
+                                                        key={index} // 각 이미지에 고유한 key를 지정해야 합니다.
+                                                        src={process.env.REACT_APP_API_BASE_URL + file}
+                                                        alt=""
+                                                        className="pointer-events-none object-cover group-hover:opacity-75"
+                                                    />
+                                                ))}
                                             </div>
                                         </div>
                                         <div className="mt-10">
-                                            <Dialog.Title
-                                                as="h3"
-                                                className="text-base font-semibold leading-6 text-gray-900"
-                                            >
-                                                사진등록(후)
-                                            </Dialog.Title>
+                                            <Dialog.Title as="h3"
+                                                          className="text-base font-semibold leading-6 text-gray-900"/>
+                                            사진등록(후)
+                                            {files && files.length > 0 ? (
+                                                <div>
+                                                    {files.map((file, index) => (
+                                                        <div key={index}>
+                                                            <img
+                                                                src={URL.createObjectURL(file)}
+                                                                alt="Preview"
+                                                                className="pointer-events-none object-cover group-hover:opacity-75"
+                                                            />
+                                                            {file.name}
+                                                            <button
+                                                                onClick={() => deleteFile(index)}
+                                                                className="ml-2 text-red-600"
+                                                                type="button"
+                                                            >
+                                                                삭제
+                                                            </button>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            ) : (null)}
+
                                             <FilePond
-                                                allowMultiple={true} // 다중 파일 업로드 허용
-                                                maxFiles={5} // 최대 파일 수 설정
-                                                acceptedFileTypes={[
-                                                    "image/jpeg",
-                                                    "image/jpg",
-                                                    "image/png",
-                                                ]}
-                                                // 엔드포인트는 백엔드 구현되면 연결요
+                                                key="uniqueKey"
+                                                allowMultiple={true}
+                                                maxFiles={5}
+                                                acceptedFileTypes={["image/jpeg", "image/jpg", "image/png"]}
                                                 onupdatefiles={(fileItems) => {
-                                                    // 파일 정보를 상태에 저장하거나 처리
-                                                    const selectedFiles = fileItems.map(
-                                                        (fileItem) => fileItem.file
-                                                    );
-                                                    setFiles(selectedFiles);
-                                                }}
-                                                server={{
-                                                    process: (
-                                                        fieldName,
-                                                        file,
-                                                        metadata,
-                                                        load,
-                                                        error,
-                                                        progress,
-                                                        abort
-                                                    ) => {
-                                                        // 확장자 검사
-                                                        if (
-                                                            !file.type.includes("image/jpeg") &&
-                                                            !file.type.includes("image/jpg") &&
-                                                            !file.type.includes("image/png")
-                                                        ) {
-                                                            error("업로드할 수 없는 확장자입니다.");
-                                                            alert("업로드할 수 없는 확장자입니다.");
-                                                            return;
-                                                        }
-                                                    },
+
+                                                    // 기존 files 배열을 복사하여 새로운 배열 생성
+                                                    const updatedFiles = [...newFiles];
+                                                    // fileItems에서 새로운 파일을 추출하여 기존 파일 배열에 추가
+                                                    fileItems.forEach((fileItem) => {
+                                                        updatedFiles.push(fileItem.file);
+                                                    });
+                                                    // 업데이트된 파일 배열을 setFiles로 설정
+                                                    setNewFiles(updatedFiles);
                                                 }}
                                                 labelIdle='클릭하거나 <span class="filepond--label-action">파일을 여기에 드롭하여 선택하세요</span>'
                                             />
+
                                         </div>
                                     </div>
                                 </div>

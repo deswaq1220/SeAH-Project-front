@@ -14,6 +14,13 @@ const notificationMethods = [
   { id: "NA", title: "N/A", color: "text-gray-900" },
 ];
 
+const notificationMethods2 = [
+  { id: "GOOD", title: "양호", color: "text-blue-600" },
+  { id: "BAD", title: "불량", color: "text-red-600" },
+  { id: "NA", title: "N/A", color: "text-gray-900" },
+];
+
+
 
 
 export default function UserRegularDetails() {
@@ -45,12 +52,6 @@ const [isModalOpen, setIsModalOpen] = useState(false); // 각 행마다 모달 �
     console.log(regularDetailDTOList[index].isModalState);
     setIsModalOpen(false);
     setIsModalOpen(true);
-
-    // setTimeout(() => { // setTimeout 사용
-    //
-    //   setIsModalOpen(false);
-    //
-    // }, 1000)
   }
 
     const handleActDataChange = (actForm) => {
@@ -59,6 +60,7 @@ const [isModalOpen, setIsModalOpen] = useState(false); // 각 행마다 모달 �
 
         regularDetailDTOList[actForm.index].isModalState = "close";
         regularDetailDTOList[actForm.index].regularActContent = actForm.regularActContent;
+      regularDetailDTOList[actForm.index].files = actForm.files;
       console.log(regularDetailDTOList[actForm.index].isModalState);
         setIsModalOpen(false);
     };
@@ -151,7 +153,22 @@ const dataTest =  ()=>{
                       {index+1}
                       <dl className="font-normal lg:hidden">
                         <dt className="sr-only">Title</dt>
-                        <dd className="mt-1 truncate text-gray-700">{regularDetail.checklist}</dd>
+                        {
+                          regularDetail.regularCheck === 'BAD' ? (
+                              <dd
+                                  className="mt-1 truncate text-gray-700 cursor-pointer"
+                                  onClick={() => handleChecklistClick(index)}
+                              >
+                                {regularDetail.checklist}
+                              </dd>
+                          ) : (
+                              <dd className="mt-1 truncate text-gray-700">
+                                {regularDetail.checklist}
+                              </dd>
+                          )
+                        }
+
+
                         <dt className="sr-only sm:hidden">Email</dt>
                         <dd className="mt-1 truncate text-gray-500 sm:hidden">
                           <div className="space-x-4 flex">
@@ -159,7 +176,7 @@ const dataTest =  ()=>{
                               <div key={notificationMethod.id} className="flex items-center">
                                 <input
                                   type="radio"
-                                  name={`radio-group-${index}`}
+                                  name={`radio-group-${index}-1`}
                                  defaultChecked={regularDetail.regularCheck === notificationMethod.id}
                                 disabled
                                   className="h-4 w-4 border-gray-300 text-seahColor focus:ring-seahColor"
@@ -176,20 +193,29 @@ const dataTest =  ()=>{
                         </dd>
                       </dl>
                     </td>
-                     <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
-                        onClick={() => handleChecklistClick(index)}
-                     >
-                        {regularDetail.checklist}
-                      </td>
-                      <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
+                    {
+                      regularDetail.regularCheck === 'BAD' ? (
+                          <td
+                              className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                              onClick={() => handleChecklistClick(index)}
+                          >
+                            {regularDetail.checklist}
+                          </td>
+                      ) : (
+                          <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
+                            {regularDetail.checklist}
+                          </td>
+                      )
+                    }
+
+                    <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
                         <div className="space-x-4 flex">
                            {notificationMethods.map((notificationMethod) => (
                              <div key={notificationMethod.id} className="flex items-center">
                                <input
                                  type="radio"
-                                 name={`radio-group-${index}`}
+                                 name={`radio-group-${index}-2`}
                                 defaultChecked={regularDetail.regularCheck === notificationMethod.id}
-//                                    onChange={() => handleRadioChange(notificationMethod.id)}
                                  disabled
                                  className="h-4 w-4 border-gray-300 text-seahColor focus:ring-seahColor"
 
