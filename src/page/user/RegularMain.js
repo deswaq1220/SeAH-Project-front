@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Pagination from "../../components/Pagination";
 import { Link } from "react-router-dom";
+import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
 function RegularMain() {
   const [currentDate, setCurrentDate] = useState(new Date()); // 년,월
@@ -212,14 +213,14 @@ function RegularMain() {
                        <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
                           {format(new Date(regular.regularDate), "yyyy-MM-dd HH시 mm분")}
                         </td>
-                        <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-
-                          {/* {regular.eduFiles.length > 0 ? (
-                            <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                             첨부
-                            </span>
-                          ) 
-                          : null} */}
+                        <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
+                          <div className="h-11 w-11 flex-shrink-0">
+                            {regular.regularComplete === 'OK' ? (
+                              <CheckCircleIcon className="text-green-600" />
+                            ) : (
+                              <XCircleIcon className="text-red-600" />
+                            )}
+                          </div>
                         </td>
                       </tr>
                     ))}
