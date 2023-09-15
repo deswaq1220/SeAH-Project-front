@@ -5,11 +5,12 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Pagination from "../../components/Pagination";
 import { Link } from "react-router-dom";
+import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
 function RegularMain() {
   const [currentDate, setCurrentDate] = useState(new Date()); // 년,월
   const [regularList, setRegularList] = useState([]); // 안전교육 데이터를 담을 상태 변수
-  
+
   const itemsPerPage = 10; // 한 페이지당 보여줄 항목 개수
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 번호
   const apiUrl = process.env.REACT_APP_API_BASE_URL;
@@ -35,7 +36,6 @@ function RegularMain() {
         const currentMonth = getMonth(currentDate) + 1; // 월은 0부터 시작하므로 1을 더해줌
         const currentYear = getYear(currentDate);
         const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/user/regularlist`, {   // 세아
-        // const response = await axios.get(`http://localhost:8081/regularlist, {
           params: {
             year: currentYear,
             month: currentMonth,
@@ -128,7 +128,7 @@ function RegularMain() {
           <div className="sm:flex sm:items-center">
             <div className="sm:flex-auto">
               <h1 className="text-base font-semibold leading-6 text-gray-900">
-              {getFormattedDate()} 정기점검 목록
+                {getFormattedDate()} 정기점검 목록
               </h1>
               <div className="flex justify-end">
                 <button
@@ -209,18 +209,19 @@ function RegularMain() {
                             </Link>
                           </div>
                         </td>
-                       <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                        <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
                           {format(new Date(regular.regularDate), "yyyy-MM-dd HH시 mm분")}
                         </td>
-                        <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-
-                          {/* {regular.eduFiles.length > 0 ? (
-                            <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                             첨부
-                            </span>
-                          ) 
-                          : null} */}
+                        <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
+                          <div className="h-11 w-11 flex-shrink-0">
+                            {regular.regularComplete === 'OK' ? (
+                              <CheckCircleIcon className="text-green-600" />
+                            ) : (
+                              <XCircleIcon className="text-red-600" />
+                            )}
+                          </div>
                         </td>
+
                       </tr>
                     ))}
                   </tbody>
@@ -239,7 +240,7 @@ function RegularMain() {
               totalItems={regularList.length}
               setCurrentPage={setCurrentPage}
             />
-          ) : ( <p className="flex justify-center">해당 월의 정기점검이 없습니다.</p>)}
+          ) : (<p className="flex justify-center">해당 월의 정기점검이 없습니다.</p>)}
         </div>
       </div>
     </div>
