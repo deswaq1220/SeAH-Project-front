@@ -35,7 +35,7 @@ export default function InsArea({ onFormDataChange }) {
   const handleCustomInputChange = (event) => {
     const value = event.target.value;
     setCustomInputValue(value);
-    onFormDataChange(value);
+    onFormDataChange({ partMenu: value });
   };
 
   // 영역 선택 시 selectedPart 값 업데이트하고 onFormDataChange 호출
