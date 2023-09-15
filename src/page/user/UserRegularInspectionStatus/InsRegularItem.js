@@ -10,7 +10,7 @@ function classNames(...classes) {
 
 export default function InsRegularItem({ onFormDataChange }) {
   const [regularNameList, setRegularNameList] = useState([]); //
-  const [selectedArea, setSelectedArea] = useState(null);
+  const [selectedArea, setSelectedArea] = useState({ id: 0, name: "선택" });
 
   useEffect(() => {
     async function fetchOptions() {
@@ -27,8 +27,8 @@ export default function InsRegularItem({ onFormDataChange }) {
           })
         );
 
-        setRegularNameList(optionsArray);
-        setSelectedArea(optionsArray[0]);
+        setRegularNameList([{ id: 0, name: "선택" }, ...optionsArray]);
+        // setSelectedArea(optionsArray[0]);
         // console.log(response.data);
       } catch (error) {
         console.error("서버 요청 오류:", error);
@@ -59,7 +59,7 @@ export default function InsRegularItem({ onFormDataChange }) {
             <div className="relative mt-2">
               <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-32 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-seahColor sm:text-sm sm:leading-6">
                 <span className="block truncate">
-                  {selectedArea ? selectedArea.name : "선택"}
+                {selectedArea.name}
                 </span>
                 <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                   <ChevronUpDownIcon
