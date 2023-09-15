@@ -60,7 +60,7 @@ export default function Userfrequent() {
     }
 
     fetchDataWithAxios(masterdataPart, masterdataId);
-  }, [masterdataPart, masterdataId]);
+  }, []);
 
 
   return (
