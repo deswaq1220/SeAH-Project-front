@@ -18,7 +18,8 @@ export default function UserRegularInspectionStatus() {
   const [spePerson, setSpePerson] = useState(null); // 점검자사번
   const [speEmpNum, setSpeEmpNum] = useState(null); // 점검자 이름
   const [searchResult, setSearchResult] = useState([]); // 검색 결과 저장할 새로운 state
-
+  const [regularInsName , setRegularInsName] = useState(null);
+  const [regularComplete, setRegularComplete] = useState(null);
   // 영역 콜백
   const handlePartDataChange = (selected) => {
     if (selected.partMenu === "선택") {
@@ -43,13 +44,15 @@ export default function UserRegularInspectionStatus() {
 
   const handleSearch = async () => { // async function으로 정의
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/user/searchregularlist`, { // GET 요청인지 POST 요청인지 확인 필요
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/user/searchregularlist`, { 
         params: {
-          part: spePart,
-          startDate: speStartDate,
-          endDate: speEndDate,
-          person: spePerson,
-          empNum: speEmpNum
+          regularPart: spePart,
+          regularInsName: regularInsName,
+          regularStartDate: speStartDate,
+          regularEndDate: speEndDate,
+          regularEmpNum: speEmpNum,
+          regularPerson: spePerson,
+          regularComplete: regularComplete, 
         }
       });
       setSearchResult(response.data); // 응답 데이터를 state에 저장

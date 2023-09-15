@@ -50,7 +50,7 @@ export default function Inspector({ onFormDataChange }) {
 
   return (
     <div className="flex flex-wrap">
-      <div id="inspector" className="flex items-baseline justify-start">
+      <div id="inspector" className="flex items-baseline justify-start flex-wrap">
         <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
           점검자
         </span>
@@ -84,7 +84,7 @@ export default function Inspector({ onFormDataChange }) {
             </div>
           </div>
         </div>
-        <div className="ml-2 flex items-baseline justify-start ">
+        <div className=" flex items-baseline justify-start ">
           <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
             완료 여부
           </span>
