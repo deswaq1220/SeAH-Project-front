@@ -14,26 +14,28 @@ export default function Regularactionrequest({ onFormDataChange, dataChange}) {
   const [instances, setInstances] = useState([{ selectedEmail: null }]);
 
   useEffect(() => {
-    async function emailFetchDataWithAxios() {
-      try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/user/regularemail`
-        );
+    // 이메일 데이터가 비어있는 경우에만 데이터 가져오기
+    if (emailDataList.length === 0) {
+      async function emailFetchDataWithAxios() {
+        try {
+          const response = await axios.get(
+              `${process.env.REACT_APP_API_BASE_URL}/user/regularemail`
+          );
 
-        const emailListFromBack = response.data["emailList"];
-        setEmailDataList(emailListFromBack);
+          const emailListFromBack = response.data["emailList"];
+          setEmailDataList(emailListFromBack);
 
-        // 이메일 고정수신자 리스트
-        const emailYListFromBack = response.data.staticEmailList;
-        setEmailYDataList(emailYListFromBack);
-        dataChange(emailYListFromBack);
-
-      } catch (error) {
-        console.error("데이터 가져오기 오류: ", error);
+          // 이메일 고정수신자 리스트
+          const emailYListFromBack = response.data.staticEmailList;
+          setEmailYDataList(emailYListFromBack);
+        } catch (error) {
+          console.error("데이터 가져오기 오류: ", error);
+        }
       }
+
+      emailFetchDataWithAxios();
     }
-    emailFetchDataWithAxios();
-  });
+  }, [emailDataList]); // emailDataList 상태가 변경될 때만 useEffect 실행
 
   // -----------------------------------
   const handleActionChange = (instanceIndex, selectedEmail) => {
