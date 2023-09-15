@@ -42,10 +42,9 @@ function RegularMain() {
             month: currentMonth,
           },
         });
-        const sortRegularList = response.data.sort((a, b) => {
-          return new Date(a.regTime) - new Date(b.regTime);
-        });
-        setRegularList(sortRegularList);
+        const regularData = response.data;
+
+        setRegularList(regularData);
         setSelectedMonth(currentMonth);
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
