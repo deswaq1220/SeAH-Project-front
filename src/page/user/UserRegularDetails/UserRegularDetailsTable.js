@@ -6,21 +6,19 @@ import UserHeader from "../../../components/UserHeader";
 import {useNavigate, useParams} from "react-router-dom";
 import { toast } from "react-toastify";
 import UserRegularDetailsOutput from "./UserRegularDetailsOutput";
-import DetailedModal from"./DetailedModal";
+import DetailedModal from "./DetailedModal";
 
 const notificationMethods = [
-  { id: "GOOD", title: "양호", color: "text-blue-600" },
-  { id: "BAD", title: "불량", color: "text-red-600" },
-  { id: "NA", title: "N/A", color: "text-gray-900" },
+    {id: "GOOD", title: "양호", color: "text-blue-600"},
+    {id: "BAD", title: "불량", color: "text-red-600"},
+    {id: "NA", title: "N/A", color: "text-gray-900"},
 ];
 
 const notificationMethods2 = [
-  { id: "GOOD", title: "양호", color: "text-blue-600" },
-  { id: "BAD", title: "불량", color: "text-red-600" },
-  { id: "NA", title: "N/A", color: "text-gray-900" },
+    {id: "GOOD", title: "양호", color: "text-blue-600"},
+    {id: "BAD", title: "불량", color: "text-red-600"},
+    {id: "NA", title: "N/A", color: "text-gray-900"},
 ];
-
-
 
 
 export default function UserRegularDetails() {
@@ -28,32 +26,32 @@ export default function UserRegularDetails() {
 const [selectedValue, setSelectedValue] = useState();
 const navigate = useNavigate();
 
-function handleRadioChange(value) {
-    setSelectedValue(value);
-}
+    function handleRadioChange(value) {
+        setSelectedValue(value);
+    }
 
-const [regularDetailDTOList, setRegularDetailDTOList] = useState([]);
-const {regularId} = useParams();
- const [regularIns, setRegularIns] = useState([]);
- const [regularData, setRegularData] = useState({
-   regularEmpNum:"",
-   regularPart:"",
-   regularPerson:"",
-   regularDate: "",
-   regularInsName:"",
-   regularEmail:"",
- });
-const [isModalOpen, setIsModalOpen] = useState(false); // 각 행마다 모달 상태 저장
+    const [regularDetailDTOList, setRegularDetailDTOList] = useState([]);
+    const {regularId} = useParams();
+    const [regularIns, setRegularIns] = useState([]);
+    const [regularData, setRegularData] = useState({
+        regularEmpNum: "",
+        regularPart: "",
+        regularPerson: "",
+        regularDate: "",
+        regularInsName: "",
+        regularEmail: "",
+    });
+    const [isModalOpen, setIsModalOpen] = useState(false); // 각 행마다 모달 상태 저장
 
-  // handleChecklistClick 함수 정의
-  function handleChecklistClick(index) {
-  console.log(regularDetailDTOList[index]);
+    // handleChecklistClick 함수 정의
+    function handleChecklistClick(index) {
+        console.log(regularDetailDTOList[index]);
 
-    regularDetailDTOList[index].isModalState = "open";
-    console.log(regularDetailDTOList[index].isModalState);
-    setIsModalOpen(false);
-    setIsModalOpen(true);
-  }
+        regularDetailDTOList[index].isModalState = "open";
+        console.log(regularDetailDTOList[index].isModalState);
+        setIsModalOpen(false);
+        setIsModalOpen(true);
+    }
 
     const handleActDataChange = (actForm) => {
 
@@ -61,46 +59,73 @@ const [isModalOpen, setIsModalOpen] = useState(false); // 각 행마다 모달 �
 
         regularDetailDTOList[actForm.index].isModalState = "close";
         regularDetailDTOList[actForm.index].regularActContent = actForm.regularActContent;
-      regularDetailDTOList[actForm.index].files = actForm.files;
-      console.log(regularDetailDTOList[actForm.index].isModalState);
+        regularDetailDTOList[actForm.index].files = actForm.files;
+        console.log(regularDetailDTOList[actForm.index].isModalState);
         setIsModalOpen(false);
     };
 
 
+    useEffect(() => {
+        const fetchRegularDetail = async () => {
+            try {
+                const response = await axios.get(
+                    `${process.env.REACT_APP_API_BASE_URL}/user/regular/detail/${regularId}`,        // 세아
+                    {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                    }
+                );
 
-  useEffect(() => {
+                setRegularData(response.data.regularDTO);
+                setRegularDetailDTOList([...response.data.regularDetailDTOList])
 
-    const fetchRegularDetail = async () => {
-      try {
-        const response = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/user/regular/detail/${regularId}`,        // 세아
-            {
-              headers: {
-                'Content-Type': 'application/json'
-              },
+
+                console.log("파일이름 찾기");
+                console.log(response.data);
+
+
+            } catch (error) {
+                console.error("Error fetching data:", error);
             }
-        );
+        };
 
-        setRegularData(response.data.regularDTO );
-        setRegularDetailDTOList([...response.data.regularDetailDTOList])
-
-
-        console.log("파일이름 찾기");
-        console.log(response.data);
+        fetchRegularDetail();
+    }, []);
 
 
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+    const updateBadDetail = async (index) => {
+        console.log(regularDetailDTOList[index]);
+
+        let regularBadId = regularDetailDTOList[index].regularBadId;
+
+        let regularDetailDTO = regularDetailDTOList[index];
+
+        regularDetailDTO.regularInspectionId = regularId;
+
+
+        try {
+
+            const response = await axios.post(
+                `${process.env.REACT_APP_API_BASE_URL}/user/regular/badDetailModify/${regularBadId}`,
+                regularDetailDTO,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
+
+            // 요청이 성공했을 때 수행할 작업 (예: 응답 데이터 확인)
+            console.log(response.data);
+            // 페이지 새로고침
+            window.location.reload();
+        } catch (error) {
+            console.error("점검리스트 조회 오류", error);
+        }
     };
 
-    fetchRegularDetail();
-  }, []);
-
-const dataTest =  ()=>{
-  console.log(regularIns);
-}
-
+  
 // 삭제버튼 클릭 핸들러
   const handleDeleteButtonClick = (regularId) => {
     const confirmDelete = window.confirm("해당 정기점검 내역을 삭제하시겠습니까?");

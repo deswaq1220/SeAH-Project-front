@@ -44,12 +44,6 @@ export default function UserRegularTable() {
     const formData = new FormData();
 
     const handleRadioChange = (index, method) => {
-//        if (method === "BAD") {
-//            isModalOpen[index] = true; // 불량을 선택한 행의 모달을 열기
-//        } else {
-//            isModalOpen[index] = false; // 그 외에는 모달 닫기
-//        }
-
         regularcheckList[index].regularCheck = method; // 해당 행의 상태 입력
 
         setIsModalOpen([...isModalOpen]); // 새로운 모달 상태 설정
@@ -100,6 +94,7 @@ export default function UserRegularTable() {
         const updatedActContent = actForm.regularActContent;
         const updatedFile = actForm.files;
         const id = actForm.id;
+
         console.log(id);
         setRegularcheckList((prevChecklist) => {
             const updatedChecklist = [...prevChecklist]; // Copy the previous checklist
@@ -123,10 +118,6 @@ export default function UserRegularTable() {
     //점검리스트 조회
     const handleSearchClick = async () => {
         try {
-            // setSelectedItemIndex(null); // 라디오 버튼 선택값 초기화
-            // console.log("초기화?")
-            // console.log("초기화 되셨낭", selectedItemIndex)
-
             const selectedPosition = regularNameList.indexOf(selectedArea);
             if (selectedPosition !== -1) {
                 //  regularNum = selectedPosition + 1;
