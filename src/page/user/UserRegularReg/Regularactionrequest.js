@@ -28,6 +28,7 @@ export default function Regularactionrequest({ onFormDataChange, dataChange}) {
           // 이메일 고정수신자 리스트
           const emailYListFromBack = response.data.staticEmailList;
           setEmailYDataList(emailYListFromBack);
+          dataChange(emailYListFromBack);
         } catch (error) {
           console.error("데이터 가져오기 오류: ", error);
         }
