@@ -19,9 +19,13 @@ export default function DetailedModal({fetchData, actForm, index}) {
     const [regularActEmail, setRegularActEmail] = useState("");
     const [regularActContent, setRegularActContent] = useState("");
     const [files, setFiles] = useState([]);
-    const [filePath, setFilePath] = useState();
+    const [beforeFilePath, setBeforeFilePath] = useState();
+    const [aftereFilePath, setAfterFilePath] = useState();
+
     const content = useRef();
     const [newFiles, setNewFiles] = useState([]);
+    const [regularComplete, setRegularComplete] = useState([]);
+
 
     //파일 삭제
     const deleteFile = (index) => {
@@ -38,7 +42,8 @@ export default function DetailedModal({fetchData, actForm, index}) {
         actForm({
             regularActPerson: regularActPerson,
             regularActEmail: regularActEmail,
-            regularActContent: content.current.value,
+            // regularActContent: content.current.value,
+            regularActContent: fetchData.regularActContent,
             files: newFiles.length > 0 ? [...newFiles,...files] : [...files],
             index: index,
         });
@@ -61,7 +66,9 @@ export default function DetailedModal({fetchData, actForm, index}) {
             setRegularActContent(fetchData.regularActContent);
             setRegularActEmail(fetchData.regularActEmail);
             setRegularActPerson(fetchData.regularActPerson);
-            setFilePath(fetchData.filePath);
+            setBeforeFilePath(fetchData.beforeFilePath|| []);
+            setAfterFilePath(fetchData.afterFilePath|| []);
+            setRegularComplete(fetchData.regularComplete);
             setFiles(fetchData.files || []);
             // fetchData.files가 존재하면 해당 값을 사용하고, 그렇지 않으면 빈 배열을 사용합니다.
         }
@@ -117,6 +124,7 @@ export default function DetailedModal({fetchData, actForm, index}) {
                               id="comment"
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6"
                               defaultValue={regularActContent}
+                              disabled
 
                           />
                                         </div>
@@ -161,7 +169,7 @@ export default function DetailedModal({fetchData, actForm, index}) {
                                             </Dialog.Title>
                                             <div
                                                 className="group aspect-h-7 aspect-w-10 block w-full overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100">
-                                                {fetchData?.filePath?.map((file, index) => (
+                                                {fetchData?.beforeFilePath?.map((file, index) => (
                                                     <img
                                                         key={index} // 각 이미지에 고유한 key를 지정해야 합니다.
                                                         src={process.env.REACT_APP_API_BASE_URL + file}
@@ -173,70 +181,109 @@ export default function DetailedModal({fetchData, actForm, index}) {
                                         </div>
                                         <div className="mt-10">
                                             <Dialog.Title as="h3"
-                                                          className="text-base font-semibold leading-6 text-gray-900"/>
-                                            사진등록(후)
-                                            {files && files.length > 0 ? (
+                                                          className="text-base font-semibold leading-6 text-gray-900">
+                                                사진등록(후)
+                                            </Dialog.Title>
+                                            {/* 이미지를 표시할 부분 */}
+                                            {fetchData?.afterFilePath && fetchData?.afterFilePath.length > 0 ? (
                                                 <div>
-                                                    {files.map((file, index) => (
+                                                    {fetchData.afterFilePath.map((file, index) => (
                                                         <div key={index}>
                                                             <img
-                                                                src={URL.createObjectURL(file)}
-                                                                alt="Preview"
+                                                                src={process.env.REACT_APP_API_BASE_URL + file}
+                                                                alt=""
                                                                 className="pointer-events-none object-cover group-hover:opacity-75"
                                                             />
-                                                            {file.name}
-                                                            <button
-                                                                onClick={() => deleteFile(index)}
-                                                                className="ml-2 text-red-600"
-                                                                type="button"
-                                                            >
-                                                                삭제
-                                                            </button>
                                                         </div>
                                                     ))}
                                                 </div>
-                                            ) : (null)}
-
-                                            <FilePond
-                                                key="uniqueKey"
-                                                allowMultiple={true}
-                                                maxFiles={5}
-                                                acceptedFileTypes={["image/jpeg", "image/jpg", "image/png"]}
-                                                onupdatefiles={(fileItems) => {
-
-                                                    // 기존 files 배열을 복사하여 새로운 배열 생성
-                                                    const updatedFiles = [...newFiles];
-                                                    // fileItems에서 새로운 파일을 추출하여 기존 파일 배열에 추가
-                                                    fileItems.forEach((fileItem) => {
-                                                        updatedFiles.push(fileItem.file);
-                                                    });
-                                                    // 업데이트된 파일 배열을 setFiles로 설정
-                                                    setNewFiles(updatedFiles);
-                                                }}
-                                                labelIdle='클릭하거나 <span class="filepond--label-action">파일을 여기에 드롭하여 선택하세요</span>'
-                                            />
-
+                                            ) : (
+                                                /* 파일 업로드 부분 */
+                                                <div>
+                                                    {files && files.length > 0 ? (
+                                                        <div>
+                                                            {files.map((file, index) => (
+                                                                <div key={index}>
+                                                                    <img
+                                                                        src={URL.createObjectURL(file)}
+                                                                        alt="Preview"
+                                                                        className="pointer-events-none object-cover group-hover:opacity-75"
+                                                                    />
+                                                                    {file.name}
+                                                                    <button
+                                                                        onClick={() => deleteFile(index)}
+                                                                        className="ml-2 text-red-600"
+                                                                        type="button"
+                                                                    >
+                                                                        삭제
+                                                                    </button>
+                                                                </div>
+                                                            ))}
+                                                            <FilePond
+                                                                key="uniqueKey"
+                                                                allowMultiple={true}
+                                                                maxFiles={5}
+                                                                acceptedFileTypes={["image/jpeg", "image/jpg", "image/png"]}
+                                                                onupdatefiles={(fileItems) => {
+                                                                    const updatedFiles = [...newFiles];
+                                                                    fileItems.forEach((fileItem) => {
+                                                                        updatedFiles.push(fileItem.file);
+                                                                    });
+                                                                    setNewFiles(updatedFiles);
+                                                                }}
+                                                                labelIdle='클릭하거나 <span class="filepond--label-action">파일을 여기에 드롭하여 선택하세요</span>'
+                                                            />
+                                                        </div>
+                                                    ) : (
+                                                        <FilePond
+                                                            key="uniqueKey"
+                                                            allowMultiple={true}
+                                                            maxFiles={5}
+                                                            acceptedFileTypes={["image/jpeg", "image/jpg", "image/png"]}
+                                                            onupdatefiles={(fileItems) => {
+                                                                const updatedFiles = [...newFiles];
+                                                                fileItems.forEach((fileItem) => {
+                                                                    updatedFiles.push(fileItem.file);
+                                                                });
+                                                                setNewFiles(updatedFiles);
+                                                            }}
+                                                            labelIdle='클릭하거나 <span class="filepond--label-action">파일을 여기에 드롭하여 선택하세요</span>'
+                                                        />
+                                                    )}
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
-                                <div
-                                    className="mt-10 mb-16 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
+
+                                {regularComplete === 'NO' ? (
+                                    <div className="mt-10 mb-16 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
+                                        <button
+                                            type="button"
+                                            className="inline-flex w-full justify-center rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor sm:col-start-2"
+                                            onClick={handleSaveClick}
+                                        >
+                                            저장
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+                                            onClick={handleCancelClick}
+                                            // ref={cancelButtonRef}
+                                        >
+                                            취소
+                                        </button>
+                                    </div>
+                                ) : (
+
                                     <button
                                         type="button"
                                         className="inline-flex w-full justify-center rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor sm:col-start-2"
-                                        onClick={handleSaveClick}
-                                    >
-                                        저장
-                                    </button>
-                                    <button
-                                        type="button"
-                                        className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
                                         onClick={handleCancelClick}
-                                        //                        ref={cancelButtonRef}
                                     >
-                                        취소
+                                        닫기
                                     </button>
-                                </div>
+                                )}
                             </div>
                         </Transition.Child>
                     </div>
