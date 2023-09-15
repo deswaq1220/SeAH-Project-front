@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import FaultyModal from "../UserRegularReg/FaultyModal";
 import UserHeader from "../../../components/UserHeader";
-import { useParams } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import { toast } from "react-toastify";
 import UserRegularDetailsOutput from "./UserRegularDetailsOutput";
 import DetailedModal from"./DetailedModal";
@@ -26,6 +26,7 @@ const notificationMethods2 = [
 export default function UserRegularDetails() {
 
 const [selectedValue, setSelectedValue] = useState();
+const navigate = useNavigate();
 
 function handleRadioChange(value) {
     setSelectedValue(value);
@@ -100,6 +101,26 @@ const dataTest =  ()=>{
   console.log(regularIns);
 }
 
+// 삭제버튼 클릭 핸들러
+  const handleDeleteButtonClick = (regularId) => {
+    const confirmDelete = window.confirm("해당 정기점검 내역을 삭제하시겠습니까?");
+    console.log("regularId: "+regularId);
+    if (confirmDelete) {
+      axios
+          .delete(`${process.env.REACT_APP_API_BASE_URL}/user/regular/detail/${regularId}`)
+          .then((response) => {
+            // 삭제 요청이 성공한 경우 처리
+            console.log("삭제 성공:", response);
+            navigate(-1);
+
+          })
+          .catch((error) => {
+            // 삭제 요청이 실패한 경우 처리
+            console.error("삭제 실패:", error);
+            // 실패한 경우 사용자에게 알림을 표시하거나 다른 작업을 수행할 수 있습니다.
+          });
+    }
+  };
 
   return (
     <div>
@@ -244,7 +265,13 @@ const dataTest =  ()=>{
           </table>
         </div>
         <div className="flex justify-end mt-4">
-
+          <button
+              type="button"
+              className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mr-2"
+              onClick={() => handleDeleteButtonClick(regularId)} // regularId 값을 넘겨줍니다.
+          >
+            삭제
+          </button>
           <button
             type="button"
             className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
