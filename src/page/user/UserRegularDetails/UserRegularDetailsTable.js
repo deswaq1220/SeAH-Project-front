@@ -65,7 +65,6 @@ export default function UserRegularDetails() {
 
 
     useEffect(() => {
-
         const fetchRegularDetail = async () => {
             try {
                 const response = await axios.get(

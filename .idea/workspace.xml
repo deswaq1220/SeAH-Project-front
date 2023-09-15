@@ -8,9 +8,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/page/user/UserRegularDetails/DetailedModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserRegularDetails/DetailedModal.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/page/user/UserRegularDetails/UserRegularDetailsTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserRegularDetails/UserRegularDetailsTable.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/UserRegularReg/FaultyModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserRegularReg/FaultyModal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/UserRegularReg/Regularactionrequest.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserRegularReg/Regularactionrequest.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/UserRegularReg/UserRegularTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserRegularReg/UserRegularTable.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,6 +78,7 @@
       <workItem from="1694073289891" duration="12875000" />
       <workItem from="1694394197505" duration="31953000" />
       <workItem from="1694654832342" duration="22674000" />
+      <workItem from="1694742327469" duration="3824000" />
     </task>
     <servers />
   </component>
