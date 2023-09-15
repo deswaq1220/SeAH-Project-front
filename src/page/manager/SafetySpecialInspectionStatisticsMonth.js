@@ -80,7 +80,19 @@ function SafetySpecialInspectionStatisticsMonth() {
       },
       {
         sheetName: "위험원인 분석",
-        data: causeCountForExcel.map((item) => ({ 위험원인: item[0], 건수: item[1] })),
+        data: [
+          ...causeCountForExcel1
+              .filter((item) => !(item[0] === '기타(직접입력)' && item[1] === 0)) // 직접입력이면서 값이 0인 경우 제거
+              .map((item) => ({ 위험원인: item[0], 건수: item[1] })),
+
+          ...(causeCountForExcel2.length === 0
+              ? causeCountForExcel1
+                  .filter((item) => item[0] == '기타(직접입력)' && item[1] === 0)
+                  .map((item) => ({ 위험원인: item[0], 건수: item[1] }))
+              : [
+                ...causeCountForExcel2.map((item) => ({ 위험원인: item[0], 건수: item[1] }))
+              ])
+        ]
       },
     ];
 
@@ -110,7 +122,8 @@ function SafetySpecialInspectionStatisticsMonth() {
     const [partCountForExcel, setPartCountForExcel] = useState([]);
     const [dangerCount, setDangerCount] = useState([]);
     const [causeCount, setCauseCount] = useState([]);
-    const [causeCountForExcel, setCauseCountForExcel] = useState([]);
+    const [causeCountForExcel1, setCauseCountForExcel1] = useState([]);
+    const [causeCountForExcel2, setCauseCountForExcel2] = useState([]);
 
 
 
@@ -175,11 +188,19 @@ function SafetySpecialInspectionStatisticsMonth() {
           });
       await axios
           .get(
-              `${process.env.REACT_APP_API_BASE_URL}/admin/special/statistics/causeandmonthforexcel`,
+              `${process.env.REACT_APP_API_BASE_URL}/admin/special/statistics/causeandmonthforexcel1`,
               { params: { yearmonth: selectedYear } }
           )
           .then((response) => {
-            setCauseCountForExcel(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
+            setCauseCountForExcel1(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
+          });
+      await axios
+          .get(
+              `${process.env.REACT_APP_API_BASE_URL}/admin/special/statistics/causeandmonthforexcel2`,
+              { params: { yearmonth: selectedYear } }
+          )
+          .then((response) => {
+            setCauseCountForExcel2(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
           });
 
     } catch (error) {
