@@ -81,10 +81,17 @@ function SafetySpecialInspectionStatisticsMonth() {
       {
         sheetName: "위험원인 분석",
         data: [
-          ...causeCountForExcel1.map((item) => ({ 위험원인: item[0], 건수: item[1] })),
-          ...(causeCountForExcel1.some((item) => item[0] === '직접입력' && item[1] !== 0)
-              ? causeCountForExcel2.map((item) => ({ 위험원인: item[0], 건수: item[1] }))
-              : [])
+          ...causeCountForExcel1
+              .filter((item) => !(item[0] === '기타(직접입력)' && item[1] === 0)) // 직접입력이면서 값이 0인 경우 제거
+              .map((item) => ({ 위험원인: item[0], 건수: item[1] })),
+
+          ...(causeCountForExcel2.length === 0
+              ? causeCountForExcel1
+                  .filter((item) => item[0] == '기타(직접입력)' && item[1] === 0)
+                  .map((item) => ({ 위험원인: item[0], 건수: item[1] }))
+              : [
+                ...causeCountForExcel2.map((item) => ({ 위험원인: item[0], 건수: item[1] }))
+              ])
         ]
       },
     ];
