@@ -1,27 +1,18 @@
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import axios from "axios";
 
-
 export default function UserRegularInstpectionTable({ data }) {
-
-  const [regularlist, setRegularList] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/user/searchregularlist`);
-        setRegularList(response.data.searchResult
-          );
-        console.log(response.data.searchResult
-          )
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const regularlist = data;
+  // 날짜 포맷
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // getMonth는 0부터 시작하므로 1을 더해줍니다.
+    const day = date.getDate().toString().padStart(2, '0');
+    
+    return `${year}년 ${month}월 ${day}일`;
+  }
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 mx-4">
@@ -90,26 +81,33 @@ export default function UserRegularInstpectionTable({ data }) {
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
                   {regularlist.map((status) => (
-                    <tr key={status}>
+                    <tr key={status.regularId}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                          {status.regularPart}
+                        {status.regularPart}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {status.regularInsName}
+                        {status.regularInsName}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {status.regularDate}
+                      {formatDate(status.regularDate)}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {status.regularPerson}
+                        {status.regularPerson}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {status.regularInsCount}건
+                        {status.regularInsCount}건
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 flex justify-center">
+                        {status.regularComplete === "OK" ? (
+                          <CheckCircleIcon className="w-10 text-green-600" />
+                        ) : (
+                          <XCircleIcon className="w-10 text-red-600" />
+                        )}
                       </td>
 
-                       <td className="flex justify-center"> 
+                      {/* <td className="flex justify-center"> 
                            {(status.regularComplete === 'OK') ? (<CheckCircleIcon className="w–10 text-green–600" />) : (<XCircleIcon className="w–10 text-red–600" />)}
-                       </td> 
+                       </td>  */}
                     </tr>
                   ))}
                 </tbody>

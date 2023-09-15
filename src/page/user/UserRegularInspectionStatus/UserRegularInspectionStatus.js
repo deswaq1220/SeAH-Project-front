@@ -7,7 +7,7 @@ import InsBreadcrumbs from "./InsBreadcrumbs";
 import InsArea from "./InsArea";
 import InsRegularItem from "./InsRegularItem";
 import InsPeriod from "./InsPeriod";
-import Inspector from "../../manager/FrequentinseptionForm/inspector";
+import RegularInspector from "./RegularInspector";
 import UserRegularInspectionTable from "./UserRegularInstpectionTable";
 //수시점검 현황
 export default function UserRegularInspectionStatus() {
@@ -20,14 +20,14 @@ export default function UserRegularInspectionStatus() {
   const [searchResult, setSearchResult] = useState([]); // 검색 결과 저장할 새로운 state
   const [regularInsName , setRegularInsName] = useState(null);
   const [regularComplete, setRegularComplete] = useState(null);
-  // 영역 콜백
-  const handlePartDataChange = (selected) => {
-    if (selected.partMenu === "선택") {
-      setSpePart(null);
-    } else {
-      setSpePart(selected.partMenu);
-    }
-  };
+ // 영역 콜백
+ const handlePartDataChange = (selected) => {
+  if (selected === "선택") {
+    setSpePart(null);
+  } else {
+    setSpePart(selected);
+  }
+};
 
   // 기간 콜백
   const handleDateDataChange = (value) => {
@@ -36,15 +36,25 @@ export default function UserRegularInspectionStatus() {
   };
 
   // 점검자 콜백
-  const handleInspectorDataChange = (selected) => {
-    setSpePerson(selected.inspectorName);
-    setSpeEmpNum(selected.inspectorNum);
-  };
+const handleInspectorDataChange = (selected) => {
+  setSpePerson(selected.inspectorName);
+  setSpeEmpNum(selected.inspectorNum);
+  setRegularComplete(selected.speComplete); // 추가된 코드
+};
+
+  // 점검항목 콜백
+const handleRegularNameDataChange = (selected) => {
+  if (selected.name === "선택") {
+    setRegularInsName(null);
+  } else {
+    setRegularInsName(selected.name);
+  }
+};
   const isLoggedIn = sessionStorage.getItem("username", "admin") !== null;
 
-  const handleSearch = async () => { // async function으로 정의
+  const handleSearch = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/user/searchregularlist`, { 
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/user/searchregularlist`, {
         params: {
           regularPart: spePart,
           regularInsName: regularInsName,
@@ -52,15 +62,14 @@ export default function UserRegularInspectionStatus() {
           regularEndDate: speEndDate,
           regularEmpNum: speEmpNum,
           regularPerson: spePerson,
-          regularComplete: regularComplete, 
+          regularComplete: regularComplete
         }
       });
-      setSearchResult(response.data); // 응답 데이터를 state에 저장
+      setSearchResult(response.data.searchResult); // 응답 데이터를 state에 저장
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
 
   return (
     <>
@@ -74,11 +83,12 @@ export default function UserRegularInspectionStatus() {
           <div className="flex flex-wrap">
             <div className="flex flex-wrap">
               <InsArea onFormDataChange={handlePartDataChange} /> {/* 영역 */}
-              <InsRegularItem /> {/* 점검항목 */}
+              <InsRegularItem onFormDataChange={handleRegularNameDataChange} /> {/* 점검항목 */}
+
               <InsPeriod onFormDataChange={handleDateDataChange} /> {/* 기간 */}
             </div>
             <div className="flex items-center flex-wrap">
-              <Inspector onFormDataChange={handleInspectorDataChange} />{" "}
+              <RegularInspector onFormDataChange={handleInspectorDataChange} />{" "}
               {/* 점검자 */}
               <div className="flex flex-row-reverse">
                 <button
@@ -94,7 +104,7 @@ export default function UserRegularInspectionStatus() {
         </form>
         {/* 테이블 */}
         {/* 테이블 컴포넌트에 props로 searchResult 전달 */}
-      <UserRegularInspectionTable data={searchResult} />
+        <UserRegularInspectionTable data={searchResult} />
       </div>
     </>
   );
