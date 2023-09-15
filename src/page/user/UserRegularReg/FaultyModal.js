@@ -161,9 +161,7 @@ export default function FaultyModal({ index, actForm, fetchData }) {
                         className="text-base font-semibold leading-6 text-gray-900"
                       >
                         담당자
-                        <div>
-                          {regularActEmail}
-                        </div>
+
                       </Dialog.Title>
                         <Regularactionrequest
                             selectedEmailChange = {selectedEmail}
@@ -192,7 +190,7 @@ export default function FaultyModal({ index, actForm, fetchData }) {
                                 </div>
                             ))
                         ) : (
-                            <p>파일이 없습니다.</p>
+                                null
                         )}
                       <Dialog.Title
                         as="h3"

@@ -37,16 +37,19 @@ export default function UserRegularTable() {
     const [checkList, setCheckList] = useState([]); //정기점검 항목
     const [selectedArea, setSelectedArea] = useState(null);
     const [regularNum, setRegularNum] = useState(0);
-    const [isModalOpen, setIsModalOpen] = useState([]); // 각 행마다 모달 상태 저장
+    const [isModalOpen, setIsModalOpen] = useState(false); // 각 행마다 모달 상태 저장
     const [isEditButtonVisible, setIsEditButtonVisible] = useState([]); // 각 행마다 수정 버튼 상태 저장
     const [regularcheckList, setRegularcheckList] = useState([]);
     const [files, setFiles] = useState([]);
     const formData = new FormData();
 
     const handleRadioChange = (index, method) => {
+    console.log(regularcheckList[index]);
         regularcheckList[index].regularCheck = method; // 해당 행의 상태 입력
+        if(method==='BAD'){
+            handleChecklistClick(index);
+        }
 
-        setIsModalOpen([...isModalOpen]); // 새로운 모달 상태 설정
     };
 
 
@@ -89,24 +92,24 @@ export default function UserRegularTable() {
         console.log(value);
     };
 
-    //bad 상태일때 점검자 이름, 이메일,내용 저장
-    function handleChecklistClick(index) {
 
+    function handleChecklistClick(index) {
+                 setIsModalOpen(true);
         regularcheckList[index].isModalState = "open";
-        setIsModalOpen(false);
-        setIsModalOpen(true);
-    }
+}
+
     const handleActDataChange = (actForm) => {
-        console.log(regularcheckList[actForm.index])
+        console.log(regularcheckList[actForm.index]);
 
         const updatedActPerson = actForm.regularActPerson;
         const updatedActEmail = actForm.regularActEmail;
         const updatedActContent = actForm.regularActContent;
         const updatedFile = actForm.files;
         const id = actForm.id;
+
         regularcheckList[actForm.index].isModalState = "close";
         setIsModalOpen(false);
-
+        console.log(regularcheckList[actForm.index].isModalState);
         setRegularcheckList((prevChecklist) => {
             const updatedChecklist = [...prevChecklist]; // Copy the previous checklist
             // Update the specific object in the checklist
@@ -116,9 +119,17 @@ export default function UserRegularTable() {
             updatedChecklist[actForm.index].files = updatedFile;
 
 
+
             return updatedChecklist; // Return the new checklist to update the state
         });
 
+        setRegularDTO((prevData) => ({
+                    ...prevData,
+                    file: {
+                        ...prevData.file,
+                        [id]: updatedFile, // '1' is the key and 'updatedFile' should be an array of File or Blob objects.
+                    },
+                }));
 
     };
 
@@ -152,29 +163,29 @@ export default function UserRegularTable() {
 
     const handleFormSubmit = async () => {
         try {
-            const updatedFiles = [];
+//       const updatedFilesMap = new Map();
 
-// regularcheckList를 순회하면서 files 필드를 추출하여 updatedFiles 배열에 추가합니다.
-            regularcheckList.forEach((regularcheck) => {
-                if (regularcheck.files) {
-                    updatedFiles.push(...regularcheck.files);
-                }
-            });
+       // regularcheckList를 순회하면서 files 필드를 추출하여 updatedFilesMap에 추가합니다.
+//       regularcheckList.forEach((regularcheck) => {
+//           if (regularcheck.files) {
+//         setRegularDTO((prevData) => ({
+//                     ...prevData,
+//                     file: {
+//                         ...prevData.file,
+//                         [regularcheck.id]: regularcheck.files, // '1' is the key and 'updatedFile' should be an array of File or Blob objects.
+//                     },
+//                 }));
+//
+//           }
+//       });
 
-
-            console.log(updatedFiles);
 
             const updatedRegularcheckList = regularcheckList.map((regularcheck) => {
                 const { files, isModalState, ...rest } = regularcheck;
                 return rest;
             });
 
-            // setRegularDTO 함수를 호출하고 완료될 때까지 기다립니다.
-            // await setRegularDTO((prevData) => ({
-            //     ...prevData,
-            //     file: updatedFiles,
-            // }));
-            regularDTO.file = updatedFiles;
+
             regularDTO.regularDetailRegDTOList = JSON.stringify(updatedRegularcheckList);
 
             console.log("regularDTO", regularDTO);
@@ -404,7 +415,7 @@ export default function UserRegularTable() {
                                                     >
                                                         <input
                                                             type="radio"
-                                                            name={`radio-group-${index}`}
+                                                            name={`radio-group-${index}-1`}
                                                             value={item.id}
                                                             onChange={() =>
                                                                 handleRadioChange(
@@ -440,7 +451,7 @@ export default function UserRegularTable() {
                                             >
                                                 <input
                                                     type="radio"
-                                                    name={`radio-group-${index}`}
+                                                    name={`radio-group-${index}-2`}
                                                     value={item.id}
                                                     onChange={() =>
                                                         handleRadioChange(index, notificationMethod.id)
@@ -456,7 +467,7 @@ export default function UserRegularTable() {
                                             </div>
                                         ))}
                                     </div>
-                                    {item.regularCheck === "BAD" || item.isModalState === "open" ? (
+                                    {item.isModalState === "open" ? (
                                         <FaultyModal
                                             actForm={handleActDataChange}
                                             fetchData={item}
