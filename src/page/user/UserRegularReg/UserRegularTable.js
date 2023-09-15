@@ -241,7 +241,7 @@ export default function UserRegularTable() {
                                           </tr>
                                           <tr>
                                             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검 유해위험요인</td>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><font color="blue">${itemChecklist}</font></td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong><font color="blue">${itemChecklist}</font></strong></td>
                                           </tr>
                                           <tr>
                                             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">개선대책</td>
