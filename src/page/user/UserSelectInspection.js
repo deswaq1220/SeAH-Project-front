@@ -27,12 +27,8 @@ function classNames(...classes) {
 export default function UserSelectInspection() {
   const { masterdataPart } = useParams(); // url 영역 파라미터
   const { masterdataId } = useParams(); // url 설비코드 파라미터
-
   const [currentDate, setCurrentDate] = useState(new Date()); // 년,월
   const navigate = useNavigate();
-
-
-
 
   // 수시점검
   const [monthlyAll, setMonthlyAll] = useState(0); // 월별 수시점검 실시 정보
