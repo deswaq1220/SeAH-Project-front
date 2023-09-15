@@ -42,6 +42,7 @@ export default function UserRegularTable() {
     const [regularcheckList, setRegularcheckList] = useState([]);
     const [files, setFiles] = useState([]);
     const formData = new FormData();
+    const [staticEmailPerson, setStaticEmailPerson] = useState([]); //고정수신자
 
     const handleRadioChange = (index, method) => {
         regularcheckList[index].regularCheck = method; // 해당 행의 상태 입력
@@ -113,6 +114,8 @@ export default function UserRegularTable() {
                 [id]: updatedFile, // '1' is the key and 'updatedFile' should be an array of File or Blob objects.
             },
         }));
+        const staticEmailPerson = actForm.staticEmailPerson; //고정수신자
+        setStaticEmailPerson(staticEmailPerson);
     };
 
     //점검리스트 조회
