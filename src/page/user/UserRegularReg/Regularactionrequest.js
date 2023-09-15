@@ -8,7 +8,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Regularactionrequest({ onFormDataChange, onChange}) {
+export default function Regularactionrequest({ onFormDataChange, dataChange}) {
   const [emailDataList, setEmailDataList] = useState([]);
   const [emailYDataList, setEmailYDataList] = useState([]);
   const [instances, setInstances] = useState([{ selectedEmail: null }]);
@@ -26,7 +26,7 @@ export default function Regularactionrequest({ onFormDataChange, onChange}) {
         // 이메일 고정수신자 리스트
         const emailYListFromBack = response.data.staticEmailList;
         setEmailYDataList(emailYListFromBack);
-        onChange(emailYListFromBack);
+        dataChange(emailYListFromBack);
 
       } catch (error) {
         console.error("데이터 가져오기 오류: ", error);

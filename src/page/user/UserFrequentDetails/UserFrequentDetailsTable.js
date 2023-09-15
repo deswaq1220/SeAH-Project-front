@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { PaperClipIcon } from "@heroicons/react/20/solid";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import {toast} from "react-toastify";
 
 export default function UserFrequentDetailsTable() {
   const { speId } = useParams(); // URL 파라미터로부터 speId를 가져옵니다.
@@ -66,7 +67,11 @@ export default function UserFrequentDetailsTable() {
   // 수정버튼
   const handleEditButtonClick = (speId) => {
     if (inspectionData.specialData.speComplete === "OK") {
-      alert("완료된 내역은 수정이 불가합니다.");
+      toast.warn("완료된 내역은 수정이 불가합니다.", {
+        position: "top-center",
+        autoClose: 2000, // 알림이 3초 후에 자동으로 사라짐
+        hideProgressBar: true,
+      });
     } else {
       navigate(
         `/special/new/${inspectionData.specialData.spePart}/${inspectionData.facilityCode}?speId=${speId}`
@@ -81,7 +86,12 @@ export default function UserFrequentDetailsTable() {
   // 완료버튼
   const handleEditCompleteButtonClick = (speId) => {
     if (inspectionData.specialData.speComplete === "OK") {
-      alert("이미 조치완료된 내역입니다.");
+      // alert("이미 조치완료된 내역입니다.");
+      toast.warn("이미 조치완료된 내역입니다.", {
+        position: "top-center",
+        autoClose: 2000, // 알림이 3초 후에 자동으로 사라짐
+        hideProgressBar: true,
+      });
     } else {
       navigate(
         `/special/complete/${inspectionData.specialData.spePart}/${inspectionData.facilityCode}?speId=${speId}`
@@ -100,14 +110,14 @@ export default function UserFrequentDetailsTable() {
         <p className="mt-1 max-w-2xl text-base leading-6 text-gray-500">
           등록한 해당 수시점검의 조회 및 수정, 완료등록이 가능합니다
         </p>
-        <div className="flex justify-end mt-1">
-          <button
-            type="button"
-            className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mr-2"
-          >
-            삭제
-          </button>
-        </div>
+        {/*<div className="flex justify-end mt-1">*/}
+        {/*  <button*/}
+        {/*    type="button"*/}
+        {/*    className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mr-2"*/}
+        {/*  >*/}
+        {/*    삭제*/}
+        {/*  </button>*/}
+        {/*</div>*/}
       </div>
       <div className="mt-6 border-t border-gray-100">
         <dl className="divide-y divide-gray-100">

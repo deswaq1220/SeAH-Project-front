@@ -348,7 +348,7 @@ function SafetyInspectionStatisticsYear() {
     const handleExport2 = () => {
 
         // 엑셀 데이터 생성
-        const data = createDangerExcelData(regularBarChartData, uniqueNameKinds);
+        const data = createDangerExcelData(barChartData, uniqueDangerKinds);
 
         // 엑셀 시트 생성
         const worksheet = XLSX.utils.json_to_sheet(data);

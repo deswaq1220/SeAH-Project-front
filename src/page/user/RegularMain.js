@@ -192,7 +192,7 @@ function RegularMain() {
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           <div className="flex items-center">
                             <Link
-                              to={`/user/regular/detail/${regular.regularId}`}
+                              to={`/regulardetails/${regular.regularId}`}
                               className="font-medium text-seahColor hover:text-seahDeep "
                             >
                               {regular.regularInsName}
@@ -202,7 +202,7 @@ function RegularMain() {
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           <div className="flex items-center">
                             <Link
-                              to={`/user/regular/detail/${regular.regularId}`}
+                              to={`/regulardetails/${regular.regularId}`}
                               className="font-medium text-seahColor hover:text-seahDeep "
                             >
                               {regular.regularPart}

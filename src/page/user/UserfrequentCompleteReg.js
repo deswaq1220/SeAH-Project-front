@@ -50,6 +50,7 @@ function UserfrequentCompleteReg() {
   const [fileDatas, setFileDatas] = useState([]);   // 백에서 가져온 파일정보(업데이트정보)
   const [deleteFileIds, setDeleteFileIds] = useState([]);
   const emailActTitle = `${spePerson}님께서 요청하신 수시점검이 처리완료되었습니다`;
+  const [isLoading, setIsLoading] = useState(true);
 
   const [speData, setSpeData] = useState({
     employeenumber :"",
@@ -190,15 +191,22 @@ function UserfrequentCompleteReg() {
           setFileDatas(response.data.specialData.speFiles);
 
           console.log(speData);
+
+          setIsLoading(false);
           })
           .catch((error) => {
             // 에러 처리
             console.error("교육 세부 정보를 가져오는 중 에러 발생:", error);
           });
     }else {
-     alert("speId 값이 없다");
+
+     // alert("speId 값이 없다");
     }
   }, [speId]);
+
+  if (isLoading) {
+    return <div>Loading...</div>; // or return null; or a loading spinner;
+  }
 
 
   const handleFormSubmit  = () => {
@@ -279,7 +287,8 @@ function UserfrequentCompleteReg() {
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${formattedSpeActDate}</td>
           </tr>
           </table>
-            <p style="font-size:16px;">링크 : <a href="http://localhost:3000/special/detail/${response.data.speId}">상세보기</a></p>
+<!--            <p style="font-size:16px;">링크 : <a href="http://localhost:3000/special/detail/${response.data.speId}">상세보기</a></p>-->
+            <p style="font-size:16px;">링크 : <a href="http://172.20.10.13:3000/special/detail/${response.data.speId}">상세보기</a></p>
     `;
 
           const emailData = {
