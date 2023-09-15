@@ -8,32 +8,48 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Regularactionrequest({ onFormDataChange, dataChange}) {
+export default function Regularactionrequest({ onFormDataChange, dataChange, selectedEmailChange}) {
   const [emailDataList, setEmailDataList] = useState([]);
   const [emailYDataList, setEmailYDataList] = useState([]);
   const [instances, setInstances] = useState([{ selectedEmail: null }]);
 
+
   useEffect(() => {
-    async function emailFetchDataWithAxios() {
-      try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/user/regularemail`
-        );
+    // 이메일 데이터가 비어있는 경우에만 데이터 가져오기
+    if (emailDataList.length === 0) {
+      async function emailFetchDataWithAxios() {
+        try {
+          const response = await axios.get(
+              `${process.env.REACT_APP_API_BASE_URL}/user/regularemail`
+          );
 
-        const emailListFromBack = response.data["emailList"];
-        setEmailDataList(emailListFromBack);
+          const emailListFromBack = response.data["emailList"];
+          setEmailDataList(emailListFromBack);
 
-        // 이메일 고정수신자 리스트
-        const emailYListFromBack = response.data.staticEmailList;
-        setEmailYDataList(emailYListFromBack);
-        dataChange(emailYListFromBack);
+          // setInstances()
+          // 이메일 고정수신자 리스트
+          const emailYListFromBack = response.data.staticEmailList;
+          setEmailYDataList(emailYListFromBack);
+          dataChange(emailYListFromBack);
 
-      } catch (error) {
-        console.error("데이터 가져오기 오류: ", error);
+          if(selectedEmailChange.length!==0){
+            setInstances((prevInstances) =>
+                [
+                  ...selectedEmailChange.map((email) => ({ selectedEmail: email })),
+                ]
+            );
+          }
+
+
+
+        } catch (error) {
+          console.error("데이터 가져오기 오류: ", error);
+        }
       }
+
+      emailFetchDataWithAxios();
     }
-    emailFetchDataWithAxios();
-  });
+  }, [emailDataList,instances ,selectedEmailChange]); // emailDataList 상태가 변경될 때만 useEffect 실행
 
   // -----------------------------------
   const handleActionChange = (instanceIndex, selectedEmail) => {
@@ -194,6 +210,7 @@ export default function Regularactionrequest({ onFormDataChange, dataChange}) {
                 placeholder="E-Mail"
                 autoComplete=""
                 className="block w-full rounded-md border-0  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5 "
+
                 value={
                   instance.selectedEmail ? instance.selectedEmail.emailAdd : ""
                 }

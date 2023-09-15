@@ -50,6 +50,8 @@ export default function UserRegularTable() {
     };
 
 
+
+
     const [regularDTO, setRegularDTO] = useState({
         regularPerson: "", // 관찰자 이름
         regularEmail: "", //관찰자 이메일
@@ -88,31 +90,36 @@ export default function UserRegularTable() {
     };
 
     //bad 상태일때 점검자 이름, 이메일,내용 저장
+    function handleChecklistClick(index) {
+
+        regularcheckList[index].isModalState = "open";
+        setIsModalOpen(false);
+        setIsModalOpen(true);
+    }
     const handleActDataChange = (actForm) => {
+        console.log(regularcheckList[actForm.index])
+
         const updatedActPerson = actForm.regularActPerson;
         const updatedActEmail = actForm.regularActEmail;
         const updatedActContent = actForm.regularActContent;
         const updatedFile = actForm.files;
         const id = actForm.id;
+        regularcheckList[actForm.index].isModalState = "close";
+        setIsModalOpen(false);
 
-        console.log(id);
         setRegularcheckList((prevChecklist) => {
             const updatedChecklist = [...prevChecklist]; // Copy the previous checklist
             // Update the specific object in the checklist
             updatedChecklist[actForm.index].regularActPerson = updatedActPerson;
             updatedChecklist[actForm.index].regularActEmail = updatedActEmail;
             updatedChecklist[actForm.index].regularActContent = updatedActContent;
+            updatedChecklist[actForm.index].files = updatedFile;
+
 
             return updatedChecklist; // Return the new checklist to update the state
         });
 
-        setRegularDTO((prevData) => ({
-            ...prevData,
-            file: {
-                ...prevData.file,
-                [id]: updatedFile, // '1' is the key and 'updatedFile' should be an array of File or Blob objects.
-            },
-        }));
+
     };
 
     //점검리스트 조회
@@ -144,45 +151,62 @@ export default function UserRegularTable() {
     };
 
     const handleFormSubmit = async () => {
-        console.log(regularDTO.file);
-        regularDTO.regularDetailDTOList = JSON.stringify(regularcheckList);
+        try {
+            const updatedFiles = [];
 
-        console.log("regularDTO");
-        console.log(regularDTO);
-        //        let formData = new FormData();
+// regularcheckList를 순회하면서 files 필드를 추출하여 updatedFiles 배열에 추가합니다.
+            regularcheckList.forEach((regularcheck) => {
+                if (regularcheck.files) {
+                    updatedFiles.push(...regularcheck.files);
+                }
+            });
 
-        const response = await axios
-            .post(
+
+            console.log(updatedFiles);
+
+            const updatedRegularcheckList = regularcheckList.map((regularcheck) => {
+                const { files, isModalState, ...rest } = regularcheck;
+                return rest;
+            });
+
+            // setRegularDTO 함수를 호출하고 완료될 때까지 기다립니다.
+            // await setRegularDTO((prevData) => ({
+            //     ...prevData,
+            //     file: updatedFiles,
+            // }));
+            regularDTO.file = updatedFiles;
+            regularDTO.regularDetailRegDTOList = JSON.stringify(updatedRegularcheckList);
+
+            console.log("regularDTO", regularDTO);
+
+            // axios.post 실행
+            const response = await axios.post(
                 `${process.env.REACT_APP_API_BASE_URL}/user/regular/new`,
-
                 regularDTO,
                 {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },
                 }
-            )
-            .then((response) => {
-                console.log(response);
+            );
 
-                if (formData !== null) {
-                    // 등록이 완료되었다는 알림 띄우기
-                    toast.success("등록이 완료되었습니다.", {
-                        position: "top-center",
-                        autoClose: 2000, // 알림이 3초 후에 자동으로 사라짐
-                        hideProgressBar: true,
-                    });
+            console.log(response);
 
-                    // 저장성공시 리스트 페이지
-                    navigate(`/regular`);
-                }
-            })
-            .catch((error) => {
-                // console.log(requestData);
-                console.log(formData);
-                console.error(error);
-                toast.error("정기점검 등록에 실패했습니다. 다시 시도해주세요.");
-            });
+            if (formData !== null) {
+                // 등록이 완료되었다는 알림 띄우기
+                toast.success("등록이 완료되었습니다.", {
+                    position: "top-center",
+                    autoClose: 2000, // 알림이 3초 후에 자동으로 사라짐
+                    hideProgressBar: true,
+                });
+
+                // 저장성공시 리스트 페이지
+                navigate(`/regular`);
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error("정기점검 등록에 실패했습니다. 다시 시도해주세요.");
+        }
     };
 
     useEffect(() => {
@@ -367,7 +391,9 @@ export default function UserRegularTable() {
                                     {index + 1}
                                     <dl className="font-normal lg:hidden">
                                         <dt className="sr-only">Title</dt>
-                                        <dd className="mt-1 truncate text-gray-700">{item.checklist}</dd>
+                                        <dd className="mt-1 truncate text-gray-700"
+                                            onClick={() => handleChecklistClick(index)}
+                                        >{item.checklist}</dd>
                                         <dt className="sr-only sm:hidden">Email</dt>
                                         <dd className="mt-1 truncate text-gray-500 sm:hidden">
                                             <div className="space-x-4 flex">
@@ -400,7 +426,9 @@ export default function UserRegularTable() {
                                         </dd>
                                     </dl>
                                 </td>
-                                <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
+                                <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                                    onClick={() => handleChecklistClick(index)}
+                                >
                                     {item.checklist}
                                 </td>
                                 <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
@@ -428,11 +456,11 @@ export default function UserRegularTable() {
                                             </div>
                                         ))}
                                     </div>
-                                    {item.regularCheck === "BAD" ? (
+                                    {item.regularCheck === "BAD" || item.isModalState === "open" ? (
                                         <FaultyModal
                                             actForm={handleActDataChange}
+                                            fetchData={item}
                                             index={index}
-                                            id={item.id}
                                         />
                                     ) : null}
                                 </td>
