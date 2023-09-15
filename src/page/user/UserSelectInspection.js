@@ -31,25 +31,7 @@ export default function UserSelectInspection() {
   const [currentDate, setCurrentDate] = useState(new Date()); // 년,월
   const navigate = useNavigate();
 
-  // function 위에 있던거 function으로 옮겼음
-  const actions = [
-    {
-      title: "정기점검",
-      sub: "안전점검 영역에 대한 정기점검을 할 수 있습니다.",
-      href: "/regular",
-      icon: ClipboardDocumentListIcon,
-      iconForeground: "text-teal-700",
-      iconBackground: "bg-teal-50",
-    },
-    {
-      title: "수시점검",
-      sub: "영역 및 설비에 따른 수시점검을 할 수 있습니다.",
-      href: `/special/list/${masterdataPart}/${masterdataId}`,
-      icon: ClipboardDocumentCheckIcon,
-      iconForeground: "text-purple-700",
-      iconBackground: "bg-purple-50",
-    },
-  ];
+
 
 
   // 수시점검
@@ -97,7 +79,27 @@ export default function UserSelectInspection() {
     }
 
     fetchDataWithAxios(masterdataPart, masterdataId);
-  }, []);
+  });
+
+  // function 위에 있던거 function으로 옮겼음
+  const actions = [
+    {
+      title: "정기점검",
+      sub: "안전점검 영역에 대한 정기점검을 할 수 있습니다.",
+      href: "/regular",
+      icon: ClipboardDocumentListIcon,
+      iconForeground: "text-teal-700",
+      iconBackground: "bg-teal-50",
+    },
+    {
+      title: "수시점검",
+      sub: "영역 및 설비에 따른 수시점검을 할 수 있습니다.",
+      href: `/special/list/${masterdataPart}/${masterdataId}`,
+      icon: ClipboardDocumentCheckIcon,
+      iconForeground: "text-purple-700",
+      iconBackground: "bg-purple-50",
+    },
+  ];
 
   const regular = [
     // { name: '정기점검', href: '#', icon: UsersIcon, current: false },

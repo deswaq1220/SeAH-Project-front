@@ -570,6 +570,11 @@ function UserfrequentReg() {
       {fileDatas.map((fileItem, index) => (
         <div key={index} className="flex items-start mt-2">
           <div className="text-left">
+              <img
+                  key={index}
+                  src={process.env.REACT_APP_API_BASE_URL + fileItem.speFileUrl}
+                  alt={`사진 ${index + 1}`}
+              />
             {fileItem.speFileOriName}
           </div>
           <button
