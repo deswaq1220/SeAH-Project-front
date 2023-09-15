@@ -42,7 +42,7 @@ function RegularMain() {
           },
         });
         const sortRegularList = response.data.sort((a, b) => {
-          return new Date(a.regularDate) - new Date(b.regularDate);
+          return new Date(a.regTime) - new Date(b.regTime);
         });
         setRegularList(sortRegularList);
         setSelectedMonth(currentMonth);
@@ -175,6 +175,12 @@ function RegularMain() {
                         scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
+                        점검자
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
                         완료여부
                       </th>
                     </tr>
@@ -210,7 +216,10 @@ function RegularMain() {
                           </div>
                         </td>
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                          {format(new Date(regular.regularDate), "yyyy-MM-dd HH시 mm분")}
+                          {format(new Date(regular.regTime), "yyyy-MM-dd HH시 mm분")}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                          {regular.regularPerson}
                         </td>
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           <div className="h-11 w-11 flex-shrink-0">

@@ -33,7 +33,7 @@ export default function UserRegularDetails() {
         regularEmpNum: "",
         regularPart: "",
         regularPerson: "",
-        regularDate: "",
+        
         regularInsName: "",
         regularEmail: "",
     });
@@ -136,7 +136,7 @@ export default function UserRegularDetails() {
 
                 })
                 .catch((error) => {
-                    // 삭제 요청이 실패한 경우 처리
+                    // 삭제 요청이 실패한 경우 처리f
                     console.error("삭제 실패:", error);
                     // 실패한 경우 사용자에게 알림을 표시하거나 다른 작업을 수행할 수 있습니다.
                 });
