@@ -217,35 +217,35 @@ export default function UserRegularTable() {
                                           <table style="width: 100%; border-collapse: collapse; border: 1px solid #ccc;">
                                           <tr>
                                             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">항목</td>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">내용</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>내용</strong></td>
                                           </tr>
                                           <tr>
                                             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검일시</td>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${formattedRegisterDate}</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${formattedRegisterDate}</strong></td>
                                           </tr>
                                           <tr>
                                             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검자</td>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${regularDTO.regularPerson}</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${regularDTO.regularPerson}</strong></td>
                                           </tr>
                                           <tr>
                                             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">조치자</td>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${item.regularActPerson}</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${item.regularActPerson}</strong></td>
                                           </tr>
                                           <tr>
                                             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검구역</td>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${regularDTO.regularPart}</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${regularDTO.regularPart}</strong></td>
                                           </tr>
                                           <tr>
                                             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검항목</td>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${regularDTO.regularInsName}</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${regularDTO.regularInsName}</strong></td>
                                           </tr>
                                           <tr>
                                             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검 유해위험요인</td>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${itemChecklist}</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><font color="blue">${itemChecklist}</font></td>
                                           </tr>
                                           <tr>
                                             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">개선대책</td>
-                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${item.regularActContent}</td>
+                                            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${item.regularActContent}</strong></td>
                                           </tr>
                                           </table>
                                             <p style="font-size:16px;">링크 : <a href="http://localhost:3000/regulardetails/${response.data.regularId}">상세보기</a></p>`; /*★이거 정기점검항목의 상세목록-항목별 목록생기면 해당하는 주소로 바꿔야함 */
