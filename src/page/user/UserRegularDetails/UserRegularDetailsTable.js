@@ -56,7 +56,7 @@ export default function UserRegularDetails() {
         regularDetailDTOList[actForm.index].isModalState = "close";
         regularDetailDTOList[actForm.index].regularActContent = actForm.regularActContent;
         regularDetailDTOList[actForm.index].files = actForm.files;
-        console.log(regularDetailDTOList[actForm.index].isModalState);
+        console.log("ㅇㅇㅇㅇㅇㅇ"+ regularDetailDTOList[actForm.index].isModalState);
         setIsModalOpen(false);
     };
 
@@ -112,10 +112,110 @@ export default function UserRegularDetails() {
                 }
             );
 
-            // 요청이 성공했을 때 수행할 작업 (예: 응답 데이터 확인)
-            console.log(response.data);
+
+
+        // 이메일 발송기능
+/*        const registerDate = new Date(response.data.regularDate);
+        const options = {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            second: "numeric",
+            hour12: true,
+        };
+
+        const formattedRegisterDate = registerDate.toLocaleDateString(
+            "ko-KR",
+            options
+        );
+        const id = item.id; // 아이템의 ID 가져오기
+        const itemContent = regularcheckList.find(
+            (checkItem) => checkItem.id === id
+        );
+        const itemChecklist = itemContent.checklist;
+        console.log(
+            "itemContent==============" + formattedRegisterDate,
+            regularDTO.regularPerson,
+            item.regularActPerson,
+            regularDTO.regularPart,
+            regularDTO.regularInsName,
+            itemChecklist,
+            itemContent.regularActContent
+        );
+        console.log(staticEmailPerson);
+
+        const spendForm = `
+                              <table style="width: 100%; border-collapse: collapse; border: 1px solid #ccc;">
+                              <tr>
+                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">항목</td>
+                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>내용</strong></td>
+                              </tr>
+                              <tr>
+                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검일시</td>
+                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${formattedRegisterDate}</strong></td>
+                              </tr>
+                              <tr>
+                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검자</td>
+                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${regularDTO.regularPerson}</strong></td>
+                              </tr>
+                              <tr>
+                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">조치자</td>
+                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${item.regularActPerson}</strong></td>
+                              </tr>
+                              <tr>
+                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검구역</td>
+                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${regularDTO.regularPart}</strong></td>
+                              </tr>
+                              <tr>
+                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검항목</td>
+                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${regularDTO.regularInsName}</strong></td>
+                              </tr>
+                              <tr>
+                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검 유해위험요인</td>
+                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong><font color="blue">${itemChecklist}</font></strong></td>
+                              </tr>
+                              <tr>
+                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">개선대책</td>
+                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${item.regularActContent}</strong></td>
+                              </tr>
+                              </table>
+                                <p style="font-size:16px;">링크 : <a href="http://localhost:3000/regulardetails/${response.data.regularId}">상세보기</a></p>`; /!*★이거 정기점검항목의 상세목록-항목별 목록생기면 해당하는 주소로 바꿔야함 *!/
+
+        const actPersonEmails = item.regularActEmail
+            .split(",")
+            .map((email) => email.trim());
+        const finalEmailList = [...actPersonEmails, ...staticEmailPerson];
+        const uniqueRecipientsSet = new Set(finalEmailList); //이메일 중복제거
+        const uniqueRecipientsArray = Array.from(uniqueRecipientsSet); // Set을 다시 배열로 변환
+
+        const emailData = {
+            recipients: uniqueRecipientsArray,
+            subject: emailTitle,
+            content: spendForm,
+        };
+        console.log(
+            "emailData===============" + JSON.stringify(emailData, null, 2)
+        );
+
+        axios
+            .post(
+                `${process.env.REACT_APP_API_BASE_URL}/api/send-email`,
+                emailData
+            )
+            .then((response) => {
+                console.log("이메일 전송 완료:", response);
+            })
+            .catch((error) => {
+                console.error("이메일 전송 오류: ", error);
+            });*/
+
+
             // 페이지 새로고침
-            window.location.reload();
+            // window.location.reload();
+            // 요청이 성공했을 때 수행할 작업 (예: 응답 데이터 확인)
+            console.log("성공"+ response.data);
         } catch (error) {
             console.error("점검리스트 조회 오류", error);
         }
