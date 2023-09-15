@@ -248,7 +248,7 @@ export default function UserRegularTable() {
                                             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${item.regularActContent}</td>
                                           </tr>
                                           </table>
-                                            <p style="font-size:16px;">링크 : <a href="http://localhost:3000/regular/detail/${response.data.regularId}">상세보기</a></p>`; /*★이거 정기점검항목의 상세목록-항목별 목록생기면 해당하는 주소로 바꿔야함 */
+                                            <p style="font-size:16px;">링크 : <a href="http://localhost:3000/regulardetails/${response.data.regularId}">상세보기</a></p>`; /*★이거 정기점검항목의 상세목록-항목별 목록생기면 해당하는 주소로 바꿔야함 */
 
                             const actPersonEmails = item.regularActEmail
                                 .split(",")
