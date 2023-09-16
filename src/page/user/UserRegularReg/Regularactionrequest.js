@@ -8,10 +8,11 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Regularactionrequest({ onFormDataChange, dataChange}) {
+export default function Regularactionrequest({ onFormDataChange, dataChange, selectedEmailChange}) {
   const [emailDataList, setEmailDataList] = useState([]);
   const [emailYDataList, setEmailYDataList] = useState([]);
   const [instances, setInstances] = useState([{ selectedEmail: null }]);
+
 
   useEffect(() => {
     // 이메일 데이터가 비어있는 경우에만 데이터 가져오기
@@ -25,10 +26,21 @@ export default function Regularactionrequest({ onFormDataChange, dataChange}) {
           const emailListFromBack = response.data["emailList"];
           setEmailDataList(emailListFromBack);
 
+          // setInstances()
+
           // 이메일 고정수신자 리스트
           const emailYListFromBack = response.data.staticEmailList;
           setEmailYDataList(emailYListFromBack);
           dataChange(emailYListFromBack);
+
+          if(selectedEmailChange.length!==0){
+            setInstances((prevInstances) =>
+                [
+                  ...selectedEmailChange.map((email) => ({ selectedEmail: email })),
+                ]
+            );
+          }
+
         } catch (error) {
           console.error("데이터 가져오기 오류: ", error);
         }
@@ -36,7 +48,9 @@ export default function Regularactionrequest({ onFormDataChange, dataChange}) {
 
       emailFetchDataWithAxios();
     }
-  }, [emailDataList]); // emailDataList 상태가 변경될 때만 useEffect 실행
+
+  }, [emailDataList,instances ,selectedEmailChange]); // emailDataList 상태가 변경될 때만 useEffect 실행
+
 
   // -----------------------------------
   const handleActionChange = (instanceIndex, selectedEmail) => {
@@ -197,6 +211,7 @@ export default function Regularactionrequest({ onFormDataChange, dataChange}) {
                 placeholder="E-Mail"
                 autoComplete=""
                 className="block w-full rounded-md border-0  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5 "
+
                 value={
                   instance.selectedEmail ? instance.selectedEmail.emailAdd : ""
                 }
