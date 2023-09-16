@@ -39,20 +39,30 @@ export default function UserSelectInspection() {
   const [monthlyCompleteReg, setMonthlyCompleteReg] = useState(0); // 월별 정기점검 완료 정보
   const [monthlyBad, setMonthlyBadReg] = useState(0); // 월별 불량건수 정보
 
-  // 원래코드
   useEffect(() => {
-    // Json값 가져와서 세팅
-    function fetchDataWithAxios(masterdataPart, masterdataId) {
-      const apiUrls = [
-        `${process.env.REACT_APP_API_BASE_URL}/user/special/${masterdataPart}/${masterdataId}`,
-        `${process.env.REACT_APP_API_BASE_URL}/user/regular/${masterdataPart}/${masterdataId}`,
-      ];
 
-      // 여러 개의 API를 호출하는 프로미스 배열 생성
-      const apiRequests = apiUrls.map((url) => axios.get(url));
+    // 모바일에서 스와이프 뒤로가기 감지해서 get 요청 다시
+    window.onpageshow = function(event) {
+      if ( event.persisted ) {
+        fetchDataWithAxios(masterdataPart, masterdataId);
+      }
+    }
+    fetchDataWithAxios(masterdataPart, masterdataId);
+  });
 
-      // 모든 API 호출을 기다리고 결과를 처리
-      Promise.all(apiRequests)
+
+  // Json값 가져와서 세팅
+  function fetchDataWithAxios(masterdataPart, masterdataId) {
+    const apiUrls = [
+      `${process.env.REACT_APP_API_BASE_URL}/user/special/${masterdataPart}/${masterdataId}`,
+      `${process.env.REACT_APP_API_BASE_URL}/user/regular/${masterdataPart}/${masterdataId}`,
+    ];
+
+    // 여러 개의 API를 호출하는 프로미스 배열 생성
+    const apiRequests = apiUrls.map((url) => axios.get(url));
+
+    // 모든 API 호출을 기다리고 결과를 처리
+    Promise.all(apiRequests)
         .then((responses) => {
           // 모든 API 호출이 성공하면 여기로 진입
           const responseData = responses.map((response) => response.data);
@@ -73,69 +83,7 @@ export default function UserSelectInspection() {
           // 하나 이상의 API 호출이 실패한 경우 에러 처리
           console.error("Error fetching data:", errors);
         });
-    }
-
-    fetchDataWithAxios(masterdataPart, masterdataId);
-  });
-
-
-
-// 촬영용
-  // // 데이터를 주기적으로 업데이트하는 함수
-  // const fetchDataPeriodically = () => {
-  //   // Json값 가져와서 세팅
-  //   function fetchDataWithAxios(masterdataPart, masterdataId) {
-  //     const apiUrls = [
-  //       `${process.env.REACT_APP_API_BASE_URL}/user/special/${masterdataPart}/${masterdataId}`,
-  //       `${process.env.REACT_APP_API_BASE_URL}/user/regular/${masterdataPart}/${masterdataId}`,
-  //     ];
-  //
-  //     // 여러 개의 API를 호출하는 프로미스 배열 생성
-  //     const apiRequests = apiUrls.map((url) => axios.get(url));
-  //
-  //     // 모든 API 호출을 기다리고 결과를 처리
-  //     Promise.all(apiRequests)
-  //         .then((responses) => {
-  //           // 모든 API 호출이 성공하면 여기로 진입
-  //           const responseData = responses.map((response) => response.data);
-  //
-  //           // 가져온 데이터로 상태 변수 업데이트
-  //           // 수시점검
-  //           setMonthlyAll(responseData[0].monthlyAll);
-  //           setMonthlyComplete(responseData[0].monthlyComplete);
-  //           setMonthlyNoComplete(responseData[0].monthlyNoComplete);
-  //           // 정기점검
-  //           setMonthlyAllReg(responseData[1].monthlyAll);
-  //           setMonthlyCompleteReg(responseData[1].monthlyComplete);
-  //           setMonthlyBadReg(responseData[1].monthlyBad);
-  //
-  //           console.log(responseData); // JSON 데이터가 출력됩니다.
-  //         })
-  //         .catch((errors) => {
-  //           // 하나 이상의 API 호출이 실패한 경우 에러 처리
-  //           console.error("Error fetching data:", errors);
-  //         });
-  //   }
-  //
-  //   fetchDataWithAxios(masterdataPart, masterdataId);
-  // };
-  //
-  // // 컴포넌트가 마운트되면 주기적으로 데이터를 업데이트하는 작업 시작
-  // useEffect(() => {
-  //   // 초기 데이터 가져오기
-  //   fetchDataPeriodically();
-  //
-  //   // 5초마다 데이터를 다시 가져오도록 설정
-  //   const intervalId = setInterval(() => {
-  //     fetchDataPeriodically();
-  //   }, 500);
-  //
-  //   // 컴포넌트가 언마운트되면 타이머 정리
-  //   return () => {
-  //     clearInterval(intervalId);
-  //   };
-  // }, [masterdataPart, masterdataId]);
-
+  }
 
 
   // function 위에 있던거 function으로 옮겼음
