@@ -133,7 +133,7 @@ export default function DetailedModal({fetchData, actForm, index}) {
                                                 as="h3"
                                                 className="text-base font-semibold leading-6 text-gray-900"
                                             >
-                                                점검자
+                                                조치자
                                             </Dialog.Title>
                                             <div className="flex flex-wrap">
                                                 <div className="mt-2 mr-2">

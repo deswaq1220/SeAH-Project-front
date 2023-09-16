@@ -21,6 +21,7 @@ export default function UserRegularDetails() {
 
     const [selectedValue, setSelectedValue] = useState();
     const navigate = useNavigate();
+    const [staticEmailPerson, setEmailYDataList] = useState([]);
 
     function handleRadioChange(value) {
         setSelectedValue(value);
@@ -33,11 +34,12 @@ export default function UserRegularDetails() {
         regularEmpNum: "",
         regularPart: "",
         regularPerson: "",
-        regularDate: "",
+        regTime: "",
         regularInsName: "",
         regularEmail: "",
     });
     const [isModalOpen, setIsModalOpen] = useState(false); // 각 행마다 모달 상태 저장
+
 
     // handleChecklistClick 함수 정의
     function handleChecklistClick(index) {
@@ -90,6 +92,8 @@ export default function UserRegularDetails() {
     }, []);
 
 
+
+
     const updateBadDetail = async (index) => {
         console.log(regularDetailDTOList[index]);
 
@@ -112,10 +116,24 @@ export default function UserRegularDetails() {
                 }
             );
 
+        // 이메일 고정수신자 리스트
+            const responseStaticEmail = await axios.get(
+                `${process.env.REACT_APP_API_BASE_URL}/user/regularemail`
+            );
 
+
+            const emailYListFromBack = responseStaticEmail.data.staticEmailList;
+            const emailAdds = emailYListFromBack.map((item) => item.emailAdd);
+            const emailAddsJoin = emailAdds.join(", ");
+
+
+//날짜
+            console.log("regularData.regularDate============" + regularData.regTime );
 
         // 이메일 발송기능
-/*        const registerDate = new Date(response.data.regularDate);
+        const completeDate = new Date(response.data);
+        const registerDate = new Date(regularData.regTime);
+
         const options = {
             year: "numeric",
             month: "numeric",
@@ -126,90 +144,95 @@ export default function UserRegularDetails() {
             hour12: true,
         };
 
+        //조치완료일
+        const formattedCompleteDate = completeDate.toLocaleDateString(
+            "ko-KR", options
+        );
+        //점검일
         const formattedRegisterDate = registerDate.toLocaleDateString(
-            "ko-KR",
-            options
-        );
-        const id = item.id; // 아이템의 ID 가져오기
-        const itemContent = regularcheckList.find(
-            (checkItem) => checkItem.id === id
-        );
-        const itemChecklist = itemContent.checklist;
-        console.log(
-            "itemContent==============" + formattedRegisterDate,
-            regularDTO.regularPerson,
-            item.regularActPerson,
-            regularDTO.regularPart,
-            regularDTO.regularInsName,
-            itemChecklist,
-            itemContent.regularActContent
-        );
-        console.log(staticEmailPerson);
-
-        const spendForm = `
-                              <table style="width: 100%; border-collapse: collapse; border: 1px solid #ccc;">
-                              <tr>
-                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">항목</td>
-                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>내용</strong></td>
-                              </tr>
-                              <tr>
-                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검일시</td>
-                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${formattedRegisterDate}</strong></td>
-                              </tr>
-                              <tr>
-                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검자</td>
-                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${regularDTO.regularPerson}</strong></td>
-                              </tr>
-                              <tr>
-                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">조치자</td>
-                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${item.regularActPerson}</strong></td>
-                              </tr>
-                              <tr>
-                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검구역</td>
-                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${regularDTO.regularPart}</strong></td>
-                              </tr>
-                              <tr>
-                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검항목</td>
-                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${regularDTO.regularInsName}</strong></td>
-                              </tr>
-                              <tr>
-                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검 유해위험요인</td>
-                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong><font color="blue">${itemChecklist}</font></strong></td>
-                              </tr>
-                              <tr>
-                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">개선대책</td>
-                                <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${item.regularActContent}</strong></td>
-                              </tr>
-                              </table>
-                                <p style="font-size:16px;">링크 : <a href="http://localhost:3000/regulardetails/${response.data.regularId}">상세보기</a></p>`; /!*★이거 정기점검항목의 상세목록-항목별 목록생기면 해당하는 주소로 바꿔야함 *!/
-
-        const actPersonEmails = item.regularActEmail
-            .split(",")
-            .map((email) => email.trim());
-        const finalEmailList = [...actPersonEmails, ...staticEmailPerson];
-        const uniqueRecipientsSet = new Set(finalEmailList); //이메일 중복제거
-        const uniqueRecipientsArray = Array.from(uniqueRecipientsSet); // Set을 다시 배열로 변환
-
-        const emailData = {
-            recipients: uniqueRecipientsArray,
-            subject: emailTitle,
-            content: spendForm,
-        };
-        console.log(
-            "emailData===============" + JSON.stringify(emailData, null, 2)
+            "ko-KR", options
         );
 
-        axios
-            .post(
-                `${process.env.REACT_APP_API_BASE_URL}/api/send-email`,
-                emailData
-            )
-            .then((response) => {
-                console.log("이메일 전송 완료:", response);
-            })
-            .catch((error) => {
-                console.error("이메일 전송 오류: ", error);
-            });*/
+
+      const spendForm = `
+        <table style="width: 100%; border-collapse: collapse; border: 1px solid #ccc;">
+          <tr>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">항목</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>내용</strong></td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검일시</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${formattedRegisterDate}</strong></td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검항목</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${regularData.regularInsName}</strong></td>
+          </tr>          
+          <tr>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검구역</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${regularData.regularPart}</strong></td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검자</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${regularData.regularEmpNum}/ ${regularData.regularPerson}</strong></td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">유해위험요인</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong><font color="blue">${regularDetailDTOList[index].checklist}</strong></font></td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">개선대책</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${regularDetailDTOList[index].regularActContent}</strong></td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">조치자</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong><font color="blue">${regularDetailDTOList[index].regularActPerson}</font></strong></td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">조치완료일</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong><font color="blue">${formattedCompleteDate}</font></strong></td>
+          </tr>
+          </table>
+            <p style="font-size:16px;">링크 : <a href="http://localhost:3000/regulardetails/${regularId}">상세보기</a></p>
+            `;
+
+            const regularPersonEmails = regularData.regularEmail; //점검자 이메일
+            console.log("발신자========재확인" + JSON.stringify(regularPersonEmails));
+
+
+            const staticPersonEmails = emailAddsJoin
+                /*.join(",") // 배열을 문자열로 변환*/
+                .split(",")
+                .map((email) => email.trim());
+            console.log("고정수신자========재확인" + JSON.stringify(staticPersonEmails));
+            const finalEmailList = [regularPersonEmails, ...staticPersonEmails];
+            const uniqueRecipientsSet = new Set(finalEmailList); //이메일 중복제거
+            const uniqueRecipientsArray = Array.from(uniqueRecipientsSet); // Set을 다시 배열로 변환
+
+
+
+            const emailTitle = `${regularDetailDTOList[index].regularActPerson}님의 정기점검완료 메일입니다`;
+
+            const emailData = {
+                recipients: uniqueRecipientsArray,
+                subject: emailTitle,
+                content: spendForm,
+            };
+            console.log(
+                "emailData===============" + JSON.stringify(emailData, null, 2)
+            );
+
+            axios
+                .post(
+                    `${process.env.REACT_APP_API_BASE_URL}/api/send-email`,
+                    emailData
+                )
+                .then((response) => {
+                    console.log("이메일 전송 완료:", response);
+                })
+                .catch((error) => {
+                    console.error("이메일 전송 오류: ", error);
+                });
 
 
             // 페이지 새로고침
