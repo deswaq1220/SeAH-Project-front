@@ -228,9 +228,6 @@ function UserfrequentReg() {
       }
     }, [speId]);
 
-  {/*  }*/}
-  {/*}, []);*/}
-
   if (isLoading) {
     return <div>Loading...</div>; // or return null; or a loading spinner;
   }
@@ -576,7 +573,7 @@ function UserfrequentReg() {
                   alt={`사진 ${index + 1}`}
               />
             {fileItem.speFileOriName}
-          </div>
+
           <button
             onClick={() => handleRemoveFile(fileItem, index)}
             className="ml-2 text-red-600"
@@ -584,6 +581,7 @@ function UserfrequentReg() {
           >
             삭제
           </button>
+          </div>
         </div>
       ))}
 
