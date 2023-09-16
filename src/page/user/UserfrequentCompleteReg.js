@@ -287,11 +287,11 @@ function UserfrequentCompleteReg() {
           </tr>
           </table>
 <!--            <p style="font-size:16px;">링크 : <a href="http://localhost:3000/special/detail/${response.data.speId}">상세보기</a></p>-->
-            <p style="font-size:16px;">링크 : <a href="http://172.20.10.13:3000/special/detail/${response.data.speId}">상세보기</a></p>
+            <p style="font-size:16px;">링크 : <a href="http://172.30.1.35:3000/special/detail/${response.data.speId}">상세보기</a></p>
     `;
 
           const emailData = {
-            recipients: speEmail.split(", "), // 이메일 주소를 수신자로 설정
+            recipients: [...speEmail.split(", "), ...staticEmailPerson], // 이메일 주소를 수신자로 설정
             subject: emailActTitle, // 이메일 제목
             content: inspectionData, // 이메일 내용 (점검 내용 등)
             // 필요한 다른 속성도 여기에 추가 가능
@@ -304,6 +304,7 @@ function UserfrequentCompleteReg() {
             )
             .then((response) => {
               console.log("이메일 전송 완료:", response);
+              console.log("이메일확인: ",emailData.recipients);
               // ... (나머지 처리 로직)
             })
             .catch((error) => {
@@ -392,7 +393,7 @@ function UserfrequentCompleteReg() {
           조치요청
         </span>
         <ActionRquest onFormDataChange={handleActionRequestDetailsDataChange}
-                      defaultState={speActData} complete={complete}/>{" "}
+                      onChange={handleStaticEmailChange} defaultState={speActData} complete={complete}/>{" "}
       </div>
       {/* 조치요청 */}
       <IsCompelete onFormDataChange={handleIsCompeleteDataChange} complete={complete} />{" "}
