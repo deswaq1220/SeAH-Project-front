@@ -236,7 +236,7 @@ export default function UserRegularDetails() {
 
 
             // 페이지 새로고침
-            // window.location.reload();
+             window.location.reload();
             // 요청이 성공했을 때 수행할 작업 (예: 응답 데이터 확인)
             console.log("성공"+ response.data);
         } catch (error) {
