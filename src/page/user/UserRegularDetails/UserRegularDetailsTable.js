@@ -265,13 +265,24 @@ export default function UserRegularDetails() {
                                     {
                                         regularDetail.regularCheck === 'BAD' ? (
                                             regularDetail.regularComplete !== 'OK' ? (
-                                                <button
-                                                    type="button"
-                                                    className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
-                                                    onClick={() => updateBadDetail(index)}
-                                                >
-                                                    조치 완료
-                                                </button>
+                                          <button
+                                            type="button"
+                                            className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                                            onClick={() => {
+                                              const result = window.confirm("정말 조치 완료하시겠습니까?? 수정할 수 없습니다.");
+
+                                              if (result) {
+                                                // 확인 버튼을 눌렀을 때 실행할 코드
+                                                updateBadDetail(index);
+                                              } else {
+                                                // 취소 버튼을 눌렀을 때 실행할 코드 (옵션)
+                                                // 취소 버튼을 눌렀을 때 수행할 작업을 추가할 수 있습니다.
+                                              }
+                                            }}
+                                          >
+                                            조치 완료
+                                          </button>
+
                                             ) : (
                                                 <button
                                                     type="button"

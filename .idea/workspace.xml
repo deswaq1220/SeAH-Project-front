@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c20fbe9c-9169-4241-9ec0-dff0f7b0e503" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/UserRegularReg/FaultyModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserRegularReg/FaultyModal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/UserRegularReg/UserRegularTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserRegularReg/UserRegularTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/UserRegularDetails/UserRegularDetailsTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserRegularDetails/UserRegularDetailsTable.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,7 +38,7 @@
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/SpringBootWork/SeAH-Project-front",
+    "last_opened_file_path": "C:/SpringBootWork/SeAH_Project",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
