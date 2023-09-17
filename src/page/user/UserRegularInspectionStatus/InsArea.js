@@ -43,7 +43,7 @@ export default function InsArea({ onFormDataChange }) {
     if (value === "기타(직접입력)") {
       setCustomInputVisible(true);
       setSelectedPart(value); // 기타(직접입력) 선택 시에만 selectedPart 업데이트
-      onFormDataChange(customInputValue); // 기타(직접입력) 선택 시 customInputValue를 전달함.
+      onFormDataChange({ partMenu: customInputValue }); // 기타(직접입력) 선택 시 customInputValue를 전달함.
     } else {
       setCustomInputVisible(false);
       setSelectedPart(value);
