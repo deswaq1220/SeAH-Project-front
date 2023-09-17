@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import {useNavigate, Link, useParams} from "react-router-dom";
 import { format } from "date-fns";
 import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
@@ -12,6 +12,8 @@ function classNames(...classes) {
 export default function FrequentInseptionTable({ searchResults }) {
   const navigate = useNavigate();
   const [thisMonthResults, setThisMonthResults] = useState([]); // 해당 월 데이터
+  const params = new URLSearchParams(window.location.search);
+  const isManager = params.get("isManager");
 
   // 현재월 구하기
   var today = new Date();
@@ -150,18 +152,28 @@ export default function FrequentInseptionTable({ searchResults }) {
           <h1 className="text-base font-semibold leading-6 text-gray-900">
           수시점검 현황 조회
           </h1>
-          <p className="mt-2 text-sm text-gray-700">
-          검색을 통해 등록된 수시점검 현황 데이터를 조회 및 엑셀 저장이 가능합니다.
-          </p>
+          {isManager ? (
+              <p className="mt-2 text-sm text-gray-700">
+                검색을 통해 등록된 수시점검 현황 데이터를 조회 및 엑셀 저장이 가능합니다.
+              </p>
+          ) : (
+              <p className="mt-2 text-sm text-gray-700">
+                검색을 통해 등록된 수시점검 현황 데이터의 조회가 가능합니다.
+              </p>
+          )}
         </div>
         <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-        <button
-            type="button"
-            onClick={handleExcelSave}
-            className="block rounded-md bg-green-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-green-800  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
-          >
-            엑셀저장
-          </button>
+          {isManager && (
+              <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+                <button
+                    type="button"
+                    onClick={handleExcelSave}
+                    className="block rounded-md bg-green-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-green-800  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+                >
+                  엑셀저장
+                </button>
+              </div>
+          )}
         </div>
       </div>
       {displayResults.map((result, index) => (
