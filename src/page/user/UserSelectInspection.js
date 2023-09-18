@@ -27,12 +27,8 @@ function classNames(...classes) {
 export default function UserSelectInspection() {
   const { masterdataPart } = useParams(); // url 영역 파라미터
   const { masterdataId } = useParams(); // url 설비코드 파라미터
-
   const [currentDate, setCurrentDate] = useState(new Date()); // 년,월
   const navigate = useNavigate();
-
-
-
 
   // 수시점검
   const [monthlyAll, setMonthlyAll] = useState(0); // 월별 수시점검 실시 정보
@@ -44,18 +40,29 @@ export default function UserSelectInspection() {
   const [monthlyBad, setMonthlyBadReg] = useState(0); // 월별 불량건수 정보
 
   useEffect(() => {
-    // Json값 가져와서 세팅
-    function fetchDataWithAxios(masterdataPart, masterdataId) {
-      const apiUrls = [
-        `${process.env.REACT_APP_API_BASE_URL}/user/special/${masterdataPart}/${masterdataId}`,
-        `${process.env.REACT_APP_API_BASE_URL}/user/regular/${masterdataPart}/${masterdataId}`,
-      ];
 
-      // 여러 개의 API를 호출하는 프로미스 배열 생성
-      const apiRequests = apiUrls.map((url) => axios.get(url));
+    // 모바일에서 스와이프 뒤로가기 감지해서 get 요청 다시
+    window.onpageshow = function(event) {
+      if ( event.persisted ) {
+        fetchDataWithAxios(masterdataPart, masterdataId);
+      }
+    }
+    fetchDataWithAxios(masterdataPart, masterdataId);
+  });
 
-      // 모든 API 호출을 기다리고 결과를 처리
-      Promise.all(apiRequests)
+
+  // Json값 가져와서 세팅
+  function fetchDataWithAxios(masterdataPart, masterdataId) {
+    const apiUrls = [
+      `${process.env.REACT_APP_API_BASE_URL}/user/special/${masterdataPart}/${masterdataId}`,
+      `${process.env.REACT_APP_API_BASE_URL}/user/regular/${masterdataPart}/${masterdataId}`,
+    ];
+
+    // 여러 개의 API를 호출하는 프로미스 배열 생성
+    const apiRequests = apiUrls.map((url) => axios.get(url));
+
+    // 모든 API 호출을 기다리고 결과를 처리
+    Promise.all(apiRequests)
         .then((responses) => {
           // 모든 API 호출이 성공하면 여기로 진입
           const responseData = responses.map((response) => response.data);
@@ -76,10 +83,8 @@ export default function UserSelectInspection() {
           // 하나 이상의 API 호출이 실패한 경우 에러 처리
           console.error("Error fetching data:", errors);
         });
-    }
+  }
 
-    fetchDataWithAxios(masterdataPart, masterdataId);
-  });
 
   // function 위에 있던거 function으로 옮겼음
   const actions = [

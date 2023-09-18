@@ -35,7 +35,6 @@ function UserfrequentReg() {
     // 초기값 설정
     return [];
   });
-  // const [staticEmailPerson, setStaticEmailPerson] = useState([]);
   const [speFacility, setSpeFacility] = useState("");
   const [speDanger, setSpeDanger] = useState("");
   const [speInjure, setSpeInjure] = useState("");
@@ -228,9 +227,6 @@ function UserfrequentReg() {
       }
     }, [speId]);
 
-  {/*  }*/}
-  {/*}, []);*/}
-
   if (isLoading) {
     return <div>Loading...</div>; // or return null; or a loading spinner;
   }
@@ -384,7 +380,7 @@ function UserfrequentReg() {
           </tr>
           <tr>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검내용</td>
-            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><font color="blue"> ${response.data.speContent}</font></td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${response.data.speContent}</strong></td>
           </tr>
           <tr>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">개선대책</td>
@@ -400,7 +396,7 @@ function UserfrequentReg() {
           </tr>
           </table>
 <!--            <p style="font-size:16px;">링크 : <a href="http://localhost:3000/special/detail/${response.data.speId}">상세보기</a></p>-->
-            <p style="font-size:16px;">링크 : <a href="http://172.20.10.13:3000/special/detail/${response.data.speId}">상세보기</a></p>
+            <p style="font-size:16px;">링크 : <a href="http://172.30.1.35:3000/special/detail/${response.data.speId}">상세보기</a></p>
     `;
 
             const emailData = {
@@ -438,7 +434,7 @@ function UserfrequentReg() {
             });
 
             // 저장성공시 해당설비의 리스트 페이지
-            navigate(`/special/list/${masterdataPart}/${masterdataId}`);
+            navigate(-1);
           }
         })
         .catch((error) => {
@@ -576,7 +572,7 @@ function UserfrequentReg() {
                   alt={`사진 ${index + 1}`}
               />
             {fileItem.speFileOriName}
-          </div>
+
           <button
             onClick={() => handleRemoveFile(fileItem, index)}
             className="ml-2 text-red-600"
@@ -584,6 +580,7 @@ function UserfrequentReg() {
           >
             삭제
           </button>
+          </div>
         </div>
       ))}
 

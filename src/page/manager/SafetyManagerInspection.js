@@ -110,8 +110,6 @@ export default function SafetyManagerInspection() {
   }, []);
 
 
-
-
   const regular = [
     // { name: '정기점검', href: '#', icon: UsersIcon, current: false },
     {
@@ -160,9 +158,6 @@ export default function SafetyManagerInspection() {
       current: false,
       iconForeground: "text-red-600",
     },
-    // { name: 'Calendar', href: '#', icon: CalendarIcon, count: '20+', current: false },
-    // { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
-    // { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
   ];
 
   const goToPreviousMonth = () => {
@@ -181,6 +176,12 @@ export default function SafetyManagerInspection() {
 
     return `${year}년 ${month}`;
   };
+
+ // 수시점검 현황 클릭시
+  const goToFrequentinspection = () => {
+    const isManager = "manager";
+    navigate(`/frequentinspection?isManager=${isManager}`);
+  }
 
   return (
     <div className="container mx-auto sm:px-6 lg:px-8 px-4">
@@ -323,7 +324,7 @@ export default function SafetyManagerInspection() {
           </ul>
           <button
             type="button"
-            onClick={() => navigate("/frequentinspection")}
+            onClick={goToFrequentinspection}
             className="rounded-md bg-seahColor px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mt-4"
           >
             수시점검 현황 
