@@ -84,21 +84,6 @@ const duty = [
     name: "F",
   },
 ];
-// // 한글 값 매핑 함수
-// function mapDutyName(duty) {
-//   switch (duty) {
-//     case "선택":
-//       return "[선택]";
-//     case "T":
-//       return "[전체]";
-//     case "O":
-//       return "[사무직]";
-//     case "F":
-//       return "[현장직]";
-//     default:
-//       return "[선택]";
-//   }
-// }
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -389,9 +374,6 @@ const useSafetyEduForm = (eduData) => {
     // onDrop,
     deleteFile,
     handleFileChange,
-    // getRootProps,
-    // getInputProps,
-    // isDragActive,
     handleListboxChange,
     handleDutyChange,
     navigate,
