@@ -103,6 +103,7 @@ export default function UserRegularInspectionStatus() {
         }
       );
       setSearchResult(response.data.searchResult); // 응답 데이터를 state에 저장
+      console.log("여기다",response.data)
       if (response.data.searchResult.length === 0) {
         toast.info("검색 결과가 없습니다.", {
           position: toast.POSITION.TOP_CENTER,
