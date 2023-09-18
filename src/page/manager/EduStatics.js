@@ -54,8 +54,7 @@ function EduStatics() {
   const getCurrentPageItems = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    console.log("검색 리스트--------?"  + eduList);
-    
+   
     return eduList.slice(startIndex, endIndex);
   };
 

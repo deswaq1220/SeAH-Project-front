@@ -24,6 +24,7 @@ export default function UserRegularInstpectionTable({ data }) {
    }
 
 
+
   return (
     <div className="px-4 sm:px-6 lg:px-8 mx-4">
       <div className="sm:flex sm:items-center">
@@ -99,8 +100,11 @@ export default function UserRegularInstpectionTable({ data }) {
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
                     {regularlist.map((status) => (
-                        <tr key={status.regularId} onClick={() => goToRegularDetail(status.regularId)}>
-                          {/*<Link to={`/regulardetails/${result.regularId}`}>*/}
+                        <tr
+                        key={status.regularId}
+                        onClick={() => goToRegularDetail(status.regularId)}
+                        style={{ cursor: 'pointer' }}
+                      >
                           <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                             {status.regularPart}
                           </td>
