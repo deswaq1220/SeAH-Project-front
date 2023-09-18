@@ -287,25 +287,25 @@ export default function UserRegularDetails() {
                         <tr>
                             <th
                                 scope="col"
-                                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                                className="py-3.5 pl-4 pr-3 text-center text-sm font-semibold text-gray-900 sm:pl-0"
                             >
                                 번호
                             </th>
                             <th
                                 scope="col"
-                                className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
+                                className="hidden px-3 py-3.5 text-center text-sm font-semibold text-gray-900 lg:table-cell"
                             >
-                                유해위험요인확인
+                                유해위험요인 확인
                             </th>
                             <th
                                 scope="col"
-                                className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
+                                className="hidden px-3 py-3.5 text-center text-sm font-semibold text-gray-900 sm:table-cell"
                             >
                                 확인결과
                             </th>
                             <th
                                 scope="col"
-                                className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                className="px-3 py-3.5 text-center text-sm font-semibold text-gray-900"
                             >
                                 조치여부
                             </th>
@@ -314,7 +314,7 @@ export default function UserRegularDetails() {
                         <tbody className="divide-y divide-gray-200 bg-white">
                         {regularDetailDTOList.map((regularDetail, index) => (
                             <tr key={index}>
-                                <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
+                                <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0 text-center">
                                     {index + 1}
                                     <dl className="font-normal lg:hidden">
                                         <dt className="sr-only">Title</dt>
@@ -372,7 +372,7 @@ export default function UserRegularDetails() {
                                     )
                                 }
 
-                                <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
+                                <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell text-center">
                                     <div className="space-x-4 flex">
                                         {notificationMethods.map((notificationMethod) => (
                                             <div key={notificationMethod.id} className="flex items-center">

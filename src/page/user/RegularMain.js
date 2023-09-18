@@ -149,54 +149,54 @@ function RegularMain() {
                     <tr>
                       <th
                         scope="col"
-                        className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                        className="py-3.5 pl-4 pr-3 text-center text-sm font-semibold text-gray-900 sm:pl-0"
                       >
                         번호
                       </th>
                       <th
                         scope="col"
-                        className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                        className="py-3.5 pl-4 pr-3 text-center text-sm font-semibold text-gray-900 sm:pl-0"
                       >
-                        분류
+                        점검항목
                       </th>
                       <th
                         scope="col"
-                        className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                        className="py-3.5 pl-4 pr-3 text-center text-sm font-semibold text-gray-900 sm:pl-0"
                       >
-                        영역
+                        점검구역
                       </th>
                       <th
                         scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                        className="px-3 py-3.5 text-center text-sm font-semibold text-gray-900"
                       >
-                        점검 일자
+                        점검일자
                       </th>
                       <th
                         scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                        className="px-3 py-3.5 text-center text-sm font-semibold text-gray-900"
                       >
                         점검자
                       </th>
                       <th
                         scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                        className="px-3 py-3.5 text-center text-sm font-semibold text-gray-900"
                       >
-                        완료여부
+                        조치완료 여부
                       </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
                     {getCurrentPageItems().map((regular, index) => (
                       <tr key={regular.regularId}>
-                        <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
-                          <div className="flex items-center">
+                        <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0 text-center">
+                          <div>
                             <div className="mt-1 text-gray-500">
                               {getDisplayedId(regular.regularId)}
                             </div>
                           </div>
                         </td>
-                        <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
-                          <div className="flex items-center">
+                        <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0 text-center">
+                          <div>
                             <Link
                               to={`/regulardetails/${regular.regularId}`}
                               className="font-medium text-seahColor hover:text-seahDeep "
@@ -205,8 +205,8 @@ function RegularMain() {
                             </Link>
                           </div>
                         </td>
-                        <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
-                          <div className="flex items-center">
+                        <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0 text-center">
+                          <div>
                             <Link
                               to={`/regulardetails/${regular.regularId}`}
                               className="font-medium text-seahColor hover:text-seahDeep "
@@ -215,14 +215,14 @@ function RegularMain() {
                             </Link>
                           </div>
                         </td>
-                        <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                        <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500 text-center">
                           {format(new Date(regular.regTime), "yyyy-MM-dd HH시 mm분")}
                         </td>
-                        <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                        <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500 text-center">
                           {regular.regularPerson}
                         </td>
-                        <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
-                          <div className="h-11 w-11 flex-shrink-0">
+                        <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0 flex items-center justify-center">
+                          <div className="h-11 w-11 flex-shrink-0 ">
                             {regular.regularComplete === 'OK' ? (
                               <CheckCircleIcon className="text-green-600" />
                             ) : (
