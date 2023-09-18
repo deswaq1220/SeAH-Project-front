@@ -200,7 +200,6 @@ function UserfrequentCompleteReg() {
           });
     }else {
 
-     // alert("speId 값이 없다");
     }
   }, [speId]);
 
@@ -256,43 +255,43 @@ function UserfrequentCompleteReg() {
           <table style="width: 100%; border-collapse: collapse; border: 1px solid #ccc;">
           <tr>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">항목</td>
-            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">내용</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>내용</strong></td>
           </tr>
           <tr>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검일시</td>
-            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${formattedSpeDate}</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${formattedSpeDate}</strong></td>
           </tr>
           <tr>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검영역</td>
-            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.spePart}</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${response.data.spePart}</strong></td>
           </tr>
           <tr>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검설비</td>
-            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speFacility}</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${response.data.speFacility}</strong></td>
           </tr>
           <tr>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검내용</td>
-            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"> ${response.data.speContent}</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${response.data.speContent}</strong></td>
           </tr>
           <tr>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">개선대책</td>
-            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speActContent}</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${response.data.speActContent}</strong></td>
           </tr>
           <tr>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">조치자</td>
-            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${response.data.speActPerson}</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${response.data.speActPerson}</strong></td>
           </tr>
           <tr>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">조치완료일</td>
-            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">${formattedSpeActDate}</td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${formattedSpeActDate}</strong></td>
           </tr>
           </table>
 <!--            <p style="font-size:16px;">링크 : <a href="http://localhost:3000/special/detail/${response.data.speId}">상세보기</a></p>-->
-            <p style="font-size:16px;">링크 : <a href="http://172.20.10.13:3000/special/detail/${response.data.speId}">상세보기</a></p>
+            <p style="font-size:16px;">링크 : <a href="http://172.30.1.35:3000/special/detail/${response.data.speId}">상세보기</a></p>
     `;
 
           const emailData = {
-            recipients: speEmail.split(", "), // 이메일 주소를 수신자로 설정
+            recipients: [...speEmail.split(", "), ...staticEmailPerson], // 이메일 주소를 수신자로 설정
             subject: emailActTitle, // 이메일 제목
             content: inspectionData, // 이메일 내용 (점검 내용 등)
             // 필요한 다른 속성도 여기에 추가 가능
@@ -305,6 +304,7 @@ function UserfrequentCompleteReg() {
             )
             .then((response) => {
               console.log("이메일 전송 완료:", response);
+              console.log("이메일확인: ",emailData.recipients);
               // ... (나머지 처리 로직)
             })
             .catch((error) => {
@@ -393,7 +393,7 @@ function UserfrequentCompleteReg() {
           조치요청
         </span>
         <ActionRquest onFormDataChange={handleActionRequestDetailsDataChange}
-                      defaultState={speActData} complete={complete}/>{" "}
+                      onChange={handleStaticEmailChange} defaultState={speActData} complete={complete}/>{" "}
       </div>
       {/* 조치요청 */}
       <IsCompelete onFormDataChange={handleIsCompeleteDataChange} complete={complete} />{" "}
@@ -438,6 +438,11 @@ function UserfrequentCompleteReg() {
       {fileDatas.map((fileItem, index) => (
         <div key={index} className="flex items-start mt-2">
           <div className="text-left">
+              <img
+                  key={index}
+                  src={process.env.REACT_APP_API_BASE_URL + fileItem.speFileUrl}
+                  alt={`사진 ${index + 1}`}
+              />
             {fileItem.speFileOriName}
           </div>
         </div>

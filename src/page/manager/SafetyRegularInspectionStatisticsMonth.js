@@ -241,63 +241,6 @@ function SafetyInspectionStatisticsMonthImg() {
 
   const fetchData = async () => {
     try {
-      //수시점검
-      //점검건수 값
-      await axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/admin/special/statistics/count`, {
-            params: { yearmonth: selectedYear },
-          }) //세아
-          .then((response) => {
-            setSpcCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
-          });
-
-      //영역값(엑셀용)
-      await axios
-          .get(
-              `${process.env.REACT_APP_API_BASE_URL}/admin/special/statistics/partandmonth`,
-              { params: { yearmonth: selectedYear } }
-          )
-          .then((response) => {
-            setPartCountForExcel(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
-          });
-
-      //영역값
-      await axios
-          .get(
-              `${process.env.REACT_APP_API_BASE_URL}/admin/special/statistics/partandmonth`,
-              { params: { yearmonth: selectedYear } }
-          )
-          .then((response) => {
-            setPartCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
-          });
-
-      //위험분류값
-      await axios
-          .get(
-              `${process.env.REACT_APP_API_BASE_URL}/admin/special/statistics/dangerandmonth`,
-              { params: { yearmonth: selectedYear } }
-          )
-          .then((response) => {
-            setDangerCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
-          });
-
-      //위험원인값
-      await axios
-          .get(
-              `${process.env.REACT_APP_API_BASE_URL}/admin/special/statistics/causeandmonth`,
-              { params: { yearmonth: selectedYear } }
-          )
-          .then((response) => {
-            setCauseCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
-          });
-      await axios
-          .get(
-              `${process.env.REACT_APP_API_BASE_URL}/admin/special/statistics/causeandmonthforexcel`,
-              { params: { yearmonth: selectedYear } }
-          )
-          .then((response) => {
-            setCauseCountForExcel(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
-          });
 
       //정기점검
       //점검건수 값

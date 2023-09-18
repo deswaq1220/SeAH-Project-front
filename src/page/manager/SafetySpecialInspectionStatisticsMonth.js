@@ -57,117 +57,7 @@ function SafetySpecialInspectionStatisticsMonth() {
     }
   };
 
-  const [selected, setSelected] = useState([]);
 
-  // 이벤트4: 드롭다운 선택에 따른 piechart 전체데이터/sort된 데이터 불러오는 기능
-  const handleSelectedChange = (selected) => {
-    setSelected(selected);
-    if(selected !== "전체"){
-      // axios 요청
-      axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/admin/regular/statistics/checkvaluecountsort`, {
-            params: {
-              yearmonth: selectedYear,
-              regularinsname: selected,
-            },
-          })
-          .then((response) => {
-            setCheckCount(response.data);
-          })
-          .catch((error) => {
-            console.log("드롭박스메소드에서 선택 값을 보내지 못합니다")
-          });
-    }else{
-      axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/admin/regular/statistics/checkvaluecount`, {
-            params: {yearmonth: selectedYear},
-          })
-          .then((response) => {
-            setCheckCount(response.data);
-          });
-    }
-  };
-
-
-
-
-  // 이벤트: 정기점검 분석 결과 엑셀로 내보내기
-  const regularHandleExport = () => {
-
-    const transformedData = regularCntByNameForExcel;
-
-    // "구분" 값을 중복되지 않게 추출
-    const uniqueKeys = [...new Set(transformedData.map((item) => item.name))];
-
-    const data = [
-      {
-        sheetName: "정기점검 총 건수",
-        data: [{ "이번달 정기점검 총 건수": regularCount }],
-      },
-      {
-        sheetName: "점검영역 분석",
-        data: regularCntByPartForExcel.map((item) => ({
-          점검영역: item[0],
-          건수: item[1],
-        })),
-      },
-      {
-        sheetName: "위험성평가 분석",
-        data: uniqueKeys.map((key) => {
-          const transformedItem = {
-            구분: key,
-          };
-
-          // 해당 키를 가진 항목만 필터링
-          const filteredItems = transformedData.filter((item) => item.name === key);
-
-          // "GOOD" 및 "BAD"를 위한 카운트 변수를 0으로 초기화
-          let goodCount = 0;
-          let badCount = 0;
-          let na = 0;
-
-          console.log("filteredItems:", filteredItems);
-          filteredItems.forEach((item) => {
-            const evaluationValue = item.evaluationValue;
-            const count = item.count;
-            // evaluationValue에 따라 카운트 업데이트
-            if (evaluationValue === "GOOD") {
-              goodCount += count;
-            } else if (evaluationValue === "BAD") {
-              badCount += count;
-            } else if (evaluationValue === "NA"){
-              na += count;
-            }
-          });
-
-          // 변환된 항목에 카운트 추가
-          transformedItem["양호"] = goodCount;
-          transformedItem["불량"] = badCount;
-          transformedItem["N/A"] = na;
-
-          return transformedItem;
-        }),
-      },
-    ];
-
-    const workbook = XLSX.utils.book_new();
-
-    data.forEach(({ sheetName, data }) => {
-      const worksheet = XLSX.utils.json_to_sheet(data);
-      XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
-    });
-
-    const excelBuffer = XLSX.write(workbook, {
-      bookType: "xlsx",
-      type: "array",
-    });
-
-    const excelFile = new Blob([excelBuffer], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    });
-
-    saveAs(excelFile, "정기점검_월간분석.xlsx");
-  };
 
 
   // 이벤트2: 수시점검 분석 결과 엑셀로 내보내기
@@ -190,7 +80,19 @@ function SafetySpecialInspectionStatisticsMonth() {
       },
       {
         sheetName: "위험원인 분석",
-        data: causeCountForExcel.map((item) => ({ 위험원인: item[0], 건수: item[1] })),
+        data: [
+          ...causeCountForExcel1
+              .filter((item) => !(item[0] === '기타(직접입력)' && item[1] === 0)) // 직접입력이면서 값이 0인 경우 제거
+              .map((item) => ({ 위험원인: item[0], 건수: item[1] })),
+
+          ...(causeCountForExcel2.length === 0
+              ? causeCountForExcel1
+                  .filter((item) => item[0] == '기타(직접입력)' && item[1] === 0)
+                  .map((item) => ({ 위험원인: item[0], 건수: item[1] }))
+              : [
+                ...causeCountForExcel2.map((item) => ({ 위험원인: item[0], 건수: item[1] }))
+              ])
+        ]
       },
     ];
 
@@ -215,21 +117,15 @@ function SafetySpecialInspectionStatisticsMonth() {
 
 
   //그 외 변수
-    //수시점검
     const [spcCount, setSpcCount] = useState([]); //수시점검횟수
     const [partCount, setPartCount] = useState([]);
     const [partCountForExcel, setPartCountForExcel] = useState([]);
     const [dangerCount, setDangerCount] = useState([]);
     const [causeCount, setCauseCount] = useState([]);
-    const [causeCountForExcel, setCauseCountForExcel] = useState([]);
+    const [causeCountForExcel1, setCauseCountForExcel1] = useState([]);
+    const [causeCountForExcel2, setCauseCountForExcel2] = useState([]);
 
-    //정기점검
-    const [regularCount, setRegularCount] = useState([]); //월간 총 정기점검횟수
-    const [regularNameList, setRegularNameList] = useState([]);
-    const [regularCountByPart, setRegularCountByPart] = useState([]); //월간 영역별 정기점검횟수
-    const [regularCntByPartForExcel, setRegularCntByPartForExcel] = useState([]); //월간 영역별 정기점검횟수 엑셀용
-    const [checkCount, setCheckCount] = useState([]); //백엔드 값
-    const [regularCntByNameForExcel, setRegularCntByNameForExcel] = useState([]); //월간 영역별 정기점검횟수 엑셀용
+
 
 
   useEffect(() => {
@@ -292,105 +188,21 @@ function SafetySpecialInspectionStatisticsMonth() {
           });
       await axios
           .get(
-              `${process.env.REACT_APP_API_BASE_URL}/admin/special/statistics/causeandmonthforexcel`,
+              `${process.env.REACT_APP_API_BASE_URL}/admin/special/statistics/causeandmonthforexcel1`,
               { params: { yearmonth: selectedYear } }
           )
           .then((response) => {
-            setCauseCountForExcel(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
+            setCauseCountForExcel1(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
           });
-
-      //정기점검
-      //점검건수 값
       await axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/admin/regular/statistics/monthcount`, {
-            params: {yearmonth: selectedYear},
-          }) //세아
+          .get(
+              `${process.env.REACT_APP_API_BASE_URL}/admin/special/statistics/causeandmonthforexcel2`,
+              { params: { yearmonth: selectedYear } }
+          )
           .then((response) => {
-            setRegularCount(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
+            setCauseCountForExcel2(response.data); // 백엔드에서 받아온 데이터를 상태에 설정
           });
 
-      //(엑셀) 영역별 점검건수
-      await axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/admin/regular/statistics/partandmonthforexcel`, {
-            params: {yearmonth: selectedYear},
-          }) //세아
-          .then((response) => {
-            setRegularCntByPartForExcel(response.data);
-          });
-
-      //(radarChart) 영역별 점검건수
-      await axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/admin/regular/statistics/partandmonth`, {
-            params: {yearmonth: selectedYear},
-          })
-          .then((response) => {
-            setRegularCountByPart(response.data);
-          });
-
-      //(pieChart) 위험성결과 분석
-      //드롭다운 미선택 시,  전체 위험성 결과 출력
-      await axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/admin/regular/statistics/checkvaluecount`, {
-            params: {yearmonth: selectedYear},
-          })
-          .then((response) => {
-            setCheckCount(response.data);
-          });
-
-
-      //(pieChart) 위험성결과 드롭다운 기능
-        //백데이터 들고오기
-        const response = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/admin/regular/statistics/namedropdown`);
-
-        // 문자열 배열을 객체로 변환하여 새로운 배열 생성
-        const optionsArray = response.data.regularNameList.map((name, index) => ({
-          id: index + 1,
-          name: name,
-        }));
-
-        setRegularNameList(optionsArray);
-        setSelected(optionsArray[0])
-
-      //(pieChart, 엑셀) 위험성결과 데이터 출력
-      await axios
-          .get(`${process.env.REACT_APP_API_BASE_URL}/admin/regular/statistics/nameandmonthforexcel`, {
-            params: {yearmonth: selectedYear}
-          })
-          .then((response) => {
-            console.log("서버에서 받은 데이터:", response.data);
-            let transformedData = response.data.flatMap((item) => {
-              return Object.keys(item).map((name) => {
-                console.log("key값", name);
-                let innerData = item[name];
-
-                // 평가값(key) 배열과 개수 배열 생성
-                const evaluationValues = Object.keys(innerData);
-                const counts = evaluationValues.map((value) => innerData[value]);
-
-                const rowData = [];
-
-                // 각 항목을 키 값마다 행으로 나누기
-                for (let i = 0; i < evaluationValues.length; i++) {
-                  rowData.push({
-                    name: name,
-                    evaluationValue: evaluationValues[i],
-                    count: counts[i],
-                  });
-                  console.log("name[i]값", name);
-                }
-
-                return rowData;
-              });
-            });
-
-            // 모든 데이터를 단일 배열로 펼치기
-            transformedData = [].concat(...transformedData);
-
-            // 데이터를 state에 저장
-            setRegularCntByNameForExcel(transformedData);
-            console.log("결과값:", transformedData);
-          });
     } catch (error) {
       console.error("불러온 데이터에 에러가 발생했습니다:", error);
     }

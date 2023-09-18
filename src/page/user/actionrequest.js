@@ -47,7 +47,7 @@ export default function ActionRquest({ onFormDataChange, defaultState, onChange,
             // console.log("배열확인:" + defaultStatePersonArray);
             // console.log("배열확인:" + defaultStateEmailArray);
 
-            // let initialInstances = [];
+
             for(let i=0; i<defaultStatePersonArray.length; i++) {
               initialInstances.push({
                 selectedEmail: {
@@ -73,6 +73,7 @@ export default function ActionRquest({ onFormDataChange, defaultState, onChange,
         const emailYListFromBack = response.data.staticEmailList;
         setEmailYDataList(emailYListFromBack);
         onChange(emailYListFromBack);
+
 
       } catch (error) {
         console.error("데이터 가져오기 오류: ", error);

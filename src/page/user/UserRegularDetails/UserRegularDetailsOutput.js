@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import { format, parseISO } from 'date-fns';
 import axios from "axios";
 
 export default function UserRegularDetailsOutput({regularData}) {
@@ -50,7 +51,7 @@ export default function UserRegularDetailsOutput({regularData}) {
             type="type"
             name="date"
             id="date"
-            defaultValue={regularData.regularDate}
+            defaultValue={regularData.regTime ? format(parseISO(regularData.regTime), 'yyyy-MM-dd HH시 mm분'):''}
             disabled
             className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 sm:text-sm sm:leading-6"
             placeholder="2023.08.22 11시30분"
@@ -90,6 +91,17 @@ export default function UserRegularDetailsOutput({regularData}) {
         <div className="flex flex-wrap">
           <div className="mt-2 mr-2">
             <input
+                type="text"
+                name="Employeenumber"
+                id="Employeenumber"
+                defaultValue={regularData.regularEmpNum}
+                disabled
+                className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 sm:text-sm sm:leading-6"
+                placeholder="A201913925"
+            />
+          </div>
+          <div className="mt-2 mr-2">
+            <input
               type="text"
               name="inspector"
               id="inspector"
@@ -107,17 +119,6 @@ export default function UserRegularDetailsOutput({regularData}) {
               disabled
               className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 sm:text-sm sm:leading-6"
               placeholder="cutysexy@seah.co.kr"
-            />
-          </div>
-          <div className="mt-2">
-            <input
-              type="text"
-              name="Employeenumber"
-              id="Employeenumber"
-              defaultValue={regularData.regularEmpNum}
-              disabled
-              className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 sm:text-sm sm:leading-6"
-              placeholder="A201913925"
             />
           </div>
         </div>

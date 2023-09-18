@@ -26,7 +26,7 @@ function classNames(...classes) {
 
 export default function SafetyManagerInspection() {
   const { masterdataPart } = useParams(); // url 영역 파라미터
-  const { masterdataFacility } = useParams(); // url 설비 파라미터
+  const { masterdataId } = useParams(); // url 설비 파라미터
 
   const [currentDate, setCurrentDate] = useState(new Date()); // 년,월
   const navigate = useNavigate();
@@ -35,7 +35,7 @@ export default function SafetyManagerInspection() {
   const actions = [
     {
       title: "정기점검",
-      sub: "안전점검 영역에 대한 정기점검을 할 수 있습니다.",
+      sub: "점검항목에 따른 정기점검을 할 수 있습니다.",
       href: "/regular",
       icon: ClipboardDocumentListIcon,
       iconForeground: "text-teal-700",
@@ -44,7 +44,7 @@ export default function SafetyManagerInspection() {
     {
       title: "수시점검",
       sub: "영역 및 설비에 따른 수시점검을 할 수 있습니다.",
-      href: `/special/list/${masterdataPart}/${masterdataFacility}`,
+      href: `/special/list/${masterdataPart}/${masterdataId}`,
       icon: ClipboardDocumentCheckIcon,
       iconForeground: "text-purple-700",
       iconBackground: "bg-purple-50",
@@ -61,59 +61,80 @@ export default function SafetyManagerInspection() {
     },
   ];
 
+  // 수시점검
+  const [monthlyAll, setMonthlyAll] = useState(0); // 월별 수시점검 실시 정보
+  const [monthlyComplete, setMonthlyComplete] = useState(0); // 월별 수시점검 완료 정보
+  const [monthlyNoComplete, setMonthlyNoComplete] = useState(0); // 이번달 deadline 중 조치필요 정보
+  // 정기점검
+  const [monthlyAllReg, setMonthlyAllReg] = useState(0); // 월별 정기점검 실시 정보
+  const [monthlyCompleteReg, setMonthlyCompleteReg] = useState(0); // 월별 정기점검 완료 정보
+  const [monthlyBad, setMonthlyBadReg] = useState(0); // 월별 불량건수 정보
+
+
+  useEffect(() => {
+    // Json값 가져와서 세팅
+    function fetchDataWithAxios(masterdataPart, masterdataId) {
+      const apiUrls = [
+        `${process.env.REACT_APP_API_BASE_URL}/user/special/${masterdataPart}/${masterdataId}`,
+        `${process.env.REACT_APP_API_BASE_URL}/user/regular/${masterdataPart}/${masterdataId}`,
+      ];
+
+      // 여러 개의 API를 호출하는 프로미스 배열 생성
+      const apiRequests = apiUrls.map((url) => axios.get(url));
+
+      // 모든 API 호출을 기다리고 결과를 처리
+      Promise.all(apiRequests)
+        .then((responses) => {
+          // 모든 API 호출이 성공하면 여기로 진입
+          const responseData = responses.map((response) => response.data);
+
+          // 가져온 데이터로 상태 변수 업데이트
+          // 수시점검
+          setMonthlyAll(responseData[0].monthlyAll);
+          setMonthlyComplete(responseData[0].monthlyComplete);
+          setMonthlyNoComplete(responseData[0].monthlyNoComplete);
+          // 정기점검
+          setMonthlyAllReg(responseData[1].monthlyAll);
+          setMonthlyCompleteReg(responseData[1].monthlyComplete);
+          setMonthlyBadReg(responseData[1].monthlyBad);
+
+          console.log(responseData); // JSON 데이터가 출력됩니다.
+        })
+        .catch((errors) => {
+          // 하나 이상의 API 호출이 실패한 경우 에러 처리
+          console.error("Error fetching data:", errors);
+        });
+    }
+
+    fetchDataWithAxios(masterdataPart, masterdataId);
+  }, []);
+
+
   const regular = [
     // { name: '정기점검', href: '#', icon: UsersIcon, current: false },
     {
-      name: "조치완료",
-      icon: ShieldCheckIcon,
-      count: "5",
+      name: "점검실시",
+      icon: WrenchScrewdriverIcon,
+      count: monthlyAllReg.toString(),
       current: true,
-      iconForeground: "text-green-600",
+      iconForeground: "text-blue-600",
     },
     {
-      name: "점검실시",
-      icon: XCircleIcon,
-      count: "12",
+      name: "조치완료",
+      icon: ShieldCheckIcon,
+      count: monthlyCompleteReg.toString(),
       current: false,
-      iconForeground: "text-yellow-600",
+      iconForeground: "text-green-600",
     },
     {
       name: "불량건수",
       icon: ExclamationCircleIcon,
-      count: "20+",
+      count: monthlyBad.toString(),
       current: false,
       iconForeground: "text-red-600",
     },
   ];
 
-  const [monthlyAll, setMonthlyAll] = useState(0); // 월별 수시점검 실시 정보
-  const [monthlyComplete, setMonthlyComplete] = useState(0); // 월별 수시점검 완료 정보
-  const [monthlyNoComplete, setMonthlyNoComplete] = useState(0); // 이번달 deadline 중 조치필요 정보
-
-  useEffect(() => {
-    // Json값 가져와서 세팅
-    function fetchDataWithAxios(masterdataPart, masterdataFacility) {
-      axios
-        .get(
-          `${process.env.REACT_APP_API_BASE_URL}/user/special/${masterdataPart}/${masterdataFacility}`
-        ) // 세아
-        //  .get(`http://localhost:8081/special/${masterdataPart}/${masterdataFacility}`)
-        .then((response) => {
-          const data = response.data;
-          // 가져온 데이터로 상태 변수 업데이트
-          setMonthlyAll(data.monthlyAll);
-          setMonthlyComplete(data.monthlyComplete);
-          setMonthlyNoComplete(data.monthlyNoComplete);
-          console.log(data); // JSON 데이터가 출력됩니다.
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-          console.error("에러가?:", error);
-        });
-    }
-
-    fetchDataWithAxios(masterdataPart, masterdataFacility);
-  }, [masterdataPart, masterdataFacility]);
 
   const frequent = [
     {
@@ -137,9 +158,6 @@ export default function SafetyManagerInspection() {
       current: false,
       iconForeground: "text-red-600",
     },
-    // { name: 'Calendar', href: '#', icon: CalendarIcon, count: '20+', current: false },
-    // { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
-    // { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
   ];
 
   const goToPreviousMonth = () => {
@@ -158,6 +176,12 @@ export default function SafetyManagerInspection() {
 
     return `${year}년 ${month}`;
   };
+
+ // 수시점검 현황 클릭시
+  const goToFrequentinspection = () => {
+    const isManager = "manager";
+    navigate(`/frequentinspection?isManager=${isManager}`);
+  }
 
   return (
     <div className="container mx-auto sm:px-6 lg:px-8 px-4">
@@ -215,9 +239,7 @@ export default function SafetyManagerInspection() {
         <nav className="flex flex-1 flex-col" aria-label="Sidebar">
           <p className="flex justify-center font-semibold text-lg mb-2">
             <CalendarDaysIcon className="w-6 h-6 mr-1" />
-            {/*------------------------  수정 필요  -------------------------*/}
             {getFormattedDate()} 점검현황
-            {/*------------------------  수정 필요  -------------------------*/}
           </p>
           <p className=" text-lg font-semibold">정기점검</p>
           <ul role="list" className="-mx-2 space-y-1 mb-3">
@@ -240,7 +262,7 @@ export default function SafetyManagerInspection() {
                   </span>
                   <span
                     className={
-                      item.current ? "text-green-600" : "text-gray-700"
+                      item.current ? "text-blue-600" : "text-gray-700"
                     }
                   >
                     {item.name}
@@ -302,7 +324,7 @@ export default function SafetyManagerInspection() {
           </ul>
           <button
             type="button"
-            onClick={() => navigate("/frequentinspection")}
+            onClick={goToFrequentinspection}
             className="rounded-md bg-seahColor px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mt-4"
           >
             수시점검 현황 

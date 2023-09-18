@@ -12,7 +12,7 @@ import {
   WrenchScrewdriverIcon,
   ShieldCheckIcon,
   ShieldExclamationIcon,
-  XCircleIcon,
+  XCircleIcon, ExclamationCircleIcon,
 } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -27,15 +27,70 @@ function classNames(...classes) {
 export default function UserSelectInspection() {
   const { masterdataPart } = useParams(); // url 영역 파라미터
   const { masterdataId } = useParams(); // url 설비코드 파라미터
-
   const [currentDate, setCurrentDate] = useState(new Date()); // 년,월
   const navigate = useNavigate();
+
+  // 수시점검
+  const [monthlyAll, setMonthlyAll] = useState(0); // 월별 수시점검 실시 정보
+  const [monthlyComplete, setMonthlyComplete] = useState(0); // 월별 수시점검 완료 정보
+  const [monthlyNoComplete, setMonthlyNoComplete] = useState(0); // 이번달 deadline 중 조치필요 정보
+  // 정기점검
+  const [monthlyAllReg, setMonthlyAllReg] = useState(0); // 월별 정기점검 실시 정보
+  const [monthlyCompleteReg, setMonthlyCompleteReg] = useState(0); // 월별 정기점검 완료 정보
+  const [monthlyBad, setMonthlyBadReg] = useState(0); // 월별 불량건수 정보
+
+  useEffect(() => {
+
+    // 모바일에서 스와이프 뒤로가기 감지해서 get 요청 다시
+    window.onpageshow = function(event) {
+      if ( event.persisted ) {
+        fetchDataWithAxios(masterdataPart, masterdataId);
+      }
+    }
+    fetchDataWithAxios(masterdataPart, masterdataId);
+  });
+
+
+  // Json값 가져와서 세팅
+  function fetchDataWithAxios(masterdataPart, masterdataId) {
+    const apiUrls = [
+      `${process.env.REACT_APP_API_BASE_URL}/user/special/${masterdataPart}/${masterdataId}`,
+      `${process.env.REACT_APP_API_BASE_URL}/user/regular/${masterdataPart}/${masterdataId}`,
+    ];
+
+    // 여러 개의 API를 호출하는 프로미스 배열 생성
+    const apiRequests = apiUrls.map((url) => axios.get(url));
+
+    // 모든 API 호출을 기다리고 결과를 처리
+    Promise.all(apiRequests)
+        .then((responses) => {
+          // 모든 API 호출이 성공하면 여기로 진입
+          const responseData = responses.map((response) => response.data);
+
+          // 가져온 데이터로 상태 변수 업데이트
+          // 수시점검
+          setMonthlyAll(responseData[0].monthlyAll);
+          setMonthlyComplete(responseData[0].monthlyComplete);
+          setMonthlyNoComplete(responseData[0].monthlyNoComplete);
+          // 정기점검
+          setMonthlyAllReg(responseData[1].monthlyAll);
+          setMonthlyCompleteReg(responseData[1].monthlyComplete);
+          setMonthlyBadReg(responseData[1].monthlyBad);
+
+          console.log(responseData); // JSON 데이터가 출력됩니다.
+        })
+        .catch((errors) => {
+          // 하나 이상의 API 호출이 실패한 경우 에러 처리
+          console.error("Error fetching data:", errors);
+        });
+  }
+
 
   // function 위에 있던거 function으로 옮겼음
   const actions = [
     {
       title: "정기점검",
-      sub: "안전점검 영역에 대한 정기점검을 할 수 있습니다.",
+      sub: "점검항목에 따른 정기점검을 할 수 있습니다.",
       href: "/regular",
       icon: ClipboardDocumentListIcon,
       iconForeground: "text-teal-700",
@@ -54,56 +109,27 @@ export default function UserSelectInspection() {
   const regular = [
     // { name: '정기점검', href: '#', icon: UsersIcon, current: false },
     {
-      name: "점검완료",
-      icon: ShieldCheckIcon,
-      count: "5",
+      name: "점검실시",
+      icon: WrenchScrewdriverIcon,
+      count: monthlyAllReg.toString(),
       current: true,
+      iconForeground: "text-blue-600",
+    },
+    {
+      name: "조치완료",
+      icon: ShieldCheckIcon,
+      count: monthlyCompleteReg.toString(),
+      current: false,
       iconForeground: "text-green-600",
     },
     {
-      name: "미점검",
-      icon: XCircleIcon,
-      count: "12",
-      current: false,
-      iconForeground: "text-yellow-600",
-    },
-    {
-      name: "조치필요",
-      icon: ShieldExclamationIcon,
-      count: "20+",
+      name: "불량건수",
+      icon: ExclamationCircleIcon,
+      count: monthlyBad.toString(),
       current: false,
       iconForeground: "text-red-600",
     },
   ];
-
-  const [monthlyAll, setMonthlyAll] = useState(0); // 월별 수시점검 실시 정보
-  const [monthlyComplete, setMonthlyComplete] = useState(0); // 월별 수시점검 완료 정보
-  const [monthlyNoComplete, setMonthlyNoComplete] = useState(0); // 이번달 deadline 중 조치필요 정보
-
-  useEffect(() => {
-    // Json값 가져와서 세팅
-    function fetchDataWithAxios(masterdataPart, masterdataId) {
-      axios
-        .get(
-          `${process.env.REACT_APP_API_BASE_URL}/user/special/${masterdataPart}/${masterdataId}`
-        )
-        .then((response) => {
-          const data = response.data;
-          // 가져온 데이터로 상태 변수 업데이트
-          setMonthlyAll(data.monthlyAll);
-          setMonthlyComplete(data.monthlyComplete);
-          setMonthlyNoComplete(data.monthlyNoComplete);
-          console.log(data.monthlyAll); // JSON 데이터가 출력됩니다.
-
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-          console.error("에러가?:", error);
-        });
-    }
-
-    fetchDataWithAxios(masterdataPart, masterdataId);
-  },[] );
 
   const frequent = [
     {
@@ -225,7 +251,7 @@ export default function UserSelectInspection() {
                   </span>
                   <span
                     className={
-                      item.current ? "text-green-600" : "text-gray-700"
+                      item.current ? "text-blue-600" : "text-gray-700"
                     }
                   >
                     {item.name}

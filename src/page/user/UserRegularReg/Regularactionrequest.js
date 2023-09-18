@@ -27,6 +27,7 @@ export default function Regularactionrequest({ onFormDataChange, dataChange, sel
           setEmailDataList(emailListFromBack);
 
           // setInstances()
+
           // 이메일 고정수신자 리스트
           const emailYListFromBack = response.data.staticEmailList;
           setEmailYDataList(emailYListFromBack);
@@ -40,8 +41,6 @@ export default function Regularactionrequest({ onFormDataChange, dataChange, sel
             );
           }
 
-
-
         } catch (error) {
           console.error("데이터 가져오기 오류: ", error);
         }
@@ -49,7 +48,9 @@ export default function Regularactionrequest({ onFormDataChange, dataChange, sel
 
       emailFetchDataWithAxios();
     }
+
   }, [emailDataList,instances ,selectedEmailChange]); // emailDataList 상태가 변경될 때만 useEffect 실행
+
 
   // -----------------------------------
   const handleActionChange = (instanceIndex, selectedEmail) => {

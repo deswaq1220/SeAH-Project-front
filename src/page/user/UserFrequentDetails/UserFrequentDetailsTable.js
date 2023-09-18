@@ -79,6 +79,28 @@ export default function UserFrequentDetailsTable() {
     }
   };
 
+
+// 삭제버튼 클릭 핸들러
+  const handleDeleteButtonClick = (speId) => {
+    const confirmDelete = window.confirm("해당 수시점검 내역을 삭제하시겠습니까?");
+    if (confirmDelete) {
+      axios
+        .delete(`${process.env.REACT_APP_API_BASE_URL}/user/special/detail/${speId}`)
+        .then((response) => {
+          // 삭제 요청이 성공한 경우 처리
+          console.log("삭제 성공:", response);
+          navigate(-1);
+
+        })
+        .catch((error) => {
+          // 삭제 요청이 실패한 경우 처리
+          console.error("삭제 실패:", error);
+          // 실패한 경우 사용자에게 알림을 표시하거나 다른 작업을 수행할 수 있습니다.
+        });
+    }
+  };
+
+
   // 확인버튼 클릭 시 바로 이전페이지 이동
   const backBtn = () => { navigate(-1); };
 
@@ -110,14 +132,15 @@ export default function UserFrequentDetailsTable() {
         <p className="mt-1 max-w-2xl text-base leading-6 text-gray-500">
           등록한 해당 수시점검의 조회 및 수정, 완료등록이 가능합니다
         </p>
-        {/*<div className="flex justify-end mt-1">*/}
-        {/*  <button*/}
-        {/*    type="button"*/}
-        {/*    className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mr-2"*/}
-        {/*  >*/}
-        {/*    삭제*/}
-        {/*  </button>*/}
-        {/*</div>*/}
+        <div className="flex justify-end mt-1">
+          <button
+            type="button"
+            className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mr-2"
+            onClick={() => handleDeleteButtonClick(speId)} // speId 값을 넘겨줍니다.
+          >
+            삭제
+          </button>
+        </div>
       </div>
       <div className="mt-6 border-t border-gray-100">
         <dl className="divide-y divide-gray-100">
