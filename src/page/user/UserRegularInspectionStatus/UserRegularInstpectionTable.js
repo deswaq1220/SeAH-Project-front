@@ -63,7 +63,7 @@ export default function UserRegularInstpectionTable({ data }) {
                         scope="col"
                         className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                       >
-                        영역
+                        점검구역
                       </th>
                       <th
                         scope="col"

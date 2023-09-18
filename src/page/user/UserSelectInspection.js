@@ -90,7 +90,7 @@ export default function UserSelectInspection() {
   const actions = [
     {
       title: "정기점검",
-      sub: "안전점검 영역에 대한 정기점검을 할 수 있습니다.",
+      sub: "점검항목에 따른 정기점검을 할 수 있습니다.",
       href: "/regular",
       icon: ClipboardDocumentListIcon,
       iconForeground: "text-teal-700",
