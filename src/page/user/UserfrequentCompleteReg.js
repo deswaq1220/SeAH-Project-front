@@ -271,7 +271,7 @@ function UserfrequentCompleteReg() {
           </tr>
           <tr>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">점검내용</td>
-            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>font color="blue">${response.data.speContent}</font></strong></td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${response.data.speContent}</strong></td>
           </tr>
           <tr>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">개선대책</td>

@@ -178,7 +178,7 @@ export default function UserRegularDetails() {
           </tr>
           <tr>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">유해위험요인</td>
-            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong><font color="blue">${regularDetailDTOList[index].checklist}</strong></font></td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${regularDetailDTOList[index].checklist}</strong></td>
           </tr>
           <tr>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">개선대책</td>
@@ -186,11 +186,11 @@ export default function UserRegularDetails() {
           </tr>
           <tr>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">조치자</td>
-            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong><font color="blue">${regularDetailDTOList[index].regularActPerson}</font></strong></td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${regularDetailDTOList[index].regularActPerson}</strong></td>
           </tr>
           <tr>
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;">조치완료일</td>
-            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong><font color="blue">${formattedCompleteDate}</font></strong></td>
+            <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${formattedCompleteDate}</strong></td>
           </tr>
           </table>
             <p style="font-size:16px;">링크 : <a href="http://localhost:3000/regulardetails/${regularId}">상세보기</a></p>
