@@ -10,6 +10,7 @@ import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import DangerousType from "./FrequentinseptionForm/DangerousType";
+import {useParams} from "react-router-dom";
 
 // String -> SpeStatus 형변환
 const SpeStatus = {
@@ -19,6 +20,7 @@ const SpeStatus = {
 
 //수시점검 현황
 export default function FrequentIns() {
+  const { isManager } = useParams(); // 관리자접근 파라미터
   const [searchData, setSearchData] = useState([]); // 검색 결과 데이터 저장
   const [spePart, setSpePart] = useState(null); // 영역
   const [speFacility, setSpeFacility] = useState(""); // 설비명
@@ -166,7 +168,8 @@ export default function FrequentIns() {
           </div>
         </form>
         {/* 테이블 */}
-        <FrequentInseptionTable searchResults={searchData} />
+        <FrequentInseptionTable searchResults={searchData}
+                                isManager={isManager}/>
       </div>
     </>
   );

@@ -35,7 +35,6 @@ function UserfrequentReg() {
     // 초기값 설정
     return [];
   });
-  // const [staticEmailPerson, setStaticEmailPerson] = useState([]);
   const [speFacility, setSpeFacility] = useState("");
   const [speDanger, setSpeDanger] = useState("");
   const [speInjure, setSpeInjure] = useState("");
@@ -397,7 +396,7 @@ function UserfrequentReg() {
           </tr>
           </table>
 <!--            <p style="font-size:16px;">링크 : <a href="http://localhost:3000/special/detail/${response.data.speId}">상세보기</a></p>-->
-            <p style="font-size:16px;">링크 : <a href="http://172.20.10.13:3000/special/detail/${response.data.speId}">상세보기</a></p>
+            <p style="font-size:16px;">링크 : <a href="http://172.30.1.35:3000/special/detail/${response.data.speId}">상세보기</a></p>
     `;
 
             const emailData = {
@@ -435,7 +434,7 @@ function UserfrequentReg() {
             });
 
             // 저장성공시 해당설비의 리스트 페이지
-            navigate(`/special/list/${masterdataPart}/${masterdataId}`);
+            navigate(-1);
           }
         })
         .catch((error) => {

@@ -2,8 +2,10 @@ import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import {useNavigate} from "react-router-dom";
 
 export default function UserRegularInstpectionTable({ data }) {
+  const navigate = useNavigate();
   const regularlist = data;
 
 
@@ -17,7 +19,10 @@ export default function UserRegularInstpectionTable({ data }) {
     return `${year}년 ${month}월 ${day}일`;
   }
 
-  
+   const goToRegularDetail = (regularId) => {
+    navigate(`/regulardetails/${regularId}`);
+   }
+
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 mx-4">
@@ -94,30 +99,31 @@ export default function UserRegularInstpectionTable({ data }) {
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
                     {regularlist.map((status) => (
-                      <tr key={status.regularId}>
-                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                          {status.regularPart}
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {status.regularInsName}
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {formatDate(status.regularDate)}
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {status.regularPerson}
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {status.regularInsCount}건
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 flex justify-center">
-                          {status.regularComplete === "OK" ? (
-                            <CheckCircleIcon className="w-10 text-green-600" />
-                          ) : (
-                            <XCircleIcon className="w-10 text-red-600" />
-                          )}
-                        </td>
-                      </tr>
+                        <tr key={status.regularId} onClick={() => goToRegularDetail(status.regularId)}>
+                          {/*<Link to={`/regulardetails/${result.regularId}`}>*/}
+                          <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                            {status.regularPart}
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                            {status.regularInsName}
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                            {formatDate(status.regularDate)}
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                            {status.regularPerson}
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                            {status.regularInsCount}건
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 flex justify-center">
+                            {status.regularComplete === "OK" ? (
+                                <CheckCircleIcon className="w-10 text-green-600" />
+                            ) : (
+                                <XCircleIcon className="w-10 text-red-600" />
+                            )}
+                          </td>
+                        </tr>
                     ))}
                   </tbody>
                 </table>
