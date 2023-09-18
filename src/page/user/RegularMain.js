@@ -42,7 +42,7 @@ function RegularMain() {
           },
         });
         const sortRegularList = response.data.sort((a, b) => {
-          return new Date(a.regularDate) - new Date(b.regularDate);
+          return new Date(a.regTime) - new Date(b.regTime);
         });
         setRegularList(sortRegularList);
         setSelectedMonth(currentMonth);
@@ -210,7 +210,7 @@ function RegularMain() {
                           </div>
                         </td>
                        <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                          {format(new Date(regular.regularDate), "yyyy-MM-dd HH시 mm분")}
+                          {format(new Date(regular.regTime), "yyyy-MM-dd HH시 mm분")}
                         </td>
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
 
