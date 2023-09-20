@@ -142,16 +142,12 @@ export default function UserRegularTable() {
         try {
             const selectedPosition = regularNameList.indexOf(selectedArea);
             if (selectedPosition !== -1) {
-                //  regularNum = selectedPosition + 1;
-                const newRegularNum = selectedPosition + 1;
-
-                setRegularNum(newRegularNum);
 
                 const response = await axios.get(
                     `${process.env.REACT_APP_API_BASE_URL}/user/regularcheck`,
                     {
                         params: {
-                            regularNum: newRegularNum,
+                            regularNum: selectedPosition,
                         },
                     }
                 );
