@@ -15,15 +15,15 @@ const notificationMethods = [
     {id: "NA", title: "N/A", color: "text-gray-900"},
 ];
 
-const people = [
-    {
-        name: "Lindsay Walton",
-        title: "Front-end Developer",
-        email: "lindsay.walton@example.com",
-        role: "Member",
-    },
-    // More people...
-];
+// const people = [
+//     {
+//         name: "Lindsay Walton",
+//         title: "Front-end Developer",
+//         email: "lindsay.walton@example.com",
+//         role: "Member",
+//     },
+//     // More people...
+// ];
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -52,8 +52,6 @@ export default function UserRegularTable() {
         }
 
     };
-
-
 
 
     const [regularDTO, setRegularDTO] = useState({
@@ -236,16 +234,16 @@ export default function UserRegularTable() {
                                 (checkItem) => checkItem.id === id
                             );
                             const itemChecklist = itemContent.checklist;
-                            console.log(
-                                "itemContent==============" + formattedRegisterDate,
-                                regularDTO.regularPerson,
-                                item.regularActPerson,
-                                regularDTO.regularPart,
-                                regularDTO.regularInsName,
-                                itemChecklist,
-                                itemContent.regularActContent
-                            );
-                            console.log(staticEmailPerson);
+                            // console.log(
+                            //     "itemContent==============" + formattedRegisterDate,
+                            //     regularDTO.regularPerson,
+                            //     item.regularActPerson,
+                            //     regularDTO.regularPart,
+                            //     regularDTO.regularInsName,
+                            //     itemChecklist,
+                            //     itemContent.regularActContent
+                            // );
+                            // console.log(staticEmailPerson);
                             /*/★!*!/!*!/!*고정수신자 생기면 넣기*!/!*!/!*!/*/
                             const spendForm = `
                                           <table style="width: 100%; border-collapse: collapse; border: 1px solid #ccc;">
