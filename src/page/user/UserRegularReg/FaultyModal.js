@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect, useRef, useState} from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import Regularactionrequest from "./Regularactionrequest";
@@ -21,7 +21,7 @@ export default function FaultyModal({ index, actForm, fetchData }) {
   const content = useRef();
   const [staticEmailPerson, setStaticEmailPerson] = useState([]);
   const [selectedEmail, setSelectedEmail] = useState([]);
-    const [newFiles, setNewFiles] = useState([]);
+  const [newFiles, setNewFiles] = useState([]);
 
   // ActionRquest 콜백 : 조치자(이름, 이메일)
   const handleActionRequestDetailsDataChange = (data) => {
@@ -31,78 +31,79 @@ export default function FaultyModal({ index, actForm, fetchData }) {
 
   // 고정수신자
   const handleStaticEmailChange = (staticEmailList) => {
-
     // staticEmailList가 배열인 경우, 각 이메일 주소를 추출하여 배열에 추가
     const staticEmailAddresses = Array.isArray(staticEmailList)
-        ? staticEmailList.map((item) => item.emailAdd)
-        : [staticEmailList.emailAdd];
+      ? staticEmailList.map((item) => item.emailAdd)
+      : [staticEmailList.emailAdd];
 
     setStaticEmailPerson(staticEmailAddresses);
   };
-    //파일 삭제
-    const deleteFile = (index) => {
+  //파일 삭제
+  const deleteFile = (index) => {
+    const updatedFiles = [...files];
+    updatedFiles.splice(index, 1);
+    setFiles(updatedFiles); // Update formData with new file array
+  };
 
-        const updatedFiles = [...files];
-        updatedFiles.splice(index, 1);
-        setFiles(updatedFiles); // Update formData with new file array
-    };
-
-  const handleSaveClick = async()=> {
+  const handleSaveClick = async () => {
     const editedContent = content.current.value;
-// actForm 함수 호출
-      actForm({
+    // actForm 함수 호출
+    actForm({
       id: fetchData.id,
       index: index,
       regularActPerson: regularActPerson,
       regularActEmail: regularActEmail,
-      regularActContent : editedContent,
-          files: newFiles.length > 0 ? [...newFiles,...files] : [...files],
+      regularActContent: editedContent,
+      files: newFiles.length > 0 ? [...newFiles, ...files] : [...files],
       staticEmailPerson: staticEmailPerson,
-      });
-      setOpen(false);
-  }
+    });
+    setOpen(false);
+  };
 
-   const handleCancelClick = async()=> {
-     actForm({
-       id: fetchData.id,
-       regularActPerson: fetchData.regularActPerson,
-       regularActEmail: fetchData.regularActEmail,
-       regularActContent: fetchData.regularActContent,
-       files: fetchData.files,
-       index: index,
-     });
-        setOpen(false);
-    }
+  const handleCancelClick = async () => {
+    actForm({
+      id: fetchData.id,
+      regularActPerson: fetchData.regularActPerson,
+      regularActEmail: fetchData.regularActEmail,
+      regularActContent: fetchData.regularActContent,
+      files: fetchData.files,
+      index: index,
+    });
+    setOpen(false);
+  };
 
-// fetchData 상태를 가져오는 useEffect
-    useEffect(() => {
-        const fetchRegularDetail = () => {
-            if (fetchData.regularActEmail && fetchData.regularActPerson) {
-                // 쉼표로 구분된 문자열을 배열로 변환
-                const emailAddArray = fetchData.regularActEmail.split(', ').map(email => email.trim());
-                const emailNameArray = fetchData.regularActPerson.split(', ').map(name => name.trim());
+  // fetchData 상태를 가져오는 useEffect
+  useEffect(() => {
+    const fetchRegularDetail = () => {
+      if (fetchData.regularActEmail && fetchData.regularActPerson) {
+        // 쉼표로 구분된 문자열을 배열로 변환
+        const emailAddArray = fetchData.regularActEmail
+          .split(", ")
+          .map((email) => email.trim());
+        const emailNameArray = fetchData.regularActPerson
+          .split(", ")
+          .map((name) => name.trim());
 
-                // emailAddArray와 emailNameArray를 사용하여 객체 배열 생성
-                const newSelectedEmail = emailAddArray.map((emailAdd, index) => ({
-                    emailAdd,
-                    emailName: emailNameArray[index],
-                }));
-                setSelectedEmail(newSelectedEmail);
-            }
-        };
+        // emailAddArray와 emailNameArray를 사용하여 객체 배열 생성
+        const newSelectedEmail = emailAddArray.map((emailAdd, index) => ({
+          emailAdd,
+          emailName: emailNameArray[index],
+        }));
+        setSelectedEmail(newSelectedEmail);
+      }
+    };
 
-        fetchRegularDetail();
-    }, [fetchData]);
+    fetchRegularDetail();
+  }, [fetchData]);
 
-// selectedEmail을 사용하는 useEffect
-    useEffect(() => {
-        setRegularActContent(fetchData.regularActContent);
-        setRegularActEmail(fetchData.regularActEmail);
-        setRegularActPerson(fetchData.regularActPerson);
-        setFiles(fetchData.files || []);
-        console.log(selectedEmail);
-    }, [fetchData, selectedEmail]);
-
+  // selectedEmail을 사용하는 useEffect
+  useEffect(() => {
+    setRegularActContent(fetchData.regularActContent);
+    setRegularActEmail(fetchData.regularActEmail);
+    setRegularActPerson(fetchData.regularActPerson);
+    setFiles(fetchData.files || []);
+    console.log(selectedEmail);
+  }, [fetchData, selectedEmail]);
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -152,7 +153,6 @@ export default function FaultyModal({ index, actForm, fetchData }) {
                         id="comment"
                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6"
                         defaultValue={regularActContent}
-
                       />
                     </div>
                     <div className="mt-10">
@@ -160,38 +160,35 @@ export default function FaultyModal({ index, actForm, fetchData }) {
                         as="h3"
                         className="text-base font-semibold leading-6 text-gray-900"
                       >
-                        담당자
-
+                        조치담당자
                       </Dialog.Title>
-                        <Regularactionrequest
-                            selectedEmailChange = {selectedEmail}
-                          onFormDataChange={handleActionRequestDetailsDataChange}
-                          dataChange={handleStaticEmailChange}
-                        />
+                      <Regularactionrequest
+                        selectedEmailChange={selectedEmail}
+                        onFormDataChange={handleActionRequestDetailsDataChange}
+                        dataChange={handleStaticEmailChange}
+                      />
                     </div>
 
                     <div className="mt-10">
-                        {files && files.length > 0 ? (
-                            files.map((file, index) => (
-                                <div key={index}>
-                                    <img
-                                        src={URL.createObjectURL(file)}
-                                        alt="Preview"
-                                        className="pointer-events-none object-cover group-hover:opacity-75"
-                                    />
-                                    {file.name}
-                                    <button
-                                        onClick={() => deleteFile(index)}
-                                        className="ml-2 text-red-600"
-                                        type="button"
-                                    >
-                                        삭제
-                                    </button>
-                                </div>
-                            ))
-                        ) : (
-                                null
-                        )}
+                      {files && files.length > 0
+                        ? files.map((file, index) => (
+                            <div key={index}>
+                              <img
+                                src={URL.createObjectURL(file)}
+                                alt="Preview"
+                                className="pointer-events-none object-cover group-hover:opacity-75"
+                              />
+                              {file.name}
+                              <button
+                                onClick={() => deleteFile(index)}
+                                className="ml-2 text-red-600"
+                                type="button"
+                              >
+                                삭제
+                              </button>
+                            </div>
+                          ))
+                        : null}
                       <Dialog.Title
                         as="h3"
                         className="text-base font-semibold leading-6 text-gray-900"
@@ -207,13 +204,12 @@ export default function FaultyModal({ index, actForm, fetchData }) {
                           "image/png",
                         ]}
                         onupdatefiles={(fileItems) => {
-                            const updatedFiles = [...newFiles];
-                            fileItems.forEach((fileItem) => {
-                                updatedFiles.push(fileItem.file);
-                            });
-                            setNewFiles(updatedFiles);
+                          const updatedFiles = [...newFiles];
+                          fileItems.forEach((fileItem) => {
+                            updatedFiles.push(fileItem.file);
+                          });
+                          setNewFiles(updatedFiles);
                         }}
-
                         server={{
                           process: (
                             fieldName,

@@ -76,7 +76,7 @@ export default function InspectionArea({ handleInspectionAreaChange }) {
 
   return (
     <>
-      <div id="charge" className="flex  items-baseline justify-start">
+      <div id="charge" className="flex  items-baseline justify-start ml-4">
         <div className="flex flex-col">
           <Listbox value={selectedArea} onChange={handleSelectedArea}>
             {({ open }) => (
