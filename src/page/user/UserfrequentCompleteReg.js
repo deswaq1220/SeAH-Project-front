@@ -288,7 +288,6 @@ function UserfrequentCompleteReg() {
           </table>
 <!--            <p style="font-size:16px;">링크 : <a href="http://localhost:3000/special/detail/${response.data.speId}">상세보기</a></p>-->
             <p style="font-size:16px;">링크 : <a href="http://172.30.1.35:3000/special/detail/${response.data.speId}">상세보기</a></p>
-            <p style="font-size:16px;">해당 메일은 발신전용 메일입니다.</p>
     `;
 
           const emailData = {

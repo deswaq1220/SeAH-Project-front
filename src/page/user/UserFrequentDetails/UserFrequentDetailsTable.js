@@ -302,7 +302,7 @@ export default function UserFrequentDetailsTable() {
       <div className="flex justify-center my-4">
         <button
           type="button"
-          className="rounded-md bg-seahColor px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mr-2"
+          className="rounded-md bg-seahColor px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
           onClick={() => handleEditButtonClick(speId)} // speId 값을 넘겨줍니다.
         >
           수정
