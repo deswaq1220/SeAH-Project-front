@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { toast } from 'react-toastify';
 
 export default function Inspector({onFormDataChange}){
   const [inspector, setInspector] = useState({
@@ -14,17 +15,26 @@ export default function Inspector({onFormDataChange}){
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     // 새로운 상태 업데이트
-    const updatedFormDate = {
+    const updatedFormData = {
       ...inspector,
       [name]: value,
     };
-    setInspector(updatedFormDate);
+    setInspector(updatedFormData);
+
+    // 이메일 필드가 비어있는지 확인
+    if (name === 'email' && value.trim() === '') {
+      toast.error('이메일을 입력해주세요.', {
+        position: 'top-center',
+        autoClose: 3000,
+        hideProgressBar: true,
+      });
+    }
 
     // 폼 데이터 업데이트 후에 콜백 호출
     onFormDataChange({
-      employeenumber: updatedFormDate.employeenumber,
-      name: updatedFormDate.name,
-      email: updatedFormDate.email + seahDomain,
+      employeenumber: updatedFormData.employeenumber,
+      name: updatedFormData.name,
+      email: updatedFormData.email + seahDomain, // 이메일 업데이트
     });
   };
 

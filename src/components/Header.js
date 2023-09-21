@@ -198,7 +198,7 @@ export default function Header() {
                   className="text-lg font-semibold leading-6 text-gray-900 cursor-pointer"
                 >
                   로그아웃 <span aria-hidden="true">&rarr;</span>
-                </button>s
+                </button>
         </div>
       </nav>
       <Dialog
