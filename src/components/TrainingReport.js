@@ -7,12 +7,17 @@ export default function TrainingReport() {
   const { eduId } = useParams();
   const [eduDetails, setEduDetails] = useState(null);
   const [attendanceList, setAttendanceList] = useState([]);
+
+  const handlePrintButtonClick = () => {
+    window.print(); // 인쇄 대화상자를 열기 위해 window.print() 함수 호출
+  };
+
   useEffect(() => {
     // API 요청을 통해 해당 교육 아이디에 해당하는 데이터 가져오기
     axios
       .get(`${process.env.REACT_APP_API_BASE_URL}/admin/edudetails/${eduId}`, {
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
       })
       .then((response) => {
@@ -172,16 +177,18 @@ export default function TrainingReport() {
             </tr>
             <tr className="flex">
               <td className="p-4 border-black w-[97mm] h-auto">
-              {eduDetails && eduDetails.eduimgurls && eduDetails.eduimgurls.length > 0 ? (
+                {eduDetails &&
+                eduDetails.eduimgurls &&
+                eduDetails.eduimgurls.length > 0 ? (
                   <div>
                     <ul className="list-disc pl-8">
                       {eduDetails.eduimgurls.map((file, index) => (
                         <div key={index} className="flex justify-between">
-                        <img
-                          src={process.env.REACT_APP_API_BASE_URL + file}
-                          className="mb-4"
-                        />
-                      </div>
+                          <img
+                            src={process.env.REACT_APP_API_BASE_URL + file}
+                            className="mb-4"
+                          />
+                        </div>
                       ))}
                     </ul>
                   </div>
@@ -192,6 +199,15 @@ export default function TrainingReport() {
             </tr>
           </table>
         </section>
+      </div>
+      <div className="flex justify-center mt-4 print:hidden">
+      <button
+        type="button"
+        className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mr-2"
+        onClick={handlePrintButtonClick} // 버튼 클릭 시 인쇄 함수를 호출
+      >
+        인쇄
+      </button>
       </div>
     </div>
   );
