@@ -330,7 +330,7 @@ export default function UserRegularTable() {
         const optionsArray = response.data.regularNameList.map(
           (name, index) => ({
             id: index + 1,
-            name: name,
+            name: name === "전체" ? "선택" : name,
           })
         );
 
@@ -415,6 +415,7 @@ export default function UserRegularTable() {
                                 )}
                               >
                                 {regularName.name}
+                                {/*{regularName.name === "전체" ? "선택" : regularName.name}*/}
                               </span>
 
                               {selected ? (
