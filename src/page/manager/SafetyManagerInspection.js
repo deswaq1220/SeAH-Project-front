@@ -84,26 +84,26 @@ export default function SafetyManagerInspection() {
 
       // 모든 API 호출을 기다리고 결과를 처리
       Promise.all(apiRequests)
-        .then((responses) => {
-          // 모든 API 호출이 성공하면 여기로 진입
-          const responseData = responses.map((response) => response.data);
+          .then((responses) => {
+            // 모든 API 호출이 성공하면 여기로 진입
+            const responseData = responses.map((response) => response.data);
 
-          // 가져온 데이터로 상태 변수 업데이트
-          // 수시점검
-          setMonthlyAll(responseData[0].monthlyAll);
-          setMonthlyComplete(responseData[0].monthlyComplete);
-          setMonthlyNoComplete(responseData[0].monthlyNoComplete);
-          // 정기점검
-          setMonthlyAllReg(responseData[1].monthlyAll);
-          setMonthlyCompleteReg(responseData[1].monthlyComplete);
-          setMonthlyBadReg(responseData[1].monthlyBad);
+            // 가져온 데이터로 상태 변수 업데이트
+            // 수시점검
+            setMonthlyAll(responseData[0].monthlyAll);
+            setMonthlyComplete(responseData[0].monthlyComplete);
+            setMonthlyNoComplete(responseData[0].monthlyNoComplete);
+            // 정기점검
+            setMonthlyAllReg(responseData[1].monthlyAll);
+            setMonthlyCompleteReg(responseData[1].monthlyComplete);
+            setMonthlyBadReg(responseData[1].monthlyBad);
 
-          console.log(responseData); // JSON 데이터가 출력됩니다.
-        })
-        .catch((errors) => {
-          // 하나 이상의 API 호출이 실패한 경우 에러 처리
-          console.error("Error fetching data:", errors);
-        });
+            console.log(responseData); // JSON 데이터가 출력됩니다.
+          })
+          .catch((errors) => {
+            // 하나 이상의 API 호출이 실패한 경우 에러 처리
+            console.error("Error fetching data:", errors);
+          });
     }
 
     fetchDataWithAxios(masterdataPart, masterdataId);
@@ -115,21 +115,21 @@ export default function SafetyManagerInspection() {
     {
       name: "점검실시",
       icon: WrenchScrewdriverIcon,
-      count: monthlyAllReg.toString(),
+      count: monthlyAllReg,
       current: true,
       iconForeground: "text-blue-600",
     },
     {
       name: "조치완료",
       icon: ShieldCheckIcon,
-      count: monthlyCompleteReg.toString(),
+      count: monthlyCompleteReg,
       current: false,
       iconForeground: "text-green-600",
     },
     {
       name: "불량건수",
       icon: ExclamationCircleIcon,
-      count: monthlyBad.toString(),
+      count: monthlyBad,
       current: false,
       iconForeground: "text-red-600",
     },
@@ -140,21 +140,21 @@ export default function SafetyManagerInspection() {
     {
       name: "점검실시",
       icon: WrenchScrewdriverIcon,
-      count: monthlyAll.toString(),
+      count: monthlyAll,
       current: true,
       iconForeground: "text-blue-600",
     },
     {
       name: "조치완료",
       icon: ShieldCheckIcon,
-      count: monthlyComplete.toString(),
+      count: monthlyComplete,
       current: false,
       iconForeground: "text-green-600",
     },
     {
       name: "조치필요",
       icon: ShieldExclamationIcon,
-      count: monthlyNoComplete.toString(),
+      count: monthlyNoComplete,
       current: false,
       iconForeground: "text-red-600",
     },

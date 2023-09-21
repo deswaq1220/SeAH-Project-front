@@ -6,8 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="c20fbe9c-9169-4241-9ec0-dff0f7b0e503" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/UserRegularReg/Inspector.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserRegularReg/Inspector.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/inspector.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/inspector.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/SafetyEduDetails.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/SafetyEduDetails.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/SafetyManagerInspection.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/SafetyManagerInspection.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +100,6 @@
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/page/user/UserRegularReg/UserRegularTable.js</url>
           <line>361</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>

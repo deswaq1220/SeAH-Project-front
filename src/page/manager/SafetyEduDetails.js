@@ -2,7 +2,7 @@ import { PaperClipIcon } from "@heroicons/react/20/solid";
 import Header from "../../components/Header";
 import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import useSafetyEduForm from "../../useHook/useSafetyEduForm";
