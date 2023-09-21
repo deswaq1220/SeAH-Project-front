@@ -8,7 +8,7 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import Inspector from "./Inspector";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
-import '../../../style/reset.css'
+import "../../../style/reset.css";
 
 const notificationMethods = [
   { id: "GOOD", title: "양호", color: "text-blue-600" },
@@ -133,46 +133,51 @@ export default function UserRegularTable() {
   //점검리스트 조회
   const handleSearchClick = async () => {
     try {
-        const selectedPosition = regularNameList.indexOf(selectedArea);
-        if (selectedPosition !== -1) {
+      const selectedPosition = regularNameList.indexOf(selectedArea);
+      if (selectedPosition !== -1) {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_BASE_URL}/user/regularcheck`,
+          {
+            params: {
+              regularNum: selectedPosition,
+            },
+          }
+        );
 
-            const response = await axios.get(
-                `${process.env.REACT_APP_API_BASE_URL}/user/regularcheck`,
-                {
-                    params: {
-                        regularNum: selectedPosition,
-                    },
-                }
-            );
-
-            setRegularcheckList(response.data);
-            console.log("초기화 된다..");
-            console.log(response.data);
-        }
+        setRegularcheckList(response.data);
+        console.log("초기화 된다..");
+        console.log(response.data);
+      }
     } catch (error) {
-        console.error("점검리스트 조회 오류", error);
+      console.error("점검리스트 조회 오류", error);
     }
-};
-
+  };
 
   const handleFormSubmit = async () => {
+    // 저장 버튼 클릭 시, 라디오 버튼이 선택되었는지 확인
+    const radioButtonsNotSelected = regularcheckList.some(
+      (item) => !item.regularCheck
+    );
+
+    if (radioButtonsNotSelected) {
+      // 라디오 버튼이 선택되지 않은 경우, 알림 띄우기
+      toast.error("모든 항목을 체크해주세요.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+      });
+      return;
+    }
+
+    if (!regularDTO.regularPart || !regularDTO.regularPerson || !selectedArea) {
+      toast.error("모든 필수 항목을 선택 또는 입력해주세요.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+      });
+      return;
+    }
     try {
-      //       const updatedFilesMap = new Map();
-
-      // regularcheckList를 순회하면서 files 필드를 추출하여 updatedFilesMap에 추가합니다.
-      //       regularcheckList.forEach((regularcheck) => {
-      //           if (regularcheck.files) {
-      //         setRegularDTO((prevData) => ({
-      //                     ...prevData,
-      //                     file: {
-      //                         ...prevData.file,
-      //                         [regularcheck.id]: regularcheck.files, // '1' is the key and 'updatedFile' should be an array of File or Blob objects.
-      //                     },
-      //                 }));
-      //
-      //           }
-      //       });
-
       const updatedRegularcheckList = regularcheckList.map((regularcheck) => {
         const { files, isModalState, ...rest } = regularcheck;
         return rest;

@@ -2,6 +2,7 @@ import { Fragment, useState, useEffect } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import axios from "axios";
+import { toast } from 'react-toastify';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -12,6 +13,13 @@ export default function InspectionArea({ handleInspectionAreaChange }) {
   const [selectedArea, setSelectedArea] = useState(null);
   const [customInputVisible, setCustomInputVisible] = useState(false); // 직접입력 인풋창 가시성 상태
   const [customInputValue, setCustomInputValue] = useState(""); // 새로운 상태 변수 추가
+
+  const showNotification = () => {
+    toast.warn('점검구역이 선택되지 않았습니다.', {
+      position: 'top-right',
+      autoClose: 3000, 
+    });
+  };
 
   const handleInputChange = (name) => {
     const regularPart = name;
@@ -54,9 +62,13 @@ export default function InspectionArea({ handleInspectionAreaChange }) {
   // 영역 선택 시 selectedPart 값 업데이트하고 onFormDataChange 호출
   const handleSelectedArea = (value) => {
     setSelectedArea(value);
-    if (value.name === "기타(직접입력)") {
+    if (value.name === '기타(직접입력)') {
       setCustomInputVisible(true);
     } else {
+      if (!value.name) {
+        showNotification(); 
+        return; 
+      }
       setCustomInputVisible(false);
       handleInputChange(value.name);
       handleInspectionAreaChange({
