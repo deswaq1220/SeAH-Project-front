@@ -322,20 +322,20 @@ export default function UserRegularDetails() {
                                         {
                                             regularDetail.regularCheck === 'BAD' ? (
                                                 <dd
-                                                    className="mt-1 truncate text-gray-700 cursor-pointer"
+                                                    className="mt-1  text-gray-700 cursor-pointer"
                                                     onClick={() => handleChecklistClick(index)}
                                                 >
                                                     {regularDetail.checklist}
                                                 </dd>
                                             ) : (
-                                                <dd className="mt-1 truncate text-gray-700">
+                                                <dd className="mt-1  text-gray-700">
                                                     {regularDetail.checklist}
                                                 </dd>
                                             )
                                         }
 
                                         <dt className="sr-only sm:hidden">Email</dt>
-                                        <dd className="mt-1 truncate text-gray-500 sm:hidden">
+                                        <dd className="mt-1  text-gray-500 sm:hidden">
                                             <div className="space-x-4 flex">
                                                 {notificationMethods.map((notificationMethod) => (
                                                     <div key={notificationMethod.id} className="flex items-center">
