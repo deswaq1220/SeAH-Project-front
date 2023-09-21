@@ -194,6 +194,7 @@ export default function UserRegularDetails() {
           </tr>
           </table>
             <p style="font-size:16px;">링크 : <a href="http://localhost:3000/regulardetails/${regularId}">상세보기</a></p>
+            <p style="font-size:16px;">해당 메일은 발신전용 메일입니다.</p>
             `;
 
             const regularPersonEmails = regularData.regularEmail; //점검자 이메일
@@ -415,7 +416,7 @@ export default function UserRegularDetails() {
                                             ) : (
                                                 <button
                                                     type="button"
-                                                    className="rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                                                    className="rounded-md bg-gray-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
                                                 >
                                                     조치 완료
                                                 </button>
