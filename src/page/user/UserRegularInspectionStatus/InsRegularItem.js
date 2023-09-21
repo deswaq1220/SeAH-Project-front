@@ -16,20 +16,18 @@ export default function InsRegularItem({ onFormDataChange }) {
     async function fetchOptions() {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/user/regularname`
+            `${process.env.REACT_APP_API_BASE_URL}/user/regularname`
         );
 
-        // 문자열 배열을 객체로 변환하여 새로운 배열 생성
-        const optionsArray = response.data.regularNameList.map(
-          (name, index) => ({
-            id: index + 1,
-            name: name,
-          })
-        );
+        // "전체"를 제외한 문자열 배열을 객체로 변환하여 새로운 배열 생성
+        const optionsArray = response.data.regularNameList
+            .filter(name => name !== "전체")
+            .map((name, index) => ({
+              id: index + 1,
+              name: name,
+            }));
 
         setRegularNameList([{ id: 0, name: "선택" }, ...optionsArray]);
-        // setSelectedArea(optionsArray[0]);
-        // console.log(response.data);
       } catch (error) {
         console.error("서버 요청 오류:", error);
       }
