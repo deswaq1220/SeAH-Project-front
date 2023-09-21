@@ -20,6 +20,7 @@ export default function UserRegularDetails() {
   const [selectedValue, setSelectedValue] = useState();
   const navigate = useNavigate();
   const [staticEmailPerson, setEmailYDataList] = useState([]);
+  const [completedStatus, setCompletedStatus] = useState([]); // 각 항목의 조치 완료 상태를 저장할 배열
 
   function handleRadioChange(value) {
     setSelectedValue(value);
@@ -309,12 +310,24 @@ export default function UserRegularDetails() {
                         <dd
                           className="mt-1  text-gray-700 cursor-pointer"
                           onClick={() => handleChecklistClick(index)}
+                          dangerouslySetInnerHTML={{
+                            __html: regularDetail.checklist.replace(
+                              /퀜/g,
+                              '<span class="special-font">퀜</span>'
+                            ),
+                          }}
                         >
-                          {regularDetail.checklist}
+                          {/* {regularDetail.checklist} */}
                         </dd>
                       ) : (
-                        <dd className="mt-1  text-gray-700">
-                          {regularDetail.checklist}
+                        <dd className="mt-1  text-gray-700"
+                        dangerouslySetInnerHTML={{
+                            __html: regularDetail.checklist.replace(
+                              /퀜/g,
+                              '<span class="special-font">퀜</span>'
+                            ),
+                          }} >
+                          {/* {regularDetail.checklist} */}
                         </dd>
                       )}
 
@@ -352,12 +365,23 @@ export default function UserRegularDetails() {
                     <td
                       className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                       onClick={() => handleChecklistClick(index)}
+                      dangerouslySetInnerHTML={{
+                        __html: regularDetail.checklist.replace(
+                          /퀜/g,
+                          '<span class="special-font">퀜</span>'
+                        ),
+                      }}
                     >
-                      {regularDetail.checklist}
+                      {/* {regularDetail.checklist} */}
                     </td>
                   ) : (
-                    <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
-                      {regularDetail.checklist}
+                    <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell" dangerouslySetInnerHTML={{
+                        __html: regularDetail.checklist.replace(
+                          /퀜/g,
+                          '<span class="special-font">퀜</span>'
+                        ),
+                      }}>
+                      {/* {regularDetail.checklist} */}
                     </td>
                   )}
 

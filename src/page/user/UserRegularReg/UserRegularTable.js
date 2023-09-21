@@ -547,9 +547,13 @@ export default function UserRegularTable() {
                   <td
                     className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                     onClick={() => handleChecklistClick(index)}
-                  >
-                    {item.checklist}
-                  </td>
+                    dangerouslySetInnerHTML={{
+                      __html: item.checklist.replace(
+                        /퀜/g,
+                        '<span class="special-font">퀜</span>'
+                      ),
+                    }}
+                  ></td>
                   <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
                     <div className="space-x-4 flex">
                       {notificationMethods.map((notificationMethod) => (
