@@ -284,7 +284,7 @@ function EduAttenStatics() {
       {/* 여기까지가 달력 */}
 
       {/* 드롭다운 메뉴 */}
-      <div className="flex justify-center mt-4">
+      <div className="flex justify-center my-4">
         <div className="mx-2">
           <label className="block text-sm font-medium text-gray-700"></label>
           <select
@@ -315,12 +315,12 @@ function EduAttenStatics() {
             className="block w-auto rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
           />
         </div>
-        <button
+        {/* <button
           onClick={handleSearch}
           className="ml-2 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-seahColor hover:bg-seahDeep focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-seahColor"
         >
           검색
-        </button>
+        </button> */}
       </div>
 
       {/* 카테고리 선택 */}
