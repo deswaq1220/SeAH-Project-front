@@ -393,7 +393,7 @@ export default function UserRegularDetails() {
                   </td>
                   {regularDetail.regularCheck === "BAD" ? (
                     <td
-                      className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                      className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell cursor-pointer"
                       onClick={() => handleChecklistClick(index)}
                       dangerouslySetInnerHTML={{
                         __html: regularDetail.checklist.replace(

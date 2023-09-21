@@ -55,7 +55,7 @@ export default function RegularInspector({ onFormDataChange }) {
         </span>
         <div className="flex flex-wrap">
           <div className="sm:col-span-3">
-            <div className="mt-2 mr-2">
+            <div className="mt-2 ml-4 mr-2">
               <input
                 type="text"
                 name="inspectorNum"
@@ -69,7 +69,7 @@ export default function RegularInspector({ onFormDataChange }) {
             </div>
           </div>
           <div className="sm:col-span-3">
-            <div className="mt-2">
+            <div className="mt-2 ml-4">
               <input
                 type="text"
                 name="inspectorName"

@@ -86,9 +86,14 @@ export default function UserRegularTable() {
     setSelectedArea(value);
     setRegularDTO((prevData) => ({
       ...prevData,
-      regularInsName: value.name, //
+      regularInsName: value.name,
     }));
     console.log(value);
+
+    // 점검항목이 변경되면 라디오 버튼 상태를 초기화
+    setRegularcheckList((prevChecklist) =>
+      prevChecklist.map((item) => ({ ...item, regularCheck: null }))
+    );
   };
 
   function handleChecklistClick(index) {
@@ -342,6 +347,9 @@ export default function UserRegularTable() {
         setRegularNameList(optionsArray);
         setSelectedArea(optionsArray[0]);
         // console.log(response.data);
+
+        // 여기서 regularcheckList를 초기화합니다.
+      setRegularcheckList([]); // 
       } catch (error) {
         console.error("서버 요청 오류:", error);
       }
@@ -563,8 +571,8 @@ export default function UserRegularTable() {
                         >
                           <input
                             type="radio"
-                            name={`radio-group-${index}-2`}
-                            value={item.id}
+                            name={`radio-group-${index}-1`}
+                            value={notificationMethod.id}
                             onChange={() =>
                               handleRadioChange(index, notificationMethod.id)
                             }

@@ -235,7 +235,7 @@ export default function SafetyManagerInspection() {
         ))}
       </div>
 
-      <div className="mt-4">
+      <div className="mt-4 mb-6">
         <nav className="flex flex-1 flex-col" aria-label="Sidebar">
           <p className="flex justify-center font-semibold text-lg mb-2">
             <CalendarDaysIcon className="w-6 h-6 mr-1" />
@@ -325,7 +325,7 @@ export default function SafetyManagerInspection() {
           <button
             type="button"
             onClick={goToFrequentinspection}
-            className="rounded-md bg-seahColor px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mt-4"
+            className="rounded-md bg-seahColor px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mt-4 "
           >
             수시점검 현황 
           </button>
