@@ -288,7 +288,7 @@ export default function UserRegularDetails() {
                         <tr>
                             <th
                                 scope="col"
-                                className="py-3.5 pl-4 pr-3 text-center text-sm font-semibold text-gray-900 sm:pl-0"
+                                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
                             >
                                 번호
                             </th>
@@ -315,7 +315,7 @@ export default function UserRegularDetails() {
                         <tbody className="divide-y divide-gray-200 bg-white">
                         {regularDetailDTOList.map((regularDetail, index) => (
                             <tr key={index}>
-                                <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0 text-center">
+                                <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0 text-left">
                                     {index + 1}
                                     <dl className="font-normal lg:hidden">
                                         <dt className="sr-only">Title</dt>
