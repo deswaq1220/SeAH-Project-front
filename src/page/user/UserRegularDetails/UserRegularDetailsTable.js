@@ -21,6 +21,7 @@ export default function UserRegularDetails() {
   const navigate = useNavigate();
   const [staticEmailPerson, setEmailYDataList] = useState([]);
   const [completedStatus, setCompletedStatus] = useState([]); // 각 항목의 조치 완료 상태를 저장할 배열
+  const [loading, setLoading] = useState(false); // 로딩 상태 추가
 
   function handleRadioChange(value) {
     setSelectedValue(value);
@@ -88,6 +89,10 @@ export default function UserRegularDetails() {
   }, []);
 
   const updateBadDetail = async (index) => {
+    if (loading) return; // 이미 요청 중이면 함수 종료
+
+    setLoading(true); // 요청 시작, 로딩 상태 활성화
+
     console.log(regularDetailDTOList[index]);
 
     let regularBadId = regularDetailDTOList[index].regularBadId;
@@ -106,6 +111,14 @@ export default function UserRegularDetails() {
           },
         }
       );
+
+      // 요청이 성공했을 때 버튼 색상 변경
+      const updatedRegularDetailDTOList = [...regularDetailDTOList];
+      updatedRegularDetailDTOList[index].regularComplete = "OK";
+      setRegularDetailDTOList(updatedRegularDetailDTOList);
+
+      // 성공 시 로딩 상태 해제
+      setLoading(false);
 
       // 이메일 고정수신자 리스트
       const responseStaticEmail = await axios.get(
@@ -222,11 +235,13 @@ export default function UserRegularDetails() {
         });
 
       // 페이지 새로고침
-      window.location.reload();
+      //   window.location.reload();
       // 요청이 성공했을 때 수행할 작업 (예: 응답 데이터 확인)
       console.log("성공" + response.data);
     } catch (error) {
       console.error("점검리스트 조회 오류", error);
+      // 실패 시 로딩 상태 해제
+      setLoading(false);
     }
   };
 
@@ -251,6 +266,19 @@ export default function UserRegularDetails() {
           console.error("삭제 실패:", error);
           // 실패한 경우 사용자에게 알림을 표시하거나 다른 작업을 수행할 수 있습니다.
         });
+    }
+  };
+
+  // 조치완료 버튼의 className을 동적으로 설정
+  const getButtonClassName = (regularDetail) => {
+    if (regularDetail.regularCheck === "BAD") {
+      if (regularDetail.regularComplete === "OK") {
+        return "rounded-md bg-gray-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor";
+      } else {
+        return "rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor";
+      }
+    } else {
+      return "rounded-md bg-gray-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor";
     }
   };
 
@@ -320,13 +348,15 @@ export default function UserRegularDetails() {
                           {/* {regularDetail.checklist} */}
                         </dd>
                       ) : (
-                        <dd className="mt-1  text-gray-700"
-                        dangerouslySetInnerHTML={{
+                        <dd
+                          className="mt-1  text-gray-700"
+                          dangerouslySetInnerHTML={{
                             __html: regularDetail.checklist.replace(
                               /퀜/g,
                               '<span class="special-font">퀜</span>'
                             ),
-                          }} >
+                          }}
+                        >
                           {/* {regularDetail.checklist} */}
                         </dd>
                       )}
@@ -375,12 +405,15 @@ export default function UserRegularDetails() {
                       {/* {regularDetail.checklist} */}
                     </td>
                   ) : (
-                    <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell" dangerouslySetInnerHTML={{
+                    <td
+                      className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                      dangerouslySetInnerHTML={{
                         __html: regularDetail.checklist.replace(
                           /퀜/g,
                           '<span class="special-font">퀜</span>'
                         ),
-                      }}>
+                      }}
+                    >
                       {/* {regularDetail.checklist} */}
                     </td>
                   )}
@@ -424,7 +457,7 @@ export default function UserRegularDetails() {
                       regularDetail.regularComplete !== "OK" ? (
                         <button
                           type="button"
-                          className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                          className={getButtonClassName(regularDetail)}
                           onClick={() => updateBadDetail(index)}
                         >
                           조치 완료
@@ -432,7 +465,7 @@ export default function UserRegularDetails() {
                       ) : (
                         <button
                           type="button"
-                          className="rounded-md bg-gray-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                          className={getButtonClassName(regularDetail)}
                         >
                           조치 완료
                         </button>
@@ -444,13 +477,13 @@ export default function UserRegularDetails() {
             </tbody>
           </table>
         </div>
-        <div className="flex justify-end mt-4">
+        <div className="flex justify-end my-4">
           <button
             type="button"
             className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mr-2"
             onClick={() => {
-                navigate(-1);
-              }}
+              navigate(-1);
+            }}
           >
             확인
           </button>
