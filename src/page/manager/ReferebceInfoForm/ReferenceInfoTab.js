@@ -18,6 +18,11 @@ function classNames(...classes) {
 export default function InfoTab() {
   const [currentTab, setCurrentTab] = useState(tabs.find((tab) => tab.current));
 
+  const handleTabChange = (tab) => {
+    setCurrentTab(tab);
+  };
+
+
   return (
     <div className="px-8 mt-2">
       <div className="sm:hidden">
@@ -28,10 +33,18 @@ export default function InfoTab() {
           id="tabs"
           name="tabs"
           className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-seahColor focus:outline-none focus:ring-seahColor sm:text-sm"
-          defaultValue={tabs.find((tab) => tab.current).name}
+          value={currentTab.name}
+          onChange={(e) => {
+            const selectedTab = tabs.find((tab) => tab.name === e.target.value);
+            if (selectedTab) {
+              handleTabChange(selectedTab);
+            }
+          }}
         >
           {tabs.map((tab) => (
-            <option key={tab.name}>{tab.name}</option>
+            <option key={tab.name} value={tab.name}>
+              {tab.name}
+            </option>
           ))}
         </select>
       </div>

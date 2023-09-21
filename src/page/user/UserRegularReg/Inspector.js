@@ -27,7 +27,7 @@ export default function Inspector({onFormDataChange}){
   };
 
   return(
-    <div className=" flex flex-col   ">
+    <div className=" flex flex-col ml-2  ">
       <div className="">
         <input
           type="text"

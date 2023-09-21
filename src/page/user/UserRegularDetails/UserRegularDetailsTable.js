@@ -194,6 +194,7 @@ export default function UserRegularDetails() {
           </tr>
           </table>
             <p style="font-size:16px;">링크 : <a href="http://localhost:3000/regulardetails/${regularId}">상세보기</a></p>
+            <p style="font-size:16px;">해당 메일은 발신전용 메일입니다.</p>
             `;
 
             const regularPersonEmails = regularData.regularEmail; //점검자 이메일
@@ -287,7 +288,7 @@ export default function UserRegularDetails() {
                         <tr>
                             <th
                                 scope="col"
-                                className="py-3.5 pl-4 pr-3 text-center text-sm font-semibold text-gray-900 sm:pl-0"
+                                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
                             >
                                 번호
                             </th>
@@ -314,27 +315,27 @@ export default function UserRegularDetails() {
                         <tbody className="divide-y divide-gray-200 bg-white">
                         {regularDetailDTOList.map((regularDetail, index) => (
                             <tr key={index}>
-                                <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0 text-center">
+                                <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0 text-left">
                                     {index + 1}
                                     <dl className="font-normal lg:hidden">
                                         <dt className="sr-only">Title</dt>
                                         {
                                             regularDetail.regularCheck === 'BAD' ? (
                                                 <dd
-                                                    className="mt-1 truncate text-gray-700 cursor-pointer"
+                                                    className="mt-1  text-gray-700 cursor-pointer"
                                                     onClick={() => handleChecklistClick(index)}
                                                 >
                                                     {regularDetail.checklist}
                                                 </dd>
                                             ) : (
-                                                <dd className="mt-1 truncate text-gray-700">
+                                                <dd className="mt-1  text-gray-700">
                                                     {regularDetail.checklist}
                                                 </dd>
                                             )
                                         }
 
                                         <dt className="sr-only sm:hidden">Email</dt>
-                                        <dd className="mt-1 truncate text-gray-500 sm:hidden">
+                                        <dd className="mt-1  text-gray-500 sm:hidden">
                                             <div className="space-x-4 flex">
                                                 {notificationMethods.map((notificationMethod) => (
                                                     <div key={notificationMethod.id} className="flex items-center">
@@ -415,7 +416,7 @@ export default function UserRegularDetails() {
                                             ) : (
                                                 <button
                                                     type="button"
-                                                    className="rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+                                                    className="rounded-md bg-gray-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
                                                 >
                                                     조치 완료
                                                 </button>
