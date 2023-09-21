@@ -144,8 +144,8 @@ export default function FacilityInfo({ fetchData, handleNewData }) {
       <span className=" w-22 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 my-4">
         이메일등록
       </span>
-      <div id="charge" className="flex  items-baseline justify-start">
-        <div className="flex flex-col">
+      <div id="charge" className="flex  items-baseline justify-start flex-wrap">
+        <div className="flex flex-col mr-2">
           <Listbox value={selectedArea} onChange={setSelectedArea}>
             {({ open }) => (
               <>
@@ -222,7 +222,7 @@ export default function FacilityInfo({ fetchData, handleNewData }) {
           </Listbox>
         </div>
 
-        <div className="sm:col-span-3 ml-2">
+        <div className="sm:col-span-3 mr-2">
           <label
             htmlFor="name"
             className="block text-sm font-medium leading-6 text-gray-900"
@@ -242,7 +242,7 @@ export default function FacilityInfo({ fetchData, handleNewData }) {
             />
           </div>
         </div>
-        <div className="sm:col-span-3 ml-2">
+        <div className="sm:col-span-3 mr-2">
           <label
             htmlFor="email"
             className="block text-sm font-medium leading-6 text-gray-900"
@@ -263,8 +263,8 @@ export default function FacilityInfo({ fetchData, handleNewData }) {
           </div>
         </div>
 
-        <div className="flex flex-col ml-2">
-          <div className="flex flex-col ml-2">
+        <div className="flex flex-col">
+          <div className="flex flex-col ">
             <Listbox value={status} onChange={setStatus}>
               {({ open }) => (
                 <>
