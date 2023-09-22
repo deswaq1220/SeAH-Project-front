@@ -38,7 +38,7 @@ export default function Inspector({ onFormDataChange , defaultState, complete}) 
     onFormDataChange({
       employeenumber: updatedFormDate.employeenumber,
       inspectorname: updatedFormDate.inspectorname,
-      inspectoremail: updatedFormDate.inspectoremail + seahDomain,
+      inspectoremail: updatedFormDate.inspectoremail,
     });
   };
 

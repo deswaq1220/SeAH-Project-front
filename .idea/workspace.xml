@@ -4,7 +4,38 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c20fbe9c-9169-4241-9ec0-dff0f7b0e503" name="Changes" comment="" />
+    <list default="true" id="c20fbe9c-9169-4241-9ec0-dff0f7b0e503" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Header.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/EduStatics.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/EduStatics.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/FrequentDetails/FrequentDetailsTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/FrequentDetails/FrequentDetailsTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/FrequentInseptionTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/FrequentInseptionTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/FrequentinseptionForm/inspector.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/FrequentinseptionForm/inspector.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/ReferebceInfoForm/DepartmentReg.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/ReferebceInfoForm/DepartmentReg.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/ReferebceInfoForm/FacilityInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/ReferebceInfoForm/FacilityInfo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/ReferebceInfoForm/FacilityReg.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/ReferebceInfoForm/FacilityReg.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/ReferebceInfoForm/ReferenceInfoTab.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/ReferebceInfoForm/ReferenceInfoTab.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/ReferenceInfoTable/DepartmentTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/ReferenceInfoTable/DepartmentTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/ReferenceInfoTable/EmailTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/ReferenceInfoTable/EmailTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/ReferenceInfoTable/FacilityTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/ReferenceInfoTable/FacilityTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/UserFrequentDetails/UserFrequentDetailsTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserFrequentDetails/UserFrequentDetailsTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/UserRegularDetails/DetailedModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserRegularDetails/DetailedModal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/UserRegularDetails/UserRegularDetailsOutput.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserRegularDetails/UserRegularDetailsOutput.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/UserRegularDetails/temp.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserRegularDetails/temp.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/UserRegularInspectionStatus/InsArea.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserRegularInspectionStatus/InsArea.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/UserRegularInspectionStatus/RegularInspector.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserRegularInspectionStatus/RegularInspector.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/UserRegularInspectionStatus/UserRegularInspectionStatus.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserRegularInspectionStatus/UserRegularInspectionStatus.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/UserRegularInspectionStatus/UserRegularInstpectionTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserRegularInspectionStatus/UserRegularInstpectionTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/UserRegularReg/FaultyModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserRegularReg/FaultyModal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/UserRegularReg/Inspector.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserRegularReg/Inspector.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/UserRegularReg/UserRegularTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserRegularReg/UserRegularTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/UserSafetyEduAttendance.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserSafetyEduAttendance.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/Userfrequent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/Userfrequent.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/UserfrequentCompleteReg.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserfrequentCompleteReg.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/UserfrequentReg.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserfrequentReg.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/inspector.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/inspector.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/isCompelete.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/isCompelete.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

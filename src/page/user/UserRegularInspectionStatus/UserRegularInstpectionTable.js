@@ -32,7 +32,7 @@ export default function UserRegularInstpectionTable({ data }) {
             정기점검 현황
           </h1>
           <p className="mt-2 text-sm text-gray-700">
-            검색을 통해 등록된 정기점검 현황 데이터를 조회 할 수있습니다.
+            등록된 정기점검 현황조회가 가능합니다.
           </p>
         </div>
         <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -93,7 +93,7 @@ export default function UserRegularInstpectionTable({ data }) {
                         scope="col"
                         className="px-3 py-3.5 text-center text-sm font-semibold text-gray-900"
                       >
-                        조치완료여부
+                        조치여부
                       </th>
                     </tr>
                   </thead>

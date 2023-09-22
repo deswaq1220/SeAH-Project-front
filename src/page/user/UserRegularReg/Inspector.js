@@ -34,7 +34,7 @@ export default function Inspector({onFormDataChange}){
     onFormDataChange({
       employeenumber: updatedFormData.employeenumber,
       name: updatedFormData.name,
-      email: updatedFormData.email + seahDomain, // 이메일 업데이트
+      email: updatedFormData.email, // 이메일 업데이트
     });
   };
 

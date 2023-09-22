@@ -65,13 +65,18 @@ function UserfrequentReg() {
     speActEmail: "",
   });
 
+    // 세아도메인
+    const [seahDomain, setSeahDomain] = useState("@seah.co.kr");
+
   // ----------- 콜백 함수
 
   // Inspector 콜백 함수 : 점검자(이름, 이메일, 사원번호)
   const handleInspectorDataChange = (inspectorForm) => {
     setSpeEmpNum(inspectorForm.employeenumber);
     setSpePerson(inspectorForm.inspectorname);
-    setSpeEmail(inspectorForm.inspectoremail);
+    inspectorForm.inspectoremail !== null && inspectorForm.inspectoremail !=="" ?
+        setSpeEmail(inspectorForm.inspectoremail+seahDomain) : setSpeEmail(inspectorForm.inspectoremail);
+
   };
 
   // Facilityname 콜백 : 설비명
@@ -464,7 +469,7 @@ function UserfrequentReg() {
               수시점검 등록
             </h1>
             <p className="mt-2 text-sm text-gray-700">
-              {masterdataPart}/{speFacility}에 관한 수시 점검을 하고 등록할 수 있습니다.
+              {masterdataPart}/{speFacility}에 관한 수시점검을 등록할 수 있습니다.
             </p>
           </div>
           <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">

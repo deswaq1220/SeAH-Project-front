@@ -142,7 +142,7 @@ export default function FacilityInfo({ fetchData, handleNewData }) {
   return (
     <div className="px-8 relative z-20">
       <span className=" w-22 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 my-4">
-        이메일등록
+        조치담당자 등록
       </span>
       <div id="charge" className="flex  items-baseline justify-start flex-wrap">
         <div className="flex flex-col mr-2">
@@ -256,7 +256,7 @@ export default function FacilityInfo({ fetchData, handleNewData }) {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="seah@test.com"
+              placeholder="seah@seah.co.kr"
               autoComplete="family-name"
               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
             />

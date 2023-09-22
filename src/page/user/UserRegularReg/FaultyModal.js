@@ -176,7 +176,7 @@ export default function FaultyModal({ index, actForm, fetchData }) {
                         as="h3"
                         className="text-base font-semibold leading-6 text-gray-900"
                       >
-                        담당자
+                        조치자
 
                       </Dialog.Title>
                         <Regularactionrequest

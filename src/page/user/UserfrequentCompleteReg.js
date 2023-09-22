@@ -340,8 +340,7 @@ function UserfrequentCompleteReg() {
   return (
     <>
       <UserHeader />
-      <p>수시점검</p>
-      <p>수시점검 내용등록</p>
+      <p>수시점검 조치완료 등록페이지</p>
       <Inspector onFormDataChange={handleInspectorDataChange}
                   defaultState={speData} complete={complete} /> {/* 점검자 */}
       <Inspectionarea /> {/* 점검영역 */}

@@ -64,12 +64,16 @@ export default function UserRegularTable() {
 
   const emailTitle = `${regularDTO.regularPerson}님의 정기점검 요청메일입니다`;
 
+  // 세아도메인
+  const [seahDomain, setSeahDomain] = useState("@seah.co.kr");
+
   // Inspector 항목 저장 : 관찰자(이름, 이메일, 사원번호)
   const handleInspectorDataChange = (inspectorForm) => {
     setRegularDTO((prevData) => ({
       ...prevData,
       regularPerson: inspectorForm.name, //
-      regularEmail: inspectorForm.email,
+      regularEmail: inspectorForm.email !== null && inspectorForm.email !== "" ?
+          inspectorForm.email + seahDomain : inspectorForm.email,
       regularEmpNum: inspectorForm.employeenumber,
     }));
   };
@@ -480,7 +484,7 @@ export default function UserRegularTable() {
               정기점검
             </h1>
             <p className="mt-2 text-sm text-gray-700">
-              정기점검 체크항목 리스트입니다
+              점검항목 체크리스트입니다.
             </p>
           </div>
           <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none"></div>

@@ -125,7 +125,7 @@ export default function UserRegularInspectionStatus() {
         <form className="flex mb-8">
           <div className="flex flex-wrap">
             <div className="flex flex-wrap">
-              <InsArea onFormDataChange={handlePartDataChange} /> {/* 영역 */}
+              <InsArea onFormDataChange={handlePartDataChange} /> {/* 점검구역 */}
               <InsRegularItem
                 onFormDataChange={handleRegularNameDataChange}
               />{" "}

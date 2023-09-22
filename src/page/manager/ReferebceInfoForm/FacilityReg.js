@@ -105,7 +105,7 @@ export default function FacilityReg({ fetchData, handleNewData }) {
   return (
     <div className="px-8">
       <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 my-4">
-        설비등록
+        설비 등록
       </span>
       <div id="charge" className="flex  items-baseline justify-start flex-wrap">
         <div className="sm:col-span-3">

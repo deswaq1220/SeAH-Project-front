@@ -97,7 +97,7 @@ export default function FacilityTable() {
             <p className="mt-2 text-sm text-gray-700">
               해당 설비에 생성된 QR 코드를 확인하실 수 있습니다.
             </p>
-            <div className="flex justify-end">
+            <div className="flex justify-end mt-4">
               <button
                 type="button"
                 onClick={() => handleButtonClick("주조")}

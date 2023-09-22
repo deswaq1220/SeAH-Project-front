@@ -154,11 +154,11 @@ export default function FrequentInseptionTable({ searchResults }) {
           </h1>
           {isManager ? (
               <p className="mt-2 text-sm text-gray-700">
-                검색을 통해 등록된 수시점검 현황 데이터를 조회 및 엑셀 저장이 가능합니다.
+                등록된 수시점검 현황조회 및 엑셀 저장이 가능합니다.
               </p>
           ) : (
               <p className="mt-2 text-sm text-gray-700">
-                검색을 통해 등록된 수시점검 현황 데이터의 조회가 가능합니다.
+                등록된 수시점검 현황조회가 가능합니다.
               </p>
           )}
         </div>
@@ -224,7 +224,7 @@ export default function FrequentInseptionTable({ searchResults }) {
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                         >
-                          완료여부
+                          조치여부
                         </th>
                       </tr>
                     </thead>

@@ -162,7 +162,7 @@ function UserSafetyEduAttendance() {
               <span className=" font-bold text-seahColor">
                 {eduList.eduTitle}
               </span>{" "}
-              교육 사원출석 페이지입니다
+              교육 사원출석 페이지입니다.
             </p>
           </div>
           <form className="w-full md:grid-cols-2" onSubmit={handleSubmit}>

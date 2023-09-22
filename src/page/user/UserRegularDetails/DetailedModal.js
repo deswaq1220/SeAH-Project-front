@@ -165,7 +165,7 @@ export default function DetailedModal({fetchData, actForm, index}) {
                                                 as="h3"
                                                 className="text-base font-semibold leading-6 text-gray-900"
                                             >
-                                                사진등록(전)
+                                                조치 전 사진
                                             </Dialog.Title>
                                             <div
                                                 className="group aspect-h-7 aspect-w-10 block w-full overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100">
@@ -182,7 +182,7 @@ export default function DetailedModal({fetchData, actForm, index}) {
                                         <div className="mt-10">
                                             <Dialog.Title as="h3"
                                                           className="text-base font-semibold leading-6 text-gray-900">
-                                                사진등록(후)
+                                                조치 후 사진
                                             </Dialog.Title>
                                             {/* 이미지를 표시할 부분 */}
                                             {fetchData?.afterFilePath && fetchData?.afterFilePath.length > 0 ? (
