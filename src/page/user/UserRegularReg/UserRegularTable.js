@@ -16,16 +16,6 @@ const notificationMethods = [
   { id: "NA", title: "N/A", color: "text-gray-900" },
 ];
 
-const people = [
-  {
-    name: "Lindsay Walton",
-    title: "Front-end Developer",
-    email: "lindsay.walton@example.com",
-    role: "Member",
-  },
-  // More people...
-];
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -44,12 +34,23 @@ export default function UserRegularTable() {
   const [files, setFiles] = useState([]);
   const formData = new FormData();
   const [staticEmailPerson, setStaticEmailPerson] = useState([]); //고정수신자
+  const [isInspectionAreaSelected, setIsInspectionAreaSelected] =
+    useState(false); //"점검항목"이 선택되었는지 여부를 추적
+  const [uncheckedItemIndexes, setUncheckedItemIndexes] = useState([]); // 체크되지 않은 항목의 인덱스를 기록하는 상태 변수
 
   const handleRadioChange = (index, method) => {
     console.log(regularcheckList[index]);
     regularcheckList[index].regularCheck = method; // 해당 행의 상태 입력
     if (method === "BAD") {
       handleChecklistClick(index);
+    }
+    // 체크 해제된 경우 해당 인덱스를 제거하고, 체크되지 않은 경우 해당 인덱스를 추가합니다.
+    if (method === null && uncheckedItemIndexes.includes(index)) {
+      setUncheckedItemIndexes((prevIndexes) =>
+        prevIndexes.filter((itemIndex) => itemIndex !== index)
+      );
+    } else if (method !== null && !uncheckedItemIndexes.includes(index)) {
+      setUncheckedItemIndexes((prevIndexes) => [...prevIndexes, index]);
     }
   };
 
@@ -98,6 +99,7 @@ export default function UserRegularTable() {
     setRegularcheckList((prevChecklist) =>
       prevChecklist.map((item) => ({ ...item, regularCheck: null }))
     );
+    setIsInspectionAreaSelected(true); // 유효한 옵션을 선택했을 때 true로 설정
   };
 
   function handleChecklistClick(index) {
@@ -163,6 +165,15 @@ export default function UserRegularTable() {
   };
 
   const handleFormSubmit = async () => {
+    // "점검항목"이 선택되었는지 확인
+    if (!isInspectionAreaSelected) {
+      toast.error("점검항목을 선택해주세요.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+      });
+      return;
+    }
 
     // 이메일 필드가 비어있는지 확인
     if (!regularDTO.regularEmail) {
@@ -178,9 +189,20 @@ export default function UserRegularTable() {
       (item) => !item.regularCheck
     );
 
-    if (radioButtonsNotSelected) {
-      // 라디오 버튼이 선택되지 않은 경우, 알림 띄우기
-      toast.error("모든 항목을 체크해주세요.", {
+    // 라디오 버튼이 선택되지 않은 경우, 알림 띄우기
+    // 선택되지 않은 항목의 인덱스를 찾음
+    const uncheckedItemIndexes = regularcheckList
+      .map((item, index) => (item.regularCheck === null ? index : -1))
+      .filter((index) => index !== -1);
+
+    // 만약 선택되지 않은 라디오 버튼이 있다면, 알림을 표시
+    if (uncheckedItemIndexes.length > 0) {
+      // 선택되지 않은 항목의 인덱스를 문자열로 변환하여
+      // 쉼표로 구분하여 표시
+      const uncheckedItemsText = uncheckedItemIndexes
+        .map((index) => `${index + 1}`)
+        .join(", ");
+      toast.error(`항목 ${uncheckedItemsText}을(를) 체크해주세요.`, {
         position: "top-center",
         autoClose: 3000,
         hideProgressBar: true,
@@ -363,7 +385,7 @@ export default function UserRegularTable() {
         // console.log(response.data);
 
         // 여기서 regularcheckList를 초기화합니다.
-      setRegularcheckList([]); // 
+        setRegularcheckList([]); //
       } catch (error) {
         console.error("서버 요청 오류:", error);
       }
