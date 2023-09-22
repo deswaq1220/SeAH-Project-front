@@ -301,7 +301,7 @@ export default function UserRegularTable() {
                                             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${item.regularActContent}</strong></td>
                                           </tr>
                                           </table>
-                                            <p style="font-size:16px;">링크 : <a href="http://172.20.10.13:3000/regulardetails/${response.data.regularId}">상세보기</a></p>
+                                            <p style="font-size:16px;">링크 : <a href="http://112.220.233.236:3000/regulardetails/${response.data.regularId}">상세보기</a></p>
                                             <p style="font-size:16px;">해당 메일은 발신전용 메일입니다. </p>
                                             `;
 

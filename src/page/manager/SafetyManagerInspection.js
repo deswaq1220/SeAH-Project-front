@@ -40,6 +40,15 @@ export default function SafetyManagerInspection() {
       icon: ClipboardDocumentListIcon,
       iconForeground: "text-teal-700",
       iconBackground: "bg-teal-50",
+      // 새로운 onClick 속성 추가
+      onClick(e) {
+        e.preventDefault();
+        toast.error("QR 코드 인식 후 접속 바랍니다.", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: true,
+        });
+      },
     },
     {
       title: "수시점검",

@@ -200,13 +200,9 @@ export default function FacilityTable() {
                         </td>
                         <td className="whitespace-nowrap p-4 text-sm text-gray-500">
                           {selectedFacility === facility.masterdataId ? (
-                            <Link
-                              to={`/special/${facility.masterdataPart}/${facility.masterdataId}`}
-                            >
-                              <QRCode
-                                value={`http://172.20.10.13:3000/special/${facility.masterdataPart}/${facility.masterdataId}`}
-                              />
-                            </Link>
+                            <QRCode
+                              value={`http://172.20.10.13:3000/special/${facility.masterdataPart}/${facility.masterdataId}`}
+                            />
                           ) : (
                             <button
                               className="text-seahColor"

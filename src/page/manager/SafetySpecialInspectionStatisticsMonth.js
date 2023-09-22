@@ -319,18 +319,6 @@ function SafetySpecialInspectionStatisticsMonth() {
                   <div>
                     <h3 className="text-xl font-semibold leading-2 text-gray-900">2. 점검영역 분석(건)</h3>
 
-                    {/*영역별 건수 숫자로 보여주는 메소드*/}
-                    {/*                          <dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-3">
-                                                              {partCount
-                                                                  .sort((a, b) => b[1] - a[1]) // 배열을 내림차순으로 정렬
-                                                                  .map((item, index) => (
-                                                                      <div key={index} className="overflow-hidden rounded-lg bg-white px-4 py-10 shadow sm:max-w-screen-xl">
-                                                                          <dt className="truncate text-sm font-medium text-gray-900">{item[0]}파트</dt>
-                                                                          <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">{item[1]}건</dd>
-                                                                      </div>
-                                                                  ))}
-                                                          </dl>*/}
-
                     <div style={{ height: '360px' }}>
                       <ResponsiveRadar
                           data={partCount}

@@ -116,7 +116,6 @@ export default function UserRegularInspectionStatus() {
   return (
     <>
       {isLoggedIn ? <Header /> : <UserHeader />}
-      {/* 세션 유무 비교해서 true 면 header false면 usehader */}
       <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
         {/* 탭 */}
         <InsBreadcrumbs />
