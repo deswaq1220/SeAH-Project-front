@@ -55,7 +55,6 @@ export default function Userfrequent() {
           })
           .catch((error) => {
             console.error("Error fetching data:", error);
-            console.error("에러다잉:", error);
           });
     }
 

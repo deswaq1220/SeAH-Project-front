@@ -67,11 +67,10 @@ export default function Injured({ onFormDataChange, defaultState, complete }) {
   // 부상부위 선택 시 injuredSelected 값 없데이트, onFormDataChange 호출
   const handleSelectedInjuredChange = (value) => {
     setInjuredSelected(value);
-    console.log("선택한 값: " + value);
+
     // 기타(직접입력)을 제외한 경우 onFormDataChange에 value값 넘김
     if (value !== "기타(직접입력)") {
       onFormDataChange(value);
-      console.log("기타 아닐때 값: " + value);
     }
   };
 
@@ -106,7 +105,6 @@ export default function Injured({ onFormDataChange, defaultState, complete }) {
                 >
                   <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                     {specialInjuredList.map((specialInjuredItem) =>(
-                      // index !== 0 && (
                           <Listbox.Option
                             key={specialInjuredItem.injuredMenu}
                             className={({ active }) =>

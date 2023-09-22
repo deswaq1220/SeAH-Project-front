@@ -123,8 +123,6 @@ function UserfrequentCompleteReg() {
       : [staticEmailList.emailAdd];
 
     setStaticEmailPerson(staticEmailAddresses);
-    console.log("고정 수신자:", staticEmailAddresses);
-
   };
 
   // 개선대책
@@ -150,7 +148,6 @@ function UserfrequentCompleteReg() {
         .get(`${process.env.REACT_APP_API_BASE_URL}/user/special/detail/${speId}`)
         .then((response) => {
           // 가져온 데이터로 상태 업데이트
-          console.log(response.data);
 
           // 조치자정보
           setSpeData({
@@ -189,8 +186,6 @@ function UserfrequentCompleteReg() {
 
           // 수정할 파일 데이터 업데이트
           setFileDatas(response.data.specialData.speFiles);
-
-          console.log(speData);
 
           setIsLoading(false);
           })
@@ -234,15 +229,11 @@ function UserfrequentCompleteReg() {
     formData.append("speComplete", speComplete);
 
 
-
     // speId 값이 있으면 수정 요청 보내기
     axios
       .put(
         `${process.env.REACT_APP_API_BASE_URL}/user/special/complete/${speId}`, formData)
       .then((response) => {
-
-        console.log(response);
-
         const speDate = new Date(response.data.speDate);
         const speActDate = new Date(response.data.speActDate);
 
@@ -286,7 +277,6 @@ function UserfrequentCompleteReg() {
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${formattedSpeActDate}</strong></td>
           </tr>
           </table>
-<!--            <p style="font-size:16px;">링크 : <a href="http://localhost:3000/special/detail/${response.data.speId}">상세보기</a></p>-->
             <p style="font-size:16px;">링크 : <a href="http://172.20.10.13:3000/special/detail/${response.data.speId}">상세보기</a></p>
             <p style="font-size:16px;">해당 메일은 발신전용 메일입니다.</p>
     `;
@@ -295,7 +285,6 @@ function UserfrequentCompleteReg() {
             recipients: [...speEmail.split(", "), ...staticEmailPerson], // 이메일 주소를 수신자로 설정
             subject: emailActTitle, // 이메일 제목
             content: inspectionData, // 이메일 내용 (점검 내용 등)
-            // 필요한 다른 속성도 여기에 추가 가능
           };
 
           axios
@@ -304,24 +293,20 @@ function UserfrequentCompleteReg() {
               emailData
             )
             .then((response) => {
-              console.log("이메일 전송 완료:", response);
-              console.log("이메일확인: ",emailData.recipients);
-              // ... (나머지 처리 로직)
+
             })
             .catch((error) => {
               console.error("이메일 전송 오류: ", error);
-              // ... (에러 처리 로직)
             });
         } else {
           console.log("이메일 정보가 없습니다. 전송되지 않았습니다.");
-          // ... (이메일 정보가 없을 때 처리 로직)
         }
 
         if (formData !== null) {
           // 등록이 완료되었다는 알림 띄우기
           toast.success("완료등록이 완료되었습니다.", {
             position: "top-center",
-            autoClose: 1000, // 알림이 1초 후에 자동으로 사라짐
+            autoClose: 2000, // 알림이 2초 후에 자동으로 사라짐
             hideProgressBar: true,
           });
 
@@ -330,7 +315,12 @@ function UserfrequentCompleteReg() {
       })
       .catch((error) => {
         console.error(error);
-        alert("완료등록에 실패했습니다. 다시 시도해주세요.");
+          toast.error("완료등록에 실패했습니다. 다시 시도해주세요.", {
+              position: "top-center",
+              autoClose: 2000, // 알림이 2초 후에 자동으로 사라짐
+              hideProgressBar: true,
+          });
+
       });
   };
 
@@ -427,8 +417,17 @@ function UserfrequentCompleteReg() {
               !file.type.includes("image/jpg") &&
               !file.type.includes("image/png")
             ) {
-              error("업로드할 수 없는 확장자입니다.");
-              alert("업로드할 수 없는 확장자입니다.");
+                toast.error(<div>
+                    업로드할 수 없는 확장자입니다.<br />
+                    jpg/jpeg/png 파일만 업로드 가능합니다.
+                </div>, {
+                    position: "top-center",
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    style: {
+                        width: "400px",
+                    },
+                });
               return;
             }
           },

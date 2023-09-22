@@ -158,8 +158,6 @@ const useSafetyEduForm = (eduData) => {
             eduStartTime:response.data.eduStartTime
           });
           setSelectedStartTime(response.data.eduStartTime);
-          console.log("교육시간", response.data.eduStartTime);
-          console.log("regtile", response.data);
 
           if(response.data.eduCategory ==="ETC"){
             selected.name = "ETC";
@@ -172,7 +170,7 @@ const useSafetyEduForm = (eduData) => {
             console.error("교육 세부 정보를 가져오는 중 에러 발생:", error);
           });
     }else {
-      console.log(formData);
+
     }
   }, [eduId]);
 
@@ -212,7 +210,6 @@ const useSafetyEduForm = (eduData) => {
 
   function saveFile(file){
     setFormData(prevData => ({ ...prevData, files: file })); // Update formData with new file array
-    console.log(formData.files);
   }
 
   //불러온 파일 삭제
@@ -290,8 +287,6 @@ const useSafetyEduForm = (eduData) => {
       })
       return;
     }
-    console.log("업로드전 담긴 파일");
-    console.log(formData);
     try {
       if (formData.eduId) {
         // 기존 교육 데이터를 수정하는 경우 (PUT 요청)
@@ -322,7 +317,6 @@ const useSafetyEduForm = (eduData) => {
                   withCredentials: true,
             }
         );
-        console.log("등록 결과:", response.data);
       }
 
       // 성공적으로 저장되면 알림 띄우기
@@ -386,12 +380,8 @@ const useSafetyEduForm = (eduData) => {
     handleChange,
     handleStartTimeChange,
     handleCreate,
-    // onDrop,
     deleteFile,
     handleFileChange,
-    // getRootProps,
-    // getInputProps,
-    // isDragActive,
     handleListboxChange,
     handleDutyChange,
     navigate,

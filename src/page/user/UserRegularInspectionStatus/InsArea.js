@@ -23,9 +23,7 @@ export default function InsArea({ onFormDataChange }) {
       const response = await axios.get(
         `${process.env.REACT_APP_API_BASE_URL}/user/regularpart`
       );
-
       setRegularPartList(response.data.regularPartList);
-      // console.log(response.data.regularPartList);
     } catch (error) {
       console.error("데이터 로딩 오류:", error);
     }

@@ -5,14 +5,13 @@ import "react-toastify/dist/ReactToastify.css";
 import ManagerLogin from "./page/manager/ManagerLogin";
 import MainManager from "./page/manager/MainManager";
 import ReferenceInfo from "./page/manager/ReferenceInfo";
-import UserMain from "./page/user/UserMain";
+import ReferenceInfo from "./page/manager/ReferenceInfo";
 import SafetyEducationMain from "./page/manager/SafetyEducationMain";
 import SafetyInspection from "./page/manager/SafetyInspection";
 import Error from "./page/error";
 import SafetyEduReg from "./page/manager/SafetyEduReg";
 import UserSafetyEduAttendance from "./page/user/UserSafetyEduAttendance";
 import SafetyEduDetails from "./page/manager/SafetyEduDetails";
-import EmailForm from "./Email";
 import UserSelectInspection from "./page/user/UserSelectInspection";
 import Userfrequent from "./page/user/Userfrequent";
 import UserfrequentReg from "./page/user/UserfrequentReg";
@@ -28,17 +27,13 @@ import SafetyManagerInspection from "./page/manager/SafetyManagerInspection";
 import RegularMain from "./page/user/RegularMain";
 
 import UserRegularReg from "./page/user/UserRegularReg/UserRegularReg";
-import FaultyModal from "./page/user/UserRegularReg/FaultyModal";
 import UserRegularDetails from "./page/user/UserRegularDetails/UserRegularDetails";
-import DetailedModal from "./page/user/UserRegularDetails/DetailedModal";
 
 import SafetyInspectionStatisticsYear from "./page/manager/SafetyInspectionStatisticsYear";
 import SafetySpecialInspectionStatisticsMonth from "./page/manager/SafetySpecialInspectionStatisticsMonth";
 import SafetyRegularInspectionStatisticsMonth from "./page/manager/SafetyRegularInspectionStatisticsMonth";
 import UserRegularInspectionStatus from "./page/user/UserRegularInspectionStatus/UserRegularInspectionStatus";
 
-// axios.defaults.baseURL = "https://localhost:8081";
-// axios.defaults.withCredentials = true;
 
 function App() {
   console.log(`
@@ -67,7 +62,6 @@ function App() {
 
         <Route path="/reginfo" element={<ReferenceInfo/>}></Route> {/* 관리자 기준정보페이지 */}
 
-        <Route path="/sendEmail" element={<EmailForm/>}></Route> {/* 이메일 */}
         <Route path="/edustatistics" element={<EduStatics/>}></Route>{/* 관리자 안전교육통계*/}
         <Route path="/edustatistics/atten" element={<EduAttenStatics/>}></Route>{/* 관리자 안전교육 참가자통계*/}
 
@@ -84,7 +78,6 @@ function App() {
         <Route path="/regularinsstatus" element={<UserRegularInspectionStatus/>}></Route>{/* 정기점검 현황 */}
 
         {/* 사용자  */}
-        <Route path="/user" element={<UserMain/>}></Route>  {/* 사용자 메인페이지*/}
         <Route path="/userattendance/register/:eduId" element={<UserSafetyEduAttendance/>}></Route>{/* 사용자 사원출석페이지 */}
 
 
@@ -104,11 +97,9 @@ function App() {
 
         {/* 사용자 정기점검 */}
         <Route path="/regularreg" element={<UserRegularReg/>}></Route>{/* 정기점검 등록페이지 */}
-        <Route path="/faultymodal" element={<FaultyModal/>}></Route>{/* 오류 모달창 */}
 
 
         <Route path="/404" element={<Error/>}></Route> {/* 에러 */}
-        <Route path="/detailmodal" element={<DetailedModal/>}></Route> {/* 에러 */}
       </Routes>
       <ToastContainer/>
     </Router>

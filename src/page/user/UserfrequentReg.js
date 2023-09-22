@@ -47,7 +47,6 @@ function UserfrequentReg() {
   const [speActEmail, setSpeActEmail] = useState("");
   const [speComplete, setSpeComplete] = useState("");
   const [files, setFiles] = useState("");     // 백으로 넘길 파일
-  // const [files, setFiles] = useState(null);
   const [fileDatas, setFileDatas] = useState([]);   // 백에서 가져온 파일정보(업데이트정보)
   const [deleteFileIds, setDeleteFileIds] = useState([]);
   const emailTitle = `${spePerson}님의 수시점검 요청메일입니다`;
@@ -128,7 +127,6 @@ function UserfrequentReg() {
       : [staticEmailList.emailAdd];
 
     setStaticEmailPerson(staticEmailAddresses);
-    console.log("고정 수신자:", staticEmailAddresses);
   };
 
   // 개선대책
@@ -174,11 +172,8 @@ function UserfrequentReg() {
     if (speId) {
       axios
         .get(`${process.env.REACT_APP_API_BASE_URL}/user/special/detail/${speId}`)
-        //  .get(`http://localhost:8081/edudetails/${eduId}`)
         .then((response) => {
           // 가져온 데이터로 상태 업데이트
-          console.log(response.data);
-
           // 조치자정보
           setSpeData({
             employeenumber: response.data.specialData.speEmpNum,
@@ -213,12 +208,11 @@ function UserfrequentReg() {
           setSpeActContent(response.data.specialData.speActContent);
 
           setSpeComplete(response.data.specialData.speComplete);
-          // setSpeComplete(response.data.specialData.speComplete);
+
           // 수정할 파일 데이터 업데이트
           setFileDatas(response.data.specialData.speFiles);
 
           setUpdateSpeId(speId);
-          console.log(speData);
           
           setIsLoading(false);
         })
@@ -264,9 +258,6 @@ function UserfrequentReg() {
     formData.append("speActContent", speActContent);
     formData.append("speComplete", speComplete);
 
-    //   for (let [key, value] of formData.entries()) {
-    //     console.log(`${key}: ${value}`);
-    // }
 
     const requiredFields = [
       { value: speEmpNum, name: "사원번호" },
@@ -281,7 +272,6 @@ function UserfrequentReg() {
       { value: speContent, name:"점검내용"},
       { value: speActEmail, name:"조치요청"},
       { value: speContent, name:"점검내용"},
-      // ... 나머지 필요한 필드 추가 ...
     ];
   
     for (let field of requiredFields) {
@@ -302,7 +292,6 @@ function UserfrequentReg() {
         .put(
           `${process.env.REACT_APP_API_BASE_URL}/user/special/detail/${speId}`, formData)
         .then((response) => {
-          console.log(response);
 
           toast.success("수정이 완료되었습니다.", {
             position: "top-center",
@@ -314,7 +303,6 @@ function UserfrequentReg() {
         })
         .catch((error) => {
           console.error(error);
-          console.log(formData);
           toast.error("수시점검 수정에 실패했습니다. 다시 시도해주세요.", {
             position: "top-center",
             autoClose: 2000,
@@ -331,7 +319,6 @@ function UserfrequentReg() {
             },
           })
         .then((response) => {
-          console.log(response);
 
           const speDate = new Date(response.data.speDate);
           const speDeadline = new Date(response.data.speDeadline);
@@ -400,7 +387,6 @@ function UserfrequentReg() {
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${formattedSpeDeadline}</strong></td>
           </tr>
           </table>
-<!--            <p style="font-size:16px;">링크 : <a href="http://localhost:3000/special/detail/${response.data.speId}">상세보기</a></p>-->
             <p style="font-size:16px;">링크 : <a href="http://172.20.10.13:3000/special/detail/${response.data.speId}">상세보기</a></p>
             <p style="font-size:16px;">해당 메일은 발신전용 메일입니다.</p>
     `;
@@ -409,7 +395,6 @@ function UserfrequentReg() {
               recipients: [...speActEmail.split(", "), ...staticEmailPerson], // 이메일 주소를 수신자로 설정
               subject: emailTitle, // 이메일 제목
               content: inspectionData, // 이메일 내용 (점검 내용 등)
-              // 필요한 다른 속성도 여기에 추가 가능
             };
 
             axios
@@ -418,17 +403,14 @@ function UserfrequentReg() {
                 emailData
               )
               .then((response) => {
-                console.log("이메일 전송 완료:", response);
-                // ... (나머지 처리 로직)
               })
               .catch((error) => {
                 console.error("이메일 전송 오류: ", error);
-                console.log("이메일데이터", emailData);
-                // ... (에러 처리 로직)
+
               });
           } else {
             console.log("이메일 정보가 없습니다. 전송되지 않았습니다.");
-            // ... (이메일 정보가 없을 때 처리 로직)
+
           }
 
           if (formData !== null) {
@@ -438,14 +420,11 @@ function UserfrequentReg() {
               autoClose: 2000, // 알림이 3초 후에 자동으로 사라짐
               hideProgressBar: true,
             });
-
             // 저장성공시 해당설비의 리스트 페이지
             navigate(-1);
           }
         })
         .catch((error) => {
-          // console.log(requestData);
-          console.log(formData);
           console.error(error);
           toast.error("수시점검 등록에 실패했습니다. 다시 시도해주세요.", {
             position: "top-center",
@@ -561,8 +540,18 @@ function UserfrequentReg() {
               !file.type.includes("image/jpg") &&
               !file.type.includes("image/png")
             ) {
-              error("업로드할 수 없는 확장자입니다.");
-              alert("업로드할 수 없는 확장자입니다.");
+
+                toast.error(<div>
+                    업로드할 수 없는 확장자입니다.<br />
+                    jpg/jpeg/png 파일만 업로드 가능합니다.
+                </div>, {
+                    position: "top-center",
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    style: {
+                        width: "400px",
+                    },
+                });
               return;
             }
           },
@@ -589,22 +578,6 @@ function UserfrequentReg() {
           </div>
         </div>
       ))}
-
-      {/*{uploadedFiles.map((file, index) => (*/}
-      {/*  <div key={file.name} className="flex items-start mt-2">*/}
-      {/*    <div className="text-left">*/}
-      {/*      <TruncatedFileName fileName={file.name} />*/}
-      {/*    </div>*/}
-      {/*    <button*/}
-      {/*      onClick={() => deleteFile(file.name)}*/}
-      {/*      className="ml-2 text-red-600"*/}
-      {/*      type="button"*/}
-      {/*    >*/}
-      {/*      삭제*/}
-      {/*    </button>*/}
-      {/*  </div>*/}
-      {/*))}*/}
-
 
       <div className="flex justify-center w-full mt-8 mb-10">
         <button

@@ -25,8 +25,6 @@ export default function RiskAssessment({onFormDataChange, defaultState, complete
 
   // 수정/완료등록시 세팅
   useEffect(() => {
-    console.log("test"+ defaultState);
-    console.log(defaultState);
     if (defaultState) {
       const defaultRisk = riskAssessment.find((item) => item.value === defaultState);
       setRiskAssessmentSelected(defaultRisk);

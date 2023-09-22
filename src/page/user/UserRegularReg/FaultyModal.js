@@ -116,7 +116,6 @@ export default function FaultyModal({ index, actForm, fetchData }) {
         setRegularActEmail(fetchData.regularActEmail);
         setRegularActPerson(fetchData.regularActPerson);
         setFiles(fetchData.files || []);
-        console.log(selectedEmail);
     }, [fetchData, selectedEmail]);
 
 
@@ -261,7 +260,6 @@ export default function FaultyModal({ index, actForm, fetchData }) {
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor sm:col-start-2"
-                    // onClick={() => setOpen(false)}
                     onClick={handleSaveClick}
                   >
                     저장

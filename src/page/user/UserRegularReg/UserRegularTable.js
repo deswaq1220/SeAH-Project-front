@@ -93,7 +93,6 @@ export default function UserRegularTable() {
       ...prevData,
       regularInsName: value.name,
     }));
-    console.log(value);
 
     // 점검항목이 변경되면 라디오 버튼 상태를 초기화
     setRegularcheckList((prevChecklist) =>
@@ -108,7 +107,6 @@ export default function UserRegularTable() {
   }
 
   const handleActDataChange = (actForm) => {
-    console.log(regularcheckList[actForm.index]);
 
     const updatedActPerson = actForm.regularActPerson;
     const updatedActEmail = actForm.regularActEmail;
@@ -118,23 +116,22 @@ export default function UserRegularTable() {
 
     regularcheckList[actForm.index].isModalState = "close";
     setIsModalOpen(false);
-    console.log(regularcheckList[actForm.index].isModalState);
     setRegularcheckList((prevChecklist) => {
-      const updatedChecklist = [...prevChecklist]; // Copy the previous checklist
-      // Update the specific object in the checklist
+      const updatedChecklist = [...prevChecklist];
+
       updatedChecklist[actForm.index].regularActPerson = updatedActPerson;
       updatedChecklist[actForm.index].regularActEmail = updatedActEmail;
       updatedChecklist[actForm.index].regularActContent = updatedActContent;
       updatedChecklist[actForm.index].files = updatedFile;
 
-      return updatedChecklist; // Return the new checklist to update the state
+      return updatedChecklist;
     });
 
     setRegularDTO((prevData) => ({
       ...prevData,
       file: {
         ...prevData.file,
-        [id]: updatedFile, // '1' is the key and 'updatedFile' should be an array of File or Blob objects.
+        [id]: updatedFile,
       },
     }));
     const staticEmailPerson = actForm.staticEmailPerson; //고정수신자
@@ -154,10 +151,7 @@ export default function UserRegularTable() {
             },
           }
         );
-
         setRegularcheckList(response.data);
-        console.log("초기화 된다..");
-        console.log(response.data);
       }
     } catch (error) {
       console.error("점검리스트 조회 오류", error);
@@ -228,8 +222,6 @@ export default function UserRegularTable() {
         updatedRegularcheckList
       );
 
-      console.log("regularDTO", regularDTO);
-
       // axios.post 실행
       const response = await axios.post(
         `${process.env.REACT_APP_API_BASE_URL}/user/regular/new`,
@@ -240,8 +232,6 @@ export default function UserRegularTable() {
           },
         }
       );
-
-      console.log(response);
 
       if (formData !== null) {
         // 등록이 완료되었다는 알림 띄우기
@@ -276,17 +266,6 @@ export default function UserRegularTable() {
               (checkItem) => checkItem.id === id
             );
             const itemChecklist = itemContent.checklist;
-            // console.log(
-            //   "itemContent==============" + formattedRegisterDate,
-            //   regularDTO.regularPerson,
-            //   item.regularActPerson,
-            //   regularDTO.regularPart,
-            //   regularDTO.regularInsName,
-            //   itemChecklist,
-            //   itemContent.regularActContent
-            // );
-            // console.log(staticEmailPerson);
-            /*/★!*!/!*!/!*고정수신자 생기면 넣기*!/!*!/!*!/*/
             const spendForm = `
                                           <table style="width: 100%; border-collapse: collapse; border: 1px solid #ccc;">
                                           <tr>
@@ -324,7 +303,7 @@ export default function UserRegularTable() {
                                           </table>
                                             <p style="font-size:16px;">링크 : <a href="http://172.20.10.13:3000/regulardetails/${response.data.regularId}">상세보기</a></p>
                                             <p style="font-size:16px;">해당 메일은 발신전용 메일입니다. </p>
-                                            `; /*★이거 정기점검항목의 상세목록-항목별 목록생기면 해당하는 주소로 바꿔야함 */
+                                            `;
 
             const actPersonEmails = item.regularActEmail
               .split(",")
@@ -338,9 +317,6 @@ export default function UserRegularTable() {
               subject: emailTitle,
               content: spendForm,
             };
-            console.log(
-              "emailData===============" + JSON.stringify(emailData, null, 2)
-            );
 
             axios
               .post(
@@ -348,7 +324,6 @@ export default function UserRegularTable() {
                 emailData
               )
               .then((response) => {
-                console.log("이메일 전송 완료:", response);
               })
               .catch((error) => {
                 console.error("이메일 전송 오류: ", error);
@@ -382,7 +357,6 @@ export default function UserRegularTable() {
 
         setRegularNameList(optionsArray);
         setSelectedArea(optionsArray[0]);
-        // console.log(response.data);
 
         // 여기서 regularcheckList를 초기화합니다.
         setRegularcheckList([]); //
@@ -464,7 +438,6 @@ export default function UserRegularTable() {
                                 )}
                               >
                                 {regularName.name}
-                                {/*{regularName.name === "전체" ? "선택" : regularName.name}*/}
                               </span>
 
                               {selected ? (

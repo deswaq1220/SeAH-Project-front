@@ -23,9 +23,6 @@ export default function Period({onFormDataChange}) {
           startDate:updatedDate.startDate,
           endDate:updatedDate.endDate,
       });
-
-      console.log("handleInputChange - startDate:", updatedDate.startDate);
-      console.log("handleInputChange - endDate:", updatedDate.endDate);
   };
 
 

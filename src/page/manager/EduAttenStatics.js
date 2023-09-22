@@ -56,7 +56,6 @@ function EduAttenStatics() {
       );
       const { attenDepartList } = response.data;
       setDepartment([...department, ...attenDepartList]);
-      console.log(attenDepartList);
     } catch (error) {
       console.error("부서 리스트를 불러오는 데 실패했습니다.", error);
     }
@@ -94,7 +93,6 @@ function EduAttenStatics() {
         }
 
         setAttenList(data.eduStatisticsDTO);
-        // setFilteredAttenList(attenListData.slice(0, itemsPerPage));
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
       }
@@ -182,7 +180,6 @@ function EduAttenStatics() {
 
   const handleExport = async () => {
     if (!attenList || attenList.length === 0) {
-      console.log("데이터가 없습니다.");
       return;
     }
 
@@ -315,12 +312,6 @@ function EduAttenStatics() {
             className="block w-auto rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5"
           />
         </div>
-        {/* <button
-          onClick={handleSearch}
-          className="ml-2 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-seahColor hover:bg-seahDeep focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-seahColor"
-        >
-          검색
-        </button> */}
       </div>
 
       {/* 카테고리 선택 */}

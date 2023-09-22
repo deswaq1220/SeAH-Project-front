@@ -13,7 +13,6 @@ export default function ActionRquest({ onFormDataChange, defaultState, onChange,
   const [emailDataList, setEmailDataList] = useState([]); // 영역별 이메일 리스트
   const [emailYDataList, setEmailYDataList] = useState([]); // 이메일 고정수신자 리스트
   const [instances, setInstances] = useState([{ selectedEmail: null }]); // 선택한 이메일 리스트
-  // defaultState
   const [emailFormData, setEmailFormData] = useState({
     speActPerson: "",
     speActEmail: "",
@@ -44,9 +43,6 @@ export default function ActionRquest({ onFormDataChange, defaultState, onChange,
           if (defaultState.speActPerson.includes(",") && defaultState.speActEmail.includes(",")) {
             const defaultStatePersonArray = defaultState.speActPerson.split(", "); // `,`로 구분된 문자열을 배열로 파싱
             const defaultStateEmailArray = defaultState.speActEmail.split(", ");
-            // console.log("배열확인:" + defaultStatePersonArray);
-            // console.log("배열확인:" + defaultStateEmailArray);
-
 
             for(let i=0; i<defaultStatePersonArray.length; i++) {
               initialInstances.push({
@@ -67,13 +63,10 @@ export default function ActionRquest({ onFormDataChange, defaultState, onChange,
           setInstances(initialInstances);
         }
 
-
-
         // 이메일 고정수신자 리스트
         const emailYListFromBack = response.data.staticEmailList;
         setEmailYDataList(emailYListFromBack);
         onChange(emailYListFromBack);
-
 
       } catch (error) {
         console.error("데이터 가져오기 오류: ", error);
@@ -139,9 +132,6 @@ export default function ActionRquest({ onFormDataChange, defaultState, onChange,
       id="ActionRequest"
       className="grid sm:flex items-baseline justify-start"
     >
-      {/* <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 my-4 ml-4 ">
-        조치요청
-      </span> */}
       <div className="">
         {/* 조치요청 */}
         {instances.map((instance, index) => (
@@ -160,7 +150,6 @@ export default function ActionRquest({ onFormDataChange, defaultState, onChange,
                         {instance.selectedEmail
                           ? instance.selectedEmail.emailName
                           : "[선택]"}
-                        {/* {peopleSelected.name} */}
                       </span>
                       <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                         <ChevronUpDownIcon
@@ -226,12 +215,6 @@ export default function ActionRquest({ onFormDataChange, defaultState, onChange,
                 </>
               )}
             </Listbox>
-            {/* <button
-              className="px-4 py-2 text-black border rounded-full hover:bg-seahColor hover:text-white ml-1"
-              onClick={() => sendEmail(instance.selectedEmail)}
-            >
-              전송
-            </button> */}
 
             <div className="mt-2 ml-2 flex">
               <input

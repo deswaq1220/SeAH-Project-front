@@ -18,7 +18,6 @@ export default function EquipmentName({onFormDataChange, selectedPart}) {
       .get(`${process.env.REACT_APP_API_BASE_URL}/user/frequentinspection`)  // 세아
       .then((response) => {
         const speFacListFromBack = response.data.searchPartAndFacList.facilityList;
-        console.log("여기확인임: "+speFacListFromBack);
 
         // "전체" 항목 추가
         const additionalItem = {

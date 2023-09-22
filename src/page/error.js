@@ -24,10 +24,6 @@ export default function Error() {
             >
               돌아가기
             </button>
-
-            <a href="#" className="text-sm font-semibold text-gray-900">
-              Contact support <span aria-hidden="true">&rarr;</span>
-            </a>
           </div>
         </div>
       </main>

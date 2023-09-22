@@ -26,8 +26,6 @@ export default function Regularactionrequest({ onFormDataChange, dataChange, sel
           const emailListFromBack = response.data["emailList"];
           setEmailDataList(emailListFromBack);
 
-          // setInstances()
-
           // 이메일 고정수신자 리스트
           const emailYListFromBack = response.data.staticEmailList;
           setEmailYDataList(emailYListFromBack);
@@ -131,7 +129,6 @@ export default function Regularactionrequest({ onFormDataChange, dataChange, sel
                         {instance.selectedEmail
                           ? instance.selectedEmail.emailName
                           : "[선택]"}
-                        {/* {peopleSelected.name} */}
                       </span>
                       <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                         <ChevronUpDownIcon
@@ -196,12 +193,6 @@ export default function Regularactionrequest({ onFormDataChange, dataChange, sel
                 </>
               )}
             </Listbox>
-            {/* <button
-              className="px-4 py-2 text-black border rounded-full hover:bg-seahColor hover:text-white ml-1"
-              onClick={() => sendEmail(instance.selectedEmail)}
-            >
-              전송
-            </button> */}
 
             <div className="mt-2 ml-1 flex items-center">
               <input

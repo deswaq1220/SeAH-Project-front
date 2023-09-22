@@ -30,15 +30,6 @@ function Mainmanager() {
       imageSrc: info,
       imageAlt: '준비중',
     },
-    // {
-    //   id: 4,
-    //   name: '준비중',
-    //   href: '/404',
-    //   imageSrc: mark,
-    //   imageAlt: '준비중',
-    // },
-    
-    // More products...
   ]
   
 

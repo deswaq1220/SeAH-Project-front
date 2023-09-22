@@ -126,7 +126,6 @@ function SafetyInspectionStatisticsMonthImg() {
           let badCount = 0;
           let na = 0;
 
-          console.log("filteredItems:", filteredItems);
           filteredItems.forEach((item) => {
             const evaluationValue = item.evaluationValue;
             const count = item.count;
@@ -301,10 +300,10 @@ function SafetyInspectionStatisticsMonthImg() {
             params: {yearmonth: selectedYear}
           })
           .then((response) => {
-            console.log("서버에서 받은 데이터:", response.data);
+
             let transformedData = response.data.flatMap((item) => {
               return Object.keys(item).map((name) => {
-                console.log("key값", name);
+
                 let innerData = item[name];
 
                 // 평가값(key) 배열과 개수 배열 생성
@@ -320,7 +319,7 @@ function SafetyInspectionStatisticsMonthImg() {
                     evaluationValue: evaluationValues[i],
                     count: counts[i],
                   });
-                  console.log("name[i]값", name);
+
                 }
 
                 return rowData;
@@ -332,7 +331,7 @@ function SafetyInspectionStatisticsMonthImg() {
 
             // 데이터를 state에 저장
             setRegularCntByNameForExcel(transformedData);
-            console.log("결과값:", transformedData);
+
           });
     } catch (error) {
       console.error("불러온 데이터에 에러가 발생했습니다:", error);
@@ -450,16 +449,7 @@ function SafetyInspectionStatisticsMonthImg() {
                   {/*영역 2번 - 영역별*/}
                   <div>
                     <h3 className="text-xl font-semibold leading-2 text-gray-900">2. 점검영역 분석(건)</h3>
-                    {/*<dl className="mt-1 grid grid-cols-1 gap-5 sm:grid-cols-3">
-                      {partCount
-                          .sort((a, b) => b[1] - a[1]) // 배열을 내림차순으로 정렬
-                          .map((item, index) => (
-                              <div key={index} className="overflow-hidden rounded-lg bg-white px-4 py-10 shadow sm:max-w-screen-xl">
-                                <dt className="truncate text-sm font-medium text-gray-900">{item[0]}파트</dt>
-                                <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">{item[1]}건</dd>
-                              </div>
-                          ))}
-                    </dl>*/}
+
                     <div style={{ height: '360px' }}>
                       <ResponsiveRadar
                           data={regularCountByPart}
@@ -624,7 +614,7 @@ function SafetyInspectionStatisticsMonthImg() {
                               ]
                             ]
                           }}
-/*                          fill={coloredData.map(item => item.color)}*/
+
                           legends={[
                             {
                               anchor: 'bottom',

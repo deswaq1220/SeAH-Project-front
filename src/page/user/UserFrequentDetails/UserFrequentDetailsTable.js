@@ -16,7 +16,6 @@ export default function UserFrequentDetailsTable() {
       .get(`${process.env.REACT_APP_API_BASE_URL}/user/special/detail/${speId}`) // 실제 API 주소로 수정해야합니다.
       .then((response) => {
         setInspectionData(response.data); // 데이터를 상태 변수에 저장합니다.
-        console.log("인스팩숀", response.data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -88,7 +87,6 @@ export default function UserFrequentDetailsTable() {
         .delete(`${process.env.REACT_APP_API_BASE_URL}/user/special/detail/${speId}`)
         .then((response) => {
           // 삭제 요청이 성공한 경우 처리
-          console.log("삭제 성공:", response);
           navigate(-1);
 
         })

@@ -19,7 +19,6 @@ export default function DangerousType({onFormDataChange}) {
       .get(`${process.env.REACT_APP_API_BASE_URL}/user/frequentinspection`)
       .then((response) => {
         const speDangerListFromBack = response.data.searchPartAndFacList.dangerList;
-        console.log('위험분류 낸하',response.data.searchPartAndFacList.dangerList)
         setSpecialDangerList(speDangerListFromBack);
         setSelectedDanger(speDangerListFromBack[0]);
 

@@ -77,7 +77,6 @@ export default function UserSelectInspection() {
           setMonthlyCompleteReg(responseData[1].monthlyComplete);
           setMonthlyBadReg(responseData[1].monthlyBad);
 
-          console.log(responseData); // JSON 데이터가 출력됩니다.
         })
         .catch((errors) => {
           // 하나 이상의 API 호출이 실패한 경우 에러 처리
@@ -107,7 +106,6 @@ export default function UserSelectInspection() {
   ];
 
   const regular = [
-    // { name: '정기점검', href: '#', icon: UsersIcon, current: false },
     {
       name: "점검실시",
       icon: WrenchScrewdriverIcon,

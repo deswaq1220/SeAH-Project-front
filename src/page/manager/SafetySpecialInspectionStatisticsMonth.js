@@ -3,7 +3,6 @@ import {Disclosure, Listbox, Transition} from "@headlessui/react";
 
 //네비게이션
 import { Fragment, useEffect, useState } from "react";
-//import { Disclosure, Menu, Transition } from '@headlessui/react'
 import {
   Bars3Icon,
   BellIcon,

@@ -79,7 +79,6 @@ function SafetyInspection() {
           <label className="block text-sm font-medium text-gray-700">사원번호</label>
           <input
             type="text"
-            // value={searchName}
             className="mt-1 block w-full border-gray-300 shadow-sm focus:ring-seahColor focus:border-seahColor sm:text-sm rounded-md"
           />
         </div>
@@ -87,19 +86,15 @@ function SafetyInspection() {
           <label className="block text-sm font-medium text-gray-700">이름</label>
           <input
             type="text"
-            // value={searchName}
             className="mt-1 block w-full border-gray-300 shadow-sm focus:ring-seahColor focus:border-seahColor sm:text-sm rounded-md"
           />
         </div>
         <button
-          // onClick={handleSearch}
           className="ml-4 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-seahColor hover:bg-seahDeep focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-seahColor"
         >
           검색
         </button>
       </div>
-      {/* 드롭다운 메뉴와 입력 필드 */}
-
 
     </div>
   );

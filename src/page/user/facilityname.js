@@ -6,7 +6,6 @@ export default function Facilityname({onChange}) {
  const { masterdataPart } = useParams(); // url 영역 파라미터
  const { masterdataId } = useParams(); // url 설비코드 파라미터
  const [ fromBackFacility, setFromBackFacility ] = useState(""); // 백에서 받은 설비이름
- // const [masterdataFacility, setMasterdataFacility] = useState(""); // 넘겨줄 설비이름
 
 
  // 설비명
@@ -17,7 +16,6 @@ export default function Facilityname({onChange}) {
        .then((response) => {
         const facilityFromBackName = response.data.facilityName;
          setFromBackFacility(facilityFromBackName); // 설비코드에 따른 설비명
-         console.log("확인설비: "+ facilityFromBackName);
          onChange(facilityFromBackName);    // 상위 컴포넌트 전달
        })
        .catch((error) => {
@@ -26,13 +24,6 @@ export default function Facilityname({onChange}) {
   }
    fetchDataFromApi(masterdataPart, masterdataId);
  }, [onChange]);
-
-  // const facChangeHandler = (value) => {
-  //   props.onMasterdataFacility(value);
-  //   console.log("setMasterdataFacility확인설비: "+ value);
-  // };
-
-
 
 
  return(

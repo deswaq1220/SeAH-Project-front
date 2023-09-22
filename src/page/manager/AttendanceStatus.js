@@ -25,7 +25,6 @@ export default function AttenStatus() {
       .then(response => {
         // 받아온 출석목록 데이터를 attendanceList 상태에 저장
         setAttendanceList(response.data);
-        console.log(response.data); // 여기서 출력
       })
       .catch(error => {
         console.error("Error fetching attendance data:", error);
@@ -57,7 +56,6 @@ export default function AttenStatus() {
         );
   
         if (response.status === 200) {
-          console.log('출석자가 삭제되었습니다.');
           toast.success("출석 정보가 삭제되었습니다.", {
             position: "top-center",
             autoClose: 3000,
@@ -67,7 +65,6 @@ export default function AttenStatus() {
           axios.get(`${process.env.REACT_APP_API_BASE_URL}/admin/list/${eduId}`)
             .then(response => {
               setAttendanceList(response.data);
-              console.log(response.data);
             })
             .catch(error => {
               console.error("Error fetching attendance data:", error);

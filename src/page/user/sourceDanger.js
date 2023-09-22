@@ -53,8 +53,7 @@ export default function Dangersource({onFormDataChange, defaultState, complete})
          console.error("Error fetching data: ", error);
       });
     }
-  
-    // fetchData();
+
      specialCauseFetchDataWithAxios(masterdataPart, masterdataId);
   }, [defaultState]);
 
@@ -166,19 +165,6 @@ export default function Dangersource({onFormDataChange, defaultState, complete})
             />
           )}
         </div>
-
-{/* //         {sourceSelected && sourceSelected.causeMenu === "기타(직접입력)" && (
-//           <input
-//             type="text"
-//             value={customSource}
-//             name="speCause"
-//             onChange={handleCustomSourceChange}
-//             className="block w-40 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-seahColor sm:text-sm sm:leading-6 px-1.5 mt-1"
-//             placeholder="직접 입력"
-//           />
-//         )} 
-      </div>*/}
-
     </div>
   )
 }

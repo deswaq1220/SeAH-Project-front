@@ -33,7 +33,6 @@ export default function FrequentInseptionTable({ searchResults }) {
           // 해당 월 데이터 세팅
           const thisMonthData = speListFromBack.filter((item) => item.speDate.substring(0, 7) === dateString);
           setThisMonthResults(thisMonthData);
-          // console.log("데이터 다 불러와", speListFromBack);
         })
         .catch((error) => {
           console.error("Error fetching data: ", error);

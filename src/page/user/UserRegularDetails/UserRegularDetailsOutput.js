@@ -4,15 +4,6 @@ import axios from "axios";
 
 export default function UserRegularDetailsOutput({regularData}) {
   const [regularIns, setRegularIns] = useState([]);
-  //
-  // useEffect(() => {
-  //   const setData = () =>{
-  //     setRegularIns({onFormDataChange} );
-  //     console.log(onFormDataChange.regularPerson);
-  //   }
-  //       setData()
-  //
-  // }, []);
 
   return (
     <>

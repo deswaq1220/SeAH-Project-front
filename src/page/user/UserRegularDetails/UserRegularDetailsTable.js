@@ -51,15 +51,10 @@ export default function UserRegularDetails() {
   }
 
   const handleActDataChange = (actForm) => {
-    console.log(actForm);
 
     regularDetailDTOList[actForm.index].isModalState = "close";
-    regularDetailDTOList[actForm.index].regularActContent =
-      actForm.regularActContent;
+    regularDetailDTOList[actForm.index].regularActContent = actForm.regularActContent;
     regularDetailDTOList[actForm.index].files = actForm.files;
-    console.log(
-      "ㅇㅇㅇㅇㅇㅇ" + regularDetailDTOList[actForm.index].isModalState
-    );
     setIsModalOpen(false);
   };
 
@@ -78,8 +73,6 @@ export default function UserRegularDetails() {
         setRegularData(response.data.regularDTO);
         setRegularDetailDTOList([...response.data.regularDetailDTOList]);
 
-        console.log("파일이름 찾기");
-        console.log(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -92,8 +85,6 @@ export default function UserRegularDetails() {
     if (loading) return; // 이미 요청 중이면 함수 종료
 
     setLoading(true); // 요청 시작, 로딩 상태 활성화
-
-    console.log(regularDetailDTOList[index]);
 
     let regularBadId = regularDetailDTOList[index].regularBadId;
 
@@ -128,9 +119,6 @@ export default function UserRegularDetails() {
       const emailYListFromBack = responseStaticEmail.data.staticEmailList;
       const emailAdds = emailYListFromBack.map((item) => item.emailAdd);
       const emailAddsJoin = emailAdds.join(", ");
-
-      //날짜
-      console.log("regularData.regularDate============" + regularData.regTime);
 
       // 이메일 발송기능
       const completeDate = new Date(response.data);
@@ -201,15 +189,12 @@ export default function UserRegularDetails() {
             `;
 
       const regularPersonEmails = regularData.regularEmail; //점검자 이메일
-      console.log("발신자========재확인" + JSON.stringify(regularPersonEmails));
 
       const staticPersonEmails = emailAddsJoin
         /*.join(",") // 배열을 문자열로 변환*/
         .split(",")
         .map((email) => email.trim());
-      console.log(
-        "고정수신자========재확인" + JSON.stringify(staticPersonEmails)
-      );
+
       const finalEmailList = [regularPersonEmails, ...staticPersonEmails];
       const uniqueRecipientsSet = new Set(finalEmailList); //이메일 중복제거
       const uniqueRecipientsArray = Array.from(uniqueRecipientsSet); // Set을 다시 배열로 변환
@@ -221,23 +206,16 @@ export default function UserRegularDetails() {
         subject: emailTitle,
         content: spendForm,
       };
-      console.log(
-        "emailData===============" + JSON.stringify(emailData, null, 2)
-      );
 
       axios
         .post(`${process.env.REACT_APP_API_BASE_URL}/api/send-email`, emailData)
         .then((response) => {
-          console.log("이메일 전송 완료:", response);
+
         })
         .catch((error) => {
           console.error("이메일 전송 오류: ", error);
         });
 
-      // 페이지 새로고침
-      //   window.location.reload();
-      // 요청이 성공했을 때 수행할 작업 (예: 응답 데이터 확인)
-      console.log("성공" + response.data);
     } catch (error) {
       console.error("점검리스트 조회 오류", error);
       // 실패 시 로딩 상태 해제
@@ -258,13 +236,11 @@ export default function UserRegularDetails() {
         )
         .then((response) => {
           // 삭제 요청이 성공한 경우 처리
-          console.log("삭제 성공:", response);
           navigate(-1);
         })
         .catch((error) => {
           // 삭제 요청이 실패한 경우 처리
           console.error("삭제 실패:", error);
-          // 실패한 경우 사용자에게 알림을 표시하거나 다른 작업을 수행할 수 있습니다.
         });
     }
   };
@@ -345,7 +321,6 @@ export default function UserRegularDetails() {
                             ),
                           }}
                         >
-                          {/* {regularDetail.checklist} */}
                         </dd>
                       ) : (
                         <dd
@@ -357,7 +332,6 @@ export default function UserRegularDetails() {
                             ),
                           }}
                         >
-                          {/* {regularDetail.checklist} */}
                         </dd>
                       )}
 
@@ -402,7 +376,6 @@ export default function UserRegularDetails() {
                         ),
                       }}
                     >
-                      {/* {regularDetail.checklist} */}
                     </td>
                   ) : (
                     <td
@@ -414,7 +387,6 @@ export default function UserRegularDetails() {
                         ),
                       }}
                     >
-                      {/* {regularDetail.checklist} */}
                     </td>
                   )}
 

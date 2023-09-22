@@ -54,7 +54,6 @@ export default function FacilityTable() {
   const handleButtonClick = (part) => {
     setSelectedPart(part);
     setSelectedFacility(null); // 영역 변경 시 선택된 설비 초기화
-    console.log(part);
   };
 
   const fetchData = async () => {

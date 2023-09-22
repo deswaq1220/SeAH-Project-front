@@ -59,7 +59,6 @@ export default function UserRegularInspectionStatus() {
           `${process.env.REACT_APP_API_BASE_URL}/user/searchregularlist`
         );
         setSearchResult(response.data.searchResult);
-        console.log(response.data.searchResult);
 
         // 검색 결과를 해당 월에 해당하는 데이터로 필터링
         const currentDate = new Date();

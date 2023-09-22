@@ -26,16 +26,9 @@ import * as XLSX from "xlsx";
 //엑셀저장
 import {saveAs} from "file-saver";
 
-//검색창
-import "../../style/YearPicker.css";
-
-
 //LineChart(recharts)
 import {LineChart, Line} from 'recharts';
 
-/*function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-  }*/
 
 
 function SafetyInspectionStatisticsYear() {
@@ -127,7 +120,6 @@ function SafetyInspectionStatisticsYear() {
             //점검데이터
             const lineChartResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/admin/statistics/inspectioncount`, {params: {year: selectedYear}});   // 세아
             const specialCountData = lineChartResponse.data;
-            console.log("첫번째" + JSON.stringify(lineChartResponse.data, null, 2));
 
             // x가 1부터 12까지 있는 배열 생성하고, 해당하는 y 값이 있으면 사용하고 없으면 0을 사용
             const resultData = Array.from({length: 12}, (_, i) => {
@@ -138,7 +130,6 @@ function SafetyInspectionStatisticsYear() {
                 return {"month": i + 1 + "월", 정기점검: regularCount, 수시점검: specialCount};
             });
             setLineChartData(resultData);
-            console.log("두번째" + JSON.stringify(resultData));
 
 
             //(lineChart) 연간 수시점검/정기점검 건수 표시
@@ -178,7 +169,6 @@ function SafetyInspectionStatisticsYear() {
             const barChartDataWithAllMonths = generateDataForAllMonths(dataByMonth, allDangerKinds);
 
             setBarChartData(barChartDataWithAllMonths);
-            console.log("==================체크중" + JSON.stringify(barChartDataWithAllMonths));
 
 
 
@@ -208,7 +198,6 @@ function SafetyInspectionStatisticsYear() {
             const regularBarChartDataWithAllMonths = regularGenerateDataForAllMonths(regularDataByMonth, allregularNameKinds);
 
             setRegularBarChartData(regularBarChartDataWithAllMonths);
-            console.log("==================체크중" + JSON.stringify(regularBarChartDataWithAllMonths));
 
         } catch (error) {
             console.error("불러온 데이터에 에러가 발생했습니다:", error);

@@ -46,7 +46,6 @@ export default function FacilityInfo({ fetchData, handleNewData }) {
 
         setSpecialPartList(optionsArray);
         setSelectedArea(optionsArray[0]);
-        console.log(response.data);
       } catch (error) {
         console.error("서버 요청 오류:", error);
       }

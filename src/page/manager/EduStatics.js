@@ -40,13 +40,10 @@ function EduStatics() {
         },
       });
       const data = response.data;
-      console.log(data);
       setEduList(data); // eduList 업데이트
     } catch (error) {
       console.error("데이터 가져오기 오류:", error);
     }
-  
-    console.log(`선택한 카테고리: ${category}`);
   };
 
 
@@ -54,8 +51,6 @@ function EduStatics() {
   const getCurrentPageItems = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    console.log("검색 리스트--------?"  + eduList);
-    
     return eduList.slice(startIndex, endIndex);
   };
 
@@ -139,13 +134,11 @@ function EduStatics() {
     const handleExport = () => {
       
       if (!eduList || eduList.length === 0) {
-        console.log("데이터가 없습니다.");
         return;
       }
       // 엑셀 데이터 생성
       const data = createExcelData(eduList);
-      
-      console.log("저장");
+
       // 엑셀 시트 생성
       const worksheet = XLSX.utils.json_to_sheet(data);
   

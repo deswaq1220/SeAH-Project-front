@@ -14,7 +14,6 @@ function classNames(...classes) {
 }
 
 export default function IsCompelete({ onFormDataChange, complete }) {
- // const [completionStatusSelected, setCompletionStatusSelected] = useState(completionStatusOptions[0]);
   const [completionStatusSelected, setCompletionStatusSelected] = useState(
     completionStatusOptions.find((option) => option.id === (complete ? 2 : 1))
   );
@@ -31,10 +30,7 @@ export default function IsCompelete({ onFormDataChange, complete }) {
     onFormDataChange(completionStatusSelected.value);
   }, [completionStatusSelected, onFormDataChange]);
 
- // 처음 세팅된 미완료 선택 안해도 그 값으로 업데이트되게
- // useEffect(() => {
- //  handleCompletionStatusChange(completionStatusOptions[0]);
- // }, []); // 초기화될 때 한 번만 실행하도록 빈 배열 전달
+
   useEffect(() => {
     setCompletionStatusSelected(completionStatusOptions.find((option) => option.id === (complete ? 2 : 1)));
   }, [complete]); // 'complete' prop이 변경될 때마다 실행
@@ -77,7 +73,6 @@ export default function IsCompelete({ onFormDataChange, complete }) {
                     {completionStatusOptions.map((option) => (
                       <Listbox.Option
                         key={option.id}
-                        // disabled={option.id === 2}
                         disabled={option.id === (complete ? 1 : 2)}
                         className={({ active, disabled }) =>
                             classNames(

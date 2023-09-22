@@ -44,7 +44,6 @@ export default function EmailTable() {
       const response = await axios.get(
         `${process.env.REACT_APP_API_BASE_URL}/admin/master/viewemail`
       );
-      console.log("API Response:", response.data);
       setPeople(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);

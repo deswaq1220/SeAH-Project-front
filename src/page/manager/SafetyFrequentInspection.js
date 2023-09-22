@@ -40,10 +40,6 @@ export default function FrequentIns() {
     }
   };
 
-  // // 설비 콜백
-  // const handleFacilityDataChange = (selected) => {
-  //   setSpeFacility(selected.masterdataFacility);
-  // };
 
   // 설비 콜백
   const handleFacilityDataChange = (selected) => {
@@ -68,12 +64,6 @@ export default function FrequentIns() {
     setSpeStartDate(value.startDate);
     setSpeEndDate(value.endDate);
   };
-
-  // // 점검자 콜백
-  // const handleInspectorDataChange = (selected) => {
-  //   setSpePerson(selected.inspectorName);
-  //   setSpeEmpNum(selected.inspectorNum);
-  // };
 
   // 점검자 콜백
   const handleInspectorDataChange = (selected) => {
@@ -135,7 +125,7 @@ export default function FrequentIns() {
       <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
         {/* 탭 */}
         <Breadcrumbs />
-        {/* 여기는 검색폼 좌리*/}
+        {/* 여기는 검색폼*/}
         <form className="flex mb-8">
           <div className="flex flex-wrap">
             <div className="flex flex-wrap">

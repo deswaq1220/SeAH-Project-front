@@ -22,7 +22,6 @@ export default function TrainingReport() {
       })
       .then((response) => {
         setEduDetails(response.data);
-        console.log();
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -53,7 +52,6 @@ export default function TrainingReport() {
       .then((response) => {
         // 받아온 출석목록 데이터를 attendanceList 상태에 저장
         setAttendanceList(response.data);
-        console.log(response.data); // 여기서 출력
       })
       .catch((error) => {
         console.error("Error fetching attendance data:", error);

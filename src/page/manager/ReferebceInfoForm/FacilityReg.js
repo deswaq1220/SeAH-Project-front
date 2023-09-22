@@ -31,7 +31,6 @@ export default function FacilityReg({ fetchData, handleNewData }) {
 
         setSpecialPartList(optionsArray);
         setSelected(optionsArray[0]);
-        console.log(response.data);
       } catch (error) {
         console.error("서버 요청 오류:", error);
       }
@@ -81,10 +80,7 @@ export default function FacilityReg({ fetchData, handleNewData }) {
         requestData
       );
 
-      console.log("서버 응답:", response.data);
-
       fetchData();
-
       handleNewData(response.data);
 
       // 등록 후 입력 필드 초기화

@@ -15,15 +15,6 @@ const notificationMethods = [
   { id: "NA", title: "N/A", color: "text-gray-900" },
 ];
 
-const people = [
-  {
-    name: "Lindsay Walton",
-    title: "Front-end Developer",
-    email: "lindsay.walton@example.com",
-    role: "Member",
-  },
-  // More people...
-];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -42,24 +33,6 @@ export default function UserRegularTable() {
   const [regularcheckList, setRegularcheckList] = useState([]);
   const [files, setFiles] = useState([]);
   const formData = new FormData();
-  //  const handleRadioChange = (index, method) => {
-  //    let newModalState = [...isModalOpen]; // 현재의 모달 상태 복사
-  ////    let newEditButtonState = [...isEditButtonVisible]; // 현재의 수정 버튼 상태 복사
-  ////
-  //    if (method === "bad") {
-  //      isModalOpen[index] = true; // 불량을 선택한 행의 모달을 열기
-  ////
-  ////      newEditButtonState[index] = true; // 불량을 선택한 행의 수정 버튼 보이기
-  //    } else {
-  //      isModalOpen[index] = false; // 그 외에는 모달 닫기
-  ////      newEditButtonState[index] = false; // 그 외에는 수정버튼 숨기기
-  //    }
-  //
-  //    regularcheckList[index].regularcheck = method; //해당 행의 상태 입력
-  ////
-  //    setIsModalOpen(newModalState); // 새로운 모달 상태 설정
-  ////    setIsEditButtonVisible(newEditButtonState); // 새로운 수정버튼 상태 설정
-  //  };
 
   const handleRadioChange = (index, method) => {
     if (method === "BAD") {
@@ -124,42 +97,29 @@ export default function UserRegularTable() {
     const id = actForm.id;
     console.log(id);
     setRegularcheckList((prevChecklist) => {
-      const updatedChecklist = [...prevChecklist]; // Copy the previous checklist
-      // Update the specific object in the checklist
+      const updatedChecklist = [...prevChecklist];
+
       updatedChecklist[actForm.index].regularActPerson = updatedActPerson;
       updatedChecklist[actForm.index].regularActEmail = updatedActEmail;
       updatedChecklist[actForm.index].regularActContent = updatedActContent;
 
-      return updatedChecklist; // Return the new checklist to update the state
+      return updatedChecklist;
     });
-    //id: actForm.id,
-    //     setFiles(prevFiles => {
-    //         const newFilesState=[...prevFiles];
-    //         newFilesState.push({file:updatedFile});
-    //         return newFilesState;
-    //      });
+
     setRegularDTO((prevData) => ({
       ...prevData,
       file: {
         ...prevData.file,
-        [id]: updatedFile, // '1' is the key and 'updatedFile' should be an array of File or Blob objects.
+        [id]: updatedFile,
       },
-    })); // Update formData with new file array
-    //       setRegularDTO({
-    //           file: updatedFile, // Update the file property in the formData state
-    //       });
+    }));
   };
 
   //점검리스트 조회
   const handleSearchClick = async () => {
     try {
-      // setSelectedItemIndex(null); // 라디오 버튼 선택값 초기화
-      // console.log("초기화?")
-      // console.log("초기화 되셨낭", selectedItemIndex)
-
       const selectedPosition = regularNameList.indexOf(selectedArea);
       if (selectedPosition !== -1) {
-        //  regularNum = selectedPosition + 1;
         const newRegularNum = selectedPosition + 1;
 
         setRegularNum(newRegularNum);
@@ -172,32 +132,15 @@ export default function UserRegularTable() {
             },
           }
         );
-
         setRegularcheckList(response.data);
-        console.log("초기화 된다..");
-        console.log(response.data);
       }
     } catch (error) {
       console.error("점검리스트 조회 오류", error);
     }
   };
 
-  // console.log(regularcheckList);
-
-  // formData.regularDetailDTOList= [...regularcheckList];
-  // regularDTO.regularDetailDTOList = JSON.stringify(regularcheckList);
-
-  // formData.file = [...regularcheckList.files];
-  // formData.regularDTO = JSON.stringify(regularDTO);// EduDTO 객체를 문자열로 변환하여 추가
-  // saveFormData.append('file', regularcheckList.files); // 파일 추가
-
   const handleFormSubmit = async () => {
-    console.log(regularDTO.file);
     regularDTO.regularDetailDTOList = JSON.stringify(regularcheckList);
-
-    console.log("regularDTO");
-    console.log(regularDTO);
-    //        let formData = new FormData();
 
     const response = await axios
       .post(
@@ -211,7 +154,6 @@ export default function UserRegularTable() {
         }
       )
       .then((response) => {
-        console.log(response);
 
         if (formData !== null) {
           // 등록이 완료되었다는 알림 띄우기
@@ -226,17 +168,10 @@ export default function UserRegularTable() {
         }
       })
       .catch((error) => {
-        // console.log(requestData);
-        console.log(formData);
         console.error(error);
         toast.error("정기점검 등록에 실패했습니다. 다시 시도해주세요.");
       });
   };
-
-  // useEffect(() => {
-  //   setSelectedItemIndex(null);
-  //   console.log("여기가 넘버일세", regularNum);
-  // }, [regularNum])
 
   useEffect(() => {}, [checkList]);
 
@@ -257,7 +192,6 @@ export default function UserRegularTable() {
 
         setRegularNameList(optionsArray);
         setSelectedArea(optionsArray[0]);
-        // console.log(response.data);
       } catch (error) {
         console.error("서버 요청 오류:", error);
       }

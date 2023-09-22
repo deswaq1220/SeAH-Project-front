@@ -41,11 +41,7 @@ export default function SafetyEduDetails() {
             },
           }
         );
-
         setEduData({ ...response.data, eduFileList: response.data.eduFileList });
-        console.log("파일이름 찾기");
-        console.log(response.data);
-
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -126,7 +122,6 @@ export default function SafetyEduDetails() {
       );
 
       if (response.status === 200) {
-        console.log('교육 삭제됨');
         toast.success("교육이 삭제되었습니다.", {
           position: "top-center",
           autoClose: 3000,
@@ -281,14 +276,9 @@ export default function SafetyEduDetails() {
             <div>
               {isCompleted ? (
                 <div className="mt-4">
-                  {/* <QRCode value={JSON.stringify(formData)} /> */}
-
-                  <Link to={`/userattendance/register/${eduData.eduId}`}>
-                    <QRCode
+                  <QRCode
                       value={`http://172.20.10.13:3000/userattendance/register/${eduData.eduId}`}
-                    />
-                  </Link>
-
+                  />
                   <div className="flex items-center mt-2">
                     <CheckCircleIcon className="h-5 w-5 text-green-500" />
                     <span className="ml-1">생성완료</span>

@@ -1,4 +1,4 @@
-import { useState, Fragment, useCallback, useEffect } from "react";
+import React, { useState, Fragment, useCallback, useEffect } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import UserHeader from "../../components/UserHeader";
@@ -56,7 +56,6 @@ function UserSafetyEduAttendance() {
         }
       )
       .then((response) => {
-        console.log(response);
 
         toast.success("출석이 완료되었습니다.", {
           position: "top-center",
@@ -70,7 +69,16 @@ function UserSafetyEduAttendance() {
       })
       .catch((error) => {
         console.error(error);
-        alert("출석 등록에 실패했습니다. 다시 시도해주세요.");
+        toast.error(<div>
+          출석 등록에 실패했습니다. 다시 시도해주세요.
+        </div>, {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: true,
+          style: {
+            width: "400px",
+          },
+        });
       });
   };
 
@@ -96,7 +104,6 @@ function UserSafetyEduAttendance() {
         const response = await axios.get(
           `${process.env.REACT_APP_API_BASE_URL}/admin/edudetails/${eduId}` // 세아
         );
-        console.log(response.data); // 서버로부터 받은 데이터 확인
         setEduList(response.data); // 해당 아이디에 해당하는 데이터를 상태 변수에 저장
       } catch (error) {
         console.error("Error fetching data:", error);

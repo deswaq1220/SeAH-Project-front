@@ -42,7 +42,6 @@ export default function DetailedModal({fetchData, actForm, index}) {
         actForm({
             regularActPerson: regularActPerson,
             regularActEmail: regularActEmail,
-            // regularActContent: content.current.value,
             regularActContent: fetchData.regularActContent,
             files: newFiles.length > 0 ? [...newFiles,...files] : [...files],
             index: index,
@@ -80,7 +79,6 @@ export default function DetailedModal({fetchData, actForm, index}) {
             <Dialog
                 as="div"
                 className="relative z-10"
-                // initialFocus={cancelButtonRef}
                 onClose={setOpen}
             >
                 <div

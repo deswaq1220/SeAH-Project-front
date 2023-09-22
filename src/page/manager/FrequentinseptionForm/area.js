@@ -19,7 +19,6 @@ export default function FrequentInsArea({onFormDataChange}) {
         .get(`${process.env.REACT_APP_API_BASE_URL}/user/frequentinspection`)  // 세아
         .then((response) => {
           const spePartListFromBack = response.data.searchPartAndFacList.specialPartList;
-          console.log("여기확인임: " + spePartListFromBack);
           const spePartData = spePartListFromBack.map((item) => {
             return {
               partMenu: item.partMenu,
