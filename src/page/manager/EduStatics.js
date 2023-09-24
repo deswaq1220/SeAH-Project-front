@@ -266,7 +266,7 @@ function EduStatics() {
           <div className="sm:flex sm:items-center">
             <div className="sm:flex-auto flex justify-between">
               <h1 className="mt-2 text-sm text-gray-700">
-                {getFormattedDate()} 안전교육 목록입니다
+                {getFormattedDate()} 안전교육 목록입니다.
               </h1>
               <button
               type="button"

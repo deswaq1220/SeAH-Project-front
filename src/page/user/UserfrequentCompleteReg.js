@@ -287,7 +287,8 @@ function UserfrequentCompleteReg() {
           </tr>
           </table>
 <!--            <p style="font-size:16px;">링크 : <a href="http://localhost:3000/special/detail/${response.data.speId}">상세보기</a></p>-->
-            <p style="font-size:16px;">링크 : <a href="http://172.30.1.35:3000/special/detail/${response.data.speId}">상세보기</a></p>
+            <p style="font-size:16px;">링크 : <a href="http://172.20.10.13:3000/special/detail/${response.data.speId}">상세보기</a></p>
+            <p style="font-size:16px;">해당 메일은 발신전용 메일입니다.</p>
     `;
 
           const emailData = {
@@ -339,8 +340,7 @@ function UserfrequentCompleteReg() {
   return (
     <>
       <UserHeader />
-      <p>수시점검</p>
-      <p>수시점검 내용등록</p>
+      <p>수시점검 조치완료 등록페이지</p>
       <Inspector onFormDataChange={handleInspectorDataChange}
                   defaultState={speData} complete={complete} /> {/* 점검자 */}
       <Inspectionarea /> {/* 점검영역 */}

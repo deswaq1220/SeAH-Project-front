@@ -75,7 +75,7 @@ export default function FrequentDetailsTable() {
           수시점검
         </h3>
         <p className="mt-1 max-w-2xl text-base leading-6 text-gray-500">
-          등록한 해당 수시점검 조회가 가능합니다
+          등록한 수시점검 조회가 가능합니다.
         </p>
         <div className="flex justify-end mt-1">
         </div>
@@ -182,7 +182,7 @@ export default function FrequentDetailsTable() {
           </div>
           <div className="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
             <dt className="text-base font-bold leading-6 text-gray-900">
-              완료여부
+              조치여부
             </dt>
             <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
               {getComplateText(inspectionData.specialData.speComplete)}

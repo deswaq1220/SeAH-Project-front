@@ -127,7 +127,7 @@ export default function UserRegularInspectionStatus() {
         <form className="flex mb-8">
           <div className="flex flex-wrap">
             <div className="flex flex-wrap">
-              <InsArea onFormDataChange={handlePartDataChange} /> {/* 영역 */}
+              <InsArea onFormDataChange={handlePartDataChange} /> {/* 점검구역 */}
               <InsRegularItem
                 onFormDataChange={handleRegularNameDataChange}
               />{" "}
@@ -141,7 +141,7 @@ export default function UserRegularInspectionStatus() {
                 <button
                   type="button"
                   onClick={handleSearch}
-                  className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor ml-2 mr-4 h-9 w-28 "
+                  className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm  hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor ml-4 mr-4 h-9 w-28 "
                 >
                   검색
                 </button>

@@ -48,7 +48,7 @@ export default function DepartmentReg({ fetchData, handleNewData }) {
     <>
       <div className="px-8 relative z-20">
         <span className=" w-22 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 my-4">
-          부서등록
+          부서 등록
         </span>
         <div id="charge" className="flex  items-baseline justify-start">
           <div className="sm:col-span-3 ml-2">

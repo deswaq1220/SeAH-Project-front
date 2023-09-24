@@ -130,7 +130,7 @@ export default function UserFrequentDetailsTable() {
           수시점검
         </h3>
         <p className="mt-1 max-w-2xl text-base leading-6 text-gray-500">
-          등록한 해당 수시점검의 조회 및 수정, 완료등록이 가능합니다
+          등록한 수시점검의 조회 및 수정, 조치완료 등록이 가능합니다.
         </p>
         <div className="flex justify-end mt-1">
           <button
@@ -245,7 +245,7 @@ export default function UserFrequentDetailsTable() {
           </div>
           <div className="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
             <dt className="text-base font-bold leading-6 text-gray-900">
-              완료여부
+              조치여부
             </dt>
             <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
               {getComplateText(inspectionData.specialData.speComplete)}
@@ -253,7 +253,7 @@ export default function UserFrequentDetailsTable() {
           </div>
           <div className="bg-white px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
             <dt className="text-base font-bold leading-6 text-gray-900">
-              조치요청 사진
+              조치 전 사진
             </dt>
             <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0 flex flex-wrap">
               {inspectionData && inspectionData.noCompImageUrls
@@ -270,7 +270,7 @@ export default function UserFrequentDetailsTable() {
 
           <div className="bg-white px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
             <dt className="text-base font-bold leading-6 text-gray-900">
-              조치완료 사진
+              조치 후 사진
             </dt>
             <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0 flex flex-wrap">
               {inspectionData && inspectionData.compImageUrls
@@ -302,7 +302,7 @@ export default function UserFrequentDetailsTable() {
       <div className="flex justify-center my-4">
         <button
           type="button"
-          className="rounded-md bg-seahColor px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"
+          className="rounded-md bg-seahColor px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor mr-2"
           onClick={() => handleEditButtonClick(speId)} // speId 값을 넘겨줍니다.
         >
           수정

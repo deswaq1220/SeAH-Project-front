@@ -1,5 +1,5 @@
 import { Fragment, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Dialog, Disclosure, Popover, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
@@ -8,23 +8,46 @@ import {
   ClipboardDocumentListIcon,
   BookOpenIcon,
 } from "@heroicons/react/24/outline";
-import {
-  ChevronDownIcon,
-} from "@heroicons/react/20/solid";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import logo from "../img/logo.png";
 
 // 점검 메뉴
 const products = [
-  { name: '안전점검', description: '수시점검 및 정기점검을 할 수 있습니다. ', href: '/managerinspection', icon: ClipboardDocumentListIcon },
-  { name: '안전점검 통계', description: '안전점검 통계를 조회할 수 있습니다', href: '/inspection/statistics/year', icon: ChartPieIcon },
-]
+  {
+    name: "안전점검",
+    description: "수시점검 및 정기점검을 할 수 있습니다. ",
+    href: "/managerinspection",
+    icon: ClipboardDocumentListIcon,
+  },
+  {
+    name: "안전점검 통계",
+    description: "안전점검 통계를 조회할 수 있습니다",
+    href: "/inspection/statistics/year",
+    icon: ChartPieIcon,
+  },
+];
 
 // 교육 메뉴
 const eduProducts = [
-  { name: '안전교육', description: '안전교육 리스트 및 등록을 할 수 있습니다', href: '/eduMain', icon: BookOpenIcon },
-  { name: '안전교육 시간 통계', description: '월별 안전교육 시간을 조회할 수 있습니다', href: '/edustatistics', icon: ChartPieIcon },
-  { name: '안전교육 출석 통계', description: '안전교육 참석자를 조회할 수 있습니다', href: '/edustatistics/atten', icon: ChartPieIcon },
-]
+  {
+    name: "안전교육",
+    description: "안전교육 리스트 및 등록을 할 수 있습니다",
+    href: "/eduMain",
+    icon: BookOpenIcon,
+  },
+  {
+    name: "안전교육 시간 통계",
+    description: "월별 안전교육 시간을 조회할 수 있습니다",
+    href: "/edustatistics",
+    icon: ChartPieIcon,
+  },
+  {
+    name: "안전교육 출석 통계",
+    description: "안전교육 참석자를 조회할 수 있습니다",
+    href: "/edustatistics/atten",
+    icon: ChartPieIcon,
+  },
+];
 // const callsToAction = [
 //   { name: "Watch demo", href: "#", icon: PlayCircleIcon },
 //   { name: "Contact sales", href: "#", icon: PhoneIcon },
@@ -36,29 +59,14 @@ function classNames(...classes) {
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  // const [isSafetyCheckSelected, setSafetyCheckSelected] = useState(false);
-  // const [isEduMainSelected, setEduMainSelected] = useState(false);
-  // const [isReferenceSelected, setReferenceSelected] = useState(false);
+  const navigate = useNavigate(); // useNavigate 훅 사용
 
-  // const handleSafetyCheckClick = () => {
-  //   setSafetyCheckSelected(true);
-  //   setEduMainSelected(false);
-  //   setMobileMenuOpen(false);
-  // };
-
-  // const handleEduMainClick = () => {
-  //   setSafetyCheckSelected(false);
-  //   setEduMainSelected(true);
-  //   setMobileMenuOpen(false);
-  // };
-
-  // const handleReferenceClick = () => {
-  //   setSafetyCheckSelected(false);
-  //   setEduMainSelected(false);
-  //   setReferenceSelected(true);
-  //   setMobileMenuOpen(false);
-  // };
-
+  const handleLogout = () => {
+    // 로그아웃 버튼을 클릭했을 때 세션 스토리지 초기화
+    sessionStorage.clear();
+    // 로그아웃 후 홈페이지 또는 다른 페이지로 이동
+    navigate("/");
+  };
   return (
     <header className="bg-white">
       <nav
@@ -85,7 +93,10 @@ export default function Header() {
           <Popover className="relative">
             <Popover.Button className="flex items-center gap-x-1 text-lg font-semibold leading-6 text-gray-900 hover:text-seahColor">
               안전점검
-              <ChevronDownIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
+              <ChevronDownIcon
+                className="h-5 w-5 flex-none text-gray-400"
+                aria-hidden="true"
+              />
             </Popover.Button>
 
             <Transition
@@ -105,10 +116,16 @@ export default function Header() {
                       className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
                     >
                       <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                        <item.icon className="h-6 w-6 text-gray-600 group-hover:text-seahColor" aria-hidden="true" />
+                        <item.icon
+                          className="h-6 w-6 text-gray-600 group-hover:text-seahColor"
+                          aria-hidden="true"
+                        />
                       </div>
                       <div className="flex-auto">
-                        <a href={item.href} className="block font-semibold text-gray-900">
+                        <a
+                          href={item.href}
+                          className="block font-semibold text-gray-900"
+                        >
                           {item.name}
                           <span className="absolute inset-0" />
                         </a>
@@ -117,25 +134,16 @@ export default function Header() {
                     </div>
                   ))}
                 </div>
-                {/* <div className="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
-                  {callsToAction.map((item) => (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      className="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-100"
-                    >
-                      <item.icon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
-                      {item.name}
-                    </a>
-                  ))}
-                </div> */}
               </Popover.Panel>
             </Transition>
           </Popover>
           <Popover className="relative">
             <Popover.Button className="flex items-center gap-x-1 text-lg font-semibold leading-6 text-gray-900 hover:text-seahColor">
               안전교육
-              <ChevronDownIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
+              <ChevronDownIcon
+                className="h-5 w-5 flex-none text-gray-400"
+                aria-hidden="true"
+              />
             </Popover.Button>
 
             <Transition
@@ -155,10 +163,16 @@ export default function Header() {
                       className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
                     >
                       <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                        <item.icon className="h-6 w-6 text-gray-600 group-hover:text-seahColor" aria-hidden="true" />
+                        <item.icon
+                          className="h-6 w-6 text-gray-600 group-hover:text-seahColor"
+                          aria-hidden="true"
+                        />
                       </div>
                       <div className="flex-auto">
-                        <a href={item.href} className="block font-semibold text-gray-900">
+                        <a
+                          href={item.href}
+                          className="block font-semibold text-gray-900"
+                        >
                           {item.name}
                           <span className="absolute inset-0" />
                         </a>
@@ -167,24 +181,10 @@ export default function Header() {
                     </div>
                   ))}
                 </div>
-                {/* <div className="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
-                  {callsToAction.map((item) => (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      className="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-100"
-                    >
-                      <item.icon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
-                      {item.name}
-                    </a>
-                  ))}
-                </div> */}
               </Popover.Panel>
             </Transition>
           </Popover>
 
-          
-          
           <Link
             to="/reginfo"
             className="text-lg font-semibold leading-6 text-gray-900 hover:text-seahColor"
@@ -193,9 +193,12 @@ export default function Header() {
           </Link>
         </Popover.Group>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Link to="/" className="text-lg font-semibold leading-6 text-gray-900">
-            로그아웃 <span aria-hidden="true">&rarr;</span>
-          </Link>
+        <button
+                  onClick={handleLogout}
+                  className="text-lg font-semibold leading-6 text-gray-900 cursor-pointer"
+                >
+                  로그아웃 <span aria-hidden="true">&rarr;</span>
+                </button>
         </div>
       </nav>
       <Dialog
@@ -205,7 +208,7 @@ export default function Header() {
         onClose={setMobileMenuOpen}
       >
         <div className="fixed inset-0 z-10" />
-        <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+        <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center justify-between">
             <a href="#" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
@@ -229,7 +232,10 @@ export default function Header() {
                       <Disclosure.Button className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
                         안전점검
                         <ChevronDownIcon
-                          className={classNames(open ? 'rotate-180' : '', 'h-5 w-5 flex-none')}
+                          className={classNames(
+                            open ? "rotate-180" : "",
+                            "h-5 w-5 flex-none"
+                          )}
                           aria-hidden="true"
                         />
                       </Disclosure.Button>
@@ -255,7 +261,10 @@ export default function Header() {
                       <Disclosure.Button className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
                         안전교육
                         <ChevronDownIcon
-                          className={classNames(open ? 'rotate-180' : '', 'h-5 w-5 flex-none')}
+                          className={classNames(
+                            open ? "rotate-180" : "",
+                            "h-5 w-5 flex-none"
+                          )}
                           aria-hidden="true"
                         />
                       </Disclosure.Button>
@@ -274,20 +283,21 @@ export default function Header() {
                     </>
                   )}
                 </Disclosure>
-                
-                
-                <Link to="/reinfo"
+
+                <Link
+                  to="/reginfo"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
                   기준정보관리
                 </Link>
               </div>
               <div className="py-6">
-                <Link to="/managerlogin"
-                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                <button
+                  onClick={handleLogout}
+                  className="text-lg font-semibold leading-6 text-gray-900 cursor-pointer"
                 >
-                  로그아웃
-                </Link>
+                  로그아웃 <span aria-hidden="true">&rarr;</span>
+                </button>
               </div>
             </div>
           </div>

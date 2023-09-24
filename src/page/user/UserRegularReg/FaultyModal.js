@@ -7,6 +7,7 @@ import "filepond/dist/filepond.min.css"; // 스타일링을 위한 CSS
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import axios from "axios";
+import { toast } from 'react-toastify';
 
 // 추가 플러그인을 라이브러리에 등록
 registerPlugin(FilePondPluginImagePreview);
@@ -22,6 +23,14 @@ export default function FaultyModal({ index, actForm, fetchData }) {
   const [staticEmailPerson, setStaticEmailPerson] = useState([]);
   const [selectedEmail, setSelectedEmail] = useState([]);
     const [newFiles, setNewFiles] = useState([]);
+
+    const showToast = (message) => {
+      toast.warn(message, {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: true,
+      });
+    };
 
   // ActionRquest 콜백 : 조치자(이름, 이메일)
   const handleActionRequestDetailsDataChange = (data) => {
@@ -49,6 +58,11 @@ export default function FaultyModal({ index, actForm, fetchData }) {
 
   const handleSaveClick = async()=> {
     const editedContent = content.current.value;
+
+    if (!regularActPerson || !regularActEmail || !editedContent) {
+      showToast('개선대책과 이메일을 입력해주세요.');
+      return; // Stop the function if validation fails
+    }
 // actForm 함수 호출
       actForm({
       id: fetchData.id,
@@ -60,6 +74,8 @@ export default function FaultyModal({ index, actForm, fetchData }) {
       staticEmailPerson: staticEmailPerson,
       });
       setOpen(false);
+
+      
   }
 
    const handleCancelClick = async()=> {
@@ -160,7 +176,7 @@ export default function FaultyModal({ index, actForm, fetchData }) {
                         as="h3"
                         className="text-base font-semibold leading-6 text-gray-900"
                       >
-                        담당자
+                        조치자
 
                       </Dialog.Title>
                         <Regularactionrequest

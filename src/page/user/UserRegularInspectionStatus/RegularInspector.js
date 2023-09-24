@@ -55,7 +55,7 @@ export default function RegularInspector({ onFormDataChange }) {
         </span>
         <div className="flex flex-wrap">
           <div className="sm:col-span-3">
-            <div className="mt-2 mr-2">
+            <div className="mt-2 ml-4 mr-2">
               <input
                 type="text"
                 name="inspectorNum"
@@ -69,7 +69,7 @@ export default function RegularInspector({ onFormDataChange }) {
             </div>
           </div>
           <div className="sm:col-span-3">
-            <div className="mt-2">
+            <div className="mt-2 ml-4">
               <input
                 type="text"
                 name="inspectorName"
@@ -85,7 +85,7 @@ export default function RegularInspector({ onFormDataChange }) {
         </div>
         <div className=" flex items-baseline justify-start ">
           <span className=" w-21 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
-            조치완료 여부
+            조치여부
           </span>
           <Listbox value={selected} onChange={handleSelected}>
             {({ open }) => (

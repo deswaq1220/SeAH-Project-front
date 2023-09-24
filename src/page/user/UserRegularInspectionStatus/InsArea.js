@@ -56,7 +56,7 @@ export default function InsArea({ onFormDataChange }) {
       <div className="flex flex-col flex-wrap">
         <div className="flex items-center">
           <span className=" w-20 inline-flex items-center justify-center rounded-md bg-red-50 px-3 py-1 text-sm font-medium text-seahColor ring-1 ring-inset ring-red-600/10 flex-grow-0 m-4 ">
-            영역
+            점검구역
           </span>
           <Listbox value={selectedPart} onChange={handleSelectedPart}>
             {({ open }) => (

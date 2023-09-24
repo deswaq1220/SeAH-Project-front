@@ -140,7 +140,7 @@ export default function EmailTable() {
               조치담당자
             </h1>
             <p className="mt-2 text-sm text-gray-700">
-              이메일 수신여부 설정 및 수정이 가능합니다
+              이메일 수신여부 설정 및 수정이 가능합니다.
             </p>
           </div>
           <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none"></div>

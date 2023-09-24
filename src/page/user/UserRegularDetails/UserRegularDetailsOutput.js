@@ -32,7 +32,7 @@ export default function UserRegularDetailsOutput({regularData}) {
             id="inspectionArea"
             defaultValue={regularData.regularInsName}
             disabled
-            className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 sm:text-sm sm:leading-6"
+            className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-950 disabled:ring-gray-390 sm:text-sm sm:leading-6"
 
           />
         </div>
@@ -53,7 +53,7 @@ export default function UserRegularDetailsOutput({regularData}) {
             id="date"
             defaultValue={regularData.regTime ? format(parseISO(regularData.regTime), 'yyyy-MM-dd HH시 mm분'):''}
             disabled
-            className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 sm:text-sm sm:leading-6"
+            className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-950 disabled:ring-gray-390 sm:text-sm sm:leading-6"
             placeholder="2023.08.22 11시30분"
           />
         </div>
@@ -74,7 +74,7 @@ export default function UserRegularDetailsOutput({regularData}) {
             id="inspectionArea"
             defaultValue={regularData.regularPart}
             disabled
-            className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 sm:text-sm sm:leading-6"
+            className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-950 disabled:ring-gray-390 sm:text-sm sm:leading-6"
 
           />
         </div>
@@ -96,8 +96,7 @@ export default function UserRegularDetailsOutput({regularData}) {
                 id="Employeenumber"
                 defaultValue={regularData.regularEmpNum}
                 disabled
-                className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 sm:text-sm sm:leading-6"
-                placeholder="A201913925"
+                className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-950 disabled:ring-gray-390 sm:text-sm sm:leading-6"
             />
           </div>
           <div className="mt-2 mr-2">
@@ -106,7 +105,7 @@ export default function UserRegularDetailsOutput({regularData}) {
               name="inspector"
               id="inspector"
               disabled
-              className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 sm:text-sm sm:leading-6"
+              className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-950 disabled:ring-gray-390 sm:text-sm sm:leading-6"
               defaultValue={regularData.regularPerson}
             />
           </div>
@@ -117,8 +116,7 @@ export default function UserRegularDetailsOutput({regularData}) {
               id="email"
               defaultValue={regularData.regularEmail}
               disabled
-              className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 sm:text-sm sm:leading-6"
-              placeholder="cutysexy@seah.co.kr"
+              className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-950 disabled:ring-gray-390 sm:text-sm sm:leading-6"
             />
           </div>
         </div>

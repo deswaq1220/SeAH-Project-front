@@ -131,7 +131,7 @@ export default function DepartmentTable() {
               부서
             </h1>
             <p className="mt-2 text-sm text-gray-700">
-              부서등록 및 수정이 가능합니다
+              부서등록 및 수정이 가능합니다.
             </p>
           </div>
           <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none"></div>
