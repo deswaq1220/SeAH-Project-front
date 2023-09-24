@@ -184,7 +184,7 @@ export default function UserRegularDetails() {
             <td style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2;"><strong>${formattedCompleteDate}</strong></td>
           </tr>
           </table>
-            <p style="font-size:16px;">링크 : <a href="http://112.220.233.236:3000/regulardetails/${regularId}">상세보기</a></p>
+            <p style="font-size:16px;">링크 : <a href="http://122.220.233.236/regulardetails/${regularId}">상세보기</a></p>
             <p style="font-size:16px;">해당 메일은 발신전용 메일입니다.</p>
             `;
 
