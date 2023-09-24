@@ -5,7 +5,6 @@ import "react-toastify/dist/ReactToastify.css";
 import ManagerLogin from "./page/manager/ManagerLogin";
 import MainManager from "./page/manager/MainManager";
 import ReferenceInfo from "./page/manager/ReferenceInfo";
-import ReferenceInfo from "./page/manager/ReferenceInfo";
 import SafetyEducationMain from "./page/manager/SafetyEducationMain";
 import SafetyInspection from "./page/manager/SafetyInspection";
 import Error from "./page/error";
