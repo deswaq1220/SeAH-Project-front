@@ -44,30 +44,30 @@ function App() {
    %c███████║██║  ██║ ╚████╔╝ ╚██████╔╝
    %c╚══════╝╚═╝  ╚═╝  ╚═══╝   ╚═════╝ 
   `,"color:#F84c0b","color:#f5652f","color:#fd8153","color:#fa936d","color:#fda787","color:#fda787",)
+
+  const adminOnly = sessionStorage.getItem("adminOnly") === "adminOnly";
+
+
   return (
-    <Router>
-      <Routes>
-        {/* 관리자 */}
-        <Route path="/" element={<ManagerLogin/>}></Route> {/* 관리자 로그인페이지 */}
-        <Route path="/manager" element={<MainManager/>}></Route> {/* 관리자 메인페이지 */}
-        <Route path="/eduMain" element={<SafetyEducationMain/>}></Route>{/* 관리자 안전교육페이지 */}
-        <Route path="/edudetails/:eduId" element={<SafetyEduDetails/>}></Route>{/* 관리자 안전교육상세*/}
-        <Route path="/edureg" element={<SafetyEduReg/>}></Route>{/* 관리자 안전교육 등록페이지 */}
-        <Route path="/edureg/:eduId" element={<SafetyEduReg/>}></Route>{/* 관리자 안전교육 등록페이지 */}
-        <Route path="/managerinspection" element={<SafetyManagerInspection/>}></Route>{/* 관리자 안점점검 페이지 */}
-        <Route path="/inspection" element={<SafetyInspection/>}></Route>{/* 관리자 안점점검 페이지 */}
-        <Route path="/attenstatus/:eduId" element={<AttenStatus/>}></Route>{/* 관리자 출석현황 */}
-        <Route path="/training/:eduId" element={<TrainingReport/>}></Route>{/* 관리자 출석현황 */}
-
-        <Route path="/reginfo" element={<ReferenceInfo/>}></Route> {/* 관리자 기준정보페이지 */}
-
-        <Route path="/edustatistics" element={<EduStatics/>}></Route>{/* 관리자 안전교육통계*/}
-        <Route path="/edustatistics/atten" element={<EduAttenStatics/>}></Route>{/* 관리자 안전교육 참가자통계*/}
-
-        <Route path="/inspection/statistics/year" element={<SafetyInspectionStatisticsYear/>}></Route>{/* 관리자 연간분석(정기점검/수시점검) 통계 대시보드*/}
-        <Route path="/inspection/statistics/month/special" element={<SafetySpecialInspectionStatisticsMonth/>}></Route>{/* 관리자 월간분석(수시점검) 대시보드*/}
-        <Route path="/inspection/statistics/month/regular" element={<SafetyRegularInspectionStatisticsMonth/>}></Route>{/* 관리자 월간분석(정기점검) 대시보드*/}
-
+      <Router>
+        <Routes>
+          {/* 관리자 */}
+          <Route path="/" element={<ManagerLogin/>}></Route> {/* 관리자 로그인페이지 */}
+          <Route path="/manager" element={<MainManager/>}></Route> {/* 관리자 메인페이지 */}
+          <Route path="/eduMain" element={<SafetyEducationMain/>}></Route>{/* 관리자 안전교육페이지 */}
+          <Route path="/edudetails/:eduId" element={<SafetyEduDetails />} />{/* 관리자 안전교육상세*/}
+          <Route path="/edureg" element={<SafetyEduReg />} />{/* 관리자 안전교육 등록페이지 */}
+          <Route path="/edureg/:eduId" element={<SafetyEduReg /> }/>{/* 관리자 안전교육 등록페이지 */}
+          <Route path="/managerinspection" element={adminOnly ? <SafetyManagerInspection /> : <Navigate to="/" replace />} />{/* 관리자 안점점검 페이지 */}
+          <Route path="/inspection" element={adminOnly ? <SafetyInspection /> : <Navigate to="/" replace />} />{/* 관리자 안점점검 페이지 */}
+          <Route path="/attenstatus/:eduId" element={adminOnly ? <AttenStatus /> : <Navigate to="/" replace />} />{/* 관리자 출석현황 */}
+          <Route path="/training/:eduId" element={adminOnly ? <TrainingReport /> : <Navigate to="/" replace />} />{/* 관리자 출석현황 */}
+          <Route path="/reginfo" element={adminOnly ? <ReferenceInfo /> : <Navigate to="/" replace />} />{/* 관리자 기준정보페이지 */}
+          <Route path="/edustatistics" element={adminOnly ? <EduStatics /> : <Navigate to="/" replace />} />{/* 관리자 안전교육통계*/}
+          <Route path="/edustatistics/atten" element={adminOnly ? <EduAttenStatics /> : <Navigate to="/" replace />} />{/* 관리자 안전교육통계*/}
+          <Route path="/inspection/statistics/year" element={adminOnly ? <SafetyInspectionStatisticsYear /> : <Navigate to="/" replace />} />{/* 관리자 연간분석(정기점검/수시점검) 통계 대시보드*/}
+          <Route path="/inspection/statistics/month/special" element={adminOnly ? <SafetySpecialInspectionStatisticsMonth /> : <Navigate to="/" replace />} />{/* 관리자 월간분석(수시점검) 대시보드*/}
+          <Route path="/inspection/statistics/month/regular" element={adminOnly ? <SafetyRegularInspectionStatisticsMonth /> : <Navigate to="/" replace />} />{/* 관리자 월간분석(정기점검) 대시보드*/}
 
         {/* 공통 */}
         <Route path="/regular" element={<RegularMain/>}></Route>{/* 관리자,사용자 정기점검 목록 */}
