@@ -521,7 +521,7 @@ export default function UserRegularTable() {
                       <dt className="sr-only">Title</dt>
                       <dd
                         className="mt-1 text-gray-700"
-                        onClick={() => handleChecklistClick(index)}
+                        // onClick={() => handleChecklistClick(index)}
                         dangerouslySetInnerHTML={{
                           __html: item.checklist.replace(
                             /퀜/g,
