@@ -277,7 +277,7 @@ export default function SafetyEduDetails() {
               {isCompleted ? (
                 <div className="mt-4">
                   <QRCode
-                      value={`http://122.220.233.236/userattendance/register/${eduData.eduId}`}
+                      value={`http://112.220.233.236/userattendance/register/${eduData.eduId}`}
                   />
                   <div className="flex items-center mt-2">
                     <CheckCircleIcon className="h-5 w-5 text-green-500" />

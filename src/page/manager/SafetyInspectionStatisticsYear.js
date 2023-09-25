@@ -478,7 +478,7 @@ function SafetyInspectionStatisticsYear() {
                                     <div className="hidden lg:ml-6 lg:flex lg:space-x-8 relative group">
                                         <div className="relative">
                                             <a
-                                                href={`$112.220.233.236/inspection/statistics/month/special`}
+                                                href={`112.220.233.236/inspection/statistics/month/special`}
                                                 className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
                                             >
                                                 월간분석
