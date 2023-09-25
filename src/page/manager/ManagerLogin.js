@@ -13,24 +13,62 @@ function ManagerLogin() {
   const handleLogin = (e) => {
     e.preventDefault();
     // 여기에 로그인 처리 로직을 추가합니다. 아이디와 비밀번호가 일치하면 navigate 함수를 사용하여 /manager로 이동합니다.
-    if (username === "admin" && password === "seah1234") {
-      navigate("/manager");
-    } else {
-      toast.error(
-        <>
-          <p className="font-bold text-red-700">로그인 실패!</p>
-          <p>아이디 또는 비밀번호를 확인해주세요</p>
-        </>,
-        {
-          position: "top-center",
-          autoClose: 2000,
-          hideProgressBar: true,
-        }
-      );
-    }
+
+    const data = {
+      "loginId": username,
+      "loginPw": password
+    };
+    sessionStorage.setItem('username', username);
+
+    axios
+        .post(`${process.env.REACT_APP_API_BASE_URL}/admin/confirm`, data)
+        .then((response) => {
+
+
+          const approvalStatus = response.data;
+          console.log("======login버튼 누른다" + approvalStatus);
+
+          if (approvalStatus.includes("approval") && approvalStatus.includes("admin")) {
+            sessionStorage.setItem('approval', "approval");
+            sessionStorage.setItem('adminOnly', "adminOnly");
+
+            setTimeout(() => {
+              navigate("/manager");
+              console.log("======login--- 여기까지 들어왔다");
+            }, 500); // 1000ms (1초) 지연
+          } else if(approvalStatus.includes("approval") && approvalStatus.includes("guest")){
+            sessionStorage.setItem('approval', "approval");
+
+            setTimeout(() => {
+              navigate("/eduMain");
+              console.log("게스트 들어왔다");
+            }, 500);
+
+
+
+
+
+          } else {
+            toast.error(
+                <>
+                  <p className="font-bold text-red-700">로그인 실패!</p>
+                  <p>아이디 또는 비밀번호를 확인해주세요</p>
+                </>,
+                {
+                  position: "top-center",
+                  autoClose: 2000,
+                  hideProgressBar: true,
+                }
+            );
+          }
+        })
+          .catch((error) => {
+            console.error("로그인 오류: ", error);
+          });
+
   };
 
-  sessionStorage.setItem('username', username);
+
   return (
     <>
 

@@ -201,7 +201,7 @@ export default function FacilityTable() {
                         <td className="whitespace-nowrap p-4 text-sm text-gray-500">
                           {selectedFacility === facility.masterdataId ? (
                             <QRCode
-                              value={`http://172.20.10.13:3000/special/${facility.masterdataPart}/${facility.masterdataId}`}
+                              value={`http://172.20.10.43:3000/special/${facility.masterdataPart}/${facility.masterdataId}`}
                             />
                           ) : (
                             <button

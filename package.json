@@ -57,7 +57,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "proxy": "http://localhost:80"
+    "proxy": "http://172.20.10.43:8081"
   },
   "eslintConfig": {
     "extends": [
