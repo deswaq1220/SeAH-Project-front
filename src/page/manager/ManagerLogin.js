@@ -26,7 +26,6 @@ function ManagerLogin() {
 
 
           const approvalStatus = response.data;
-          console.log("======login버튼 누른다" + approvalStatus);
 
           if (approvalStatus.includes("approval") && approvalStatus.includes("admin")) {
             sessionStorage.setItem('approval', "approval");
@@ -34,19 +33,13 @@ function ManagerLogin() {
 
             setTimeout(() => {
               navigate("/manager");
-              console.log("======login--- 여기까지 들어왔다");
             }, 500); // 1000ms (1초) 지연
           } else if(approvalStatus.includes("approval") && approvalStatus.includes("guest")){
             sessionStorage.setItem('approval', "approval");
 
             setTimeout(() => {
               navigate("/eduMain");
-              console.log("게스트 들어왔다");
             }, 500);
-
-
-
-
 
           } else {
             toast.error(
