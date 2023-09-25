@@ -5,12 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c20fbe9c-9169-4241-9ec0-dff0f7b0e503" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/manager/ReferenceInfoTable/FacilityTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/ReferenceInfoTable/FacilityTable.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/manager/SafetyEduDetails.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/SafetyEduDetails.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/UserfrequentCompleteReg.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserfrequentCompleteReg.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/UserfrequentReg.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserfrequentReg.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,6 +89,7 @@
       <workItem from="1695228179036" duration="6270000" />
       <workItem from="1695540420587" duration="108000" />
       <workItem from="1695563652442" duration="604000" />
+      <workItem from="1695603727828" duration="298000" />
     </task>
     <servers />
   </component>
