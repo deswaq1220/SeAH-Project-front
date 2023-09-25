@@ -145,6 +145,7 @@ export default function SafetyEduDetails() {
     navigate(`/edureg/${eduId}`);
   };
 
+
   return (
     <div>
       <Header />

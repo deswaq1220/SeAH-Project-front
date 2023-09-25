@@ -77,10 +77,12 @@ function SafetyEducationMain() {
   };
 
   const navigate = useNavigate();
-
+  const guestTogether = sessionStorage.getItem("approval") != null;
   const handleClick = () => {
     // 원하는 경로로 이동
+    if(guestTogether){
     navigate("/edureg");
+    }
   };
 
   // eduList가 undefined일 때 처리

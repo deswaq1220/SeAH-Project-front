@@ -53,50 +53,20 @@ function App() {
       <Routes>
         {/* 관리자 */}
         <Route path="/" element={<ManagerLogin/>}></Route> {/* 관리자 로그인페이지 */}
-
         <Route path="/manager" element={<MainManager/>}></Route> {/* 관리자 메인페이지 */}
-        {/*<Route path="/manager" element={guestTogether ? <MainManager /> : <Navigate to="/404" replace />} />*/}{/* 관리자 메인페이지 */}
-
-        <Route path="/eduMain" element={<SafetyEducationMain/>}></Route>{/* 관리자 안전교육페이지 */} {/*다인 막음*/}
-        {/*<Route path="/eduMain" element={guestTogether ? <SafetyEducationMain /> : <Navigate to="/" replace />} />*/}{/* 관리자 안전교육페이지 */}
-
-        {/*<Route path="/edudetails/:eduId" element={<SafetyEduDetails/>}></Route>*/}{/* 관리자 안전교육상세*/}
-        <Route path="/edudetails/:eduId" element={guestTogether ? <SafetyEduDetails /> : <Navigate to="/" replace />} />{/* 관리자 안전교육상세*/}
-
-        {/*<Route path="/edureg" element={<SafetyEduReg/>}></Route>*/}{/* 관리자 안전교육 등록페이지 */}
-        <Route path="/edureg" element={guestTogether ? <SafetyEduReg /> : <Navigate to="/" replace />} />{/* 관리자 안전교육 등록페이지 */}
-
-        {/*<Route path="/edureg/:eduId" element={<SafetyEduReg/>}></Route>*/}{/* 관리자 안전교육 등록페이지 */}
-        <Route path="/edureg/:eduId" element={guestTogether ? <SafetyEduReg /> : <Navigate to="/" replace />} />{/* 관리자 안전교육 등록페이지 */}
-
-        {/*<Route path="/managerinspection" element={<SafetyManagerInspection/>}></Route>*/}{/* 관리자 안점점검 페이지 */}
+        <Route path="/eduMain" element={<SafetyEducationMain/>}></Route>{/* 관리자 안전교육페이지 */}
+        <Route path="/edudetails/:eduId" element={<SafetyEduDetails />} />{/* 관리자 안전교육상세*/}
+        <Route path="/edureg" element={<SafetyEduReg />} />{/* 관리자 안전교육 등록페이지 */}
+        <Route path="/edureg/:eduId" element={<SafetyEduReg /> }/>{/* 관리자 안전교육 등록페이지 */}
         <Route path="/managerinspection" element={adminOnly ? <SafetyManagerInspection /> : <Navigate to="/" replace />} />{/* 관리자 안점점검 페이지 */}
-
-        {/*<Route path="/inspection" element={<SafetyInspection/>}></Route>*/}{/* 관리자 안점점검 페이지 */}
         <Route path="/inspection" element={adminOnly ? <SafetyInspection /> : <Navigate to="/" replace />} />{/* 관리자 안점점검 페이지 */}
-
-        {/*<Route path="/attenstatus/:eduId" element={<AttenStatus/>}></Route>*/}{/* 관리자 출석현황 */}
         <Route path="/attenstatus/:eduId" element={adminOnly ? <AttenStatus /> : <Navigate to="/" replace />} />{/* 관리자 출석현황 */}
-
-        {/*<Route path="/training/:eduId" element={<TrainingReport/>}></Route>*/}{/* 관리자 출석현황 */}
         <Route path="/training/:eduId" element={adminOnly ? <TrainingReport /> : <Navigate to="/" replace />} />{/* 관리자 출석현황 */}
-
-        {/*<Route path="/reginfo" element={<ReferenceInfo/>}></Route>*/} {/* 관리자 기준정보페이지 */}
         <Route path="/reginfo" element={adminOnly ? <ReferenceInfo /> : <Navigate to="/" replace />} />{/* 관리자 기준정보페이지 */}
-
-        {/*<Route path="/edustatistics" element={<EduStatics/>}></Route>*/}{/* 관리자 안전교육통계*/}
         <Route path="/edustatistics" element={adminOnly ? <EduStatics /> : <Navigate to="/" replace />} />{/* 관리자 안전교육통계*/}
-
-        {/*<Route path="/edustatistics/atten" element={<EduAttenStatics/>}></Route>*/}{/* 관리자 안전교육 참가자통계*/}
         <Route path="/edustatistics/atten" element={adminOnly ? <EduAttenStatics /> : <Navigate to="/" replace />} />{/* 관리자 안전교육통계*/}
-
-        {/*<Route path="/inspection/statistics/year" element={<SafetyInspectionStatisticsYear/>}></Route>*/}{/* 관리자 연간분석(정기점검/수시점검) 통계 대시보드*/}
         <Route path="/inspection/statistics/year" element={adminOnly ? <SafetyInspectionStatisticsYear /> : <Navigate to="/" replace />} />{/* 관리자 연간분석(정기점검/수시점검) 통계 대시보드*/}
-
-        {/*<Route path="/inspection/statistics/month/special" element={<SafetySpecialInspectionStatisticsMonth/>}></Route>*/}{/* 관리자 월간분석(수시점검) 대시보드*/}
         <Route path="/inspection/statistics/month/special" element={adminOnly ? <SafetySpecialInspectionStatisticsMonth /> : <Navigate to="/" replace />} />{/* 관리자 월간분석(수시점검) 대시보드*/}
-
-        {/*<Route path="/inspection/statistics/month/regular" element={<SafetyRegularInspectionStatisticsMonth/>}></Route>*/}{/* 관리자 월간분석(정기점검) 대시보드*/}
         <Route path="/inspection/statistics/month/regular" element={adminOnly ? <SafetyRegularInspectionStatisticsMonth /> : <Navigate to="/" replace />} />{/* 관리자 월간분석(정기점검) 대시보드*/}
 
 
@@ -129,12 +99,6 @@ function App() {
         <Route path="/regularreg" element={<UserRegularReg/>}></Route>{/* 정기점검 등록페이지 */}
 
         <Route path="/404" element={<Error/>}></Route> {/* 에러 */}
-
-
-
-
-
-
 
 
 
