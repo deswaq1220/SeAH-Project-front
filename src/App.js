@@ -60,8 +60,8 @@ function App() {
           <Route path="/edureg/:eduId" element={<SafetyEduReg /> }/>{/* 관리자 안전교육 등록페이지 */}
           <Route path="/managerinspection" element={adminOnly ? <SafetyManagerInspection /> : <Navigate to="/" replace />} />{/* 관리자 안점점검 페이지 */}
           <Route path="/inspection" element={adminOnly ? <SafetyInspection /> : <Navigate to="/" replace />} />{/* 관리자 안점점검 페이지 */}
-          <Route path="/attenstatus/:eduId" element={adminOnly ? <AttenStatus /> : <Navigate to="/" replace />} />{/* 관리자 출석현황 */}
-          <Route path="/training/:eduId" element={adminOnly ? <TrainingReport /> : <Navigate to="/" replace />} />{/* 관리자 출석현황 */}
+          <Route path="/attenstatus/:eduId" element={<AttenStatus />} />{/* 관리자 출석현황 */}
+          <Route path="/training/:eduId" element={ <TrainingReport />} />{/* 관리자 출석현황 */}
           <Route path="/reginfo" element={adminOnly ? <ReferenceInfo /> : <Navigate to="/" replace />} />{/* 관리자 기준정보페이지 */}
           <Route path="/edustatistics" element={adminOnly ? <EduStatics /> : <Navigate to="/" replace />} />{/* 관리자 안전교육통계*/}
           <Route path="/edustatistics/atten" element={adminOnly ? <EduAttenStatics /> : <Navigate to="/" replace />} />{/* 관리자 안전교육통계*/}
