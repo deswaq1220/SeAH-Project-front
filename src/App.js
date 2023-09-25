@@ -46,7 +46,7 @@ function App() {
   `,"color:#F84c0b","color:#f5652f","color:#fd8153","color:#fa936d","color:#fda787","color:#fda787",)
 
   const adminOnly = sessionStorage.getItem("adminOnly") === "adminOnly";
-  const guestTogether = sessionStorage.getItem("approval") === "approval";
+
 
   return (
     <Router>
