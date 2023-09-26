@@ -12,45 +12,45 @@ export default function License() {
           </h2>
           <p class="text-gray-700 text-lg mt-4 mb-2">The MIT License</p>
           <p class="text-gray-600">
-            Copyright &copy; 2016 Eli Grey. //FileSaver
+            Copyright &copy; 2016 Eli Grey.
           </p>
           <p class="text-gray-600">
             Copyright &copy; 2021 Sasha Koss and Lesha Koss
-            https://kossnocorp.mit-license.org //date-fns
+            https://kossnocorp.mit-license.org 
           </p>
           <p class="text-gray-600">
-            Copyright &copy; 2015-present recharts //Recharts
+            Copyright &copy; 2015-present recharts 
           </p>
           <p class="text-gray-600">
             Copyright &copy; 2018-2021 PQINA | Rik Schennink
-            &lt;rik@pqina.nl&gt; //filepond-plugin-image-preview
+            &lt;rik@pqina.nl&gt; 
           </p>
 
           <p class="text-gray-600">
-            Copyright 2017-present, cssivision //qrcode-react
+            Copyright 2017-present, cssivision 
           </p>
           <p class="text-gray-600">
             Copyright &copy; 2014-2023 HackerOne Inc and individual
-            contributors//react-datepicker
+            contributors
           </p>
           <p class="text-gray-600">
             Copyright &copy; React Training LLC 2015-2019 Copyright &copy; Remix
             Software Inc. 2020-2021 Copyright &copy; Shopify Inc. 2022-2023
-            //react-router-dom
+            
           </p>
           <p class="text-gray-600">
             {" "}
-            Copyright &copy; 2013-present, Facebook, Inc. //react-scripts
+            Copyright &copy; 2013-present, Facebook, Inc. 
           </p>
           <p class="text-gray-600">
-            Copyright &copy; 2023 Fadi Khadra //react-toastify
+            Copyright &copy; 2023 Fadi Khadra 
           </p>
           <p class="text-gray-600">
-            Copyright &copy; 2014-present Matt Zabriskie & Collaborators //axios
+            Copyright &copy; 2014-present Matt Zabriskie & Collaborators 
           </p>
-          <p class="text-gray-600">Copyright &copy; Raphaël Benitte //Nivo</p>
+          <p class="text-gray-600">Copyright &copy; Raphaël Benitte </p>
           <p class="text-gray-600">
-            Copyright &copy; Tailwind Labs, Inc. //tailwindcss
+            Copyright &copy; Tailwind Labs, Inc.
           </p>
 
           <p class="text-sm text-gray-400 mt-2">
@@ -104,7 +104,7 @@ export default function License() {
           </p>
         </div>
         <div class="mb-4">
-          <h2 class="text-xl font-medium">3.xlsx</h2>
+          <h2 class="text-xl font-medium">3. xlsx,JAVAMailSender</h2>
           <p class="text-gray-600">Copyright &copy; 2012-present SheetJS LLC</p>
           <p class="text-gray-600">Apache License Version 2.0, January 2004</p>
           <p class="text-sm text-gray-400 mt-2">

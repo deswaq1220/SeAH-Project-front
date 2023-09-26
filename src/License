@@ -94,7 +94,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 또는 사용하지 않는 방법으로 발생하는 불법 행위(과실 또는 기타 포함)
 이 소프트웨어의 경우, 그러한 손상의 가능성이 있음을 알더라도 말입니다.)
 
-4.xlsx
+3.xlsx,JAVAMailSender
 
 Copyright (C) 2012-present SheetJS LLC
 
@@ -497,5 +497,6 @@ limitations under the License.
     명시적이든 묵시적이든 어떠한 종류의 보증이나 조건도 제공하지 않습니다.
     권한 및 권한을 관리하는 특정 언어는 라이센스를 참조하세요.
     라이센스에 따른 제한.
+
 
 )
