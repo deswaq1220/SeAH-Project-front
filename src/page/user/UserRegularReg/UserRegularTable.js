@@ -40,10 +40,16 @@ export default function UserRegularTable() {
 
   const handleRadioChange = (index, method) => {
     console.log(regularcheckList[index]);
-    regularcheckList[index].regularCheck = method; // 해당 행의 상태 입력
-    if (method === "BAD") {
-      handleChecklistClick(index);
-    }
+
+    setRegularcheckList((prevList) => {
+    return prevList.map((item, i) => {
+      if (i === index) {
+        return { ...item, regularCheck: method };
+      } else {
+        return item;
+      }
+    });
+  });
     // 체크 해제된 경우 해당 인덱스를 제거하고, 체크되지 않은 경우 해당 인덱스를 추가합니다.
     if (method === null && uncheckedItemIndexes.includes(index)) {
       setUncheckedItemIndexes((prevIndexes) =>
@@ -151,6 +157,9 @@ export default function UserRegularTable() {
             },
           }
         );
+        // 라디오 버튼 상태 초기화
+      setSelectedItemIndex(null);
+      console.log(selectedItemIndex)
         setRegularcheckList(response.data);
       }
     } catch (error) {
@@ -368,6 +377,27 @@ export default function UserRegularTable() {
     fetchOptions();
   }, []);
 
+  const handleSave = () => {
+    if (!isChecklistReviewed()) {
+      toast.error("저장하기 전에 체크리스트를 조회해주세요.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+      });
+      return;
+    }
+
+    // Save data...
+    console.log("Data saved");
+    handleFormSubmit();
+  };
+
+  const isChecklistReviewed = () => {
+    return regularcheckList.some(item => item.regularCheck !== null);
+  };
+
+
+
   return (
     <div className="flex flex-col ">
       <div id="ReformMeasures" className="flex items-center flex-wrap">
@@ -540,6 +570,7 @@ export default function UserRegularTable() {
                               <input
                                 type="radio"
                                 name={`radio-group-${index}-1`}
+                                key={`${index}-${notificationMethod.id}`}
                                 value={item.id}
                                 onChange={() =>
                                   handleRadioChange(
@@ -547,6 +578,7 @@ export default function UserRegularTable() {
                                     notificationMethod.id
                                   )
                                 }
+                                
                                 className="h-4 w-4 border-gray-300 text-seahColor focus:ring-seahColor"
                               />
                               <label
@@ -581,10 +613,12 @@ export default function UserRegularTable() {
                           <input
                             type="radio"
                             name={`radio-group-${index}-1`}
+                            key={`${index}-${notificationMethod.id}`}
                             value={notificationMethod.id}
                             onChange={() =>
                               handleRadioChange(index, notificationMethod.id)
                             }
+                           checked={item.regularCheck === notificationMethod.id}
                             className="h-4 w-4 border-gray-300 text-seahColor focus:ring-seahColor"
                           />
                           <label
@@ -615,7 +649,7 @@ export default function UserRegularTable() {
           <button
             type="button"
             className="rounded-md bg-seahColor px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-seahDeep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor "
-            onClick={handleFormSubmit}
+            onClick={handleSave}
           >
             저장
           </button>
