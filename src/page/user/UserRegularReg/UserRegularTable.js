@@ -603,7 +603,7 @@ export default function UserRegularTable() {
                   </td>
                   <td
                     className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
-                    onClick={() => handleChecklistClick(index)}
+                    // onClick={() => handleChecklistClick(index)}
                     dangerouslySetInnerHTML={{
                       __html: item.checklist.replace(
                         /퀜/g,

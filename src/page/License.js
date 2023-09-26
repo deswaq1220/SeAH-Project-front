@@ -1,59 +1,59 @@
 export default function License() {
   return (
-    <div class="bg-gray-100 p-8 h-full">
-      <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow">
-        <h1 class="text-2xl font-semibold mb-4">Software Licenses</h1>
+    <div className="bg-gray-100 p-8 h-full">
+      <div className="max-w-xl mx-auto bg-white p-6 rounded-lg shadow">
+        <h1 className="text-2xl font-semibold mb-4">Software Licenses</h1>
         {/* License 1 */}
-        <div class="mb-4">
-          <h2 class="text-xl font-medium">
+        <div className="mb-4">
+          <h2 className="text-xl font-medium">
             1. FileSaver, date-fns, Recharts, filepond-plugin-image-preview,
             qrcode-react, react-datepicker, react-router-dom, react-scripts,
             react-toastify, axios, Nivo, tailwindcss
           </h2>
-          <p class="text-gray-700 text-lg mt-4 mb-2">The MIT License</p>
-          <p class="text-gray-600">
+          <p className="text-gray-700 text-lg mt-4 mb-2">The MIT License</p>
+          <p className="text-gray-600">
             Copyright &copy; 2016 Eli Grey.
           </p>
-          <p class="text-gray-600">
+          <p className="text-gray-600">
             Copyright &copy; 2021 Sasha Koss and Lesha Koss
             https://kossnocorp.mit-license.org 
           </p>
-          <p class="text-gray-600">
+          <p className="text-gray-600">
             Copyright &copy; 2015-present recharts 
           </p>
-          <p class="text-gray-600">
+          <p className="text-gray-600">
             Copyright &copy; 2018-2021 PQINA | Rik Schennink
             &lt;rik@pqina.nl&gt; 
           </p>
 
-          <p class="text-gray-600">
+          <p className="text-gray-600">
             Copyright 2017-present, cssivision 
           </p>
-          <p class="text-gray-600">
+          <p className="text-gray-600">
             Copyright &copy; 2014-2023 HackerOne Inc and individual
             contributors
           </p>
-          <p class="text-gray-600">
+          <p className="text-gray-600">
             Copyright &copy; React Training LLC 2015-2019 Copyright &copy; Remix
             Software Inc. 2020-2021 Copyright &copy; Shopify Inc. 2022-2023
             
           </p>
-          <p class="text-gray-600">
+          <p className="text-gray-600">
             {" "}
             Copyright &copy; 2013-present, Facebook, Inc. 
           </p>
-          <p class="text-gray-600">
+          <p className="text-gray-600">
             Copyright &copy; 2023 Fadi Khadra 
           </p>
-          <p class="text-gray-600">
+          <p className="text-gray-600">
             Copyright &copy; 2014-present Matt Zabriskie & Collaborators 
           </p>
-          <p class="text-gray-600">Copyright &copy; Raphaël Benitte </p>
-          <p class="text-gray-600">
+          <p className="text-gray-600">Copyright &copy; Raphaël Benitte </p>
+          <p className="text-gray-600">
             Copyright &copy; Tailwind Labs, Inc.
           </p>
 
-          <p class="text-sm text-gray-400 mt-2">
+          <p className="text-sm text-gray-400 mt-2">
             Permission is hereby granted, free of charge, to any person
             obtaining a copy of this software and associated documentation files
             (the "Software"), to deal in the Software without restriction,
@@ -72,11 +72,11 @@ export default function License() {
             OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.F
           </p>
         </div>
-        <div class="mb-4">
-          <h2 class="text-xl font-medium">2. react-transition-group</h2>
-          <p class="text-gray-600">SD 3-Clause License</p>
-          <p class="text-gray-600">Copyright &copy; 2018, React Community</p>
-          <p class="text-sm text-gray-400 mt-2">
+        <div className="mb-4">
+          <h2 className="text-xl font-medium">2. react-transition-group</h2>
+          <p className="text-gray-600">SD 3-Clause License</p>
+          <p className="text-gray-600">Copyright &copy; 2018, React Community</p>
+          <p className="text-sm text-gray-400 mt-2">
             Forked from React (https://github.com/facebook/react) Copyright
             2013-present, Facebook, Inc. All rights reserved. Redistribution and
             use in source and binary forms, with or without modification, are
@@ -103,11 +103,11 @@ export default function License() {
             POSSIBILITY OF SUCH DAMAGE.
           </p>
         </div>
-        <div class="mb-4">
-          <h2 class="text-xl font-medium">3. xlsx,JAVAMailSender</h2>
-          <p class="text-gray-600">Copyright &copy; 2012-present SheetJS LLC</p>
-          <p class="text-gray-600">Apache License Version 2.0, January 2004</p>
-          <p class="text-sm text-gray-400 mt-2">
+        <div className="mb-4">
+          <h2 className="text-xl font-medium">3. xlsx,JAVAMailSender</h2>
+          <p className="text-gray-600">Copyright &copy; 2012-present SheetJS LLC</p>
+          <p className="text-gray-600">Apache License Version 2.0, January 2004</p>
+          <p className="text-sm text-gray-400 mt-2">
             TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION 1.
             Definitions. "License" shall mean the terms and conditions for use,
             reproduction, and distribution as defined by Sections 1 through 9 of
