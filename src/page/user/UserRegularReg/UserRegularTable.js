@@ -41,15 +41,22 @@ export default function UserRegularTable() {
   const handleRadioChange = (index, method) => {
     console.log(regularcheckList[index]);
 
-    setRegularcheckList((prevList) => {
-    return prevList.map((item, i) => {
-      if (i === index) {
-        return { ...item, regularCheck: method };
-      } else {
-        return item;
-      }
-    });
-  });
+    setRegularcheckList(prevState =>
+      prevState.map((item, idx) => {
+        if (idx === index) {
+          // 만약 선택된 값이 '불량'인 경우
+          if (method === "BAD") {
+            return { ...item, regularCheck: method, isModalState: "open" };
+          } else {
+            return { ...item, regularCheck: method };
+          }
+        } else {
+          return item;
+        }
+      })
+    );
+
+  
     // 체크 해제된 경우 해당 인덱스를 제거하고, 체크되지 않은 경우 해당 인덱스를 추가합니다.
     if (method === null && uncheckedItemIndexes.includes(index)) {
       setUncheckedItemIndexes((prevIndexes) =>
@@ -58,6 +65,7 @@ export default function UserRegularTable() {
     } else if (method !== null && !uncheckedItemIndexes.includes(index)) {
       setUncheckedItemIndexes((prevIndexes) => [...prevIndexes, index]);
     }
+    
   };
 
   const [regularDTO, setRegularDTO] = useState({
