@@ -37,11 +37,26 @@ export default function UserRegularTable() {
   const [isInspectionAreaSelected, setIsInspectionAreaSelected] =
     useState(false); //"점검항목"이 선택되었는지 여부를 추적
   const [uncheckedItemIndexes, setUncheckedItemIndexes] = useState([]); // 체크되지 않은 항목의 인덱스를 기록하는 상태 변수
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
-  const handleRadioChange = (index, method) => {
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // cleanup function
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const handleRadioChangeMobile = (index, method, event) => {
+    event.stopPropagation();
     console.log(regularcheckList[index]);
 
-    setRegularcheckList(prevState =>
+    setRegularcheckList((prevState) =>
       prevState.map((item, idx) => {
         if (idx === index) {
           // 만약 선택된 값이 '불량'인 경우
@@ -55,18 +70,42 @@ export default function UserRegularTable() {
         }
       })
     );
-
-
-    // 체크 해제된 경우 해당 인덱스를 제거하고, 체크되지 않은 경우 해당 인덱스를 추가합니다.
-    if (method === null && uncheckedItemIndexes.includes(index)) {
-      setUncheckedItemIndexes((prevIndexes) =>
-        prevIndexes.filter((itemIndex) => itemIndex !== index)
-      );
-    } else if (method !== null && !uncheckedItemIndexes.includes(index)) {
-      setUncheckedItemIndexes((prevIndexes) => [...prevIndexes, index]);
-    }
-    
   };
+  const handleRadioChangePC = (index, method, event) => {
+    event.stopPropagation();
+    console.log(regularcheckList[index]);
+
+    setRegularcheckList((prevState) =>
+      prevState.map((item, idx) => {
+        if (idx === index) {
+          // 만약 선택된 값이 '불량'인 경우
+          if (method === "BAD") {
+            return { ...item, regularCheck: method, isModalState: "open" };
+          } else {
+            return { ...item, regularCheck: method };
+          }
+        } else {
+          return item;
+        }
+      })
+    );
+  };
+
+  useEffect(() => {
+    regularcheckList.forEach((item, index) => {
+      // 체크 해제된 경우 해당 인덱스를 제거하고, 체크되지 않은 경우 해당 인덱스를 추가합니다.
+      if (item.regularCheck === null && uncheckedItemIndexes.includes(index)) {
+        setUncheckedItemIndexes((prevIndexes) =>
+          prevIndexes.filter((itemIndex) => itemIndex !== index)
+        );
+      } else if (
+        item.regularCheck !== null &&
+        !uncheckedItemIndexes.includes(index)
+      ) {
+        setUncheckedItemIndexes((prevIndexes) => [...prevIndexes, index]);
+      }
+    });
+  }, [regularcheckList]);
 
   const [regularDTO, setRegularDTO] = useState({
     regularPerson: "", // 관찰자 이름
@@ -77,7 +116,7 @@ export default function UserRegularTable() {
     file: null,
   });
 
-  const emailTitle = `${regularDTO.regularPerson}님의 정기점검 조치요청 메일입니다`;
+  const emailTitle = `${regularDTO.regularPerson}님의 정기점검 요청메일입니다`;
 
   // 세아도메인
   const [seahDomain, setSeahDomain] = useState("@seah.co.kr");
@@ -87,8 +126,10 @@ export default function UserRegularTable() {
     setRegularDTO((prevData) => ({
       ...prevData,
       regularPerson: inspectorForm.name, //
-      regularEmail: inspectorForm.email !== null && inspectorForm.email !== "" ?
-          inspectorForm.email + seahDomain : inspectorForm.email,
+      regularEmail:
+        inspectorForm.email !== null && inspectorForm.email !== ""
+          ? inspectorForm.email + seahDomain
+          : inspectorForm.email,
       regularEmpNum: inspectorForm.employeenumber,
     }));
   };
@@ -121,7 +162,6 @@ export default function UserRegularTable() {
   }
 
   const handleActDataChange = (actForm) => {
-
     const updatedActPerson = actForm.regularActPerson;
     const updatedActEmail = actForm.regularActEmail;
     const updatedActContent = actForm.regularActContent;
@@ -166,8 +206,8 @@ export default function UserRegularTable() {
           }
         );
         // 라디오 버튼 상태 초기화
-      setSelectedItemIndex(null);
-      console.log(selectedItemIndex)
+        setSelectedItemIndex(null);
+        console.log(selectedItemIndex);
         setRegularcheckList(response.data);
       }
     } catch (error) {
@@ -340,8 +380,7 @@ export default function UserRegularTable() {
                 `${process.env.REACT_APP_API_BASE_URL}/api/send-email`,
                 emailData
               )
-              .then((response) => {
-              })
+              .then((response) => {})
               .catch((error) => {
                 console.error("이메일 전송 오류: ", error);
               });
@@ -401,10 +440,8 @@ export default function UserRegularTable() {
   };
 
   const isChecklistReviewed = () => {
-    return regularcheckList.some(item => item.regularCheck !== null);
+    return regularcheckList.some((item) => item.regularCheck !== null);
   };
-
-
 
   return (
     <div className="flex flex-col ">
@@ -577,16 +614,40 @@ export default function UserRegularTable() {
                             >
                               <input
                                 type="radio"
-                                name={`radio-group-${index}-1`}
+                                name={`radio-group-${index}-${notificationMethod.id}`}
                                 key={`${index}-${notificationMethod.id}`}
                                 value={item.id}
-                                onChange={() =>
-                                  handleRadioChange(
-                                    index,
-                                    notificationMethod.id
-                                  )
+                                // 모바일일때
+                                onTouchStart={(e) =>
+                                  isMobile
+                                    ? handleRadioChangeMobile(
+                                        index,
+                                        notificationMethod.id,
+                                        e
+                                      )
+                                    : handleRadioChangePC(
+                                        index,
+                                        notificationMethod.id,
+                                        e
+                                      )
                                 }
-                                checked={item.regularCheck === notificationMethod.id}
+                                // pc에서 화면 모바일 사이즈
+                                onChange={(e) =>
+                                  isMobile
+                                    ? handleRadioChangeMobile(
+                                        index,
+                                        notificationMethod.id,
+                                        e
+                                      )
+                                    : handleRadioChangePC(
+                                        index,
+                                        notificationMethod.id,
+                                        e
+                                      )
+                                }
+                                checked={
+                                  item.regularCheck === notificationMethod.id
+                                }
                                 className="h-4 w-4 border-gray-300 text-seahColor focus:ring-seahColor"
                               />
                               <label
@@ -623,10 +684,22 @@ export default function UserRegularTable() {
                             name={`radio-group-${index}-1`}
                             key={`${index}-${notificationMethod.id}`}
                             value={notificationMethod.id}
-                            onChange={() =>
-                              handleRadioChange(index, notificationMethod.id)
+                            onChange={(e) =>
+                              isMobile
+                                ? handleRadioChangeMobile(
+                                    index,
+                                    notificationMethod.id,
+                                    e
+                                  )
+                                : handleRadioChangePC(
+                                    index,
+                                    notificationMethod.id,
+                                    e
+                                  )
                             }
-                           checked={item.regularCheck === notificationMethod.id}
+                            checked={
+                              item.regularCheck === notificationMethod.id
+                            }
                             className="h-4 w-4 border-gray-300 text-seahColor focus:ring-seahColor"
                           />
                           <label
