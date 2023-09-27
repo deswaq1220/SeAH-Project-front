@@ -56,7 +56,7 @@ export default function UserRegularTable() {
       })
     );
 
-  
+
     // 체크 해제된 경우 해당 인덱스를 제거하고, 체크되지 않은 경우 해당 인덱스를 추가합니다.
     if (method === null && uncheckedItemIndexes.includes(index)) {
       setUncheckedItemIndexes((prevIndexes) =>
@@ -586,7 +586,7 @@ export default function UserRegularTable() {
                                     notificationMethod.id
                                   )
                                 }
-                                
+                                checked={item.regularCheck === notificationMethod.id}
                                 className="h-4 w-4 border-gray-300 text-seahColor focus:ring-seahColor"
                               />
                               <label
