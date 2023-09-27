@@ -1,8 +1,16 @@
+
+
+
 export default function License() {
   return (
     <div className="bg-gray-100 p-8 h-full">
       <div className="max-w-xl mx-auto bg-white p-6 rounded-lg shadow">
-        <h1 className="text-2xl font-semibold mb-4">Software Licenses</h1>
+        <h1 className="text-2xl font-semibold mb-4">Opensource Licenses</h1>
+        <div className="mb-4">
+        <h2 className="text-xl font-medium">
+          We used the following Opensource, which is subject to the following copyrights.
+        </h2>
+        </div>
         {/* License 1 */}
         <div className="mb-4">
           <h2 className="text-xl font-medium">
@@ -27,16 +35,20 @@ export default function License() {
           </p>
 
           <p className="text-gray-600">
-            Copyright 2017-present, cssivision 
+            Copyright &copy;  2017-present, cssivision
           </p>
           <p className="text-gray-600">
             Copyright &copy; 2014-2023 HackerOne Inc and individual
             contributors
           </p>
           <p className="text-gray-600">
-            Copyright &copy; React Training LLC 2015-2019 Copyright &copy; Remix
-            Software Inc. 2020-2021 Copyright &copy; Shopify Inc. 2022-2023
-            
+            Copyright &copy; 2015-2019 React Training LLC
+          </p>
+          <p className="text-gray-600">
+            Copyright &copy; 2020-2021 Remix Software Inc.
+          </p>
+          <p className="text-gray-600">
+            Copyright &copy; 2022-2023 Shopify Inc.
           </p>
           <p className="text-gray-600">
             {" "}
@@ -104,9 +116,11 @@ export default function License() {
           </p>
         </div>
         <div className="mb-4">
-          <h2 className="text-xl font-medium">3. xlsx,JAVAMailSender</h2>
-          <p className="text-gray-600">Copyright &copy; 2012-present SheetJS LLC</p>
+          <h2 className="text-xl font-medium">3. xlsx, JAVAMailSender, Querydsl</h2>
           <p className="text-gray-600">Apache License Version 2.0, January 2004</p>
+          <p className="text-gray-600">Copyright &copy; 2012-present SheetJS LLC</p>
+          <p className="text-gray-600">Copyright &copy; 2002-2023 spring-projects/spring-framework(VMware)</p>
+          <p className="text-gray-600">Copyright &copy; 2015 - 2020 by The Querydsl Team</p>
           <p className="text-sm text-gray-400 mt-2">
             TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION 1.
             Definitions. "License" shall mean the terms and conditions for use,
@@ -255,7 +269,7 @@ export default function License() {
             syntax for the file format. We also recommend that a file or class
             name and description of purpose be included on the same "printed
             page" as the copyright notice for easier identification within
-            third-party archives. Copyright &copy; 2012-present SheetJS LLC
+            third-party archives. 
             Licensed under the Apache License, Version 2.0 (the "License"); you
             may not use this file except in compliance with the License. You may
             obtain a copy of the License at
