@@ -49,7 +49,7 @@ function UserfrequentReg() {
   const [files, setFiles] = useState("");     // 백으로 넘길 파일
   const [fileDatas, setFileDatas] = useState([]);   // 백에서 가져온 파일정보(업데이트정보)
   const [deleteFileIds, setDeleteFileIds] = useState([]);
-  const emailTitle = `${spePerson}님의 수시점검 요청메일입니다`;
+  const emailTitle = `${spePerson}님의 수시점검 조치요청 메일입니다`;
   const [isLoading, setIsLoading] = useState(true);
   const [speData, setSpeData] = useState({
     employeenumber :"",

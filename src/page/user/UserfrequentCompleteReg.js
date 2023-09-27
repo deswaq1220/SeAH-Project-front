@@ -49,7 +49,7 @@ function UserfrequentCompleteReg() {
   const [files, setFiles] = useState("");     // 백으로 넘길 파일
   const [fileDatas, setFileDatas] = useState([]);   // 백에서 가져온 파일정보(업데이트정보)
   const [deleteFileIds, setDeleteFileIds] = useState([]);
-  const emailActTitle = `${spePerson}님께서 요청하신 수시점검이 처리완료되었습니다`;
+  const emailActTitle = `${spePerson}님께서 요청하신 수시점검 조치요청이 처리완료되었습니다`;
   const [isLoading, setIsLoading] = useState(true);
 
   const [speData, setSpeData] = useState({

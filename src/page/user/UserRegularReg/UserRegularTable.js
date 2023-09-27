@@ -77,7 +77,7 @@ export default function UserRegularTable() {
     file: null,
   });
 
-  const emailTitle = `${regularDTO.regularPerson}님의 정기점검 요청메일입니다`;
+  const emailTitle = `${regularDTO.regularPerson}님의 정기점검 조치요청 메일입니다`;
 
   // 세아도메인
   const [seahDomain, setSeahDomain] = useState("@seah.co.kr");

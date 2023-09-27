@@ -199,7 +199,7 @@ export default function UserRegularDetails() {
       const uniqueRecipientsSet = new Set(finalEmailList); //이메일 중복제거
       const uniqueRecipientsArray = Array.from(uniqueRecipientsSet); // Set을 다시 배열로 변환
 
-      const emailTitle = `${regularDetailDTOList[index].regularActPerson}님의 정기점검완료 메일입니다`;
+      const emailTitle = `${regularDetailDTOList[index].regularActPerson}님의 정기점검 조치완료 메일입니다`;
 
       const emailData = {
         recipients: uniqueRecipientsArray,
