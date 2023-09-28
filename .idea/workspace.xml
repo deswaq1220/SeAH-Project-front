@@ -11,8 +11,6 @@
       <change beforePath="$PROJECT_DIR$/src/page/manager/ReferenceInfoTable/FacilityTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/ReferenceInfoTable/FacilityTable.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/page/manager/SafetyInspectionStatisticsYear.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/SafetyInspectionStatisticsYear.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/page/manager/SafetyRegularInspectionStatisticsMonth.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/SafetyRegularInspectionStatisticsMonth.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/manager/SafetySpecialInspectionStatisticsMonth.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/SafetySpecialInspectionStatisticsMonth.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/page/user/UserRegularReg/UserRegularTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserRegularReg/UserRegularTable.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,6 +94,7 @@
       <workItem from="1695540420587" duration="108000" />
       <workItem from="1695563652442" duration="604000" />
       <workItem from="1695798910123" duration="4635000" />
+      <workItem from="1695896672434" duration="1963000" />
     </task>
     <servers />
   </component>

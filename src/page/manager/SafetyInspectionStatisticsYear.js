@@ -99,7 +99,7 @@ function SafetyInspectionStatisticsYear() {
 
 
 
-    //(BarChart) 특정년도의 월별 정기점검 점검종류별 건수
+    //(BarChart) 특정년도의 월별 정기점검 점검항목별 건수
     const [regularBarChartData, setRegularBarChartData] = useState([]);
     // 모든 dangerKind를 추출하여 하나의 배열로 모으기
     const [uniqueNameKinds, setUniqueNameKinds] = useState([]); //중복값 제거
@@ -172,7 +172,7 @@ function SafetyInspectionStatisticsYear() {
 
 
 
-            //(BarChart) 특정년도의 월별 정기점검 종류별 건수
+            //(BarChart) 특정년도의 월별 정기점검 항목별 건수
             const regularBarChartResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/admin/regular/statistics/nameandyear`, {params: {year: selectedYear}});
 
             const regularNameData = regularBarChartResponse.data; //백엔드에서 받아온 데이터
@@ -360,7 +360,7 @@ function SafetyInspectionStatisticsYear() {
 
 
     //이벤트6: 정기점검 위험분류 엑셀저장
-        //정기점검 종류별 엑셀시트만들 때 월별 데이터 생성 메소드
+        //정기점검 항목별 엑셀시트만들 때 월별 데이터 생성 메소드
         const regularGenerateDataForAllMonthsForExcel = (regularDataByMonth, uniqueNameKinds) => {
             const dataForAllMonths = [];
             for (let i = 0; i <= 11; i++) {
@@ -418,7 +418,7 @@ function SafetyInspectionStatisticsYear() {
             const excelFile = new Blob([excelBuffer], {
                 type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             });
-            saveAs(excelFile, `연간 정기점검 종류별 분석.xlsx`);
+            saveAs(excelFile, `연간 정기점검 항목별 분석.xlsx`);
         };
 
 
@@ -678,7 +678,7 @@ function SafetyInspectionStatisticsYear() {
                             {/* 3/3번째 화면 - 화면 분할 2/2 */}
                             <div className="p-4">
                                 <div className="flex justify-between items-center">
-                                    <h5 className="text-xl font-semibold leading-2 text-gray-900">연간 정기점검 종류 분석</h5>
+                                    <h5 className="text-xl font-semibold leading-2 text-gray-900">연간 정기점검 항목 분석</h5>
                                     <button
                                         type="button"
                                         className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-seahColor"

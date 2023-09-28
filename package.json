@@ -59,7 +59,7 @@
     "eject": "react-scripts eject"
   },
 
-  "proxy": "http://172.20.10.13:8081",
+  "proxy": "http://112.220.233.236:80",
 
   "eslintConfig": {
     "extends": [

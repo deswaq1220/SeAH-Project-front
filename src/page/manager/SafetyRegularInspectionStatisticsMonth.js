@@ -105,9 +105,9 @@ function SafetyInspectionStatisticsMonthImg() {
         data: [{ "이번달 정기점검 총 건수": regularCount }],
       },
       {
-        sheetName: "점검영역 분석",
+        sheetName: "점검구역 분석",
         data: regularCntByPartForExcel.map((item) => ({
-          점검영역: item[0],
+          점검구역: item[0],
           건수: item[1],
         })),
       },
@@ -447,7 +447,7 @@ function SafetyInspectionStatisticsMonthImg() {
                   </div>
                   {/*영역 2번 - 영역별*/}
                   <div>
-                    <h3 className="text-xl font-semibold leading-2 text-gray-900">2. 점검영역 분석(건)</h3>
+                    <h3 className="text-xl font-semibold leading-2 text-gray-900">2. 점검구역 분석(건)</h3>
 
                     <div style={{ height: '360px' }}>
                       <ResponsiveRadar
