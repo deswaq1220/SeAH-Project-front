@@ -15,17 +15,17 @@ export default function TrainingReport() {
   useEffect(() => {
     // API 요청을 통해 해당 교육 아이디에 해당하는 데이터 가져오기
     axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/admin/edudetails/${eduId}`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        setEduDetails(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+        .get(`${process.env.REACT_APP_API_BASE_URL}/admin/edudetails/${eduId}`, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          setEduDetails(response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
   }, [eduId]);
 
   function mapEduCategoryName(category) {
@@ -48,14 +48,14 @@ export default function TrainingReport() {
   useEffect(() => {
     // 교육 아이디에 맞는 출석목록 데이터를 받아오는 API 호출
     axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/admin/list/${eduId}`) //세아
-      .then((response) => {
-        // 받아온 출석목록 데이터를 attendanceList 상태에 저장
-        setAttendanceList(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching attendance data:", error);
-      });
+        .get(`${process.env.REACT_APP_API_BASE_URL}/admin/list/${eduId}`) //세아
+        .then((response) => {
+          // 받아온 출석목록 데이터를 attendanceList 상태에 저장
+          setAttendanceList(response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching attendance data:", error);
+        });
   }, [eduId]);
 
   const formatTime = (dateTime) => {
@@ -69,144 +69,142 @@ export default function TrainingReport() {
   };
 
   return (
-    <div className="w-[210mm]  p-8">
-      <div>
-        <header className="flex justify-between">
-          <img className="h-8 w-auto" src={logo} alt="" />
-          <div className="flex  flex-col items-center">
-            {eduDetails && (
-              <p className=" font-bold text-xl">{eduDetails.eduTitle}</p>
-            )}
-            <p className="text-lg">안전교육수강확인서</p>
-          </div>
-        </header>
-        <section className="flex ">
-          <div className="flex ">
-            <div className="w-[150px] flex justify-center items-center text-lg font-bold border-black border-l border-t">
-              1.일시
+
+      <div className="w-[210mm] p-2">
+        <div>
+          <header className="flex justify-between">
+            <img className="h-8 w-auto" src={logo} alt="" />
+            <div className="flex  flex-col items-center">
+              {eduDetails && (
+                  <p className=" font-bold text-xl">{eduDetails.eduTitle}</p>
+              )}
+              <p className="text-lg">안전교육수강확인서</p>
             </div>
-            <table className="w-[310px]">
-              <tr className="border border-black">
-                <td className="p-1 border-r border-black text-center">날짜</td>
-                <td className="p-1">
-                  {formatTime(eduDetails && eduDetails.eduStartTime)}
+          </header>
+          <section className="flex ">
+            <div className="flex ">
+              <div className="w-[150px] flex justify-center items-center text-lg font-bold border-black border-l border-t">
+                1.일시
+              </div>
+              <table className="w-[310px]">
+                <tr className="border border-black">
+                  <td className="p-1 border-r border-black text-center">날짜</td>
+                  <td className="p-1">
+                    {formatTime(eduDetails && eduDetails.eduStartTime)}
+                  </td>
+                </tr>
+                <tr className="border border-black">
+                  <td className="p-1 border-r border-black text-center">시간</td>
+                  <td className="p-1">{eduDetails && eduDetails.eduSumTime}분</td>
+                </tr>
+                <tr className="border-x border-black">
+                  <td className="p-1 border-r border-black text-center">장소</td>
+                  <td className="p-1">{eduDetails && eduDetails.eduPlace}</td>
+                </tr>
+              </table>
+            </div>
+            <div className="flex  ">
+              <div className="w-[120px] flex justify-center items-center text-lg  border-black border-t text-lg font-bold">
+                2.강사
+              </div>
+              <div className="w-[149.7px] flex justify-center items-center text-lg  border-black border-l border-t border-r">
+                {eduDetails && eduDetails.eduInstructor}
+              </div>
+            </div>
+          </section>
+          <section className="border flex border-black ">
+            <table className="">
+              <tr>
+                <td className=" p-1 border-black text-lg font-bold">3.분류</td>
+                <td className="p-1 border-black ">
+                  {mapEduCategoryName(eduDetails && eduDetails.eduCategory)}
                 </td>
-              </tr>
-              <tr className="border border-black">
-                <td className="p-1 border-r border-black text-center">시간</td>
-                <td className="p-1">{eduDetails && eduDetails.eduSumTime}분</td>
-              </tr>
-              <tr className="border-x border-black">
-                <td className="p-1 border-r border-black text-center">장소</td>
-                <td className="p-1">{eduDetails && eduDetails.eduPlace}</td>
               </tr>
             </table>
-          </div>
-          <div className="flex  ">
-            <div className="w-[120px] flex justify-center items-center text-lg  border-black border-t text-lg font-bold">
-              2.강사
-            </div>
-            <div className="w-[149.7px] flex justify-center items-center text-lg  border-black border-l border-t border-r">
-              {eduDetails && eduDetails.eduInstructor}
-            </div>
-          </div>
-        </section>
-        <section className="border flex border-black ">
-          <table className="">
-            <tr>
-              <td className=" p-1 border-black text-lg font-bold">3.분류</td>
-              <td className="p-1 border-black ">
-                {mapEduCategoryName(eduDetails && eduDetails.eduCategory)}
-              </td>
-            </tr>
-          </table>
-        </section>
-        <section className="border-x flex border-black ">
-          <table className="">
-            <tr>
-              <td className=" p-1 border-b border-black w-[210mm] text-lg font-bold">
-                4.교육내용 요약
-              </td>
-            </tr>
-            <tr className="flex">
-              <td className=" p-4  border-black w-[97mm] h-[350px] sm:col-span-2 sm:mt-0 whitespace-pre-wrap">
-                <p>{eduDetails && eduDetails.eduContent}</p>
-              </td>
-            </tr>
-          </table>
-        </section>
-        <section className="border-x  border-y flex border-black ">
-          <table className="">
-            <tr>
-              <td className=" p-1 w-[210mm] text-lg font-bold">5.참석자</td>
-            </tr>
-            <tr>
-              <td className=" p-1 w-[210mm] border-t border-r text-center border-black">
-                소속
-              </td>
-              <td className=" p-1 w-[210mm] border-black text-center border-t border-r">
-                성명
-              </td>
-              <td className=" p-1 w-[210mm] border-black text-center border-t ">
-                사원번호
-              </td>
-            </tr>
-            {attendanceList.map((attendance) => (
-              <tr key={attendance.attenId}>
-                <td className=" p-1 w-[210mm] border-t border-r text-center border-black">
-                  {attendance.attenDepartment}
-                </td>
-                <td className=" p-1 w-[210mm] border-black text-center border-t border-r">
-                  {attendance.attenName}
-                </td>
-                <td className=" p-1 w-[210mm] border-black text-center border-t ">
-                  {attendance.attenEmployeeNumber}
+          </section>
+          <section className="border-x flex border-black ">
+            <table className="">
+              <tr>
+                <td className=" p-1 border-b border-black w-[210mm] text-lg font-bold">
+                  4.교육내용 요약
                 </td>
               </tr>
-            ))}
-          </table>
-        </section>
-        <section className="border-x border-b flex border-black ">
-          <table className="">
-            <tr>
-              <td className=" p-1 border-b border-black w-[210mm] text-center text-lg font-bold">
-                교육사진
-              </td>
-            </tr>
-            <tr className="flex">
-              <td className="p-4 border-black w-[97mm] h-auto">
+              <tr className="flex">
+                <td className=" p-4  border-black w-[97mm] h-[350px] sm:col-span-2 sm:mt-0 whitespace-pre-wrap">
+                  <p>{eduDetails && eduDetails.eduContent}</p>
+                </td>
+              </tr>
+            </table>
+          </section>
+          <section className="border-x  border-y flex border-black ">
+            <table className="">
+              <tr>
+                <td className=" p-1 w-[210mm] text-lg font-bold">5.참석자</td>
+              </tr>
+              <tr>
+                <td className=" p-1 w-[210mm] border-t border-r text-center border-black">
+                  소속
+                </td>
+                <td className=" p-1 w-[210mm] border-black text-center border-t border-r">
+                  성명
+                </td>
+                <td className=" p-1 w-[210mm] border-black text-center border-t ">
+                  사원번호
+                </td>
+              </tr>
+              {attendanceList.map((attendance) => (
+                  <tr key={attendance.attenId}>
+                    <td className=" p-1 w-[210mm] border-t border-r text-center border-black">
+                      {attendance.attenDepartment}
+                    </td>
+                    <td className=" p-1 w-[210mm] border-black text-center border-t border-r">
+                      {attendance.attenName}
+                    </td>
+                    <td className=" p-1 w-[210mm] border-black text-center border-t ">
+                      {attendance.attenEmployeeNumber}
+                    </td>
+                  </tr>
+              ))}
+            </table>
+          </section>
+          <section className="border-x border-b flex border-black ">
+            <table className="">
+              <tr>
+                <td className=" p-1 border-b border-black w-[210mm] text-center text-lg font-bold">
+                  교육사진
+                </td>
+              </tr>
+              <tr className="flex justify-center">
                 {eduDetails &&
                 eduDetails.eduimgurls &&
                 eduDetails.eduimgurls.length > 0 ? (
-                  <div>
-                    <ul className="list-disc pl-8">
+                    <ul className="list-disc p-4 grid grid-cols-2 gap-2 grid">
                       {eduDetails.eduimgurls.map((file, index) => (
-                        <div key={index} className="flex justify-between">
-                          <img
-                            src={process.env.REACT_APP_API_BASE_URL + file}
-                            className="mb-4"
-                          />
-                        </div>
+                          <div key={index} className="grid grid-cols-1">
+                            <img
+                                src={process.env.REACT_APP_API_BASE_URL + file}
+                                className=" w-[260px] h-auto"
+                            />
+                          </div>
                       ))}
                     </ul>
-                  </div>
-                ) : (
-                  <p>첨부된 파일이 없습니다</p>
-                )}
-              </td>
-            </tr>
-          </table>
-        </section>
+                ) : null}
+                {/* <td className="p-4 border-black w-[97mm] h-auto">
+
+              </td> */}
+              </tr>
+            </table>
+          </section>
+        </div>
+        <div className="flex justify-center mt-4 print:hidden">
+          <button
+              type="button"
+              className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mr-2 mb-12"
+              onClick={handlePrintButtonClick} // 버튼 클릭 시 인쇄 함수를 호출
+          >
+            인쇄
+          </button>
+        </div>
       </div>
-      <div className="flex justify-center mt-4 print:hidden">
-      <button
-        type="button"
-        className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mr-2"
-        onClick={handlePrintButtonClick} // 버튼 클릭 시 인쇄 함수를 호출
-      >
-        인쇄
-      </button>
-      </div>
-    </div>
   );
 }

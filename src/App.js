@@ -3,6 +3,7 @@ import {
   Navigate,
   Route,
   Routes,
+  Outlet,
 } from "react-router-dom";
 import "./style/reset.css";
 import { ToastContainer } from "react-toastify";
@@ -40,6 +41,14 @@ import UserRegularInspectionStatus from "./page/user/UserRegularInspectionStatus
 import Footer from "./components/Footer";
 import License from "./page/License";
 
+function WithoutFooterLayout() {
+  return (
+      <>
+        <Outlet /> {/* 이 위치에 자식 Route 컴포넌트가 렌더링됩니다 */}
+      </>
+  );
+}
+
 function App() {
   console.log(
     `
@@ -62,169 +71,127 @@ function App() {
   const adminOnly = sessionStorage.getItem("adminOnly") === "adminOnly";
 
   return (
-    <>
-      <Router>
-        <Routes>
-          {/* 관리자 */}
-          <Route path="/" element={<ManagerLogin />}></Route>{" "}
-          {/* 관리자 로그인페이지 */}
-          <Route path="/manager" element={<MainManager />}></Route>{" "}
-          {/* 관리자 메인페이지 */}
-          <Route path="/eduMain" element={<SafetyEducationMain />}></Route>
-          {/* 관리자 안전교육페이지 */}
-          <Route path="/edudetails/:eduId" element={<SafetyEduDetails />} />
-          {/* 관리자 안전교육상세*/}
-          <Route path="/edureg" element={<SafetyEduReg />} />
-          {/* 관리자 안전교육 등록페이지 */}
-          <Route path="/edureg/:eduId" element={<SafetyEduReg />} />
-          {/* 관리자 안전교육 등록페이지 */}
-          <Route
-            path="/managerinspection"
-            element={
-              adminOnly ? (
-                <SafetyManagerInspection />
-              ) : (
-                <Navigate to="/" replace />
-              )
-            }
-          />
-          {/* 관리자 안점점검 페이지 */}
-          <Route
-            path="/inspection"
-            element={
-              adminOnly ? <SafetyInspection /> : <Navigate to="/" replace />
-            }
-          />
-          {/* 관리자 안점점검 페이지 */}
-          <Route path="/attenstatus/:eduId" element={<AttenStatus />} />
-          {/* 관리자 출석현황 */}
-          <Route path="/training/:eduId" element={<TrainingReport />} />
-          {/* 관리자 출석현황 */}
-          <Route
-            path="/reginfo"
-            element={
-              adminOnly ? <ReferenceInfo /> : <Navigate to="/" replace />
-            }
-          />
-          {/* 관리자 기준정보페이지 */}
-          <Route
-            path="/edustatistics"
-            element={adminOnly ? <EduStatics /> : <Navigate to="/" replace />}
-          />
-          {/* 관리자 안전교육통계*/}
-          <Route
-            path="/edustatistics/atten"
-            element={
-              adminOnly ? <EduAttenStatics /> : <Navigate to="/" replace />
-            }
-          />
-          {/* 관리자 안전교육통계*/}
-          <Route
-            path="/inspection/statistics/year"
-            element={
-              adminOnly ? (
-                <SafetyInspectionStatisticsYear />
-              ) : (
-                <Navigate to="/" replace />
-              )
-            }
-          />
-          {/* 관리자 연간분석(정기점검/수시점검) 통계 대시보드*/}
-          <Route
-            path="/inspection/statistics/month/special"
-            element={
-              adminOnly ? (
-                <SafetySpecialInspectionStatisticsMonth />
-              ) : (
-                <Navigate to="/" replace />
-              )
-            }
-          />
-          {/* 관리자 월간분석(수시점검) 대시보드*/}
-          <Route
-            path="/inspection/statistics/month/regular"
-            element={
-              adminOnly ? (
-                <SafetyRegularInspectionStatisticsMonth />
-              ) : (
-                <Navigate to="/" replace />
-              )
-            }
-          />
-          {/* 관리자 월간분석(정기점검) 대시보드*/}
-          {/* 공통 */}
-          <Route path="/regular" element={<RegularMain />}></Route>
-          {/* 관리자,사용자 정기점검 목록 */}
-          <Route
-            path="/regulardetails"
-            element={<UserRegularDetails />}
-          ></Route>
-          {/* 관리자,사용자 정기점검 상세페이지 */}
-          <Route path="/frequentinspection" element={<FrequentIns />}></Route>
-          {/* 공통 수시점검 현황*/}
-          <Route
-            path="/all/special/detail/:speId"
-            element={<FrequentDetails />}
-          ></Route>
-          {/* 공통 수시점검 상세페이지 */}
-          <Route
-            path="/regularinsstatus"
-            element={<UserRegularInspectionStatus />}
-          ></Route>
-          {/* 정기점검 현황 */}
-          {/* 사용자  */}
-          <Route
-            path="/userattendance/register/:eduId"
-            element={<UserSafetyEduAttendance />}
-          ></Route>
-          {/* 사용자 사원출석페이지 */}
-          {/* 사용자 수시점검 */}
-          <Route
-            path="/special/:masterdataPart/:masterdataId"
-            element={<UserSelectInspection />}
-          ></Route>{" "}
-          {/* 사용자 점검선택페이지*/}
-          <Route
-            path="/special/list/:masterdataPart/:masterdataId"
-            element={<Userfrequent />}
-          ></Route>{" "}
-          {/* 사용자 수시점검 설비별 리스트페이지*/}
-          <Route
-            path="/special/new/:masterdataPart/:masterdataId"
-            element={<UserfrequentReg />}
-          ></Route>
-          {/* 사용자 수시점검등록 / 수정페이지 */}
-          <Route
-            path="/special/complete/:masterdataPart/:masterdataId"
-            element={<UserfrequentCompleteReg />}
-          ></Route>
-          {/* 사용자 수시점검 완료등록 페이지 */}
-          <Route path="/userfrequentreg" element={<UserfrequentReg />}></Route>
-          {/* 수시점검 등록페이지 */}
-          <Route
-            path="/special/detail/:speId"
-            element={<UserFrequentDetails />}
-          ></Route>
-          {/* 수시점검 상세페이지 */}
-          {/* 정기점검 */}
-          <Route path="/regular" element={<RegularMain />}></Route>
-          {/* 관리자,사용자 정기점검 목록 */}
-          <Route
-            path="/regulardetails/:regularId"
-            element={<UserRegularDetails />}
-          ></Route>
-          {/* 관리자,사용자 정기점검 목록 */}
-          {/* 사용자 정기점검 */}
-          <Route path="/regularreg" element={<UserRegularReg />}></Route>
-          {/* 정기점검 등록페이지 */}
-          <Route path="/404" element={<Error />}></Route> {/* 에러 */}
-          <Route path="/license" element={<License/>}></Route>
-        </Routes>
-        <ToastContainer />
-        <Footer />
-        
-      </Router>
-    </>
+      <>
+        <Router>
+          <Routes>
+            {/* 관리자 */}
+            <Route path="/" element={<ManagerLogin />}></Route>{" "}
+            {/* 관리자 로그인페이지 */}
+            <Route path="/manager" element={<MainManager />}></Route>{" "}
+            {/* 관리자 메인페이지 */}
+            <Route path="/eduMain" element={adminOnly ? (<SafetyEducationMain />) : (<Navigate to="/" replace />)}/>
+            {/* 관리자 안전교육페이지 */}
+            <Route path="/edudetails/:eduId" element={adminOnly ? (<SafetyEduDetails />) : (<Navigate to="/" replace />)}/>
+            {/* 관리자 안전교육상세*/}
+            <Route path="/edureg" element={adminOnly ? (<SafetyEduReg />) : (<Navigate to="/" replace />)}/>
+            {/* 관리자 안전교육 등록페이지 */}
+            <Route path="/edureg/:eduId" element={adminOnly ? (<SafetyEduReg />) : (<Navigate to="/" replace />)}/>
+            {/* 관리자 안전교육 등록페이지 */}
+            <Route path="/managerinspection" element={adminOnly ? (<SafetyManagerInspection />) : (<Navigate to="/" replace />)}/>
+            {/* 관리자 안점점검 페이지 */}
+            <Route path="/inspection" element={adminOnly ? <SafetyInspection /> : <Navigate to="/" replace />}/>
+            {/* 관리자 안점점검 페이지 */}
+            <Route path="/attenstatus/:eduId" element={<AttenStatus />} />
+            {/* 관리자 출석현황 */}
+            <Route path="training/:eduId" element={<WithoutFooterLayout />}>
+              <Route index element={<TrainingReport />} />
+              {/* ... 필요한 경우 여기에 추가적인 Route 추가 ... */}
+            </Route>
+            {/* 관리자 출석현황 */}
+            <Route path="/reginfo" element={adminOnly ? <ReferenceInfo /> : <Navigate to="/" replace />}/>
+            {/* 관리자 기준정보페이지 */}
+            <Route path="/edustatistics" element={adminOnly ? <EduStatics /> : <Navigate to="/" replace />}/>
+            {/* 관리자 안전교육통계*/}
+            <Route path="/edustatistics/atten" element={adminOnly ? <EduAttenStatics /> : <Navigate to="/" replace />}/>
+            {/* 관리자 안전교육통계*/}
+            <Route path="/inspection/statistics/year" element={adminOnly ? (<SafetyInspectionStatisticsYear />) : (<Navigate to="/" replace />)}/>
+            {/* 관리자 연간분석(정기점검/수시점검) 통계 대시보드*/}
+            <Route path="/inspection/statistics/month/special" element={adminOnly ? (<SafetySpecialInspectionStatisticsMonth />) : (<Navigate to="/" replace />)}/>
+            {/* 관리자 월간분석(수시점검) 대시보드*/}
+            <Route
+                path="/inspection/statistics/month/regular"
+                element={
+                  adminOnly ? (
+                      <SafetyRegularInspectionStatisticsMonth />
+                  ) : (
+                      <Navigate to="/" replace />
+                  )
+                }
+            />
+            {/* 관리자 월간분석(정기점검) 대시보드*/}
+            {/* 공통 */}
+            <Route path="/regular" element={<RegularMain />}></Route>
+            {/* 관리자,사용자 정기점검 목록 */}
+            <Route
+                path="/regulardetails"
+                element={<UserRegularDetails />}
+            ></Route>
+            {/* 관리자,사용자 정기점검 상세페이지 */}
+            <Route path="/frequentinspection" element={<FrequentIns />}></Route>
+            {/* 공통 수시점검 현황*/}
+            <Route
+                path="/all/special/detail/:speId"
+                element={<FrequentDetails />}
+            ></Route>
+            {/* 공통 수시점검 상세페이지 */}
+            <Route
+                path="/regularinsstatus"
+                element={<UserRegularInspectionStatus />}
+            ></Route>
+            {/* 정기점검 현황 */}
+            {/* 사용자  */}
+            <Route
+                path="/userattendance/register/:eduId"
+                element={<UserSafetyEduAttendance />}
+            ></Route>
+            {/* 사용자 사원출석페이지 */}
+            {/* 사용자 수시점검 */}
+            <Route
+                path="/special/:masterdataPart/:masterdataId"
+                element={<UserSelectInspection />}
+            ></Route>{" "}
+            {/* 사용자 점검선택페이지*/}
+            <Route
+                path="/special/list/:masterdataPart/:masterdataId"
+                element={<Userfrequent />}
+            ></Route>{" "}
+            {/* 사용자 수시점검 설비별 리스트페이지*/}
+            <Route
+                path="/special/new/:masterdataPart/:masterdataId"
+                element={<UserfrequentReg />}
+            ></Route>
+            {/* 사용자 수시점검등록 / 수정페이지 */}
+            <Route
+                path="/special/complete/:masterdataPart/:masterdataId"
+                element={<UserfrequentCompleteReg />}
+            ></Route>
+            {/* 사용자 수시점검 완료등록 페이지 */}
+            <Route path="/userfrequentreg" element={<UserfrequentReg />}></Route>
+            {/* 수시점검 등록페이지 */}
+            <Route
+                path="/special/detail/:speId"
+                element={<UserFrequentDetails />}
+            ></Route>
+            {/* 수시점검 상세페이지 */}
+            {/* 정기점검 */}
+            <Route path="/regular" element={<RegularMain />}></Route>
+            {/* 관리자,사용자 정기점검 목록 */}
+            <Route
+                path="/regulardetails/:regularId"
+                element={<UserRegularDetails />}
+            ></Route>
+            {/* 관리자,사용자 정기점검 목록 */}
+            {/* 사용자 정기점검 */}
+            <Route path="/regularreg" element={<UserRegularReg />}></Route>
+            {/* 정기점검 등록페이지 */}
+            <Route path="/404" element={<Error />}></Route> {/* 에러 */}
+            <Route path="/license" element={<License/>}></Route>
+          </Routes>
+          <ToastContainer />
+          {!window.location.pathname.includes("/training") && <Footer />}
+
+        </Router>
+      </>
   );
 }
 

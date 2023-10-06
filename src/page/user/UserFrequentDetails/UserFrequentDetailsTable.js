@@ -237,8 +237,12 @@ export default function UserFrequentDetailsTable() {
               조치요청
             </dt>
             <dd className="mt-1 text-base leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-              <dd>조치자 : {inspectionData.specialData.speActPerson}</dd>
-              <dd>이메일 : {inspectionData.specialData.speActEmail}</dd>
+              {inspectionData.specialData.speActPerson.split(', ').map((person, index) => (
+                  <div key={index}>
+                    <p><strong>조치자 : {person}</strong></p>
+                    <p>이메일 : {inspectionData.specialData.speActEmail.split(', ')[index]}</p>
+                  </div>
+              ))}
             </dd>
           </div>
           <div className="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
