@@ -87,7 +87,17 @@ function App() {
             {/* 관리자 안전교육 등록페이지 */}
             <Route path="/edureg/:eduId" element={adminOnly ? (<SafetyEduReg />) : (<Navigate to="/" replace />)}/>
             {/* 관리자 안전교육 등록페이지 */}
-            <Route path="/managerinspection" element={adminOnly ? (<SafetyManagerInspection />) : (<Navigate to="/" replace />)}/>
+            <Route path="/managerinspection"
+                   element={adminOnly ?
+                       (<>
+                             <SafetyManagerInspection />
+                             <Footer />
+                           </>
+                       )
+
+                       :
+
+                       (<Navigate to="/" replace />)}/>
             {/* 관리자 안점점검 페이지 */}
             <Route path="/inspection" element={adminOnly ? <SafetyInspection /> : <Navigate to="/" replace />}/>
             {/* 관리자 안점점검 페이지 */}
@@ -145,7 +155,12 @@ function App() {
             {/* 사용자 수시점검 */}
             <Route
                 path="/special/:masterdataPart/:masterdataId"
-                element={<UserSelectInspection />}
+                element={
+                  <>
+                    <UserSelectInspection />
+                    <Footer />
+                  </>
+                }
             ></Route>{" "}
             {/* 사용자 점검선택페이지*/}
             <Route
@@ -185,7 +200,7 @@ function App() {
             <Route path="/license" element={<License/>}></Route>
           </Routes>
           <ToastContainer />
-          {!window.location.pathname.includes("/training") && <Footer />}
+
         </Router>
       </>
   );
