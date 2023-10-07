@@ -67,7 +67,7 @@ export default function TrainingReport() {
     const minutes = String(dateObj.getMinutes()).padStart(2, "0");
     return `${year}년 ${month}월 ${day}일 ${hours}시 ${minutes}분`;
   };
-
+  console.log("확인용:" + window.location.pathname);
   return (
 
       <div className="w-[210mm] p-2">

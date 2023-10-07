@@ -93,10 +93,7 @@ function App() {
             {/* 관리자 안점점검 페이지 */}
             <Route path="/attenstatus/:eduId" element={<AttenStatus />} />
             {/* 관리자 출석현황 */}
-            <Route path="training/:eduId" element={adminOnly ? <WithoutFooterLayout /> : <Navigate to="/" replace />}>
-              {/*<Route index element={adminOnly ? <TrainingReport /> : <Navigate to="/" replace /> } />*/}
-              <Route index element= <TrainingReport />  />
-            </Route>
+            <Route path="/training/:eduId" element={adminOnly ? <TrainingReport /> : <Navigate to="/" replace />}/>
             {/* 관리자 출석현황 */}
             <Route path="/reginfo" element={adminOnly ? <ReferenceInfo /> : <Navigate to="/" replace />}/>
             {/* 관리자 기준정보페이지 */}
@@ -189,7 +186,6 @@ function App() {
           </Routes>
           <ToastContainer />
           {!window.location.pathname.includes("/training") && <Footer />}
-
         </Router>
       </>
   );
