@@ -101,7 +101,7 @@ function App() {
             {/* 관리자 안점점검 페이지 */}
             <Route path="/inspection" element={adminOnly ? <SafetyInspection /> : <Navigate to="/" replace />}/>
             {/* 관리자 안점점검 페이지 */}
-            <Route path="/attenstatus/:eduId" element={<AttenStatus />} />
+            <Route path="/attenstatus/:eduId" element={adminOnly ? <AttenStatus />: <Navigate to="/" replace />} />
             {/* 관리자 출석현황 */}
             <Route path="/training/:eduId" element={adminOnly ? <TrainingReport /> : <Navigate to="/" replace />}/>
             {/* 관리자 출석현황 */}
