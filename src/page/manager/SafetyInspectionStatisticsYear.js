@@ -468,7 +468,7 @@ function SafetyInspectionStatisticsYear() {
                                     <div className="hidden lg:ml-6 lg:flex lg:space-x-8 relative group">
                                         <div className="relative">
                                             <a
-                                                href={`http://112.220.233.236/inspection/statistics/year`}
+                                                href={`http://localhost:3000/inspection/statistics/year`}
                                                 className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
                                             >
                                                 연간분석
@@ -478,20 +478,20 @@ function SafetyInspectionStatisticsYear() {
                                     <div className="hidden lg:ml-6 lg:flex lg:space-x-8 relative group">
                                         <div className="relative">
                                             <a
-                                                href={`http://112.220.233.236/inspection/statistics/month/special`}
+                                                href={`http://localhost:3000/inspection/statistics/month/special`}
                                                 className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
                                             >
                                                 월간분석
                                             </a>
                                             <div className="absolute left-3 hidden group-hover:block mt-2 bg-white border border-gray-300 rounded-lg shadow-lg top-4">
                                                 <a
-                                                    href={`http://112.220.233.236/inspection/statistics/month/special`}
+                                                    href={`http://localhost:3000/inspection/statistics/month/special`}
                                                     className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
                                                 >
                                                     수시점검
                                                 </a>
                                                 <a
-                                                    href={`http://112.220.233.236/inspection/statistics/month/regular`}
+                                                    href={`http://localhost:3000/inspection/statistics/month/regular`}
                                                     className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
                                                 >
                                                     정기점검

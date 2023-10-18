@@ -4,7 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c20fbe9c-9169-4241-9ec0-dff0f7b0e503" name="Changes" comment="" />
+    <list default="true" id="c20fbe9c-9169-4241-9ec0-dff0f7b0e503" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/ReferenceInfoTable/FacilityTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/ReferenceInfoTable/FacilityTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/SafetyEduDetails.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/SafetyEduDetails.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/SafetyInspectionStatisticsYear.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/SafetyInspectionStatisticsYear.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/SafetyRegularInspectionStatisticsMonth.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/SafetyRegularInspectionStatisticsMonth.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/manager/SafetySpecialInspectionStatisticsMonth.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/manager/SafetySpecialInspectionStatisticsMonth.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/UserRegularDetails/UserRegularDetailsTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserRegularDetails/UserRegularDetailsTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/UserRegularReg/UserRegularTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserRegularReg/UserRegularTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/UserfrequentCompleteReg.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserfrequentCompleteReg.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/page/user/UserfrequentReg.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/page/user/UserfrequentReg.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -92,6 +105,7 @@
       <workItem from="1696673149628" duration="13369000" />
       <workItem from="1696737948043" duration="591000" />
       <workItem from="1696739591326" duration="2679000" />
+      <workItem from="1697644677306" duration="1914000" />
     </task>
     <servers />
   </component>
